@@ -2,9 +2,12 @@
 
 Object.defineProperty(exports, '__esModule', { value: true });
 
-function testMethod(param) {
-    return 'Hello ' + param;
+var React = require('react');
+
+function Test(_a) {
+    return (React.createElement("div", null,
+        React.createElement("h1", null, "TEST")));
 }
 
-exports.testMethod = testMethod;
+exports.Test = Test;
 //# sourceMappingURL=index.js.map

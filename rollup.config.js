@@ -1,8 +1,7 @@
-npimport typescript from 'rollup-plugin-typescript2';
+import typescript from 'rollup-plugin-typescript2';
 import commonjs from 'rollup-plugin-commonjs';
 import external from 'rollup-plugin-peer-deps-external';
 import resolve from 'rollup-plugin-node-resolve';
-
 import pkg from './package.json';
 
 export default {
@@ -23,7 +22,9 @@ export default {
   ],
   plugins: [
     external(),
-    resolve(),
+    resolve({
+      browser: true
+    }),
     typescript({
       rollupCommonJSResolveHack: true,
       exclude: '**/__tests__/**',
@@ -31,6 +32,7 @@ export default {
     }),
     commonjs({
       include: ['node_modules/**'],
+      exclude: ['**/*.stories.js'],
       namedExports: {
         'node_modules/react/react.js': [
           'Children',
