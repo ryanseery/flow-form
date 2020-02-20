@@ -5,31 +5,30 @@ import { useFormData } from './hooks';
 interface IInput {
   children?: string;
   type?: string;
-  required?: boolean;
   placeholder?: string;
 }
 
-export const Input: React.FC<IInput> = ({ children, type, required, placeholder }) => {
+export const Input: React.FC<IInput> = ({ children, type = 'text', placeholder }) => {
   const { value, handleChange } = useFormData({ id: children ?? '', value: '', error: false });
 
   const kebabCase = toKebabCase(children ?? '');
 
   const camelCase = toCamelCase(children ?? '');
 
-  const defaultProps = {
-    key: camelCase,
-    name: camelCase,
-    className: kebabCase,
-    id: camelCase,
-    type,
-    required,
-    placeholder,
-  };
+  // const defaultProps = {
+  //   key: camelCase,
+  //   name: camelCase,
+  //   className: kebabCase,
+  //   id: camelCase,
+  //   type,
+  //   required,
+  //   placeholder,
+  // };
 
   return (
     <label htmlFor={camelCase} className={`flow-form-label ${kebabCase}-label`}>
       <input
-        type="text"
+        type={type}
         placeholder={placeholder}
         className={`flow-form-input ${kebabCase}-input`}
         name={camelCase}
