@@ -8,7 +8,7 @@ export interface IUseFormData {
 }
 
 export function useFormData({ id, value, error }: IUseFormData) {
-  const { data, setValue, updateValue } = React.useContext(FormContext);
+  const { data, setValue, updateValue, updateBlur } = React.useContext(FormContext);
 
   React.useEffect(() => {
     setValue({ id, value, error });
@@ -19,9 +19,15 @@ export function useFormData({ id, value, error }: IUseFormData) {
     updateValue({ id: e.target.name, value: e.target.value.toLowerCase() });
   };
 
+  const handleBlur = (e: React.FocusEvent<HTMLInputElement>) => {
+    e.persist();
+    updateBlur({ id: e.target.name });
+  };
+
   return {
     value: data[id],
     error: error[id],
     handleChange,
+    handleBlur,
   };
 }

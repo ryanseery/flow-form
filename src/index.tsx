@@ -14,13 +14,13 @@ const FormComponent: React.FC<IForm> = ({ children, onSubmit, className }) => {
     <>
       <form
         className={`flow-form ${className || ''}`}
-        style={{ display: 'block', marginRight: '10em' }}
+        style={{ marginRight: '10em' }}
         onSubmit={e => {
           e.preventDefault();
           onSubmit(data);
         }}
       >
-        <fieldset disabled={false} aria-busy={false}>
+        <fieldset disabled={false} aria-busy={false} style={{ border: `none` }}>
           {children}
           <button type="submit">Submit</button>
         </fieldset>

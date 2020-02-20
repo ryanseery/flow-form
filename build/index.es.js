@@ -31,10 +31,10 @@ var ACTIONS;
 (function (ACTIONS) {
     ACTIONS["SET_DEFAULT_VALUE"] = "SET_DEFAULT_VALUE";
     ACTIONS["UPDATE_VALUE"] = "UPDATE_VALUE";
-    ACTIONS["HANDLE_BLUR"] = "HANDLE_BLUR";
+    ACTIONS["UPDATE_BLUR"] = "UPDATE_BLUR";
 })(ACTIONS || (ACTIONS = {}));
 function reducer(state, action) {
-    var _a, _b;
+    var _a, _b, _c;
     var type = action.type, id = action.id, value = action.value, error = action.error;
     switch (type) {
         case ACTIONS.SET_DEFAULT_VALUE: {
@@ -45,18 +45,20 @@ function reducer(state, action) {
             if (typeof id === 'string' && !stateCopy.data[id]) {
                 stateCopy.data[id] = '';
                 stateCopy.error[id] = error;
-                stateCopy.blur[id] = false;
             }
             // return copy
             return stateCopy;
         }
         case ACTIONS.UPDATE_VALUE: {
             if (typeof id === 'string') {
-                return __assign(__assign({}, state), { formData: __assign(__assign({}, state), { data: __assign(__assign({}, state.data), (_a = {}, _a[id] = value, _a)), error: __assign(__assign({}, state.error), (_b = {}, _b[id] = error, _b)) }) });
+                return __assign(__assign({}, state), { data: __assign(__assign({}, state.data), (_a = {}, _a[id] = value, _a)), error: __assign(__assign({}, state.error), (_b = {}, _b[id] = error, _b)) });
             }
         }
-        case ACTIONS.HANDLE_BLUR:
-            return state;
+        case ACTIONS.UPDATE_BLUR: {
+            if (typeof id === 'string') {
+                return __assign(__assign({}, state), { blur: __assign(__assign({}, state.blur), (_c = {}, _c[id] = !state.blur[id], _c)) });
+            }
+        }
         default:
             console.error('State Reducer Error');
             return state;
@@ -77,9 +79,9 @@ var FormWrapper = function (_a) {
             }, updateValue: function (_a) {
                 var id = _a.id, value = _a.value, error = _a.error;
                 return dispatch({ type: ACTIONS.UPDATE_VALUE, id: id, value: value, error: error });
-            }, handleBlur: function (_a) {
+            }, updateBlur: function (_a) {
                 var id = _a.id;
-                return dispatch({ type: ACTIONS.HANDLE_BLUR, id: id });
+                return dispatch({ type: ACTIONS.UPDATE_BLUR, id: id });
             } }) }, children));
 };
 
@@ -104,7 +106,7 @@ var toCamelCase = function (str) {
 
 function useFormData(_a) {
     var id = _a.id, value = _a.value, error = _a.error;
-    var _b = useContext(FormContext), data = _b.data, setValue = _b.setValue, updateValue = _b.updateValue;
+    var _b = useContext(FormContext), data = _b.data, setValue = _b.setValue, updateValue = _b.updateValue, updateBlur = _b.updateBlur;
     useEffect(function () {
         setValue({ id: id, value: value, error: error });
     }, []);
@@ -112,16 +114,26 @@ function useFormData(_a) {
         e.persist();
         updateValue({ id: e.target.name, value: e.target.value.toLowerCase() });
     };
+    var handleBlur = function (e) {
+        e.persist();
+        updateBlur({ id: e.target.name });
+    };
     return {
         value: data[id],
         error: error[id],
         handleChange: handleChange,
+        handleBlur: handleBlur,
     };
 }
 
 var Input = function (_a) {
     var children = _a.children, _b = _a.type, type = _b === void 0 ? 'text' : _b, placeholder = _a.placeholder;
-    var _c = useFormData({ id: children !== null && children !== void 0 ? children : '', value: '', error: false }), value = _c.value, handleChange = _c.handleChange;
+    var _c;
+    var _d = useFormData({
+        id: (_c = children === null || children === void 0 ? void 0 : children.toLowerCase()) !== null && _c !== void 0 ? _c : '',
+        value: '',
+        error: false,
+    }), value = _d.value, handleChange = _d.handleChange;
     var kebabCase = toKebabCase(children !== null && children !== void 0 ? children : '');
     var camelCase = toCamelCase(children !== null && children !== void 0 ? children : '');
     // const defaultProps = {
@@ -133,19 +145,20 @@ var Input = function (_a) {
     //   required,
     //   placeholder,
     // };
-    return (createElement("label", { htmlFor: camelCase, className: "flow-form-label " + kebabCase + "-label" },
-        createElement("input", { type: type, placeholder: placeholder, className: "flow-form-input " + kebabCase + "-input", name: camelCase, id: camelCase, value: value || '', onChange: handleChange })));
+    return (createElement("label", { htmlFor: camelCase, className: "flow-form-label " + kebabCase + "-label", style: { display: "block" } },
+        children,
+        createElement("input", { id: camelCase, name: camelCase, value: value || '', onChange: handleChange, type: type, placeholder: placeholder, style: { display: "block" }, className: "flow-form-input " + kebabCase + "-input" })));
 };
 
 var FormComponent = function (_a) {
     var children = _a.children, onSubmit = _a.onSubmit, className = _a.className;
     var _b = useContext(FormContext), data = _b.data, error = _b.error, blur = _b.blur, touched = _b.touched;
     return (createElement(Fragment, null,
-        createElement("form", { className: "flow-form " + (className || ''), style: { display: 'block', marginRight: '10em' }, onSubmit: function (e) {
+        createElement("form", { className: "flow-form " + (className || ''), style: { marginRight: '10em' }, onSubmit: function (e) {
                 e.preventDefault();
                 onSubmit(data);
             } },
-            createElement("fieldset", { disabled: false, "aria-busy": false },
+            createElement("fieldset", { disabled: false, "aria-busy": false, style: { border: "none" } },
                 children,
                 createElement("button", { type: "submit" }, "Submit"))),
         createElement("pre", null, JSON.stringify({ data: data, error: error, blur: blur, touched: touched }, null, 2))));

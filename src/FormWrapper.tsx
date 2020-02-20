@@ -18,7 +18,7 @@ export interface IArgs {
 interface IContextProps extends IState {
   setValue: (args: IArgs) => void;
   updateValue: (args: IArgs) => void;
-  handleBlur: (args: IArgs) => void;
+  updateBlur: (args: IArgs) => void;
 }
 
 export const FormContext = React.createContext({} as IContextProps);
@@ -26,11 +26,11 @@ export const FormContext = React.createContext({} as IContextProps);
 enum ACTIONS {
   SET_DEFAULT_VALUE = 'SET_DEFAULT_VALUE',
   UPDATE_VALUE = 'UPDATE_VALUE',
-  HANDLE_BLUR = 'HANDLE_BLUR',
+  UPDATE_BLUR = 'UPDATE_BLUR',
 }
 
 interface IAction extends IArgs {
-  type: ACTIONS.SET_DEFAULT_VALUE | ACTIONS.UPDATE_VALUE | ACTIONS.HANDLE_BLUR;
+  type: ACTIONS.SET_DEFAULT_VALUE | ACTIONS.UPDATE_VALUE | ACTIONS.UPDATE_BLUR;
 }
 
 function reducer(state: IState, action: IAction) {
@@ -48,7 +48,6 @@ function reducer(state: IState, action: IAction) {
       if (typeof id === 'string' && !stateCopy.data[id]) {
         stateCopy.data[id] = '';
         stateCopy.error[id] = error;
-        stateCopy.blur[id] = false;
       }
 
       // return copy
@@ -58,22 +57,28 @@ function reducer(state: IState, action: IAction) {
       if (typeof id === 'string') {
         return {
           ...state,
-          formData: {
-            ...state,
-            data: {
-              ...state.data,
-              [id]: value,
-            },
-            error: {
-              ...state.error,
-              [id]: error,
-            },
+          data: {
+            ...state.data,
+            [id]: value,
+          },
+          error: {
+            ...state.error,
+            [id]: error,
           },
         };
       }
     }
-    case ACTIONS.HANDLE_BLUR:
-      return state;
+    case ACTIONS.UPDATE_BLUR: {
+      if (typeof id === 'string') {
+        return {
+          ...state,
+          blur: {
+            ...state.blur,
+            [id]: !state.blur[id],
+          },
+        };
+      }
+    }
     default:
       console.error('State Reducer Error');
       return state;
@@ -100,7 +105,7 @@ export const FormWrapper: React.FC<FormWrapper> = ({ children }) => {
         ...state,
         setValue: ({ id, value, error }) => dispatch({ type: ACTIONS.SET_DEFAULT_VALUE, id, value, error }),
         updateValue: ({ id, value, error }) => dispatch({ type: ACTIONS.UPDATE_VALUE, id, value, error }),
-        handleBlur: ({ id }) => dispatch({ type: ACTIONS.HANDLE_BLUR, id }),
+        updateBlur: ({ id }) => dispatch({ type: ACTIONS.UPDATE_BLUR, id }),
       }}
     >
       {children}
