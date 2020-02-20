@@ -121,9 +121,9 @@ function useFormData(_a) {
 
 var Input = function (_a) {
     var children = _a.children, _b = _a.type, type = _b === void 0 ? 'text' : _b, placeholder = _a.placeholder;
-    var _c = useFormData({ id: (children !== null && children !== void 0 ? children : ''), value: '', error: false }), value = _c.value, handleChange = _c.handleChange;
-    var kebabCase = toKebabCase((children !== null && children !== void 0 ? children : ''));
-    var camelCase = toCamelCase((children !== null && children !== void 0 ? children : ''));
+    var _c = useFormData({ id: children !== null && children !== void 0 ? children : '', value: '', error: false }), value = _c.value, handleChange = _c.handleChange;
+    var kebabCase = toKebabCase(children !== null && children !== void 0 ? children : '');
+    var camelCase = toCamelCase(children !== null && children !== void 0 ? children : '');
     // const defaultProps = {
     //   key: camelCase,
     //   name: camelCase,
