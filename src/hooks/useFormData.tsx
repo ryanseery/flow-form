@@ -10,7 +10,7 @@ export interface IUseFormData {
 export function useFormData({ id, value, error }: IUseFormData) {
   const { data, setValue, updateValue } = React.useContext(FormContext);
 
-  React.useReducer(() => {
+  React.useEffect(() => {
     setValue({ id, value, error });
   }, []);
 
