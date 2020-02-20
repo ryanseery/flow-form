@@ -4,7 +4,7 @@ import { IState, FormContext, FormWrapper } from './FormWrapper';
 interface IForm {
   children: React.ReactNode | React.ReactNode[];
   onSubmit: (data: object) => IState;
-  className: string;
+  className?: string;
 }
 
 const FormComponent: React.FC<IForm> = ({ children, onSubmit, className }) => {
@@ -13,7 +13,7 @@ const FormComponent: React.FC<IForm> = ({ children, onSubmit, className }) => {
   return (
     <>
       <form
-        className={`flow-form ${className}`}
+        className={`flow-form ${className || ''}`}
         style={{ display: 'block', marginRight: '10em' }}
         onSubmit={e => {
           e.preventDefault();
@@ -37,3 +37,5 @@ export const Form: React.FC<IForm> = ({ children, onSubmit, className }) => (
     </FormComponent>
   </FormWrapper>
 );
+
+export { Input } from './Input';
