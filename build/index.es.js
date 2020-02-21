@@ -1,4 +1,4 @@
-import { createContext, useReducer, createElement, useContext, useEffect, Fragment } from 'react';
+import { createContext, useReducer, useMemo, createElement, useContext, useEffect, Fragment } from 'react';
 
 /*! *****************************************************************************
 Copyright (c) Microsoft Corporation. All rights reserved.
@@ -26,12 +26,19 @@ var __assign = function() {
     return __assign.apply(this, arguments);
 };
 
+var formData = {
+    data: {},
+    error: {},
+    focus: {},
+    touched: {},
+};
 var FormContext = createContext({});
 var ACTIONS;
 (function (ACTIONS) {
     ACTIONS["SET_DEFAULT_VALUE"] = "SET_DEFAULT_VALUE";
     ACTIONS["UPDATE_VALUE"] = "UPDATE_VALUE";
-    ACTIONS["UPDATE_BLUR"] = "UPDATE_BLUR";
+    ACTIONS["UPDATE_FOCUS"] = "UPDATE_FOCUS";
+    ACTIONS["CLEAR_FORM"] = "CLEAR_FORM";
 })(ACTIONS || (ACTIONS = {}));
 function reducer(state, action) {
     var _a, _b, _c;
@@ -45,6 +52,7 @@ function reducer(state, action) {
             if (typeof id === 'string' && !stateCopy.data[id]) {
                 stateCopy.data[id] = '';
                 stateCopy.error[id] = error;
+                stateCopy.focus[id] = false;
             }
             // return copy
             return stateCopy;
@@ -54,35 +62,40 @@ function reducer(state, action) {
                 return __assign(__assign({}, state), { data: __assign(__assign({}, state.data), (_a = {}, _a[id] = value, _a)), error: __assign(__assign({}, state.error), (_b = {}, _b[id] = error, _b)) });
             }
         }
-        case ACTIONS.UPDATE_BLUR: {
+        case ACTIONS.UPDATE_FOCUS: {
             if (typeof id === 'string') {
-                return __assign(__assign({}, state), { blur: __assign(__assign({}, state.blur), (_c = {}, _c[id] = !state.blur[id], _c)) });
+                return __assign(__assign({}, state), { focus: __assign(__assign({}, state.focus), (_c = {}, _c[id] = !state.focus[id], _c)) });
             }
         }
+        case ACTIONS.CLEAR_FORM:
+            return __assign({}, formData);
         default:
             console.error('State Reducer Error');
             return state;
     }
 }
-var formData = {
-    data: {},
-    error: {},
-    blur: {},
-    touched: {},
-};
 var FormWrapper = function (_a) {
     var children = _a.children;
     var _b = useReducer(reducer, formData), state = _b[0], dispatch = _b[1];
-    return (createElement(FormContext.Provider, { value: __assign(__assign({}, state), { setValue: function (_a) {
+    console.count('FormWrapper render');
+    var actions = useMemo(function () {
+        return {
+            setValue: function (_a) {
                 var id = _a.id, value = _a.value, error = _a.error;
                 return dispatch({ type: ACTIONS.SET_DEFAULT_VALUE, id: id, value: value, error: error });
-            }, updateValue: function (_a) {
+            },
+            updateValue: function (_a) {
                 var id = _a.id, value = _a.value, error = _a.error;
                 return dispatch({ type: ACTIONS.UPDATE_VALUE, id: id, value: value, error: error });
-            }, updateBlur: function (_a) {
+            },
+            updateFocus: function (_a) {
                 var id = _a.id;
-                return dispatch({ type: ACTIONS.UPDATE_BLUR, id: id });
-            } }) }, children));
+                return dispatch({ type: ACTIONS.UPDATE_FOCUS, id: id });
+            },
+            clearForm: function () { return dispatch({ type: ACTIONS.CLEAR_FORM }); },
+        };
+    }, []);
+    return (createElement(FormContext.Provider, { value: __assign(__assign({}, state), actions) }, children));
 };
 
 var toKebabCase = function (str) {
@@ -106,7 +119,7 @@ var toCamelCase = function (str) {
 
 function useFormData(_a) {
     var id = _a.id, value = _a.value, error = _a.error;
-    var _b = useContext(FormContext), data = _b.data, setValue = _b.setValue, updateValue = _b.updateValue, updateBlur = _b.updateBlur;
+    var _b = useContext(FormContext), data = _b.data, setValue = _b.setValue, updateValue = _b.updateValue, updateFocus = _b.updateFocus;
     useEffect(function () {
         setValue({ id: id, value: value, error: error });
     }, []);
@@ -114,45 +127,67 @@ function useFormData(_a) {
         e.persist();
         updateValue({ id: e.target.name, value: e.target.value.toLowerCase() });
     };
-    var handleBlur = function (e) {
+    var handleFocus = function (e) {
         e.persist();
-        updateBlur({ id: e.target.name });
+        updateFocus({ id: e.target.name });
     };
     return {
         value: data[id],
         error: error[id],
         handleChange: handleChange,
-        handleBlur: handleBlur,
+        handleFocus: handleFocus,
     };
 }
 
-var Input = function (_a) {
-    var children = _a.children, _b = _a.type, type = _b === void 0 ? 'text' : _b, placeholder = _a.placeholder;
-    var _c;
-    var _d = useFormData({
-        id: (_c = children === null || children === void 0 ? void 0 : children.toLowerCase()) !== null && _c !== void 0 ? _c : '',
+var Text = function (_a) {
+    var id = _a.id, type = _a.type, className = _a.className, placeholder = _a.placeholder;
+    var _b = useFormData({
+        id: id,
         value: '',
         error: false,
-    }), value = _d.value, handleChange = _d.handleChange;
+    }), value = _b.value, handleChange = _b.handleChange, handleFocus = _b.handleFocus;
+    return (createElement("input", { id: id, name: id, value: value || '', onChange: handleChange, onFocus: handleFocus, onBlur: handleFocus, type: type, placeholder: placeholder, style: { display: "block" }, className: "flow-form-input " + className + "-input" }));
+};
+
+var Number = function (_a) {
+    var id = _a.id, type = _a.type, className = _a.className, placeholder = _a.placeholder;
+    var _b = useFormData({
+        id: id,
+        value: '',
+        error: false,
+    }), value = _b.value, handleChange = _b.handleChange, handleFocus = _b.handleFocus;
+    return (createElement("input", { id: id, name: id, value: value || '', onChange: handleChange, onFocus: handleFocus, onBlur: handleFocus, type: type, placeholder: placeholder, style: { display: "block" }, className: "flow-form-input " + className + "-input" }));
+};
+
+var Input = function (_a) {
+    var children = _a.children, _b = _a.type, type = _b === void 0 ? 'text' : _b, placeholder = _a.placeholder, required = _a.required;
+    console.count('Input Render');
     var kebabCase = toKebabCase(children !== null && children !== void 0 ? children : '');
     var camelCase = toCamelCase(children !== null && children !== void 0 ? children : '');
-    // const defaultProps = {
-    //   key: camelCase,
-    //   name: camelCase,
-    //   className: kebabCase,
-    //   id: camelCase,
-    //   type,
-    //   required,
-    //   placeholder,
-    // };
+    var defaultProps = {
+        id: camelCase,
+        type: type,
+        className: kebabCase,
+        placeholder: placeholder,
+        required: required,
+    };
     return (createElement("label", { htmlFor: camelCase, className: "flow-form-label " + kebabCase + "-label", style: { display: "block" } },
         children,
-        createElement("input", { id: camelCase, name: camelCase, value: value || '', onChange: handleChange, type: type, placeholder: placeholder, style: { display: "block" }, className: "flow-form-input " + kebabCase + "-input" })));
+        (function () {
+            switch (type) {
+                case 'text':
+                    return createElement(Text, __assign({}, defaultProps));
+                case 'number':
+                    return createElement(Number, __assign({}, defaultProps));
+                default:
+                    return createElement(Text, __assign({}, defaultProps));
+            }
+        })()));
 };
 
 var FormComponent = function (_a) {
     var children = _a.children, onSubmit = _a.onSubmit, className = _a.className;
-    var _b = useContext(FormContext), data = _b.data, error = _b.error, blur = _b.blur, touched = _b.touched;
+    var _b = useContext(FormContext), data = _b.data, error = _b.error, focus = _b.focus, touched = _b.touched, clearForm = _b.clearForm;
     return (createElement(Fragment, null,
         createElement("form", { className: "flow-form " + (className || ''), style: { marginRight: '10em' }, onSubmit: function (e) {
                 e.preventDefault();
@@ -160,8 +195,9 @@ var FormComponent = function (_a) {
             } },
             createElement("fieldset", { disabled: false, "aria-busy": false, style: { border: "none" } },
                 children,
-                createElement("button", { type: "submit" }, "Submit"))),
-        createElement("pre", null, JSON.stringify({ data: data, error: error, blur: blur, touched: touched }, null, 2))));
+                createElement("button", { type: "submit" }, "Submit"),
+                createElement("button", { type: "button", onClick: clearForm }, "Clear"))),
+        createElement("pre", null, JSON.stringify({ data: data, error: error, focus: focus, touched: touched }, null, 2))));
 };
 var Form = function (_a) {
     var children = _a.children, onSubmit = _a.onSubmit, className = _a.className;

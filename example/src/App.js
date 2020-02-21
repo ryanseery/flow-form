@@ -7,6 +7,7 @@ function App() {
     <div style={{ height: '100vh', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
       <Form onSubmit={data => console.log('data: ', data)}>
         <Input>Test</Input>
+        <Input type="number">Number</Input>
       </Form>
     </div>
   );

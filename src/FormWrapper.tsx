@@ -3,22 +3,30 @@ import * as React from 'react';
 export interface IState {
   data: {};
   error: {};
-  blur: {};
+  focus: {};
   touched: {};
 }
+
+const formData: IState = {
+  data: {},
+  error: {},
+  focus: {},
+  touched: {},
+};
 
 export interface IArgs {
   id?: string;
   value?: string | boolean | number | object;
   error?: boolean;
-  blur?: boolean;
+  focus?: boolean;
   touched?: boolean;
 }
 
 interface IContextProps extends IState {
   setValue: (args: IArgs) => void;
   updateValue: (args: IArgs) => void;
-  updateBlur: (args: IArgs) => void;
+  updateFocus: (args: IArgs) => void;
+  clearForm: () => void;
 }
 
 export const FormContext = React.createContext({} as IContextProps);
@@ -26,11 +34,12 @@ export const FormContext = React.createContext({} as IContextProps);
 enum ACTIONS {
   SET_DEFAULT_VALUE = 'SET_DEFAULT_VALUE',
   UPDATE_VALUE = 'UPDATE_VALUE',
-  UPDATE_BLUR = 'UPDATE_BLUR',
+  UPDATE_FOCUS = 'UPDATE_FOCUS',
+  CLEAR_FORM = 'CLEAR_FORM',
 }
 
 interface IAction extends IArgs {
-  type: ACTIONS.SET_DEFAULT_VALUE | ACTIONS.UPDATE_VALUE | ACTIONS.UPDATE_BLUR;
+  type: ACTIONS.SET_DEFAULT_VALUE | ACTIONS.UPDATE_VALUE | ACTIONS.UPDATE_FOCUS | ACTIONS.CLEAR_FORM;
 }
 
 function reducer(state: IState, action: IAction) {
@@ -48,6 +57,7 @@ function reducer(state: IState, action: IAction) {
       if (typeof id === 'string' && !stateCopy.data[id]) {
         stateCopy.data[id] = '';
         stateCopy.error[id] = error;
+        stateCopy.focus[id] = false;
       }
 
       // return copy
@@ -68,29 +78,24 @@ function reducer(state: IState, action: IAction) {
         };
       }
     }
-    case ACTIONS.UPDATE_BLUR: {
+    case ACTIONS.UPDATE_FOCUS: {
       if (typeof id === 'string') {
         return {
           ...state,
-          blur: {
-            ...state.blur,
-            [id]: !state.blur[id],
+          focus: {
+            ...state.focus,
+            [id]: !state.focus[id],
           },
         };
       }
     }
+    case ACTIONS.CLEAR_FORM:
+      return { ...formData };
     default:
       console.error('State Reducer Error');
       return state;
   }
 }
-
-const formData: IState = {
-  data: {},
-  error: {},
-  blur: {},
-  touched: {},
-};
 
 export interface FormWrapper {
   children: React.ReactNode;
@@ -98,14 +103,22 @@ export interface FormWrapper {
 
 export const FormWrapper: React.FC<FormWrapper> = ({ children }) => {
   const [state, dispatch] = React.useReducer(reducer, formData);
+  console.count('FormWrapper render');
+
+  const actions = React.useMemo(() => {
+    return {
+      setValue: ({ id, value, error }: IArgs) => dispatch({ type: ACTIONS.SET_DEFAULT_VALUE, id, value, error }),
+      updateValue: ({ id, value, error }: IArgs) => dispatch({ type: ACTIONS.UPDATE_VALUE, id, value, error }),
+      updateFocus: ({ id }: { id: string }) => dispatch({ type: ACTIONS.UPDATE_FOCUS, id }),
+      clearForm: () => dispatch({ type: ACTIONS.CLEAR_FORM }),
+    };
+  }, []);
 
   return (
     <FormContext.Provider
       value={{
         ...state,
-        setValue: ({ id, value, error }) => dispatch({ type: ACTIONS.SET_DEFAULT_VALUE, id, value, error }),
-        updateValue: ({ id, value, error }) => dispatch({ type: ACTIONS.UPDATE_VALUE, id, value, error }),
-        updateBlur: ({ id }) => dispatch({ type: ACTIONS.UPDATE_BLUR, id }),
+        ...actions,
       }}
     >
       {children}

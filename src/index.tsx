@@ -8,7 +8,7 @@ interface IForm {
 }
 
 const FormComponent: React.FC<IForm> = ({ children, onSubmit, className }) => {
-  const { data, error, blur, touched } = React.useContext(FormContext);
+  const { data, error, focus, touched, clearForm } = React.useContext(FormContext);
 
   return (
     <>
@@ -23,9 +23,12 @@ const FormComponent: React.FC<IForm> = ({ children, onSubmit, className }) => {
         <fieldset disabled={false} aria-busy={false} style={{ border: `none` }}>
           {children}
           <button type="submit">Submit</button>
+          <button type="button" onClick={clearForm}>
+            Clear
+          </button>
         </fieldset>
       </form>
-      <pre>{JSON.stringify({ data, error, blur, touched }, null, 2)}</pre>
+      <pre>{JSON.stringify({ data, error, focus, touched }, null, 2)}</pre>
     </>
   );
 };
