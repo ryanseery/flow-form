@@ -1,14 +1,28 @@
 import React from 'react';
-import { Form, Input } from 'flow-form';
+import { FlowForm, Input } from 'flow-form';
 import './App.css';
 
 function App() {
+  const checkNumber = value => {
+    console.log('test: ', Number.isInteger(parseFloat(value)));
+    return Number.isInteger(value);
+  };
+
+  const checkString = value => {
+    console.log('YO: ', value);
+    return !value || !value.length;
+  };
+
   return (
     <div style={{ height: '100vh', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-      <Form onSubmit={data => console.log('data: ', data)}>
-        <Input>Test</Input>
-        <Input type="number">Number</Input>
-      </Form>
+      <FlowForm onSubmit={data => console.log('data: ', data)}>
+        <Input validate={checkString} required>
+          Text
+        </Input>
+        <Input type="number" validate={checkNumber} required>
+          Number
+        </Input>
+      </FlowForm>
     </div>
   );
 }

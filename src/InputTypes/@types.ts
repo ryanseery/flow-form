@@ -4,4 +4,6 @@ export interface IInputType {
   className: string;
   placeholder?: string;
   required?: boolean;
+  validate?: (value: any) => boolean;
+  errMsg?: string;
 }

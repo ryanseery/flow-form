@@ -7,10 +7,11 @@ interface IInput {
   type?: string;
   placeholder?: string;
   required?: boolean;
+  validate?: (arg: string) => boolean;
+  errMsg?: string;
 }
 
-export const Input: React.FC<IInput> = ({ children, type = 'text', placeholder, required }) => {
-  console.count('Input Render');
+export const Input: React.FC<IInput> = ({ children, type = 'text', placeholder, required, validate, errMsg }) => {
   const kebabCase = toKebabCase(children ?? '');
 
   const camelCase = toCamelCase(children ?? '');
@@ -21,6 +22,8 @@ export const Input: React.FC<IInput> = ({ children, type = 'text', placeholder, 
     className: kebabCase,
     placeholder,
     required,
+    validate,
+    errMsg,
   };
 
   return (

@@ -1,14 +1,17 @@
 import * as React from 'react';
-import { IState, FormContext, FormWrapper } from './FormWrapper';
+import { IState, FormContext, FormWrapper } from './FormWrapper/FormWrapper';
+export { Input } from './Input';
 
 interface IForm {
   children: React.ReactNode | React.ReactNode[];
   onSubmit: (data: object) => IState;
   className?: string;
+  customSubmit?: boolean;
+  reset?: boolean;
 }
 
-const FormComponent: React.FC<IForm> = ({ children, onSubmit, className }) => {
-  const { data, error, focus, touched, clearForm } = React.useContext(FormContext);
+const FormComponent: React.FC<IForm> = ({ children, onSubmit, className, customSubmit, reset }) => {
+  const { data, error, focus, clearForm } = React.useContext(FormContext);
 
   return (
     <>
@@ -22,23 +25,27 @@ const FormComponent: React.FC<IForm> = ({ children, onSubmit, className }) => {
       >
         <fieldset disabled={false} aria-busy={false} style={{ border: `none` }}>
           {children}
-          <button type="submit">Submit</button>
-          <button type="button" onClick={clearForm}>
-            Clear
-          </button>
+          {!customSubmit && (
+            <button type="submit" className="flow-form-submit">
+              Submit
+            </button>
+          )}
+          {reset && (
+            <button type="button" className="flow-form-reset" onClick={clearForm}>
+              Clear
+            </button>
+          )}
         </fieldset>
       </form>
-      <pre>{JSON.stringify({ data, error, focus, touched }, null, 2)}</pre>
+      <pre>{JSON.stringify({ data, error, focus }, null, 2)}</pre>
     </>
   );
 };
 
-export const Form: React.FC<IForm> = ({ children, onSubmit, className }) => (
+export const FlowForm: React.FC<IForm> = ({ children, onSubmit, className, customSubmit, reset }) => (
   <FormWrapper>
-    <FormComponent onSubmit={onSubmit} className={className}>
+    <FormComponent onSubmit={onSubmit} className={className} customSubmit={customSubmit} reset={reset}>
       {children}
     </FormComponent>
   </FormWrapper>
 );
-
-export { Input } from './Input';

@@ -1,17 +1,16 @@
 import * as React from 'react';
+import { assignError } from './assignError';
 
 export interface IState {
   data: {};
   error: {};
   focus: {};
-  touched: {};
 }
 
 const formData: IState = {
   data: {},
   error: {},
   focus: {},
-  touched: {},
 };
 
 export interface IArgs {
@@ -19,7 +18,6 @@ export interface IArgs {
   value?: string | boolean | number | object;
   error?: boolean;
   focus?: boolean;
-  touched?: boolean;
 }
 
 interface IContextProps extends IState {
@@ -71,10 +69,6 @@ function reducer(state: IState, action: IAction) {
             ...state.data,
             [id]: value,
           },
-          error: {
-            ...state.error,
-            [id]: error,
-          },
         };
       }
     }
@@ -85,6 +79,10 @@ function reducer(state: IState, action: IAction) {
           focus: {
             ...state.focus,
             [id]: !state.focus[id],
+          },
+          error: {
+            ...state.error,
+            [id]: assignError(value),
           },
         };
       }
@@ -103,13 +101,12 @@ export interface FormWrapper {
 
 export const FormWrapper: React.FC<FormWrapper> = ({ children }) => {
   const [state, dispatch] = React.useReducer(reducer, formData);
-  console.count('FormWrapper render');
 
   const actions = React.useMemo(() => {
     return {
       setValue: ({ id, value, error }: IArgs) => dispatch({ type: ACTIONS.SET_DEFAULT_VALUE, id, value, error }),
       updateValue: ({ id, value, error }: IArgs) => dispatch({ type: ACTIONS.UPDATE_VALUE, id, value, error }),
-      updateFocus: ({ id }: { id: string }) => dispatch({ type: ACTIONS.UPDATE_FOCUS, id }),
+      updateFocus: ({ id }: IArgs) => dispatch({ type: ACTIONS.UPDATE_FOCUS, id }),
       clearForm: () => dispatch({ type: ACTIONS.CLEAR_FORM }),
     };
   }, []);
