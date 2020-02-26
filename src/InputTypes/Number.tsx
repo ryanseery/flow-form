@@ -6,10 +6,9 @@ import { Error } from '../messages';
 interface INumber extends IInputType {}
 
 export const Number: React.FC<INumber> = ({ id, type, className, placeholder, required, validate, errMsg }) => {
-  const { value, error, handleChange, handleFocus } = useFormData({
+  const { value, error, handleChange, handleBlur } = useFormData({
     id,
     value: 0,
-    error: required ?? false,
     validate,
   });
   return (
@@ -19,8 +18,12 @@ export const Number: React.FC<INumber> = ({ id, type, className, placeholder, re
         name={id}
         value={value || ''}
         onChange={handleChange}
-        onFocus={handleFocus}
-        onBlur={handleFocus}
+        onBlur={e => {
+          if (validate) {
+            validate(e);
+          }
+          handleBlur(e);
+        }}
         type={type}
         placeholder={placeholder}
         style={{ display: `block` }}

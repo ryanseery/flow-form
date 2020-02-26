@@ -7,7 +7,7 @@ interface IInput {
   type?: string;
   placeholder?: string;
   required?: boolean;
-  validate?: (arg: string) => boolean;
+  validate?: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => boolean;
   errMsg?: string;
 }
 

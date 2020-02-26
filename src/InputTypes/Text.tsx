@@ -6,13 +6,12 @@ import { Error } from '../messages';
 interface IText extends IInputType {}
 
 export const Text: React.FC<IText> = ({ id, type, className, placeholder, required, validate, errMsg }) => {
-  const { value, error, handleChange, handleFocus } = useFormData({
+  const { value, error, handleChange, handleBlur } = useFormData({
     id,
     value: '',
-    error: required ?? false,
     validate,
   });
-  console.log('test test: ', validate && validate(value));
+
   return (
     <>
       <input
@@ -20,8 +19,7 @@ export const Text: React.FC<IText> = ({ id, type, className, placeholder, requir
         name={id}
         value={value || ''}
         onChange={handleChange}
-        onFocus={handleFocus}
-        onBlur={handleFocus}
+        onBlur={handleBlur}
         type={type}
         placeholder={placeholder}
         style={{ display: `block` }}

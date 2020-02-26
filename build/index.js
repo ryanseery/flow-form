@@ -30,37 +30,20 @@ var __assign = function() {
     return __assign.apply(this, arguments);
 };
 
-var type = function (obj) { return Object.prototype.toString.call(obj).slice(8, -1); };
-function assignError(value) {
-    switch (type(value)) {
-        case 'Sting':
-            return !value.length;
-        case 'Number':
-            return !value.toString().length;
-        case 'Object':
-            return !Object.keys(value).length;
-        case 'Array':
-            return value.length;
-        default:
-            return false;
-    }
-}
-
 var formData = {
     data: {},
     error: {},
-    focus: {},
 };
 var FormContext = React.createContext({});
 var ACTIONS;
 (function (ACTIONS) {
     ACTIONS["SET_DEFAULT_VALUE"] = "SET_DEFAULT_VALUE";
     ACTIONS["UPDATE_VALUE"] = "UPDATE_VALUE";
-    ACTIONS["UPDATE_FOCUS"] = "UPDATE_FOCUS";
+    ACTIONS["UPDATE_BLUR"] = "UPDATE_BLUR";
     ACTIONS["CLEAR_FORM"] = "CLEAR_FORM";
 })(ACTIONS || (ACTIONS = {}));
 function reducer(state, action) {
-    var _a, _b, _c;
+    var _a, _b;
     var type = action.type, id = action.id, value = action.value, error = action.error;
     switch (type) {
         case ACTIONS.SET_DEFAULT_VALUE: {
@@ -71,7 +54,6 @@ function reducer(state, action) {
             if (typeof id === 'string' && !stateCopy.data[id]) {
                 stateCopy.data[id] = '';
                 stateCopy.error[id] = error;
-                stateCopy.focus[id] = false;
             }
             // return copy
             return stateCopy;
@@ -81,9 +63,9 @@ function reducer(state, action) {
                 return __assign(__assign({}, state), { data: __assign(__assign({}, state.data), (_a = {}, _a[id] = value, _a)) });
             }
         }
-        case ACTIONS.UPDATE_FOCUS: {
+        case ACTIONS.UPDATE_BLUR: {
             if (typeof id === 'string') {
-                return __assign(__assign({}, state), { focus: __assign(__assign({}, state.focus), (_b = {}, _b[id] = !state.focus[id], _b)), error: __assign(__assign({}, state.error), (_c = {}, _c[id] = assignError(value), _c)) });
+                return __assign(__assign({}, state), { error: __assign(__assign({}, state.error), (_b = {}, _b[id] = error, _b)) });
             }
         }
         case ACTIONS.CLEAR_FORM:
@@ -106,9 +88,9 @@ var FormWrapper = function (_a) {
                 var id = _a.id, value = _a.value, error = _a.error;
                 return dispatch({ type: ACTIONS.UPDATE_VALUE, id: id, value: value, error: error });
             },
-            updateFocus: function (_a) {
-                var id = _a.id;
-                return dispatch({ type: ACTIONS.UPDATE_FOCUS, id: id });
+            updateBlur: function (_a) {
+                var id = _a.id, error = _a.error;
+                return dispatch({ type: ACTIONS.UPDATE_BLUR, id: id, error: error });
             },
             clearForm: function () { return dispatch({ type: ACTIONS.CLEAR_FORM }); },
         };
@@ -136,28 +118,28 @@ var toCamelCase = function (str) {
 };
 
 function useFormData(_a) {
-    var id = _a.id, value = _a.value, error = _a.error, validate = _a.validate;
-    var _b = React.useContext(FormContext), data = _b.data, setValue = _b.setValue, updateValue = _b.updateValue, updateFocus = _b.updateFocus;
+    var id = _a.id, value = _a.value, validate = _a.validate;
+    var _b = React.useContext(FormContext), data = _b.data, error = _b.error, setValue = _b.setValue, updateValue = _b.updateValue, updateBlur = _b.updateBlur;
     React.useEffect(function () {
-        setValue({ id: id, value: value, error: error });
+        setValue({ id: id, value: value });
     }, []);
     var handleChange = function (e) {
         e.persist();
         updateValue({
             id: e.target.name,
             value: e.target.value.toLowerCase(),
-            error: validate ? validate(e.target.value) : false,
+            error: validate ? validate(e) : false,
         });
     };
-    var handleFocus = function (e) {
+    var handleBlur = function (e) {
         e.persist();
-        updateFocus({ id: e.target.name });
+        updateBlur({ id: e.target.name, error: validate ? validate(e) : false });
     };
     return {
         value: data[id],
         error: error[id],
         handleChange: handleChange,
-        handleFocus: handleFocus,
+        handleBlur: handleBlur,
     };
 }
 
@@ -171,12 +153,10 @@ var Text = function (_a) {
     var _b = useFormData({
         id: id,
         value: '',
-        error: required !== null && required !== void 0 ? required : false,
         validate: validate,
-    }), value = _b.value, error = _b.error, handleChange = _b.handleChange, handleFocus = _b.handleFocus;
-    console.log('test test: ', validate && validate(value));
+    }), value = _b.value, error = _b.error, handleChange = _b.handleChange, handleBlur = _b.handleBlur;
     return (React.createElement(React.Fragment, null,
-        React.createElement("input", { id: id, name: id, value: value || '', onChange: handleChange, onFocus: handleFocus, onBlur: handleFocus, type: type, placeholder: placeholder, style: { display: "block" }, className: "flow-form-input " + className + "-input", required: required }),
+        React.createElement("input", { id: id, name: id, value: value || '', onChange: handleChange, onBlur: handleBlur, type: type, placeholder: placeholder, style: { display: "block" }, className: "flow-form-input " + className + "-input", required: required }),
         error && React.createElement(Error, { id: id, errMsg: errMsg !== null && errMsg !== void 0 ? errMsg : id + " error." })));
 };
 
@@ -185,11 +165,15 @@ var Number = function (_a) {
     var _b = useFormData({
         id: id,
         value: 0,
-        error: required !== null && required !== void 0 ? required : false,
         validate: validate,
-    }), value = _b.value, error = _b.error, handleChange = _b.handleChange, handleFocus = _b.handleFocus;
+    }), value = _b.value, error = _b.error, handleChange = _b.handleChange, handleBlur = _b.handleBlur;
     return (React.createElement(React.Fragment, null,
-        React.createElement("input", { id: id, name: id, value: value || '', onChange: handleChange, onFocus: handleFocus, onBlur: handleFocus, type: type, placeholder: placeholder, style: { display: "block" }, className: "flow-form-input " + className + "-input", required: required }),
+        React.createElement("input", { id: id, name: id, value: value || '', onChange: handleChange, onBlur: function (e) {
+                if (validate) {
+                    validate(e);
+                }
+                handleBlur(e);
+            }, type: type, placeholder: placeholder, style: { display: "block" }, className: "flow-form-input " + className + "-input", required: required }),
         error && React.createElement(Error, { id: id, errMsg: errMsg !== null && errMsg !== void 0 ? errMsg : id + " error." })));
 };
 
@@ -222,7 +206,7 @@ var Input = function (_a) {
 
 var FormComponent = function (_a) {
     var children = _a.children, onSubmit = _a.onSubmit, className = _a.className, customSubmit = _a.customSubmit, reset = _a.reset;
-    var _b = React.useContext(FormContext), data = _b.data, error = _b.error, focus = _b.focus, clearForm = _b.clearForm;
+    var _b = React.useContext(FormContext), data = _b.data, error = _b.error, clearForm = _b.clearForm;
     return (React.createElement(React.Fragment, null,
         React.createElement("form", { className: "flow-form " + (className || ''), style: { marginRight: '10em' }, onSubmit: function (e) {
                 e.preventDefault();
@@ -232,7 +216,7 @@ var FormComponent = function (_a) {
                 children,
                 !customSubmit && (React.createElement("button", { type: "submit", className: "flow-form-submit" }, "Submit")),
                 reset && (React.createElement("button", { type: "button", className: "flow-form-reset", onClick: clearForm }, "Clear")))),
-        React.createElement("pre", null, JSON.stringify({ data: data, error: error, focus: focus }, null, 2))));
+        React.createElement("pre", null, JSON.stringify({ data: data, error: error }, null, 2))));
 };
 var FlowForm = function (_a) {
     var children = _a.children, onSubmit = _a.onSubmit, className = _a.className, customSubmit = _a.customSubmit, reset = _a.reset;

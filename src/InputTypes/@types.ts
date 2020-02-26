@@ -4,6 +4,6 @@ export interface IInputType {
   className: string;
   placeholder?: string;
   required?: boolean;
-  validate?: (value: any) => boolean;
+  validate?: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => boolean;
   errMsg?: string;
 }

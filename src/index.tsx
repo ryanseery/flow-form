@@ -11,7 +11,7 @@ interface IForm {
 }
 
 const FormComponent: React.FC<IForm> = ({ children, onSubmit, className, customSubmit, reset }) => {
-  const { data, error, focus, clearForm } = React.useContext(FormContext);
+  const { data, error, clearForm } = React.useContext(FormContext);
 
   return (
     <>
@@ -37,7 +37,7 @@ const FormComponent: React.FC<IForm> = ({ children, onSubmit, className, customS
           )}
         </fieldset>
       </form>
-      <pre>{JSON.stringify({ data, error, focus }, null, 2)}</pre>
+      <pre>{JSON.stringify({ data, error }, null, 2)}</pre>
     </>
   );
 };

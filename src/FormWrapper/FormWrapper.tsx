@@ -1,29 +1,25 @@
 import * as React from 'react';
-import { assignError } from './assignError';
 
 export interface IState {
   data: {};
   error: {};
-  focus: {};
 }
 
 const formData: IState = {
   data: {},
   error: {},
-  focus: {},
 };
 
 export interface IArgs {
   id?: string;
   value?: string | boolean | number | object;
   error?: boolean;
-  focus?: boolean;
 }
 
 interface IContextProps extends IState {
   setValue: (args: IArgs) => void;
   updateValue: (args: IArgs) => void;
-  updateFocus: (args: IArgs) => void;
+  updateBlur: (args: IArgs) => void;
   clearForm: () => void;
 }
 
@@ -32,12 +28,12 @@ export const FormContext = React.createContext({} as IContextProps);
 enum ACTIONS {
   SET_DEFAULT_VALUE = 'SET_DEFAULT_VALUE',
   UPDATE_VALUE = 'UPDATE_VALUE',
-  UPDATE_FOCUS = 'UPDATE_FOCUS',
+  UPDATE_BLUR = 'UPDATE_BLUR',
   CLEAR_FORM = 'CLEAR_FORM',
 }
 
 interface IAction extends IArgs {
-  type: ACTIONS.SET_DEFAULT_VALUE | ACTIONS.UPDATE_VALUE | ACTIONS.UPDATE_FOCUS | ACTIONS.CLEAR_FORM;
+  type: ACTIONS.SET_DEFAULT_VALUE | ACTIONS.UPDATE_VALUE | ACTIONS.UPDATE_BLUR | ACTIONS.CLEAR_FORM;
 }
 
 function reducer(state: IState, action: IAction) {
@@ -55,7 +51,6 @@ function reducer(state: IState, action: IAction) {
       if (typeof id === 'string' && !stateCopy.data[id]) {
         stateCopy.data[id] = '';
         stateCopy.error[id] = error;
-        stateCopy.focus[id] = false;
       }
 
       // return copy
@@ -72,17 +67,13 @@ function reducer(state: IState, action: IAction) {
         };
       }
     }
-    case ACTIONS.UPDATE_FOCUS: {
+    case ACTIONS.UPDATE_BLUR: {
       if (typeof id === 'string') {
         return {
           ...state,
-          focus: {
-            ...state.focus,
-            [id]: !state.focus[id],
-          },
           error: {
             ...state.error,
-            [id]: assignError(value),
+            [id]: error,
           },
         };
       }
@@ -106,7 +97,7 @@ export const FormWrapper: React.FC<FormWrapper> = ({ children }) => {
     return {
       setValue: ({ id, value, error }: IArgs) => dispatch({ type: ACTIONS.SET_DEFAULT_VALUE, id, value, error }),
       updateValue: ({ id, value, error }: IArgs) => dispatch({ type: ACTIONS.UPDATE_VALUE, id, value, error }),
-      updateFocus: ({ id }: IArgs) => dispatch({ type: ACTIONS.UPDATE_FOCUS, id }),
+      updateBlur: ({ id, error }: IArgs) => dispatch({ type: ACTIONS.UPDATE_BLUR, id, error }),
       clearForm: () => dispatch({ type: ACTIONS.CLEAR_FORM }),
     };
   }, []);

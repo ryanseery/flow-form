@@ -4,16 +4,15 @@ import { FormContext } from '../FormWrapper/FormWrapper';
 export interface IUseFormData {
   id: string;
   value: string | boolean | number | object;
-  error: boolean;
   required?: boolean;
-  validate?: (value: any) => boolean;
+  validate?: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => boolean;
 }
 
-export function useFormData({ id, value, error, validate }: IUseFormData) {
-  const { data, setValue, updateValue, updateFocus } = React.useContext(FormContext);
+export function useFormData({ id, value, validate }: IUseFormData) {
+  const { data, error, setValue, updateValue, updateBlur } = React.useContext(FormContext);
 
   React.useEffect(() => {
-    setValue({ id, value, error });
+    setValue({ id, value });
   }, []);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
@@ -21,19 +20,19 @@ export function useFormData({ id, value, error, validate }: IUseFormData) {
     updateValue({
       id: e.target.name,
       value: e.target.value.toLowerCase(),
-      error: validate ? validate(e.target.value) : false,
+      error: validate ? validate(e) : false,
     });
   };
 
-  const handleFocus = (e: React.FocusEvent<HTMLInputElement>) => {
+  const handleBlur = (e: React.FocusEvent<HTMLInputElement>) => {
     e.persist();
-    updateFocus({ id: e.target.name });
+    updateBlur({ id: e.target.name, error: validate ? validate(e) : false });
   };
 
   return {
     value: data[id],
     error: error[id],
     handleChange,
-    handleFocus,
+    handleBlur,
   };
 }
