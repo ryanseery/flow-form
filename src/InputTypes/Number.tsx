@@ -18,12 +18,7 @@ export const Number: React.FC<INumber> = ({ id, type, className, placeholder, re
         name={id}
         value={value || ''}
         onChange={handleChange}
-        onBlur={e => {
-          if (validate) {
-            validate(e);
-          }
-          handleBlur(e);
-        }}
+        onBlur={handleBlur}
         type={type}
         placeholder={placeholder}
         style={{ display: `block` }}

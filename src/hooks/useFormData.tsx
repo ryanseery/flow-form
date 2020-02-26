@@ -18,15 +18,15 @@ export function useFormData({ id, value, validate }: IUseFormData) {
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     e.persist();
     updateValue({
-      id: e.target.name,
-      value: e.target.value.toLowerCase(),
+      id,
+      value: e.target.value,
       error: validate ? validate(e) : false,
     });
   };
 
   const handleBlur = (e: React.FocusEvent<HTMLInputElement>) => {
     e.persist();
-    updateBlur({ id: e.target.name, error: validate ? validate(e) : false });
+    updateBlur({ id, error: validate ? validate(e) : false });
   };
 
   return {

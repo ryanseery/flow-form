@@ -50,7 +50,7 @@ function reducer(state: IState, action: IAction) {
       // don't mutate state yet
       if (typeof id === 'string' && !stateCopy.data[id]) {
         stateCopy.data[id] = '';
-        stateCopy.error[id] = error;
+        stateCopy.error[id] = false;
       }
 
       // return copy

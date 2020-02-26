@@ -1,4 +1,4 @@
-import { createContext, useReducer, useMemo, createElement, useContext, useEffect, Fragment } from 'react';
+import { createContext, useReducer, useMemo, createElement, useContext, Fragment, useEffect } from 'react';
 
 /*! *****************************************************************************
 Copyright (c) Microsoft Corporation. All rights reserved.
@@ -49,7 +49,7 @@ function reducer(state, action) {
             // don't mutate state yet
             if (typeof id === 'string' && !stateCopy.data[id]) {
                 stateCopy.data[id] = '';
-                stateCopy.error[id] = error;
+                stateCopy.error[id] = false;
             }
             // return copy
             return stateCopy;
@@ -94,6 +94,26 @@ var FormWrapper = function (_a) {
     return (createElement(FormContext.Provider, { value: __assign(__assign({}, state), actions) }, children));
 };
 
+var FormComponent = function (_a) {
+    var children = _a.children, onSubmit = _a.onSubmit, className = _a.className, style = _a.style, customSubmit = _a.customSubmit, reset = _a.reset;
+    var _b = useContext(FormContext), data = _b.data, error = _b.error, clearForm = _b.clearForm;
+    return (createElement(Fragment, null,
+        createElement("form", { className: "flow-form " + className, style: style, onSubmit: function (e) {
+                e.preventDefault();
+                onSubmit(data);
+            } },
+            createElement("fieldset", { disabled: false, "aria-busy": false, style: { border: "none" } },
+                children,
+                !customSubmit && (createElement("button", { type: "submit", className: "flow-form-submit" }, "Submit")),
+                reset && (createElement("button", { type: "button", className: "flow-form-reset", onClick: clearForm }, "Clear")))),
+        createElement("pre", null, JSON.stringify({ data: data, error: error }, null, 2))));
+};
+var FlowForm = function (_a) {
+    var children = _a.children, onSubmit = _a.onSubmit, className = _a.className, style = _a.style, customSubmit = _a.customSubmit, reset = _a.reset;
+    return (createElement(FormWrapper, null,
+        createElement(FormComponent, { onSubmit: onSubmit, className: className, style: style, customSubmit: customSubmit, reset: reset }, children)));
+};
+
 var toKebabCase = function (str) {
     if (typeof str !== 'string') {
         throw new TypeError('toKebabCase called on non-string');
@@ -122,14 +142,14 @@ function useFormData(_a) {
     var handleChange = function (e) {
         e.persist();
         updateValue({
-            id: e.target.name,
-            value: e.target.value.toLowerCase(),
+            id: id,
+            value: e.target.value,
             error: validate ? validate(e) : false,
         });
     };
     var handleBlur = function (e) {
         e.persist();
-        updateBlur({ id: e.target.name, error: validate ? validate(e) : false });
+        updateBlur({ id: id, error: validate ? validate(e) : false });
     };
     return {
         value: data[id],
@@ -164,12 +184,7 @@ var Number = function (_a) {
         validate: validate,
     }), value = _b.value, error = _b.error, handleChange = _b.handleChange, handleBlur = _b.handleBlur;
     return (createElement(Fragment, null,
-        createElement("input", { id: id, name: id, value: value || '', onChange: handleChange, onBlur: function (e) {
-                if (validate) {
-                    validate(e);
-                }
-                handleBlur(e);
-            }, type: type, placeholder: placeholder, style: { display: "block" }, className: "flow-form-input " + className + "-input", required: required }),
+        createElement("input", { id: id, name: id, value: value || '', onChange: handleChange, onBlur: handleBlur, type: type, placeholder: placeholder, style: { display: "block" }, className: "flow-form-input " + className + "-input", required: required }),
         error && createElement(Error, { id: id, errMsg: errMsg !== null && errMsg !== void 0 ? errMsg : id + " error." })));
 };
 
@@ -198,26 +213,6 @@ var Input = function (_a) {
                     return createElement(Text, __assign({}, defaultProps));
             }
         })()));
-};
-
-var FormComponent = function (_a) {
-    var children = _a.children, onSubmit = _a.onSubmit, className = _a.className, customSubmit = _a.customSubmit, reset = _a.reset;
-    var _b = useContext(FormContext), data = _b.data, error = _b.error, clearForm = _b.clearForm;
-    return (createElement(Fragment, null,
-        createElement("form", { className: "flow-form " + (className || ''), style: { marginRight: '10em' }, onSubmit: function (e) {
-                e.preventDefault();
-                onSubmit(data);
-            } },
-            createElement("fieldset", { disabled: false, "aria-busy": false, style: { border: "none" } },
-                children,
-                !customSubmit && (createElement("button", { type: "submit", className: "flow-form-submit" }, "Submit")),
-                reset && (createElement("button", { type: "button", className: "flow-form-reset", onClick: clearForm }, "Clear")))),
-        createElement("pre", null, JSON.stringify({ data: data, error: error }, null, 2))));
-};
-var FlowForm = function (_a) {
-    var children = _a.children, onSubmit = _a.onSubmit, className = _a.className, customSubmit = _a.customSubmit, reset = _a.reset;
-    return (createElement(FormWrapper, null,
-        createElement(FormComponent, { onSubmit: onSubmit, className: className, customSubmit: customSubmit, reset: reset }, children)));
 };
 
 export { FlowForm, Input };

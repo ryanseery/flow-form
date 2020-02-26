@@ -13,7 +13,7 @@ function App() {
     return !e.target.value || !e.target.value.length;
   };
 
-  // TODO allow style, initial Values
+  // TODO initial Values
   return (
     <div style={{ height: '100vh', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
       <FlowForm onSubmit={data => console.log('data: ', data)}>
