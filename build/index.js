@@ -100,17 +100,15 @@ var FormWrapper = function (_a) {
 
 var Form = function (_a) {
     var children = _a.children, onSubmit = _a.onSubmit, className = _a.className, style = _a.style, customSubmit = _a.customSubmit, reset = _a.reset;
-    var _b = React.useContext(FormContext), data = _b.data, error = _b.error, clearForm = _b.clearForm;
-    return (React.createElement("div", { style: { display: 'flex', flexDirection: 'row', justifyContent: 'space-between', width: '30vh' } },
-        React.createElement("form", { className: "flow-form " + className, style: style, onSubmit: function (e) {
-                e.preventDefault();
-                onSubmit(error);
-            } },
-            React.createElement("fieldset", { disabled: false, "aria-busy": false, style: { border: "none" } },
-                children,
-                !customSubmit && (React.createElement("button", { type: "submit", className: "flow-form-submit" }, "Submit")),
-                reset && (React.createElement("button", { type: "button", className: "flow-form-reset", onClick: clearForm }, "Clear")))),
-        React.createElement("pre", null, JSON.stringify({ data: data, error: error }, null, 2))));
+    var _b = React.useContext(FormContext), data = _b.data, clearForm = _b.clearForm;
+    return (React.createElement("form", { className: "flow-form " + className, style: style, onSubmit: function (e) {
+            e.preventDefault();
+            onSubmit(data);
+        } },
+        React.createElement("fieldset", { disabled: false, "aria-busy": false, style: { border: "none" } },
+            children,
+            !customSubmit && (React.createElement("button", { type: "submit", className: "flow-form-submit" }, "Submit")),
+            reset && (React.createElement("button", { type: "button", className: "flow-form-reset", onClick: clearForm }, "Clear")))));
 };
 var FlowForm = function (_a) {
     var children = _a.children, onSubmit = _a.onSubmit, className = _a.className, style = _a.style, customSubmit = _a.customSubmit, reset = _a.reset, _b = _a.initialValues, initialValues = _b === void 0 ? {} : _b;
@@ -192,15 +190,26 @@ function useFormError(_a) {
     return { error: error[id] };
 }
 
+function showFormData() {
+    var _a = React.useContext(FormContext), data = _a.data, error = _a.error;
+    return {
+        data: data,
+        error: error,
+    };
+}
+
 var Error = function (_a) {
     var id = _a.id, message = _a.message;
-    var name = toCamelCase(id);
-    var errMsg = function () { return (typeof message === 'string' ? message : id + " error."); };
-    var error = useFormError({ id: name }).error;
+    var error = useFormError({ id: toCamelCase(id) }).error;
     if (error) {
-        return (React.createElement("span", { id: name + "-error", style: { fontSize: '0.8em', color: 'red' }, className: name + "-error" }, errMsg()));
+        return (React.createElement("small", { id: toCamelCase(id) + "-error", style: { color: 'red' }, className: toKebabCase(name) + "-error" }, typeof message === 'string' ? message : id + " error."));
     }
     return null;
+};
+
+var ShowData = function () {
+    var _a = showFormData(), data = _a.data, error = _a.error;
+    return React.createElement("pre", null, JSON.stringify({ data: data, error: error }, null, 2));
 };
 
 var Text = function (_a) {
@@ -353,4 +362,5 @@ var Input = function (_a) {
 exports.Error = Error;
 exports.FlowForm = FlowForm;
 exports.Input = Input;
+exports.ShowData = ShowData;
 //# sourceMappingURL=index.js.map

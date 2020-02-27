@@ -11,34 +11,31 @@ interface IForm {
 }
 
 const Form: React.FC<IForm> = ({ children, onSubmit, className, style, customSubmit, reset }) => {
-  const { data, error, clearForm } = React.useContext(FormContext);
+  const { data, clearForm } = React.useContext(FormContext);
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', width: '30vh' }}>
-      <form
-        className={`flow-form ${className}`}
-        style={style}
-        onSubmit={e => {
-          e.preventDefault();
-          onSubmit(error);
-        }}
-      >
-        <fieldset disabled={false} aria-busy={false} style={{ border: `none` }}>
-          {children}
-          {!customSubmit && (
-            <button type="submit" className="flow-form-submit">
-              Submit
-            </button>
-          )}
-          {reset && (
-            <button type="button" className="flow-form-reset" onClick={clearForm}>
-              Clear
-            </button>
-          )}
-        </fieldset>
-      </form>
-      <pre>{JSON.stringify({ data, error }, null, 2)}</pre>
-    </div>
+    <form
+      className={`flow-form ${className}`}
+      style={style}
+      onSubmit={e => {
+        e.preventDefault();
+        onSubmit(data);
+      }}
+    >
+      <fieldset disabled={false} aria-busy={false} style={{ border: `none` }}>
+        {children}
+        {!customSubmit && (
+          <button type="submit" className="flow-form-submit">
+            Submit
+          </button>
+        )}
+        {reset && (
+          <button type="button" className="flow-form-reset" onClick={clearForm}>
+            Clear
+          </button>
+        )}
+      </fieldset>
+    </form>
   );
 };
 
