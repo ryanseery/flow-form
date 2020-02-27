@@ -12,7 +12,7 @@ export const Color: React.FC<IColor> = ({
   placeholder,
   required = false,
   validate,
-  errMsg,
+  showError,
   autoComplete,
 }) => {
   const { value, error, handleChange, handleBlur, handleFocus } = useFormData({
@@ -38,7 +38,7 @@ export const Color: React.FC<IColor> = ({
         required={required}
         autoComplete={autoComplete}
       />
-      {error && <Error id={id} errMsg={errMsg ?? `${id} error.`} />}
+      {showError && error && <Error id={id} message={showError} />}
     </>
   );
 };

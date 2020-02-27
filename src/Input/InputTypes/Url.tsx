@@ -14,7 +14,7 @@ export const Url: React.FC<IUrl> = ({
   placeholder,
   required = false,
   validate,
-  errMsg,
+  showError,
   autoComplete,
   pattern = 'https://.*',
 }) => {
@@ -42,7 +42,7 @@ export const Url: React.FC<IUrl> = ({
         autoComplete={autoComplete}
         pattern={pattern}
       />
-      {error && <Error id={id} errMsg={errMsg ?? `${id} error.`} />}
+      {showError && error && <Error id={id} message={showError} />}
     </>
   );
 };

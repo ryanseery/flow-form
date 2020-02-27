@@ -14,7 +14,7 @@ export const TextArea: React.FC<ITextArea> = ({
   placeholder,
   required = false,
   validate,
-  errMsg,
+  showError,
   autoComplete,
   rows = 4,
   cols = 20,
@@ -43,7 +43,7 @@ export const TextArea: React.FC<ITextArea> = ({
         rows={rows}
         cols={cols}
       />
-      {error && <Error id={id} errMsg={errMsg ?? `${id} error.`} />}
+      {showError && error && <Error id={id} message={showError} />}
     </>
   );
 };

@@ -8,7 +8,7 @@ interface IInput {
   placeholder?: string;
   required?: boolean;
   validate?: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => boolean;
-  errMsg?: string;
+  showError?: boolean | string;
   autoComplete?: string;
   pattern?: string;
   rows?: number;
@@ -21,7 +21,7 @@ export const Input: React.FC<IInput> = ({
   placeholder,
   required,
   validate,
-  errMsg,
+  showError,
   autoComplete,
   pattern,
   rows,
@@ -38,7 +38,7 @@ export const Input: React.FC<IInput> = ({
     placeholder,
     required,
     validate,
-    errMsg,
+    showError,
     autoComplete: autoComplete ?? 'off',
     pattern,
     rows,
@@ -49,7 +49,7 @@ export const Input: React.FC<IInput> = ({
     <label
       htmlFor={camelCase}
       className={`flow-form-label ${kebabCase}-label`}
-      style={{ display: `block`, minHeight: '3.5em' }}
+      style={{ display: `block`, minHeight: showError ? '3.5em' : '' }}
     >
       {children}
       {(() => {

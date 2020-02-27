@@ -12,7 +12,7 @@ export const Number: React.FC<INumber> = ({
   placeholder,
   required = false,
   validate,
-  errMsg,
+  showError,
   autoComplete,
 }) => {
   const { value, error, handleChange, handleBlur, handleFocus } = useFormData({
@@ -37,7 +37,7 @@ export const Number: React.FC<INumber> = ({
         required={required}
         autoComplete={autoComplete}
       />
-      {error && <Error id={id} errMsg={errMsg ?? `${id} error.`} />}
+      {showError && error && <Error id={id} message={showError} />}
     </>
   );
 };
