@@ -17,14 +17,16 @@ function App() {
       <FlowForm onSubmit={data => console.log('data: ', data)} style={{ width: '30%' }}>
         <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
           <div>
-            <Input validate={checkString} showError required>
+            <Input validate={checkString} showError required helperText="Test helper text">
               Text
             </Input>
             <Input type="number" validate={checkNumber} required>
               Number
             </Input>
             <Error id="Number" message="Custom Error" />
-            <Input type="email">Email</Input>
+            <Input type="email" helperText="Test helper text">
+              Email
+            </Input>
             <Input type="password">Password</Input>
             <Input type="tel">Phone Number</Input>
             <Input type="url">Url</Input>

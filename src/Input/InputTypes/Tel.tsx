@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { IInputType } from './@types';
 import { useFormData } from '../../hooks';
-import { Error } from '../../messages';
+import { Error, HelperText } from '../../messages';
 
 interface ITel extends IInputType {
   pattern?: string;
@@ -17,6 +17,7 @@ export const Tel: React.FC<ITel> = ({
   showError,
   autoComplete,
   pattern = '[0-9]{3}-[0-9]{2}-[0-9]{3}',
+  helperText,
 }) => {
   const { value, error, handleChange, handleBlur, handleFocus } = useFormData({
     id,
@@ -42,6 +43,7 @@ export const Tel: React.FC<ITel> = ({
         autoComplete={autoComplete}
         pattern={pattern}
       />
+      {!error && <HelperText id={id} helperText={helperText} className={className} />}
       {showError && error && <Error id={id} message={showError} />}
     </>
   );

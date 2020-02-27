@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { IInputType } from './@types';
 import { useFormData } from '../../hooks';
-import { Error } from '../../messages';
+import { Error, HelperText } from '../../messages';
 
 interface IUrl extends IInputType {
   pattern?: string;
@@ -17,6 +17,7 @@ export const Url: React.FC<IUrl> = ({
   showError,
   autoComplete,
   pattern = 'https://.*',
+  helperText,
 }) => {
   const { value, error, handleChange, handleBlur, handleFocus } = useFormData({
     id,
@@ -42,6 +43,7 @@ export const Url: React.FC<IUrl> = ({
         autoComplete={autoComplete}
         pattern={pattern}
       />
+      {!error && <HelperText id={id} helperText={helperText} className={className} />}
       {showError && error && <Error id={id} message={showError} />}
     </>
   );

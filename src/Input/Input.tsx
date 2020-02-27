@@ -13,6 +13,7 @@ interface IInput {
   pattern?: string;
   rows?: number;
   cols?: number;
+  helperText?: boolean | string;
 }
 
 export const Input: React.FC<IInput> = ({
@@ -26,6 +27,7 @@ export const Input: React.FC<IInput> = ({
   pattern,
   rows,
   cols,
+  helperText,
 }) => {
   const kebabCase = toKebabCase(children ?? '');
 
@@ -43,13 +45,14 @@ export const Input: React.FC<IInput> = ({
     pattern,
     rows,
     cols,
+    helperText,
   };
 
   return (
     <label
       htmlFor={camelCase}
       className={`flow-form-label ${kebabCase}-label`}
-      style={{ display: `block`, minHeight: showError ? '3.5em' : '' }}
+      style={{ display: `block`, minHeight: '3.5em' }}
     >
       {children}
       {(() => {

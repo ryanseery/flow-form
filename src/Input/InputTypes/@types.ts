@@ -7,4 +7,5 @@ export interface IInputType {
   autoComplete: string;
   validate?: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => boolean;
   showError?: boolean | string;
+  helperText?: boolean | string;
 }

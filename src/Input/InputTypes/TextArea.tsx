@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { IInputType } from './@types';
 import { useFormData } from '../../hooks';
-import { Error } from '../../messages';
+import { Error, HelperText } from '../../messages';
 
 interface ITextArea extends IInputType {
   rows?: number;
@@ -18,6 +18,7 @@ export const TextArea: React.FC<ITextArea> = ({
   autoComplete,
   rows = 4,
   cols = 20,
+  helperText,
 }) => {
   const { value, error, handleChange, handleBlur, handleFocus } = useFormData({
     id,
@@ -43,6 +44,7 @@ export const TextArea: React.FC<ITextArea> = ({
         rows={rows}
         cols={cols}
       />
+      {!error && <HelperText id={id} helperText={helperText} className={className} />}
       {showError && error && <Error id={id} message={showError} />}
     </>
   );

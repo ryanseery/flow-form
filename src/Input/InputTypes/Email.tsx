@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { IInputType } from './@types';
 import { useFormData } from '../../hooks';
-import { Error } from '../../messages';
+import { Error, HelperText } from '../../messages';
 
 interface IEmail extends IInputType {}
 
@@ -14,6 +14,7 @@ export const Email: React.FC<IEmail> = ({
   validate,
   showError,
   autoComplete,
+  helperText,
 }) => {
   const { value, error, handleChange, handleBlur, handleFocus } = useFormData({
     id,
@@ -38,6 +39,7 @@ export const Email: React.FC<IEmail> = ({
         required={required}
         autoComplete={autoComplete}
       />
+      {!error && <HelperText id={id} helperText={helperText} className={className} />}
       {showError && error && <Error id={id} message={showError} />}
     </>
   );
