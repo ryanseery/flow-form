@@ -1,4 +1,4 @@
-export const toKebabCase = (str: string): string => {
+export function toKebabCase(str: string): string {
   if (typeof str !== 'string') {
     throw new TypeError('toKebabCase called on non-string');
   }
@@ -6,4 +6,4 @@ export const toKebabCase = (str: string): string => {
     .replace(/([a-z])([A-Z])/g, '$1-$2')
     .replace(/\s+/g, '-')
     .toLowerCase();
-};
+}

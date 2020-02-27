@@ -5,4 +5,8 @@ interface IError {
   errMsg: string;
 }
 
-export const Error: React.FC<IError> = ({ id, errMsg }) => <span className={`${id}-error`}>{errMsg}</span>;
+export const Error: React.FC<IError> = ({ id, errMsg }) => (
+  <span style={{ fontSize: '0.8em', color: 'red' }} className={`${id}-error`}>
+    {errMsg}
+  </span>
+);

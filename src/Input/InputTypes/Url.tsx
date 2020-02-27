@@ -1,16 +1,30 @@
 import * as React from 'react';
 import { IInputType } from './@types';
-import { useFormData } from '../hooks';
-import { Error } from '../messages';
+import { useFormData } from '../../hooks';
+import { Error } from '../../messages';
 
-interface INumber extends IInputType {}
+interface IUrl extends IInputType {
+  pattern?: string;
+}
 
-export const Number: React.FC<INumber> = ({ id, type, className, placeholder, required, validate, errMsg }) => {
-  const { value, error, handleChange, handleBlur } = useFormData({
+export const Url: React.FC<IUrl> = ({
+  id,
+  type = 'url',
+  className,
+  placeholder,
+  required = false,
+  validate,
+  errMsg,
+  autoComplete,
+  pattern = 'https://.*',
+}) => {
+  const { value, error, handleChange, handleBlur, handleFocus } = useFormData({
     id,
-    value: 0,
+    value: '',
     validate,
+    required,
   });
+
   return (
     <>
       <input
@@ -19,11 +33,14 @@ export const Number: React.FC<INumber> = ({ id, type, className, placeholder, re
         value={value || ''}
         onChange={handleChange}
         onBlur={handleBlur}
+        onFocus={handleFocus}
         type={type}
         placeholder={placeholder}
         style={{ display: `block` }}
         className={`flow-form-input ${className}-input`}
         required={required}
+        autoComplete={autoComplete}
+        pattern={pattern}
       />
       {error && <Error id={id} errMsg={errMsg ?? `${id} error.`} />}
     </>

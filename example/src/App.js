@@ -4,12 +4,10 @@ import './App.css';
 
 function App() {
   const checkNumber = e => {
-    console.log('test: ', Number.isInteger(parseFloat(e.target.value)));
-    return Number.isInteger(e.target.value);
+    return !Number.isInteger(parseFloat(e.target.value));
   };
 
   const checkString = e => {
-    console.log('YO: ', e.target.value);
     return !e.target.value || !e.target.value.length;
   };
 
@@ -21,6 +19,12 @@ function App() {
         <Input type="number" validate={checkNumber} required>
           Number
         </Input>
+        <Input type="email">Email</Input>
+        <Input type="password">Password</Input>
+        <Input type="tel">Phone Number</Input>
+        <Input type="url">Url</Input>
+        <Input type="color">Color</Input>
+        <Input type="textarea">Text Area</Input>
       </FlowForm>
     </div>
   );

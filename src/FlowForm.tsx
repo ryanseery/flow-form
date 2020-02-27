@@ -10,17 +10,17 @@ interface IForm {
   reset?: boolean;
 }
 
-const FormComponent: React.FC<IForm> = ({ children, onSubmit, className, style, customSubmit, reset }) => {
+const Form: React.FC<IForm> = ({ children, onSubmit, className, style, customSubmit, reset }) => {
   const { data, error, clearForm } = React.useContext(FormContext);
 
   return (
-    <>
+    <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', width: '30vh' }}>
       <form
         className={`flow-form ${className}`}
         style={style}
         onSubmit={e => {
           e.preventDefault();
-          onSubmit(data);
+          onSubmit(error);
         }}
       >
         <fieldset disabled={false} aria-busy={false} style={{ border: `none` }}>
@@ -38,14 +38,26 @@ const FormComponent: React.FC<IForm> = ({ children, onSubmit, className, style, 
         </fieldset>
       </form>
       <pre>{JSON.stringify({ data, error }, null, 2)}</pre>
-    </>
+    </div>
   );
 };
 
-export const FlowForm: React.FC<IForm> = ({ children, onSubmit, className, style, customSubmit, reset }) => (
-  <FormWrapper>
-    <FormComponent onSubmit={onSubmit} className={className} style={style} customSubmit={customSubmit} reset={reset}>
+interface IFlowFrom extends IForm {
+  initialValues?: {};
+}
+
+export const FlowForm: React.FC<IFlowFrom> = ({
+  children,
+  onSubmit,
+  className,
+  style,
+  customSubmit,
+  reset,
+  initialValues = {},
+}) => (
+  <FormWrapper initialValues={initialValues}>
+    <Form onSubmit={onSubmit} className={className} style={style} customSubmit={customSubmit} reset={reset}>
       {children}
-    </FormComponent>
+    </Form>
   </FormWrapper>
 );

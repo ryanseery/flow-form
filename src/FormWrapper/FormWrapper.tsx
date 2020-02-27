@@ -5,7 +5,7 @@ export interface IState {
   error: {};
 }
 
-const formData: IState = {
+const initialState: IState = {
   data: {},
   error: {},
 };
@@ -79,7 +79,7 @@ function reducer(state: IState, action: IAction) {
       }
     }
     case ACTIONS.CLEAR_FORM:
-      return { ...formData };
+      return { ...initialState };
     default:
       console.error('State Reducer Error');
       return state;
@@ -88,10 +88,11 @@ function reducer(state: IState, action: IAction) {
 
 export interface FormWrapper {
   children: React.ReactNode;
+  initialValues?: {};
 }
 
 export const FormWrapper: React.FC<FormWrapper> = ({ children }) => {
-  const [state, dispatch] = React.useReducer(reducer, formData);
+  const [state, dispatch] = React.useReducer(reducer, initialState);
 
   const actions = React.useMemo(() => {
     return {
