@@ -1,5 +1,5 @@
 import React from 'react';
-import { FlowForm, Input, Error } from 'flow-form';
+import { FlowForm, Input, Error, ShowData } from 'flow-form';
 import './App.css';
 
 function App() {
@@ -14,20 +14,25 @@ function App() {
   // TODO initial Values
   return (
     <div style={{ height: '100vh', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-      <FlowForm onSubmit={data => console.log('data: ', data)}>
-        <Input validate={checkString} showError required>
-          Text
-        </Input>
-        <Input type="number" validate={checkNumber} required>
-          Number
-        </Input>
-        <Error id="Number" message="Custom Error" />
-        <Input type="email">Email</Input>
-        <Input type="password">Password</Input>
-        <Input type="tel">Phone Number</Input>
-        <Input type="url">Url</Input>
-        <Input type="color">Color</Input>
-        <Input type="textarea">Text Area</Input>
+      <FlowForm onSubmit={data => console.log('data: ', data)} style={{ width: '30%' }}>
+        <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
+          <div>
+            <Input validate={checkString} showError required>
+              Text
+            </Input>
+            <Input type="number" validate={checkNumber} required>
+              Number
+            </Input>
+            <Error id="Number" message="Custom Error" />
+            <Input type="email">Email</Input>
+            <Input type="password">Password</Input>
+            <Input type="tel">Phone Number</Input>
+            <Input type="url">Url</Input>
+            <Input type="color">Color</Input>
+            <Input type="textarea">Text Area</Input>
+          </div>
+          <ShowData />
+        </div>
       </FlowForm>
     </div>
   );
