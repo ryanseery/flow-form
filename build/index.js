@@ -215,13 +215,13 @@ var ShowData = function () {
 var HelperText = function (_a) {
     var id = _a.id, helperText = _a.helperText, className = _a.className;
     if (typeof helperText === 'string') {
-        return (React.createElement("small", { id: id + "-helper-text", className: className + "-helper-text", style: { color: '#BDBDBD' } }, helperText));
+        return (React.createElement("small", { id: id + "-helper-text", className: className + "-helper-text", style: { color: 'rgb(101, 97, 97)' } }, helperText));
     }
     return null;
 };
 
 var Text = function (_a) {
-    var id = _a.id, _b = _a.type, type = _b === void 0 ? 'text' : _b, className = _a.className, placeholder = _a.placeholder, _c = _a.required, required = _c === void 0 ? false : _c, validate = _a.validate, showError = _a.showError, autoComplete = _a.autoComplete, helperText = _a.helperText;
+    var id = _a.id, _b = _a.type, type = _b === void 0 ? 'text' : _b, className = _a.className, placeholder = _a.placeholder, _c = _a.required, required = _c === void 0 ? false : _c, validate = _a.validate, showError = _a.showError, autoComplete = _a.autoComplete, helperText = _a.helperText, style = _a.style;
     var _d = useFormData({
         id: id,
         value: '',
@@ -229,13 +229,13 @@ var Text = function (_a) {
         required: required,
     }), value = _d.value, error = _d.error, handleChange = _d.handleChange, handleBlur = _d.handleBlur, handleFocus = _d.handleFocus;
     return (React.createElement(React.Fragment, null,
-        React.createElement("input", { id: id, name: id, value: value || '', onChange: handleChange, onBlur: handleBlur, onFocus: handleFocus, type: type, placeholder: placeholder, style: { display: "block" }, className: "flow-form-input " + className + "-input", required: required, autoComplete: autoComplete }),
+        React.createElement("input", { id: id, name: id, value: value || '', onChange: handleChange, onBlur: handleBlur, onFocus: handleFocus, type: type, placeholder: placeholder, style: style, className: "flow-form-input " + className + "-input", required: required, autoComplete: autoComplete }),
         !error && React.createElement(HelperText, { id: id, helperText: helperText, className: className }),
         showError && error && React.createElement(Error, { id: id, message: showError })));
 };
 
 var Number = function (_a) {
-    var id = _a.id, _b = _a.type, type = _b === void 0 ? 'number' : _b, className = _a.className, placeholder = _a.placeholder, _c = _a.required, required = _c === void 0 ? false : _c, validate = _a.validate, showError = _a.showError, autoComplete = _a.autoComplete, helperText = _a.helperText;
+    var id = _a.id, _b = _a.type, type = _b === void 0 ? 'number' : _b, className = _a.className, placeholder = _a.placeholder, _c = _a.required, required = _c === void 0 ? false : _c, validate = _a.validate, showError = _a.showError, autoComplete = _a.autoComplete, helperText = _a.helperText, style = _a.style;
     var _d = useFormData({
         id: id,
         value: 0,
@@ -243,13 +243,13 @@ var Number = function (_a) {
         required: required,
     }), value = _d.value, error = _d.error, handleChange = _d.handleChange, handleBlur = _d.handleBlur, handleFocus = _d.handleFocus;
     return (React.createElement(React.Fragment, null,
-        React.createElement("input", { id: id, name: id, value: value || '', onChange: handleChange, onBlur: handleBlur, onFocus: handleFocus, type: type, placeholder: placeholder, style: { display: "block" }, className: "flow-form-input " + className + "-input", required: required, autoComplete: autoComplete }),
+        React.createElement("input", { id: id, name: id, value: value || '', onChange: handleChange, onBlur: handleBlur, onFocus: handleFocus, type: type, placeholder: placeholder, style: style, className: "flow-form-input " + className + "-input", required: required, autoComplete: autoComplete }),
         !error && React.createElement(HelperText, { id: id, helperText: helperText, className: className }),
         showError && error && React.createElement(Error, { id: id, message: showError })));
 };
 
 var Email = function (_a) {
-    var id = _a.id, _b = _a.type, type = _b === void 0 ? 'email' : _b, className = _a.className, placeholder = _a.placeholder, _c = _a.required, required = _c === void 0 ? false : _c, validate = _a.validate, showError = _a.showError, autoComplete = _a.autoComplete, helperText = _a.helperText;
+    var id = _a.id, _b = _a.type, type = _b === void 0 ? 'email' : _b, className = _a.className, placeholder = _a.placeholder, _c = _a.required, required = _c === void 0 ? false : _c, validate = _a.validate, showError = _a.showError, autoComplete = _a.autoComplete, helperText = _a.helperText, style = _a.style;
     var _d = useFormData({
         id: id,
         value: '',
@@ -257,13 +257,13 @@ var Email = function (_a) {
         required: required,
     }), value = _d.value, error = _d.error, handleChange = _d.handleChange, handleBlur = _d.handleBlur, handleFocus = _d.handleFocus;
     return (React.createElement(React.Fragment, null,
-        React.createElement("input", { id: id, name: id, value: value || '', onChange: handleChange, onBlur: handleBlur, onFocus: handleFocus, type: type, placeholder: placeholder, style: { display: "block" }, className: "flow-form-input " + className + "-input", required: required, autoComplete: autoComplete }),
+        React.createElement("input", { id: id, name: id, value: value || '', onChange: handleChange, onBlur: handleBlur, onFocus: handleFocus, type: type, placeholder: placeholder, style: style, className: "flow-form-input " + className + "-input", required: required, autoComplete: autoComplete }),
         !error && React.createElement(HelperText, { id: id, helperText: helperText, className: className }),
         showError && error && React.createElement(Error, { id: id, message: showError })));
 };
 
 var Password = function (_a) {
-    var id = _a.id, _b = _a.type, type = _b === void 0 ? 'password' : _b, className = _a.className, placeholder = _a.placeholder, _c = _a.required, required = _c === void 0 ? false : _c, validate = _a.validate, showError = _a.showError, autoComplete = _a.autoComplete, helperText = _a.helperText;
+    var id = _a.id, _b = _a.type, type = _b === void 0 ? 'password' : _b, className = _a.className, placeholder = _a.placeholder, _c = _a.required, required = _c === void 0 ? false : _c, validate = _a.validate, showError = _a.showError, autoComplete = _a.autoComplete, helperText = _a.helperText, style = _a.style;
     var _d = useFormData({
         id: id,
         value: '',
@@ -271,13 +271,13 @@ var Password = function (_a) {
         required: required,
     }), value = _d.value, error = _d.error, handleChange = _d.handleChange, handleBlur = _d.handleBlur, handleFocus = _d.handleFocus;
     return (React.createElement(React.Fragment, null,
-        React.createElement("input", { id: id, name: id, value: value || '', onChange: handleChange, onBlur: handleBlur, onFocus: handleFocus, type: type, placeholder: placeholder, style: { display: "block" }, className: "flow-form-input " + className + "-input", required: required, autoComplete: autoComplete }),
+        React.createElement("input", { id: id, name: id, value: value || '', onChange: handleChange, onBlur: handleBlur, onFocus: handleFocus, type: type, placeholder: placeholder, style: style, className: "flow-form-input " + className + "-input", required: required, autoComplete: autoComplete }),
         !error && React.createElement(HelperText, { id: id, helperText: helperText, className: className }),
         showError && error && React.createElement(Error, { id: id, message: showError })));
 };
 
 var Tel = function (_a) {
-    var id = _a.id, _b = _a.type, type = _b === void 0 ? 'tel' : _b, className = _a.className, placeholder = _a.placeholder, _c = _a.required, required = _c === void 0 ? false : _c, validate = _a.validate, showError = _a.showError, autoComplete = _a.autoComplete, _d = _a.pattern, pattern = _d === void 0 ? '[0-9]{3}-[0-9]{2}-[0-9]{3}' : _d, helperText = _a.helperText;
+    var id = _a.id, _b = _a.type, type = _b === void 0 ? 'tel' : _b, className = _a.className, placeholder = _a.placeholder, _c = _a.required, required = _c === void 0 ? false : _c, validate = _a.validate, showError = _a.showError, autoComplete = _a.autoComplete, _d = _a.pattern, pattern = _d === void 0 ? '[0-9]{3}-[0-9]{2}-[0-9]{3}' : _d, helperText = _a.helperText, style = _a.style;
     var _e = useFormData({
         id: id,
         value: '',
@@ -285,13 +285,13 @@ var Tel = function (_a) {
         required: required,
     }), value = _e.value, error = _e.error, handleChange = _e.handleChange, handleBlur = _e.handleBlur, handleFocus = _e.handleFocus;
     return (React.createElement(React.Fragment, null,
-        React.createElement("input", { id: id, name: id, value: value || '', onChange: handleChange, onBlur: handleBlur, onFocus: handleFocus, type: type, placeholder: placeholder, style: { display: "block" }, className: "flow-form-input " + className + "-input", required: required, autoComplete: autoComplete, pattern: pattern }),
+        React.createElement("input", { id: id, name: id, value: value || '', onChange: handleChange, onBlur: handleBlur, onFocus: handleFocus, type: type, placeholder: placeholder, style: style, className: "flow-form-input " + className + "-input", required: required, autoComplete: autoComplete, pattern: pattern }),
         !error && React.createElement(HelperText, { id: id, helperText: helperText, className: className }),
         showError && error && React.createElement(Error, { id: id, message: showError })));
 };
 
 var Url = function (_a) {
-    var id = _a.id, _b = _a.type, type = _b === void 0 ? 'url' : _b, className = _a.className, placeholder = _a.placeholder, _c = _a.required, required = _c === void 0 ? false : _c, validate = _a.validate, showError = _a.showError, autoComplete = _a.autoComplete, _d = _a.pattern, pattern = _d === void 0 ? 'https://.*' : _d, helperText = _a.helperText;
+    var id = _a.id, _b = _a.type, type = _b === void 0 ? 'url' : _b, className = _a.className, placeholder = _a.placeholder, _c = _a.required, required = _c === void 0 ? false : _c, validate = _a.validate, showError = _a.showError, autoComplete = _a.autoComplete, _d = _a.pattern, pattern = _d === void 0 ? 'https://.*' : _d, helperText = _a.helperText, style = _a.style;
     var _e = useFormData({
         id: id,
         value: '',
@@ -299,13 +299,13 @@ var Url = function (_a) {
         required: required,
     }), value = _e.value, error = _e.error, handleChange = _e.handleChange, handleBlur = _e.handleBlur, handleFocus = _e.handleFocus;
     return (React.createElement(React.Fragment, null,
-        React.createElement("input", { id: id, name: id, value: value || '', onChange: handleChange, onBlur: handleBlur, onFocus: handleFocus, type: type, placeholder: placeholder, style: { display: "block" }, className: "flow-form-input " + className + "-input", required: required, autoComplete: autoComplete, pattern: pattern }),
+        React.createElement("input", { id: id, name: id, value: value || '', onChange: handleChange, onBlur: handleBlur, onFocus: handleFocus, type: type, placeholder: placeholder, style: style, className: "flow-form-input " + className + "-input", required: required, autoComplete: autoComplete, pattern: pattern }),
         !error && React.createElement(HelperText, { id: id, helperText: helperText, className: className }),
         showError && error && React.createElement(Error, { id: id, message: showError })));
 };
 
 var TextArea = function (_a) {
-    var id = _a.id, className = _a.className, placeholder = _a.placeholder, _b = _a.required, required = _b === void 0 ? false : _b, validate = _a.validate, showError = _a.showError, autoComplete = _a.autoComplete, _c = _a.rows, rows = _c === void 0 ? 4 : _c, _d = _a.cols, cols = _d === void 0 ? 20 : _d, helperText = _a.helperText;
+    var id = _a.id, className = _a.className, placeholder = _a.placeholder, _b = _a.required, required = _b === void 0 ? false : _b, validate = _a.validate, showError = _a.showError, autoComplete = _a.autoComplete, _c = _a.rows, rows = _c === void 0 ? 4 : _c, _d = _a.cols, cols = _d === void 0 ? 20 : _d, helperText = _a.helperText, style = _a.style;
     var _e = useFormData({
         id: id,
         value: '',
@@ -313,13 +313,13 @@ var TextArea = function (_a) {
         required: required,
     }), value = _e.value, error = _e.error, handleChange = _e.handleChange, handleBlur = _e.handleBlur, handleFocus = _e.handleFocus;
     return (React.createElement(React.Fragment, null,
-        React.createElement("textarea", { id: id, name: id, value: value || '', onChange: handleChange, onBlur: handleBlur, onFocus: handleFocus, placeholder: placeholder, style: { display: "block" }, className: "flow-form-input " + className + "-input", required: required, autoComplete: autoComplete, rows: rows, cols: cols }),
+        React.createElement("textarea", { id: id, name: id, value: value || '', onChange: handleChange, onBlur: handleBlur, onFocus: handleFocus, placeholder: placeholder, style: style, className: "flow-form-input " + className + "-input", required: required, autoComplete: autoComplete, rows: rows, cols: cols }),
         !error && React.createElement(HelperText, { id: id, helperText: helperText, className: className }),
         showError && error && React.createElement(Error, { id: id, message: showError })));
 };
 
 var Color = function (_a) {
-    var id = _a.id, _b = _a.type, type = _b === void 0 ? 'text' : _b, className = _a.className, placeholder = _a.placeholder, _c = _a.required, required = _c === void 0 ? false : _c, validate = _a.validate, showError = _a.showError, autoComplete = _a.autoComplete, helperText = _a.helperText;
+    var id = _a.id, _b = _a.type, type = _b === void 0 ? 'text' : _b, className = _a.className, placeholder = _a.placeholder, _c = _a.required, required = _c === void 0 ? false : _c, validate = _a.validate, showError = _a.showError, autoComplete = _a.autoComplete, helperText = _a.helperText, style = _a.style;
     var _d = useFormData({
         id: id,
         value: '',
@@ -327,13 +327,13 @@ var Color = function (_a) {
         required: required,
     }), value = _d.value, error = _d.error, handleChange = _d.handleChange, handleBlur = _d.handleBlur, handleFocus = _d.handleFocus;
     return (React.createElement(React.Fragment, null,
-        React.createElement("input", { id: id, name: id, value: value || '#519839', onChange: handleChange, onBlur: handleBlur, onFocus: handleFocus, type: type, placeholder: placeholder, style: { display: "block" }, className: "flow-form-input " + className + "-input", required: required, autoComplete: autoComplete }),
+        React.createElement("input", { id: id, name: id, value: value || '#519839', onChange: handleChange, onBlur: handleBlur, onFocus: handleFocus, type: type, placeholder: placeholder, style: style, className: "flow-form-input " + className + "-input", required: required, autoComplete: autoComplete }),
         !error && React.createElement(HelperText, { id: id, helperText: helperText, className: className }),
         showError && error && React.createElement(Error, { id: id, message: showError })));
 };
 
 var Input = function (_a) {
-    var children = _a.children, type = _a.type, placeholder = _a.placeholder, required = _a.required, validate = _a.validate, showError = _a.showError, autoComplete = _a.autoComplete, pattern = _a.pattern, rows = _a.rows, cols = _a.cols, helperText = _a.helperText;
+    var children = _a.children, type = _a.type, placeholder = _a.placeholder, required = _a.required, validate = _a.validate, showError = _a.showError, autoComplete = _a.autoComplete, pattern = _a.pattern, rows = _a.rows, cols = _a.cols, helperText = _a.helperText, style = _a.style;
     var kebabCase = toKebabCase(children !== null && children !== void 0 ? children : '');
     var camelCase = toCamelCase(children !== null && children !== void 0 ? children : '');
     var defaultProps = {
@@ -349,8 +349,9 @@ var Input = function (_a) {
         rows: rows,
         cols: cols,
         helperText: helperText,
+        style: { margin: '0.5em 0 0 0', display: "block" },
     };
-    return (React.createElement("label", { htmlFor: camelCase, className: "flow-form-label " + kebabCase + "-label", style: { display: "block", minHeight: '3.5em' } },
+    return (React.createElement("label", { htmlFor: camelCase, className: "flow-form-label " + kebabCase + "-label", style: __assign({ display: "block", minHeight: '3.5em' }, style) },
         children,
         (function () {
             switch (type) {
@@ -376,7 +377,6 @@ var Input = function (_a) {
         })()));
 };
 
-exports.Error = Error;
 exports.FlowForm = FlowForm;
 exports.Input = Input;
 exports.ShowData = ShowData;

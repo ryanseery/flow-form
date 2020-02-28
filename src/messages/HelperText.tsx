@@ -9,7 +9,7 @@ interface IHelperText {
 export const HelperText: React.FC<IHelperText> = ({ id, helperText, className }: IHelperText) => {
   if (typeof helperText === 'string') {
     return (
-      <small id={`${id}-helper-text`} className={`${className}-helper-text`} style={{ color: '#BDBDBD' }}>
+      <small id={`${id}-helper-text`} className={`${className}-helper-text`} style={{ color: 'rgb(101, 97, 97)' }}>
         {helperText}
       </small>
     );

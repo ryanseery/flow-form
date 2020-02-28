@@ -8,4 +8,5 @@ export interface IInputType {
   validate?: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => boolean;
   showError?: boolean | string;
   helperText?: boolean | string;
+  style: {};
 }

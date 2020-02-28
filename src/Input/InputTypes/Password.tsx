@@ -15,6 +15,7 @@ export const Password: React.FC<IPassword> = ({
   showError,
   autoComplete,
   helperText,
+  style,
 }) => {
   const { value, error, handleChange, handleBlur, handleFocus } = useFormData({
     id,
@@ -34,7 +35,7 @@ export const Password: React.FC<IPassword> = ({
         onFocus={handleFocus}
         type={type}
         placeholder={placeholder}
-        style={{ display: `block` }}
+        style={style}
         className={`flow-form-input ${className}-input`}
         required={required}
         autoComplete={autoComplete}

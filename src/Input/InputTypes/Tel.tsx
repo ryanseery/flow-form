@@ -18,6 +18,7 @@ export const Tel: React.FC<ITel> = ({
   autoComplete,
   pattern = '[0-9]{3}-[0-9]{2}-[0-9]{3}',
   helperText,
+  style,
 }) => {
   const { value, error, handleChange, handleBlur, handleFocus } = useFormData({
     id,
@@ -37,7 +38,7 @@ export const Tel: React.FC<ITel> = ({
         onFocus={handleFocus}
         type={type}
         placeholder={placeholder}
-        style={{ display: `block` }}
+        style={style}
         className={`flow-form-input ${className}-input`}
         required={required}
         autoComplete={autoComplete}

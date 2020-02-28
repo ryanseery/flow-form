@@ -1,5 +1,5 @@
 import React from 'react';
-import { FlowForm, Input, Error, ShowData } from 'flow-form';
+import { FlowForm, Input, ShowData } from 'flow-form';
 import './App.css';
 
 function App() {
@@ -23,7 +23,6 @@ function App() {
             <Input type="number" validate={checkNumber} required>
               Number
             </Input>
-            <Error id="Number" message="Custom Error" />
             <Input type="email" helperText="Test helper text">
               Email
             </Input>

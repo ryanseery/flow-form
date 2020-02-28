@@ -18,6 +18,7 @@ export const Url: React.FC<IUrl> = ({
   autoComplete,
   pattern = 'https://.*',
   helperText,
+  style,
 }) => {
   const { value, error, handleChange, handleBlur, handleFocus } = useFormData({
     id,
@@ -37,7 +38,7 @@ export const Url: React.FC<IUrl> = ({
         onFocus={handleFocus}
         type={type}
         placeholder={placeholder}
-        style={{ display: `block` }}
+        style={style}
         className={`flow-form-input ${className}-input`}
         required={required}
         autoComplete={autoComplete}

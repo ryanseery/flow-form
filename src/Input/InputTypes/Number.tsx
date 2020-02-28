@@ -15,6 +15,7 @@ export const Number: React.FC<INumber> = ({
   showError,
   autoComplete,
   helperText,
+  style,
 }) => {
   const { value, error, handleChange, handleBlur, handleFocus } = useFormData({
     id,
@@ -33,7 +34,7 @@ export const Number: React.FC<INumber> = ({
         onFocus={handleFocus}
         type={type}
         placeholder={placeholder}
-        style={{ display: `block` }}
+        style={style}
         className={`flow-form-input ${className}-input`}
         required={required}
         autoComplete={autoComplete}
