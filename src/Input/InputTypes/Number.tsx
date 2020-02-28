@@ -12,7 +12,7 @@ export const Number: React.FC<INumber> = ({
   placeholder,
   required = false,
   validate,
-  showError,
+  errMsg,
   autoComplete,
   helperText,
   style,
@@ -40,7 +40,7 @@ export const Number: React.FC<INumber> = ({
         autoComplete={autoComplete}
       />
       {!error && <HelperText id={id} helperText={helperText} className={className} />}
-      {showError && error && <Error id={id} message={showError} />}
+      {error && <Error id={id} className={className} errMsg={errMsg} />}
     </>
   );
 };

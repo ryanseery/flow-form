@@ -17,7 +17,7 @@ function App() {
       <FlowForm onSubmit={data => console.log('data: ', data)} style={{ width: '30%' }}>
         <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
           <div>
-            <Input validate={checkString} showError required helperText="Test helper text">
+            <Input validate={checkString} required helperText="Test helper text" errMsg="Custom error message">
               Text
             </Input>
             <Input type="number" validate={checkNumber} required>

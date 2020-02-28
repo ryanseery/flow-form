@@ -12,7 +12,7 @@ export const Password: React.FC<IPassword> = ({
   placeholder,
   required = false,
   validate,
-  showError,
+  errMsg,
   autoComplete,
   helperText,
   style,
@@ -41,7 +41,7 @@ export const Password: React.FC<IPassword> = ({
         autoComplete={autoComplete}
       />
       {!error && <HelperText id={id} helperText={helperText} className={className} />}
-      {showError && error && <Error id={id} message={showError} />}
+      {error && <Error id={id} className={className} errMsg={errMsg} />}
     </>
   );
 };

@@ -180,12 +180,6 @@ function useFormData(_a) {
     };
 }
 
-function useFormError(_a) {
-    var id = _a.id;
-    var error = useContext(FormContext).error;
-    return { error: error[id] };
-}
-
 function showFormData() {
     var _a = useContext(FormContext), data = _a.data, error = _a.error;
     return {
@@ -195,12 +189,8 @@ function showFormData() {
 }
 
 var Error = function (_a) {
-    var id = _a.id, message = _a.message, style = _a.style;
-    var error = useFormError({ id: toCamelCase(id) }).error;
-    if (error) {
-        return (createElement("small", { id: toCamelCase(id) + "-error", className: toKebabCase(name) + "-error", style: __assign({ color: 'red' }, style) }, typeof message === 'string' ? message : id + " error."));
-    }
-    return null;
+    var id = _a.id, className = _a.className, errMsg = _a.errMsg;
+    return (createElement("small", { id: id + "-error", className: "flow-form-error " + className + "-error", style: { color: 'red' } }, typeof errMsg === 'string' ? errMsg : "Please provide a valid " + id + " "));
 };
 
 var ShowData = function () {
@@ -217,7 +207,7 @@ var HelperText = function (_a) {
 };
 
 var Text = function (_a) {
-    var id = _a.id, _b = _a.type, type = _b === void 0 ? 'text' : _b, className = _a.className, placeholder = _a.placeholder, _c = _a.required, required = _c === void 0 ? false : _c, validate = _a.validate, showError = _a.showError, autoComplete = _a.autoComplete, helperText = _a.helperText, style = _a.style;
+    var id = _a.id, _b = _a.type, type = _b === void 0 ? 'text' : _b, className = _a.className, placeholder = _a.placeholder, _c = _a.required, required = _c === void 0 ? false : _c, validate = _a.validate, errMsg = _a.errMsg, autoComplete = _a.autoComplete, helperText = _a.helperText, style = _a.style;
     var _d = useFormData({
         id: id,
         value: '',
@@ -227,11 +217,11 @@ var Text = function (_a) {
     return (createElement(Fragment, null,
         createElement("input", { id: id, name: id, value: value || '', onChange: handleChange, onBlur: handleBlur, onFocus: handleFocus, type: type, placeholder: placeholder, style: style, className: "flow-form-input " + className + "-input", required: required, autoComplete: autoComplete }),
         !error && createElement(HelperText, { id: id, helperText: helperText, className: className }),
-        showError && error && createElement(Error, { id: id, message: showError })));
+        error && createElement(Error, { id: id, className: className, errMsg: errMsg })));
 };
 
 var Number = function (_a) {
-    var id = _a.id, _b = _a.type, type = _b === void 0 ? 'number' : _b, className = _a.className, placeholder = _a.placeholder, _c = _a.required, required = _c === void 0 ? false : _c, validate = _a.validate, showError = _a.showError, autoComplete = _a.autoComplete, helperText = _a.helperText, style = _a.style;
+    var id = _a.id, _b = _a.type, type = _b === void 0 ? 'number' : _b, className = _a.className, placeholder = _a.placeholder, _c = _a.required, required = _c === void 0 ? false : _c, validate = _a.validate, errMsg = _a.errMsg, autoComplete = _a.autoComplete, helperText = _a.helperText, style = _a.style;
     var _d = useFormData({
         id: id,
         value: 0,
@@ -241,11 +231,11 @@ var Number = function (_a) {
     return (createElement(Fragment, null,
         createElement("input", { id: id, name: id, value: value || '', onChange: handleChange, onBlur: handleBlur, onFocus: handleFocus, type: type, placeholder: placeholder, style: style, className: "flow-form-input " + className + "-input", required: required, autoComplete: autoComplete }),
         !error && createElement(HelperText, { id: id, helperText: helperText, className: className }),
-        showError && error && createElement(Error, { id: id, message: showError })));
+        error && createElement(Error, { id: id, className: className, errMsg: errMsg })));
 };
 
 var Email = function (_a) {
-    var id = _a.id, _b = _a.type, type = _b === void 0 ? 'email' : _b, className = _a.className, placeholder = _a.placeholder, _c = _a.required, required = _c === void 0 ? false : _c, validate = _a.validate, showError = _a.showError, autoComplete = _a.autoComplete, helperText = _a.helperText, style = _a.style;
+    var id = _a.id, _b = _a.type, type = _b === void 0 ? 'email' : _b, className = _a.className, placeholder = _a.placeholder, _c = _a.required, required = _c === void 0 ? false : _c, validate = _a.validate, errMsg = _a.errMsg, autoComplete = _a.autoComplete, helperText = _a.helperText, style = _a.style;
     var _d = useFormData({
         id: id,
         value: '',
@@ -255,11 +245,11 @@ var Email = function (_a) {
     return (createElement(Fragment, null,
         createElement("input", { id: id, name: id, value: value || '', onChange: handleChange, onBlur: handleBlur, onFocus: handleFocus, type: type, placeholder: placeholder, style: style, className: "flow-form-input " + className + "-input", required: required, autoComplete: autoComplete }),
         !error && createElement(HelperText, { id: id, helperText: helperText, className: className }),
-        showError && error && createElement(Error, { id: id, message: showError })));
+        error && createElement(Error, { id: id, className: className, errMsg: errMsg })));
 };
 
 var Password = function (_a) {
-    var id = _a.id, _b = _a.type, type = _b === void 0 ? 'password' : _b, className = _a.className, placeholder = _a.placeholder, _c = _a.required, required = _c === void 0 ? false : _c, validate = _a.validate, showError = _a.showError, autoComplete = _a.autoComplete, helperText = _a.helperText, style = _a.style;
+    var id = _a.id, _b = _a.type, type = _b === void 0 ? 'password' : _b, className = _a.className, placeholder = _a.placeholder, _c = _a.required, required = _c === void 0 ? false : _c, validate = _a.validate, errMsg = _a.errMsg, autoComplete = _a.autoComplete, helperText = _a.helperText, style = _a.style;
     var _d = useFormData({
         id: id,
         value: '',
@@ -269,11 +259,11 @@ var Password = function (_a) {
     return (createElement(Fragment, null,
         createElement("input", { id: id, name: id, value: value || '', onChange: handleChange, onBlur: handleBlur, onFocus: handleFocus, type: type, placeholder: placeholder, style: style, className: "flow-form-input " + className + "-input", required: required, autoComplete: autoComplete }),
         !error && createElement(HelperText, { id: id, helperText: helperText, className: className }),
-        showError && error && createElement(Error, { id: id, message: showError })));
+        error && createElement(Error, { id: id, className: className, errMsg: errMsg })));
 };
 
 var Tel = function (_a) {
-    var id = _a.id, _b = _a.type, type = _b === void 0 ? 'tel' : _b, className = _a.className, placeholder = _a.placeholder, _c = _a.required, required = _c === void 0 ? false : _c, validate = _a.validate, showError = _a.showError, autoComplete = _a.autoComplete, _d = _a.pattern, pattern = _d === void 0 ? '[0-9]{3}-[0-9]{2}-[0-9]{3}' : _d, helperText = _a.helperText, style = _a.style;
+    var id = _a.id, _b = _a.type, type = _b === void 0 ? 'tel' : _b, className = _a.className, placeholder = _a.placeholder, _c = _a.required, required = _c === void 0 ? false : _c, validate = _a.validate, errMsg = _a.errMsg, autoComplete = _a.autoComplete, _d = _a.pattern, pattern = _d === void 0 ? '[0-9]{3}-[0-9]{2}-[0-9]{3}' : _d, helperText = _a.helperText, style = _a.style;
     var _e = useFormData({
         id: id,
         value: '',
@@ -283,11 +273,11 @@ var Tel = function (_a) {
     return (createElement(Fragment, null,
         createElement("input", { id: id, name: id, value: value || '', onChange: handleChange, onBlur: handleBlur, onFocus: handleFocus, type: type, placeholder: placeholder, style: style, className: "flow-form-input " + className + "-input", required: required, autoComplete: autoComplete, pattern: pattern }),
         !error && createElement(HelperText, { id: id, helperText: helperText, className: className }),
-        showError && error && createElement(Error, { id: id, message: showError })));
+        error && createElement(Error, { id: id, className: className, errMsg: errMsg })));
 };
 
 var Url = function (_a) {
-    var id = _a.id, _b = _a.type, type = _b === void 0 ? 'url' : _b, className = _a.className, placeholder = _a.placeholder, _c = _a.required, required = _c === void 0 ? false : _c, validate = _a.validate, showError = _a.showError, autoComplete = _a.autoComplete, _d = _a.pattern, pattern = _d === void 0 ? 'https://.*' : _d, helperText = _a.helperText, style = _a.style;
+    var id = _a.id, _b = _a.type, type = _b === void 0 ? 'url' : _b, className = _a.className, placeholder = _a.placeholder, _c = _a.required, required = _c === void 0 ? false : _c, validate = _a.validate, errMsg = _a.errMsg, autoComplete = _a.autoComplete, _d = _a.pattern, pattern = _d === void 0 ? 'https://.*' : _d, helperText = _a.helperText, style = _a.style;
     var _e = useFormData({
         id: id,
         value: '',
@@ -297,11 +287,11 @@ var Url = function (_a) {
     return (createElement(Fragment, null,
         createElement("input", { id: id, name: id, value: value || '', onChange: handleChange, onBlur: handleBlur, onFocus: handleFocus, type: type, placeholder: placeholder, style: style, className: "flow-form-input " + className + "-input", required: required, autoComplete: autoComplete, pattern: pattern }),
         !error && createElement(HelperText, { id: id, helperText: helperText, className: className }),
-        showError && error && createElement(Error, { id: id, message: showError })));
+        error && createElement(Error, { id: id, className: className, errMsg: errMsg })));
 };
 
 var TextArea = function (_a) {
-    var id = _a.id, className = _a.className, placeholder = _a.placeholder, _b = _a.required, required = _b === void 0 ? false : _b, validate = _a.validate, showError = _a.showError, autoComplete = _a.autoComplete, _c = _a.rows, rows = _c === void 0 ? 4 : _c, _d = _a.cols, cols = _d === void 0 ? 20 : _d, helperText = _a.helperText, style = _a.style;
+    var id = _a.id, className = _a.className, placeholder = _a.placeholder, _b = _a.required, required = _b === void 0 ? false : _b, validate = _a.validate, errMsg = _a.errMsg, autoComplete = _a.autoComplete, _c = _a.rows, rows = _c === void 0 ? 4 : _c, _d = _a.cols, cols = _d === void 0 ? 20 : _d, helperText = _a.helperText, style = _a.style;
     var _e = useFormData({
         id: id,
         value: '',
@@ -311,11 +301,11 @@ var TextArea = function (_a) {
     return (createElement(Fragment, null,
         createElement("textarea", { id: id, name: id, value: value || '', onChange: handleChange, onBlur: handleBlur, onFocus: handleFocus, placeholder: placeholder, style: style, className: "flow-form-input " + className + "-input", required: required, autoComplete: autoComplete, rows: rows, cols: cols }),
         !error && createElement(HelperText, { id: id, helperText: helperText, className: className }),
-        showError && error && createElement(Error, { id: id, message: showError })));
+        error && createElement(Error, { id: id, className: className, errMsg: errMsg })));
 };
 
 var Color = function (_a) {
-    var id = _a.id, _b = _a.type, type = _b === void 0 ? 'text' : _b, className = _a.className, placeholder = _a.placeholder, _c = _a.required, required = _c === void 0 ? false : _c, validate = _a.validate, showError = _a.showError, autoComplete = _a.autoComplete, helperText = _a.helperText, style = _a.style;
+    var id = _a.id, _b = _a.type, type = _b === void 0 ? 'text' : _b, className = _a.className, placeholder = _a.placeholder, _c = _a.required, required = _c === void 0 ? false : _c, validate = _a.validate, errMsg = _a.errMsg, autoComplete = _a.autoComplete, helperText = _a.helperText, style = _a.style;
     var _d = useFormData({
         id: id,
         value: '',
@@ -325,11 +315,11 @@ var Color = function (_a) {
     return (createElement(Fragment, null,
         createElement("input", { id: id, name: id, value: value || '#519839', onChange: handleChange, onBlur: handleBlur, onFocus: handleFocus, type: type, placeholder: placeholder, style: style, className: "flow-form-input " + className + "-input", required: required, autoComplete: autoComplete }),
         !error && createElement(HelperText, { id: id, helperText: helperText, className: className }),
-        showError && error && createElement(Error, { id: id, message: showError })));
+        error && createElement(Error, { id: id, className: className, errMsg: errMsg })));
 };
 
 var Input = function (_a) {
-    var children = _a.children, type = _a.type, placeholder = _a.placeholder, required = _a.required, validate = _a.validate, showError = _a.showError, autoComplete = _a.autoComplete, pattern = _a.pattern, rows = _a.rows, cols = _a.cols, helperText = _a.helperText, style = _a.style;
+    var children = _a.children, type = _a.type, placeholder = _a.placeholder, required = _a.required, validate = _a.validate, errMsg = _a.errMsg, autoComplete = _a.autoComplete, pattern = _a.pattern, rows = _a.rows, cols = _a.cols, helperText = _a.helperText, style = _a.style;
     var kebabCase = toKebabCase(children !== null && children !== void 0 ? children : '');
     var camelCase = toCamelCase(children !== null && children !== void 0 ? children : '');
     var defaultProps = {
@@ -339,7 +329,7 @@ var Input = function (_a) {
         placeholder: placeholder,
         required: required,
         validate: validate,
-        showError: showError,
+        errMsg: errMsg,
         autoComplete: autoComplete !== null && autoComplete !== void 0 ? autoComplete : 'off',
         pattern: pattern,
         rows: rows,

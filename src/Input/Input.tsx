@@ -8,7 +8,7 @@ interface IInput {
   placeholder?: string;
   required?: boolean;
   validate?: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => boolean;
-  showError?: boolean | string;
+  errMsg?: string;
   autoComplete?: string;
   pattern?: string;
   rows?: number;
@@ -23,7 +23,7 @@ export const Input: React.FC<IInput> = ({
   placeholder,
   required,
   validate,
-  showError,
+  errMsg,
   autoComplete,
   pattern,
   rows,
@@ -42,7 +42,7 @@ export const Input: React.FC<IInput> = ({
     placeholder,
     required,
     validate,
-    showError,
+    errMsg,
     autoComplete: autoComplete ?? 'off',
     pattern,
     rows,

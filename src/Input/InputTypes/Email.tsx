@@ -12,7 +12,7 @@ export const Email: React.FC<IEmail> = ({
   placeholder,
   required = false,
   validate,
-  showError,
+  errMsg,
   autoComplete,
   helperText,
   style,
@@ -41,7 +41,7 @@ export const Email: React.FC<IEmail> = ({
         autoComplete={autoComplete}
       />
       {!error && <HelperText id={id} helperText={helperText} className={className} />}
-      {showError && error && <Error id={id} message={showError} />}
+      {error && <Error id={id} className={className} errMsg={errMsg} />}
     </>
   );
 };

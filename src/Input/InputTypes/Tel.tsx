@@ -14,7 +14,7 @@ export const Tel: React.FC<ITel> = ({
   placeholder,
   required = false,
   validate,
-  showError,
+  errMsg,
   autoComplete,
   pattern = '[0-9]{3}-[0-9]{2}-[0-9]{3}',
   helperText,
@@ -45,7 +45,7 @@ export const Tel: React.FC<ITel> = ({
         pattern={pattern}
       />
       {!error && <HelperText id={id} helperText={helperText} className={className} />}
-      {showError && error && <Error id={id} message={showError} />}
+      {error && <Error id={id} className={className} errMsg={errMsg} />}
     </>
   );
 };
