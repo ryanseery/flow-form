@@ -367,7 +367,13 @@ var Input = function (_a) {
         })()));
 };
 
+var FormGroup = function (_a) {
+    var children = _a.children;
+    return React.createElement("div", null, children);
+};
+
 exports.FlowForm = FlowForm;
+exports.FormGroup = FormGroup;
 exports.Input = Input;
 exports.ShowData = ShowData;
 //# sourceMappingURL=index.js.map

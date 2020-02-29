@@ -363,5 +363,10 @@ var Input = function (_a) {
         })()));
 };
 
-export { FlowForm, Input, ShowData };
+var FormGroup = function (_a) {
+    var children = _a.children;
+    return createElement("div", null, children);
+};
+
+export { FlowForm, FormGroup, Input, ShowData };
 //# sourceMappingURL=index.es.js.map
