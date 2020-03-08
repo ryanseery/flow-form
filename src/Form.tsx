@@ -10,7 +10,7 @@ interface IForm {
   reset?: boolean;
 }
 
-const Form: React.FC<IForm> = ({ children, onSubmit, className, style, customSubmit, reset }) => {
+const FormComponent: React.FC<IForm> = ({ children, onSubmit, className, style, customSubmit, reset }) => {
   const { data, clearForm } = React.useContext(FormContext);
 
   return (
@@ -43,7 +43,7 @@ interface IFlowFrom extends IForm {
   initialValues?: {};
 }
 
-export const FlowForm: React.FC<IFlowFrom> = ({
+export const Form: React.FC<IFlowFrom> = ({
   children,
   onSubmit,
   className,
@@ -53,8 +53,8 @@ export const FlowForm: React.FC<IFlowFrom> = ({
   initialValues = {},
 }) => (
   <FormWrapper initialValues={initialValues}>
-    <Form onSubmit={onSubmit} className={className} style={style} customSubmit={customSubmit} reset={reset}>
+    <FormComponent onSubmit={onSubmit} className={className} style={style} customSubmit={customSubmit} reset={reset}>
       {children}
-    </Form>
+    </FormComponent>
   </FormWrapper>
 );

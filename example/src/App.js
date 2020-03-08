@@ -1,5 +1,5 @@
 import React from 'react';
-import { FlowForm, Input, ShowData, FormGroup } from 'flow-form';
+import { Form, Input, ShowData, FormGroup } from 'flow-form';
 import './App.css';
 
 function App() {
@@ -14,7 +14,7 @@ function App() {
   // TODO initial Values
   return (
     <div style={{ height: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-      <FlowForm
+      <Form
         onSubmit={data => console.log('data: ', data)}
         style={{ width: '30%', display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}
         initialValues={{ text: 'initial' }}
@@ -36,7 +36,7 @@ function App() {
           <Input type="textarea">Text Area</Input>
         </FormGroup>
         <ShowData />
-      </FlowForm>
+      </Form>
     </div>
   );
 }
