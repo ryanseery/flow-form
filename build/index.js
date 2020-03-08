@@ -94,7 +94,7 @@ var FormWrapper = function (_a) {
     return (React.createElement(FormContext.Provider, { value: __assign(__assign({}, state), actions) }, children));
 };
 
-var Form = function (_a) {
+var FormComponent = function (_a) {
     var children = _a.children, onSubmit = _a.onSubmit, className = _a.className, style = _a.style, customSubmit = _a.customSubmit, reset = _a.reset;
     var _b = React.useContext(FormContext), data = _b.data, clearForm = _b.clearForm;
     return (React.createElement("form", { className: "flow-form " + className, style: style, onSubmit: function (e) {
@@ -106,10 +106,10 @@ var Form = function (_a) {
             !customSubmit && (React.createElement("button", { type: "submit", className: "flow-form-submit" }, "Submit")),
             reset && (React.createElement("button", { type: "button", className: "flow-form-reset", onClick: clearForm }, "Clear")))));
 };
-var FlowForm = function (_a) {
+var Form = function (_a) {
     var children = _a.children, onSubmit = _a.onSubmit, className = _a.className, style = _a.style, customSubmit = _a.customSubmit, reset = _a.reset, _b = _a.initialValues, initialValues = _b === void 0 ? {} : _b;
     return (React.createElement(FormWrapper, { initialValues: initialValues },
-        React.createElement(Form, { onSubmit: onSubmit, className: className, style: style, customSubmit: customSubmit, reset: reset }, children)));
+        React.createElement(FormComponent, { onSubmit: onSubmit, className: className, style: style, customSubmit: customSubmit, reset: reset }, children)));
 };
 
 function toKebabCase(str) {
@@ -361,7 +361,7 @@ var FormGroup = function (_a) {
     return React.createElement("div", null, children);
 };
 
-exports.FlowForm = FlowForm;
+exports.Form = Form;
 exports.FormGroup = FormGroup;
 exports.Input = Input;
 exports.ShowData = ShowData;

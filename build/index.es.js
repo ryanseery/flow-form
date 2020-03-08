@@ -90,7 +90,7 @@ var FormWrapper = function (_a) {
     return (createElement(FormContext.Provider, { value: __assign(__assign({}, state), actions) }, children));
 };
 
-var Form = function (_a) {
+var FormComponent = function (_a) {
     var children = _a.children, onSubmit = _a.onSubmit, className = _a.className, style = _a.style, customSubmit = _a.customSubmit, reset = _a.reset;
     var _b = useContext(FormContext), data = _b.data, clearForm = _b.clearForm;
     return (createElement("form", { className: "flow-form " + className, style: style, onSubmit: function (e) {
@@ -102,10 +102,10 @@ var Form = function (_a) {
             !customSubmit && (createElement("button", { type: "submit", className: "flow-form-submit" }, "Submit")),
             reset && (createElement("button", { type: "button", className: "flow-form-reset", onClick: clearForm }, "Clear")))));
 };
-var FlowForm = function (_a) {
+var Form = function (_a) {
     var children = _a.children, onSubmit = _a.onSubmit, className = _a.className, style = _a.style, customSubmit = _a.customSubmit, reset = _a.reset, _b = _a.initialValues, initialValues = _b === void 0 ? {} : _b;
     return (createElement(FormWrapper, { initialValues: initialValues },
-        createElement(Form, { onSubmit: onSubmit, className: className, style: style, customSubmit: customSubmit, reset: reset }, children)));
+        createElement(FormComponent, { onSubmit: onSubmit, className: className, style: style, customSubmit: customSubmit, reset: reset }, children)));
 };
 
 function toKebabCase(str) {
@@ -357,5 +357,5 @@ var FormGroup = function (_a) {
     return createElement("div", null, children);
 };
 
-export { FlowForm, FormGroup, Input, ShowData };
+export { Form, FormGroup, Input, ShowData };
 //# sourceMappingURL=index.es.js.map
