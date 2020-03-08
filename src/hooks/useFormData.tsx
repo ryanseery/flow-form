@@ -8,14 +8,6 @@ export interface IUseFormData {
   validate?: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => boolean;
 }
 
-// export interface IUseFormDataReturn {
-//   value: string | boolean | number | object;
-//   error: boolean;
-//   handleChange: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => void;
-//   handleBlur: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => void;
-//   handleFocus: () => void;
-// }
-
 export function useFormData({ id, value, required, validate }: IUseFormData) {
   const { data, error, setValue, updateValue, updateBlur } = React.useContext(FormContext);
 

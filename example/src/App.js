@@ -13,7 +13,7 @@ function App() {
 
   // TODO initial Values
   return (
-    <div style={{ height: '100vh', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+    <div style={{ height: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
       <FlowForm
         onSubmit={data => console.log('data: ', data)}
         style={{ width: '30%', display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}

@@ -41,19 +41,14 @@ function reducer(state: IState, action: IAction) {
 
   switch (type) {
     case ACTIONS.SET_DEFAULT_VALUE: {
-      // make state copy
       const stateCopy: IState = {
         ...state,
       };
-
-      // update state copy
-      // don't mutate state yet
       if (typeof id === 'string' && !stateCopy.data[id]) {
         stateCopy.data[id] = '';
         stateCopy.error[id] = false;
       }
 
-      // return copy
       return stateCopy;
     }
     case ACTIONS.UPDATE_VALUE: {

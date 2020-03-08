@@ -47,15 +47,11 @@ function reducer(state, action) {
     var type = action.type, id = action.id, value = action.value, error = action.error;
     switch (type) {
         case ACTIONS.SET_DEFAULT_VALUE: {
-            // make state copy
             var stateCopy = __assign({}, state);
-            // update state copy
-            // don't mutate state yet
             if (typeof id === 'string' && !stateCopy.data[id]) {
                 stateCopy.data[id] = '';
                 stateCopy.error[id] = false;
             }
-            // return copy
             return stateCopy;
         }
         case ACTIONS.UPDATE_VALUE: {
@@ -135,13 +131,6 @@ function toCamelCase(str) {
         .replace(/\s+/g, '');
 }
 
-// export interface IUseFormDataReturn {
-//   value: string | boolean | number | object;
-//   error: boolean;
-//   handleChange: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => void;
-//   handleBlur: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => void;
-//   handleFocus: () => void;
-// }
 function useFormData(_a) {
     var id = _a.id, value = _a.value, required = _a.required, validate = _a.validate;
     var _b = React.useContext(FormContext), data = _b.data, error = _b.error, setValue = _b.setValue, updateValue = _b.updateValue, updateBlur = _b.updateBlur;
