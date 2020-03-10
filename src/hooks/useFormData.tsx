@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { FormContext } from '../FormWrapper/FormWrapper';
+import { FormContext } from '../FormWrapper';
 
 export interface IUseFormData {
   id: string;

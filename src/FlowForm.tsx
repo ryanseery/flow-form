@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { IState, FormContext, FormWrapper } from './FormWrapper';
+import { IState, FlowFormContext, FormWrapper } from './FlowFormWrapper';
 
 interface IForm {
   children: React.ReactNode | React.ReactNode[];
@@ -11,7 +11,7 @@ interface IForm {
 }
 
 const FormComponent: React.FC<IForm> = ({ children, onSubmit, className, style, customSubmit, reset }) => {
-  const { data, clearForm } = React.useContext(FormContext);
+  const { data, clearForm } = React.useContext(FlowFormContext);
 
   return (
     <form
