@@ -1,15 +1,21 @@
 import * as React from 'react';
-import { FormContext } from '../FormWrapper';
+import { FlowFormContext, IFlow, ICurrentStep } from '../FlowFormWrapper';
 
 interface IShowFormDataReturn {
+  flow: IFlow;
+  currentStep: ICurrentStep;
+  canStepProceed: boolean;
   data: {};
   error: {};
 }
 
 export function showFormData(): IShowFormDataReturn {
-  const { data, error } = React.useContext(FormContext);
+  const { flow, currentStep, canStepProceed, data, error } = React.useContext(FlowFormContext);
 
   return {
+    flow,
+    currentStep,
+    canStepProceed,
     data,
     error,
   };

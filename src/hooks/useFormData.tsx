@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { FormContext } from '../FormWrapper';
+import { FlowFormContext } from '../FlowFormWrapper';
 
 export interface IUseFormData {
   id: string;
@@ -9,7 +9,7 @@ export interface IUseFormData {
 }
 
 export function useFormData({ id, value, required, validate }: IUseFormData) {
-  const { data, error, setValue, updateValue, updateBlur } = React.useContext(FormContext);
+  const { data, error, setValue, updateValue, updateBlur } = React.useContext(FlowFormContext);
 
   React.useEffect(() => {
     setValue({ id, value });

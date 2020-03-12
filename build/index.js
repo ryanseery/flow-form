@@ -31,22 +31,39 @@ var __assign = function() {
 };
 
 var initialState = {
+    flow: {
+        key: 0,
+        end: 0,
+    },
+    currentStep: {
+        id: null,
+        title: null,
+    },
+    canStepProceed: false,
     data: {},
     error: {},
 };
-var FormContext = React.createContext({});
+var FlowFormContext = React.createContext({});
 var ACTIONS;
 (function (ACTIONS) {
-    ACTIONS["SET_DEFAULT_VALUE"] = "SET_DEFAULT_VALUE";
+    ACTIONS["SET_INITIAL_FLOW"] = "SET_INITIAL_FLOW";
+    ACTIONS["SET_VALUE"] = "SET_VALUE";
     ACTIONS["UPDATE_VALUE"] = "UPDATE_VALUE";
     ACTIONS["UPDATE_BLUR"] = "UPDATE_BLUR";
+    ACTIONS["UPDATE_FLOW"] = "UPDATE_FLOW";
     ACTIONS["CLEAR_FORM"] = "CLEAR_FORM";
 })(ACTIONS || (ACTIONS = {}));
 function reducer(state, action) {
-    var _a, _b;
-    var type = action.type, id = action.id, value = action.value, error = action.error;
+    var type = action.type, flow = action.flow, currentStep = action.currentStep, step = action.step, id = action.id, value = action.value, error = action.error;
+    console.log({ type: type, step: step, id: id, value: value, error: error });
     switch (type) {
-        case ACTIONS.SET_DEFAULT_VALUE: {
+        case ACTIONS.SET_INITIAL_FLOW: {
+            if (typeof flow !== 'undefined' && typeof currentStep !== 'undefined') {
+                return __assign(__assign({}, state), { flow: flow,
+                    currentStep: currentStep });
+            }
+        }
+        case ACTIONS.SET_VALUE: {
             var stateCopy = __assign({}, state);
             if (typeof id === 'string' && !stateCopy.data[id]) {
                 stateCopy.data[id] = '';
@@ -55,61 +72,106 @@ function reducer(state, action) {
             return stateCopy;
         }
         case ACTIONS.UPDATE_VALUE: {
-            if (typeof id === 'string') {
-                return __assign(__assign({}, state), { data: __assign(__assign({}, state.data), (_a = {}, _a[id] = value, _a)) });
-            }
+            return state;
         }
         case ACTIONS.UPDATE_BLUR: {
-            if (typeof id === 'string') {
-                return __assign(__assign({}, state), { error: __assign(__assign({}, state.error), (_b = {}, _b[id] = error, _b)) });
-            }
+            return state;
+        }
+        case ACTIONS.UPDATE_FLOW: {
+            return state;
         }
         case ACTIONS.CLEAR_FORM:
             return __assign({}, initialState);
         default:
-            console.error('State Reducer Error');
-            return state;
+            throw new Error("Unexpected Action received");
     }
 }
-var FormWrapper = function (_a) {
+var FlowFormWrapper = function (_a) {
     var children = _a.children;
     var _b = React.useReducer(reducer, initialState), state = _b[0], dispatch = _b[1];
     var actions = React.useMemo(function () {
         return {
+            setFlow: function (_a) {
+                var flow = _a.flow, currentStep = _a.currentStep;
+                return dispatch({ type: ACTIONS.SET_INITIAL_FLOW, flow: flow, currentStep: currentStep });
+            },
             setValue: function (_a) {
-                var id = _a.id, value = _a.value, error = _a.error;
-                return dispatch({ type: ACTIONS.SET_DEFAULT_VALUE, id: id, value: value, error: error });
+                var step = _a.step, id = _a.id, value = _a.value, error = _a.error;
+                return dispatch({ type: ACTIONS.SET_VALUE, step: step, id: id, value: value, error: error });
             },
             updateValue: function (_a) {
-                var id = _a.id, value = _a.value, error = _a.error;
-                return dispatch({ type: ACTIONS.UPDATE_VALUE, id: id, value: value, error: error });
+                var step = _a.step, id = _a.id, value = _a.value, error = _a.error;
+                return dispatch({ type: ACTIONS.UPDATE_VALUE, step: step, id: id, value: value, error: error });
             },
             updateBlur: function (_a) {
-                var id = _a.id, error = _a.error;
-                return dispatch({ type: ACTIONS.UPDATE_BLUR, id: id, error: error });
+                var step = _a.step, id = _a.id, error = _a.error;
+                return dispatch({ type: ACTIONS.UPDATE_BLUR, step: step, id: id, error: error });
+            },
+            updateFlow: function (_a) {
+                var step = _a.step, id = _a.id, value = _a.value, error = _a.error;
+                return dispatch({ type: ACTIONS.SET_INITIAL_FLOW, step: step, id: id, value: value, error: error });
             },
             clearForm: function () { return dispatch({ type: ACTIONS.CLEAR_FORM }); },
         };
     }, []);
-    return (React.createElement(FormContext.Provider, { value: __assign(__assign({}, state), actions) }, children));
+    return (React.createElement(FlowFormContext.Provider, { value: __assign(__assign({}, state), actions) }, children));
 };
 
+var FFComponent;
+(function (FFComponent) {
+    FFComponent["STEP"] = "STEP";
+    FFComponent["SHOW_DATA"] = "SHOW_DATA";
+})(FFComponent || (FFComponent = {}));
+
 var FormComponent = function (_a) {
-    var children = _a.children, onSubmit = _a.onSubmit, className = _a.className, style = _a.style, customSubmit = _a.customSubmit, reset = _a.reset;
-    var _b = React.useContext(FormContext), data = _b.data, clearForm = _b.clearForm;
+    var children = _a.children, onSubmit = _a.onSubmit, className = _a.className, style = _a.style, reset = _a.reset;
+    var _b = React.useContext(FlowFormContext), setFlow = _b.setFlow, flow = _b.flow, currentStep = _b.currentStep, data = _b.data, clearForm = _b.clearForm;
+    // TODO why  undefined?
+    function mapHeaders(children) {
+        return React.Children.map(children, function (child, index) {
+            var _a;
+            if (!React.isValidElement(child)) {
+                return null;
+            }
+            if ((child === null || child === void 0 ? void 0 : child.props.flowComp) === FFComponent.STEP) {
+                return (_a = child.props.title) !== null && _a !== void 0 ? _a : index;
+            }
+            return null;
+        });
+    }
+    function isSingleChildAStep(children) {
+        var _a;
+        if (React.isValidElement(children)) {
+            return (_a = [children.props.title]) !== null && _a !== void 0 ? _a : [0];
+        }
+        return [0];
+    }
+    var flowHeaders = Array.isArray(children) ? mapHeaders(children) : isSingleChildAStep(children);
+    var isThereShowData = Array.isArray(children) &&
+        children.filter(function (child) {
+            return React.isValidElement(child) && child.props.flowComp === FFComponent.SHOW_DATA ? child : null;
+        });
+    React.useEffect(function () {
+        var initialFlow = { key: 0, end: Array.isArray(children) ? children.length - 1 : 0 };
+        var initialStep = { id: 0, title: Array.isArray(children) && Array.isArray(flowHeaders) && flowHeaders[0] };
+        setFlow({ flow: initialFlow, currentStep: initialStep });
+    }, []);
     return (React.createElement("form", { className: "flow-form " + className, style: style, onSubmit: function (e) {
             e.preventDefault();
             onSubmit(data);
         } },
+        Array.isArray(flowHeaders) && React.createElement("div", null, flowHeaders[flow.key]),
         React.createElement("fieldset", { disabled: false, "aria-busy": false, style: { border: "none" } },
-            children,
-            !customSubmit && (React.createElement("button", { type: "submit", className: "flow-form-submit" }, "Submit")),
-            reset && (React.createElement("button", { type: "button", className: "flow-form-reset", onClick: clearForm }, "Clear")))));
+            React.createElement(React.Fragment, null, Array.isArray(children) ? children[flow.key] : children),
+            flow.key !== currentStep.id && (React.createElement("button", { type: "button", className: "flow-form-back-button" }, "Back")),
+            flow.end !== currentStep.id ? (React.createElement("button", { type: "button", className: "flow-form-next-button" }, "Next")) : (React.createElement("button", { type: "submit", className: "flow-form-submit-button" }, "Submit")),
+            reset && (React.createElement("button", { type: "button", className: "flow-form-reset", onClick: clearForm }, "Clear")),
+            isThereShowData)));
 };
-var Form = function (_a) {
-    var children = _a.children, onSubmit = _a.onSubmit, className = _a.className, style = _a.style, customSubmit = _a.customSubmit, reset = _a.reset, _b = _a.initialValues, initialValues = _b === void 0 ? {} : _b;
-    return (React.createElement(FormWrapper, { initialValues: initialValues },
-        React.createElement(FormComponent, { onSubmit: onSubmit, className: className, style: style, customSubmit: customSubmit, reset: reset }, children)));
+var FlowForm = function (_a) {
+    var children = _a.children, onSubmit = _a.onSubmit, className = _a.className, style = _a.style, reset = _a.reset, _b = _a.initialValues, initialValues = _b === void 0 ? {} : _b;
+    return (React.createElement(FlowFormWrapper, { initialValues: initialValues },
+        React.createElement(FormComponent, { onSubmit: onSubmit, className: className, style: style, reset: reset }, children)));
 };
 
 function toKebabCase(str) {
@@ -131,9 +193,23 @@ function toCamelCase(str) {
         .replace(/\s+/g, '');
 }
 
+// TODO only insert index/step if child is Input
+var Step = function (_a) {
+    var children = _a.children, title = _a.title;
+    return (React.createElement("div", { "data-step": true, className: "flow-from-step " + (title && toKebabCase(title)) }, React.Children.map(children, function (child, index) {
+        return React.cloneElement(child, {
+            index: index,
+            step: title ? toCamelCase(title) : null,
+        });
+    })));
+};
+Step.defaultProps = {
+    flowComp: FFComponent.STEP,
+};
+
 function useFormData(_a) {
     var id = _a.id, value = _a.value, required = _a.required, validate = _a.validate;
-    var _b = React.useContext(FormContext), data = _b.data, error = _b.error, setValue = _b.setValue, updateValue = _b.updateValue, updateBlur = _b.updateBlur;
+    var _b = React.useContext(FlowFormContext), data = _b.data, error = _b.error, setValue = _b.setValue, updateValue = _b.updateValue, updateBlur = _b.updateBlur;
     React.useEffect(function () {
         setValue({ id: id, value: value });
     }, []);
@@ -174,21 +250,19 @@ function useFormData(_a) {
 }
 
 function showFormData() {
-    var _a = React.useContext(FormContext), data = _a.data, error = _a.error;
+    var _a = React.useContext(FlowFormContext), flow = _a.flow, currentStep = _a.currentStep, canStepProceed = _a.canStepProceed, data = _a.data, error = _a.error;
     return {
+        flow: flow,
+        currentStep: currentStep,
+        canStepProceed: canStepProceed,
         data: data,
         error: error,
     };
 }
 
-var Error = function (_a) {
+var Error$1 = function (_a) {
     var id = _a.id, className = _a.className, errMsg = _a.errMsg;
     return (React.createElement("small", { id: id + "-error", className: "flow-form-error " + className + "-error", style: { color: 'red' } }, typeof errMsg === 'string' ? errMsg : "Please provide a valid " + id + " "));
-};
-
-var ShowData = function () {
-    var _a = showFormData(), data = _a.data, error = _a.error;
-    return React.createElement("pre", null, JSON.stringify({ data: data, error: error }, null, 2));
 };
 
 var HelperText = function (_a) {
@@ -210,7 +284,7 @@ var Text = function (_a) {
     return (React.createElement(React.Fragment, null,
         React.createElement("input", { id: id, name: id, value: value || '', onChange: handleChange, onBlur: handleBlur, onFocus: handleFocus, type: type, placeholder: placeholder, style: style, className: "flow-form-input " + className + "-input", required: required, autoComplete: autoComplete }),
         !error && React.createElement(HelperText, { id: id, helperText: helperText, className: className }),
-        error && React.createElement(Error, { id: id, className: className, errMsg: errMsg })));
+        error && React.createElement(Error$1, { id: id, className: className, errMsg: errMsg })));
 };
 
 var Number = function (_a) {
@@ -224,7 +298,7 @@ var Number = function (_a) {
     return (React.createElement(React.Fragment, null,
         React.createElement("input", { id: id, name: id, value: value || '', onChange: handleChange, onBlur: handleBlur, onFocus: handleFocus, type: type, placeholder: placeholder, style: style, className: "flow-form-input " + className + "-input", required: required, autoComplete: autoComplete }),
         !error && React.createElement(HelperText, { id: id, helperText: helperText, className: className }),
-        error && React.createElement(Error, { id: id, className: className, errMsg: errMsg })));
+        error && React.createElement(Error$1, { id: id, className: className, errMsg: errMsg })));
 };
 
 var Email = function (_a) {
@@ -238,7 +312,7 @@ var Email = function (_a) {
     return (React.createElement(React.Fragment, null,
         React.createElement("input", { id: id, name: id, value: value || '', onChange: handleChange, onBlur: handleBlur, onFocus: handleFocus, type: type, placeholder: placeholder, style: style, className: "flow-form-input " + className + "-input", required: required, autoComplete: autoComplete }),
         !error && React.createElement(HelperText, { id: id, helperText: helperText, className: className }),
-        error && React.createElement(Error, { id: id, className: className, errMsg: errMsg })));
+        error && React.createElement(Error$1, { id: id, className: className, errMsg: errMsg })));
 };
 
 var Password = function (_a) {
@@ -252,7 +326,7 @@ var Password = function (_a) {
     return (React.createElement(React.Fragment, null,
         React.createElement("input", { id: id, name: id, value: value || '', onChange: handleChange, onBlur: handleBlur, onFocus: handleFocus, type: type, placeholder: placeholder, style: style, className: "flow-form-input " + className + "-input", required: required, autoComplete: autoComplete }),
         !error && React.createElement(HelperText, { id: id, helperText: helperText, className: className }),
-        error && React.createElement(Error, { id: id, className: className, errMsg: errMsg })));
+        error && React.createElement(Error$1, { id: id, className: className, errMsg: errMsg })));
 };
 
 var Tel = function (_a) {
@@ -266,7 +340,7 @@ var Tel = function (_a) {
     return (React.createElement(React.Fragment, null,
         React.createElement("input", { id: id, name: id, value: value || '', onChange: handleChange, onBlur: handleBlur, onFocus: handleFocus, type: type, placeholder: placeholder, style: style, className: "flow-form-input " + className + "-input", required: required, autoComplete: autoComplete, pattern: pattern }),
         !error && React.createElement(HelperText, { id: id, helperText: helperText, className: className }),
-        error && React.createElement(Error, { id: id, className: className, errMsg: errMsg })));
+        error && React.createElement(Error$1, { id: id, className: className, errMsg: errMsg })));
 };
 
 var Url = function (_a) {
@@ -280,7 +354,7 @@ var Url = function (_a) {
     return (React.createElement(React.Fragment, null,
         React.createElement("input", { id: id, name: id, value: value || '', onChange: handleChange, onBlur: handleBlur, onFocus: handleFocus, type: type, placeholder: placeholder, style: style, className: "flow-form-input " + className + "-input", required: required, autoComplete: autoComplete, pattern: pattern }),
         !error && React.createElement(HelperText, { id: id, helperText: helperText, className: className }),
-        error && React.createElement(Error, { id: id, className: className, errMsg: errMsg })));
+        error && React.createElement(Error$1, { id: id, className: className, errMsg: errMsg })));
 };
 
 var TextArea = function (_a) {
@@ -294,7 +368,7 @@ var TextArea = function (_a) {
     return (React.createElement(React.Fragment, null,
         React.createElement("textarea", { id: id, name: id, value: value || '', onChange: handleChange, onBlur: handleBlur, onFocus: handleFocus, placeholder: placeholder, style: style, className: "flow-form-input " + className + "-input", required: required, autoComplete: autoComplete, rows: rows, cols: cols }),
         !error && React.createElement(HelperText, { id: id, helperText: helperText, className: className }),
-        error && React.createElement(Error, { id: id, className: className, errMsg: errMsg })));
+        error && React.createElement(Error$1, { id: id, className: className, errMsg: errMsg })));
 };
 
 var Color = function (_a) {
@@ -308,7 +382,7 @@ var Color = function (_a) {
     return (React.createElement(React.Fragment, null,
         React.createElement("input", { id: id, name: id, value: value || '#519839', onChange: handleChange, onBlur: handleBlur, onFocus: handleFocus, type: type, placeholder: placeholder, style: style, className: "flow-form-input " + className + "-input", required: required, autoComplete: autoComplete }),
         !error && React.createElement(HelperText, { id: id, helperText: helperText, className: className }),
-        error && React.createElement(Error, { id: id, className: className, errMsg: errMsg })));
+        error && React.createElement(Error$1, { id: id, className: className, errMsg: errMsg })));
 };
 
 var Input = function (_a) {
@@ -356,13 +430,39 @@ var Input = function (_a) {
         })()));
 };
 
-var FormGroup = function (_a) {
-    var children = _a.children;
-    return React.createElement("div", null, children);
+var Submit = function (_a) {
+    var className = _a.className, title = _a.title;
+    return (React.createElement("button", { type: "submit", className: "flow-form-submit " + className }, title ? title : "Submit"));
 };
 
-exports.Form = Form;
-exports.FormGroup = FormGroup;
+var ShowData = function (_a) {
+    var style = _a.style;
+    var _b = showFormData(), flow = _b.flow, currentStep = _b.currentStep, canStepProceed = _b.canStepProceed, data = _b.data, error = _b.error;
+    return (React.createElement("pre", { className: "flow-form-show-data", style: style }, JSON.stringify({ flow: flow, currentStep: currentStep, canStepProceed: canStepProceed, data: data, error: error }, null, 2)));
+};
+ShowData.defaultProps = {
+    flowComp: FFComponent.SHOW_DATA,
+};
+
+var FormContext = React.createContext({});
+var ACTIONS$1;
+(function (ACTIONS) {
+    ACTIONS["SET_DEFAULT_VALUE"] = "SET_DEFAULT_VALUE";
+    ACTIONS["UPDATE_VALUE"] = "UPDATE_VALUE";
+    ACTIONS["UPDATE_BLUR"] = "UPDATE_BLUR";
+    ACTIONS["CLEAR_FORM"] = "CLEAR_FORM";
+})(ACTIONS$1 || (ACTIONS$1 = {}));
+
+var Reset = function (_a) {
+    var className = _a.className, title = _a.title;
+    var clearForm = React.useContext(FormContext).clearForm;
+    return (React.createElement("button", { type: "submit", className: "flow-form-reset " + className, onClick: clearForm }, title ? title : "Reset"));
+};
+
+exports.FlowForm = FlowForm;
 exports.Input = Input;
+exports.Reset = Reset;
 exports.ShowData = ShowData;
+exports.Step = Step;
+exports.Submit = Submit;
 //# sourceMappingURL=index.js.map
