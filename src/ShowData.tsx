@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { showFormData } from './hooks';
+import { FlowFormContext } from './FlowFormWrapper';
 import { FFComponent } from './@types/ffFormComponents';
 
 export interface IShowData {
@@ -8,7 +8,7 @@ export interface IShowData {
 }
 
 export const ShowData: React.FC<IShowData> = ({ style }) => {
-  const { flow, currentStep, canStepProceed, data, error } = showFormData();
+  const { flow, currentStep, canStepProceed, data, error } = React.useContext(FlowFormContext);
 
   return (
     <pre className="flow-form-show-data" style={style}>

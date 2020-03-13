@@ -4,6 +4,7 @@ import { FFComponent } from './@types/ffFormComponents';
 
 export interface IStep {
   flowComp: string;
+  name?: string;
   title: string;
 }
 

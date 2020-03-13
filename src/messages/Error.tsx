@@ -1,8 +1,8 @@
 import * as React from 'react';
 
 interface IError {
-  id: string;
-  className: string;
+  id?: string;
+  className?: string;
   errMsg?: string;
 }
 

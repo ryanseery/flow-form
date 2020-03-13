@@ -12,38 +12,35 @@ interface IForm {
   reset?: boolean;
 }
 
-const FormComponent: React.FC<IForm> = ({ children, onSubmit, className, style, reset }) => {
+// TODO why undefined?
+function mapHeaders(children: React.ReactNode): React.ReactText[] | number[] | null | undefined {
+  return React.Children.map(children, (child, index) => {
+    if (!React.isValidElement<IStep>(child)) {
+      return null;
+    }
+
+    if (child.props.flowComp === FFComponent.STEP) {
+      return child.props.title ?? index;
+    }
+
+    return null;
+  });
+}
+
+function isSingleChildAStep(children: React.ReactNode): string[] | number[] {
+  if (React.isValidElement<IStep>(children)) {
+    return [children.props.title] ?? [0];
+  }
+  return [0];
+}
+
+const FlowFormComponent: React.FC<IForm> = ({ children, onSubmit, className, style, reset }) => {
   const { setFlow, flow, currentStep, data, clearForm } = React.useContext(FlowFormContext);
 
-  // TODO why  undefined?
-  function mapHeaders(children: React.ReactNode): React.ReactText[] | number[] | null | undefined {
-    return React.Children.map(children, (child: React.ReactNode, index: number) => {
-      if (!React.isValidElement<IStep>(child)) {
-        return null;
-      }
-
-      if (child?.props.flowComp === FFComponent.STEP) {
-        return child.props.title ?? index;
-      }
-
-      return null;
-    });
-  }
-
-  function isSingleChildAStep(children: React.ReactNode): string[] | number[] {
-    if (React.isValidElement<IStep>(children)) {
-      return [children.props.title] ?? [0];
-    }
-    return [0];
-  }
-
-  const flowHeaders = Array.isArray(children) ? mapHeaders(children) : isSingleChildAStep(children);
-
-  const isThereShowData =
-    Array.isArray(children) &&
-    children.filter(child =>
-      React.isValidElement<IShowData>(child) && child.props.flowComp === FFComponent.SHOW_DATA ? child : null,
-    );
+  const flowHeaders = React.useMemo(
+    () => (Array.isArray(children) ? mapHeaders(children) : isSingleChildAStep(children)),
+    [],
+  );
 
   React.useEffect(() => {
     const initialFlow = { key: 0, end: Array.isArray(children) ? children.length - 1 : 0 };
@@ -51,6 +48,15 @@ const FormComponent: React.FC<IForm> = ({ children, onSubmit, className, style, 
 
     setFlow({ flow: initialFlow, currentStep: initialStep });
   }, []);
+
+  const isThereShowData = React.useMemo(
+    () =>
+      Array.isArray(children) &&
+      children.filter(child =>
+        React.isValidElement<IShowData>(child) && child.props.flowComp === FFComponent.SHOW_DATA ? child : null,
+      ),
+    [],
+  );
 
   return (
     <form
@@ -62,6 +68,7 @@ const FormComponent: React.FC<IForm> = ({ children, onSubmit, className, style, 
       }}
     >
       {Array.isArray(flowHeaders) && <div>{flowHeaders[flow.key]}</div>}
+
       <fieldset disabled={false} aria-busy={false} style={{ border: `none` }}>
         <>{Array.isArray(children) ? children[flow.key] : children}</>
 
@@ -97,10 +104,10 @@ interface IFlowFrom extends IForm {
   initialValues?: {};
 }
 
-export const FlowForm: React.FC<IFlowFrom> = ({ children, onSubmit, className, style, reset, initialValues = {} }) => (
+export const FlowForm: React.FC<IFlowFrom> = ({ children, onSubmit, className, style, reset, initialValues }) => (
   <FlowFormWrapper initialValues={initialValues}>
-    <FormComponent onSubmit={onSubmit} className={className} style={style} reset={reset}>
+    <FlowFormComponent className={className} style={style} onSubmit={onSubmit} reset={reset}>
       {children}
-    </FormComponent>
+    </FlowFormComponent>
   </FlowFormWrapper>
 );
