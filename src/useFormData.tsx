@@ -1,6 +1,6 @@
 import * as React from 'react';
-import { FlowFormContext } from '../FlowFormWrapper';
-import { isObjectEmpty } from '../utils';
+import { FlowFormContext } from './FlowFormWrapper';
+import { isObjectEmpty } from './utils';
 
 export interface IUseFormData {
   step: string | number;
