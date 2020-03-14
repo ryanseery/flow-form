@@ -20,7 +20,7 @@ function App() {
         initialValues={{ text: 'initial' }}
       >
         <Step title="Step 1">
-          <Input>First Name</Input>
+          <Input required>First Name</Input>
           <Input type="email">Email Address</Input>
         </Step>
 

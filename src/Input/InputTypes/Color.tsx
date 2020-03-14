@@ -6,6 +6,7 @@ import { Error, HelperText } from '../../messages';
 interface IColor extends IInputType {}
 
 export const Color: React.FC<IColor> = ({
+  step,
   id,
   type = 'text',
   className,
@@ -17,7 +18,8 @@ export const Color: React.FC<IColor> = ({
   helperText,
   style,
 }) => {
-  const { value, error, handleChange, handleBlur, handleFocus } = useFormData({
+  const { value, showError, handleChange, handleBlur, handleFocus } = useFormData({
+    step,
     id,
     value: '',
     validate,
@@ -40,8 +42,8 @@ export const Color: React.FC<IColor> = ({
         required={required}
         autoComplete={autoComplete}
       />
-      {!error && <HelperText id={id} helperText={helperText} className={className} />}
-      {error && <Error id={id} className={className} errMsg={errMsg} />}
+      {!showError && <HelperText id={id} helperText={helperText} className={className} />}
+      {showError && <Error id={id} className={className} errMsg={errMsg} />}
     </>
   );
 };

@@ -6,7 +6,8 @@ export interface IFlow {
 }
 
 export interface ICurrentStep {
-  id: number | null;
+  index: number | null;
+  id: string | number | null;
   title: string | null;
 }
 
@@ -16,6 +17,7 @@ export interface IState {
   canStepProceed: boolean;
   data: {};
   error: {};
+  showError: {};
 }
 
 const initialState: IState = {
@@ -24,22 +26,15 @@ const initialState: IState = {
     end: 0,
   },
   currentStep: {
+    index: null,
     id: null,
     title: null,
   },
   canStepProceed: false,
   data: {},
   error: {},
+  showError: {},
 };
-
-export interface IArgs {
-  flow?: IFlow;
-  currentStep?: ICurrentStep;
-  step?: string;
-  id?: string;
-  value?: string | boolean | number | object;
-  error?: boolean;
-}
 
 interface IContextProps extends IState {
   setFlow: (args: any) => void;
@@ -61,44 +56,160 @@ enum ACTIONS {
   CLEAR_FORM = 'CLEAR_FORM',
 }
 
-interface IAction extends IArgs {
-  type:
-    | ACTIONS.SET_INITIAL_FLOW
-    | ACTIONS.SET_VALUE
-    | ACTIONS.UPDATE_VALUE
-    | ACTIONS.UPDATE_BLUR
-    | ACTIONS.UPDATE_FLOW
-    | ACTIONS.CLEAR_FORM;
+interface SetFlowArgs {
+  flow: IFlow;
+  currentStep: ICurrentStep;
 }
 
-function reducer(state: IState, action: IAction) {
-  const { type, flow, currentStep, step, id, value, error } = action;
-  console.log({ type, step, id, value, error });
+interface SetFlow extends SetFlowArgs {
+  type: ACTIONS.SET_INITIAL_FLOW;
+  flow: IFlow;
+  currentStep: ICurrentStep;
+}
 
-  switch (type) {
+const setFlow = ({ flow, currentStep }: SetFlowArgs): SetFlow => ({
+  type: ACTIONS.SET_INITIAL_FLOW,
+  flow,
+  currentStep,
+});
+
+interface UpdateFlow {
+  type: ACTIONS.UPDATE_FLOW;
+}
+
+const updateFlow = (): UpdateFlow => ({
+  type: ACTIONS.UPDATE_FLOW,
+});
+
+interface ValueArgs {
+  step: string | number;
+  id: string;
+  value: string | boolean | number | object;
+  error: boolean;
+}
+
+interface SetValue extends ValueArgs {
+  type: ACTIONS.SET_VALUE;
+}
+
+const setValue = ({ step, id, value, error }: ValueArgs): SetValue => ({
+  type: ACTIONS.SET_VALUE,
+  step,
+  id,
+  value,
+  error,
+});
+
+interface UpdateValue extends ValueArgs {
+  type: ACTIONS.UPDATE_VALUE;
+}
+
+const updateValue = ({ step, id, value, error }: ValueArgs): UpdateValue => ({
+  type: ACTIONS.UPDATE_VALUE,
+  step,
+  id,
+  value,
+  error,
+});
+
+interface BlurArgs {
+  step: string | number;
+  id: string;
+  showError: boolean;
+}
+
+interface UpdateBlur extends BlurArgs {
+  type: ACTIONS.UPDATE_BLUR;
+}
+
+const updateBlur = ({ step, id, showError }: BlurArgs): UpdateBlur => ({
+  type: ACTIONS.UPDATE_BLUR,
+  step,
+  id,
+  showError,
+});
+
+interface ClearForm {
+  type: ACTIONS.CLEAR_FORM;
+}
+
+const clearForm = (): ClearForm => ({
+  type: ACTIONS.CLEAR_FORM,
+});
+
+type Actions = SetFlow | UpdateFlow | SetValue | UpdateValue | UpdateBlur | ClearForm;
+
+function checkIfStepProceed(obj: {}) {
+  return Object.keys(obj)
+    .reduce((acc, a) => [...acc, ...Object.keys(obj[a]).map((b: string) => obj[a][b])], [])
+    .every((c: boolean) => c === false);
+}
+
+function reducer(state: IState, action: Actions) {
+  console.log(action);
+
+  switch (action.type) {
     case ACTIONS.SET_INITIAL_FLOW: {
-      if (typeof flow !== 'undefined' && typeof currentStep !== 'undefined') {
-        return {
-          ...state,
-          flow,
-          currentStep,
-        };
-      }
+      const { flow, currentStep } = action;
+      return {
+        ...state,
+        flow,
+        currentStep,
+        canStepProceed: checkIfStepProceed(state.error),
+      };
     }
     case ACTIONS.SET_VALUE: {
-      const stateCopy: IState = {
-        ...state,
-      };
-
-      if (typeof id === 'string' && !stateCopy.data[id]) {
-        stateCopy.data[id] = '';
-        stateCopy.error[id] = false;
+      const { step, id, value, error } = action;
+      if (!state.data[id] || !state[step].data[id]) {
+        return {
+          ...state,
+          canStepProceed: checkIfStepProceed(state.error),
+          data: {
+            ...state.data,
+            [step]: {
+              ...state.data[step],
+              [id]: value ?? '',
+            },
+          },
+          error: {
+            ...state.error,
+            [step]: {
+              ...state.error[step],
+              [id]: error,
+            },
+          },
+          showError: {
+            ...state.showError,
+            [step]: {
+              ...state.showError[step],
+              [id]: false,
+            },
+          },
+        };
       }
 
-      return stateCopy;
+      return state;
     }
     case ACTIONS.UPDATE_VALUE: {
-      return state;
+      const { step, id, value, error } = action;
+      return {
+        ...state,
+        canStepProceed: checkIfStepProceed(state.error),
+        data: {
+          ...state.data,
+          [step]: {
+            ...state.data[step],
+            [id]: value,
+          },
+        },
+        error: {
+          ...state.error,
+          [step]: {
+            ...state.error[step],
+            [id]: error,
+          },
+        },
+      };
     }
     case ACTIONS.UPDATE_BLUR: {
       return state;
@@ -123,14 +234,12 @@ export const FlowFormWrapper: React.FC<FormWrapper> = ({ children }) => {
 
   const actions = React.useMemo(() => {
     return {
-      setFlow: ({ flow, currentStep }: IArgs) => dispatch({ type: ACTIONS.SET_INITIAL_FLOW, flow, currentStep }),
-      setValue: ({ step, id, value, error }: IArgs) => dispatch({ type: ACTIONS.SET_VALUE, step, id, value, error }),
-      updateValue: ({ step, id, value, error }: IArgs) =>
-        dispatch({ type: ACTIONS.UPDATE_VALUE, step, id, value, error }),
-      updateBlur: ({ step, id, error }: IArgs) => dispatch({ type: ACTIONS.UPDATE_BLUR, step, id, error }),
-      updateFlow: ({ step, id, value, error }: IArgs) =>
-        dispatch({ type: ACTIONS.SET_INITIAL_FLOW, step, id, value, error }),
-      clearForm: () => dispatch({ type: ACTIONS.CLEAR_FORM }),
+      setFlow: ({ flow, currentStep }: SetFlowArgs) => dispatch(setFlow({ flow, currentStep })),
+      setValue: ({ step, id, value, error }: ValueArgs) => dispatch(setValue({ step, id, value, error })),
+      updateValue: ({ step, id, value, error }: ValueArgs) => dispatch(updateValue({ step, id, value, error })),
+      updateBlur: ({ step, id, showError }: BlurArgs) => dispatch(updateBlur({ step, id, showError })),
+      updateFlow: () => dispatch(updateFlow()),
+      clearForm: () => dispatch(clearForm()),
     };
   }, []);
 

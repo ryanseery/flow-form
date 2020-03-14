@@ -3,6 +3,8 @@ import { toKebabCase, toCamelCase } from '../utils';
 import { Text, Number, Email, Password, Tel, Url, TextArea, Color } from './InputTypes';
 
 interface IInput {
+  index: number;
+  step: string | number;
   children?: string;
   type?: string;
   placeholder?: string;
@@ -18,6 +20,8 @@ interface IInput {
 }
 
 export const Input: React.FC<IInput> = ({
+  index,
+  step,
   children,
   type,
   placeholder,
@@ -36,6 +40,8 @@ export const Input: React.FC<IInput> = ({
   const camelCase = toCamelCase(children ?? '');
 
   const defaultProps = {
+    index,
+    step,
     id: camelCase,
     type,
     className: kebabCase,

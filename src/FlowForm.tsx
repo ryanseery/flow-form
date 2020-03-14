@@ -3,6 +3,7 @@ import { IState, FlowFormContext, FlowFormWrapper } from './FlowFormWrapper';
 import { FFComponent } from './@types/ffFormComponents';
 import { IStep } from './Step';
 import { IShowData } from './ShowData';
+import { toCamelCase } from './utils';
 
 interface IForm {
   children: React.ReactNode;
@@ -35,7 +36,7 @@ function isSingleChildAStep(children: React.ReactNode): string[] | number[] {
 }
 
 const FlowFormComponent: React.FC<IForm> = ({ children, onSubmit, className, style, reset }) => {
-  const { setFlow, flow, currentStep, data, clearForm } = React.useContext(FlowFormContext);
+  const { setFlow, flow, currentStep, canStepProceed, data, clearForm } = React.useContext(FlowFormContext);
 
   const flowHeaders = React.useMemo(
     () => (Array.isArray(children) ? mapHeaders(children) : isSingleChildAStep(children)),
@@ -44,7 +45,15 @@ const FlowFormComponent: React.FC<IForm> = ({ children, onSubmit, className, sty
 
   React.useEffect(() => {
     const initialFlow = { key: 0, end: Array.isArray(children) ? children.length - 1 : 0 };
-    const initialStep = { id: 0, title: Array.isArray(children) && Array.isArray(flowHeaders) && flowHeaders[0] };
+    const initialStep = {
+      index: 0,
+      id:
+        Array.isArray(children) &&
+        Array.isArray(flowHeaders) &&
+        typeof flowHeaders[0] === 'string' &&
+        toCamelCase(flowHeaders[0]),
+      title: Array.isArray(children) && Array.isArray(flowHeaders) && flowHeaders[0],
+    };
 
     setFlow({ flow: initialFlow, currentStep: initialStep });
   }, []);
@@ -80,7 +89,7 @@ const FlowFormComponent: React.FC<IForm> = ({ children, onSubmit, className, sty
 
         {flow.end !== currentStep.id ? (
           <button type="button" className="flow-form-next-button">
-            Next
+            {canStepProceed ? `Next` : `Can't Proceed`}
           </button>
         ) : (
           <button type="submit" className="flow-form-submit-button">

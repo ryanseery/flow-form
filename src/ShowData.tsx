@@ -8,11 +8,11 @@ export interface IShowData {
 }
 
 export const ShowData: React.FC<IShowData> = ({ style }) => {
-  const { flow, currentStep, canStepProceed, data, error } = React.useContext(FlowFormContext);
+  const { flow, currentStep, canStepProceed, data, error, showError } = React.useContext(FlowFormContext);
 
   return (
     <pre className="flow-form-show-data" style={style}>
-      {JSON.stringify({ flow, currentStep, canStepProceed, data, error }, null, 2)}
+      {JSON.stringify({ flow, currentStep, canStepProceed, data, error, showError }, null, 2)}
     </pre>
   );
 };

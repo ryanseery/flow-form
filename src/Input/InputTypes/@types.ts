@@ -1,4 +1,6 @@
 export interface IInputType {
+  index: number;
+  step: string | number;
   id: string;
   type?: string;
   className: string;

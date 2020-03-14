@@ -9,6 +9,7 @@ interface ITextArea extends IInputType {
 }
 
 export const TextArea: React.FC<ITextArea> = ({
+  step,
   id,
   className,
   placeholder,
@@ -21,7 +22,8 @@ export const TextArea: React.FC<ITextArea> = ({
   helperText,
   style,
 }) => {
-  const { value, error, handleChange, handleBlur, handleFocus } = useFormData({
+  const { value, showError, handleChange, handleBlur, handleFocus } = useFormData({
+    step,
     id,
     value: '',
     validate,
@@ -45,8 +47,8 @@ export const TextArea: React.FC<ITextArea> = ({
         rows={rows}
         cols={cols}
       />
-      {!error && <HelperText id={id} helperText={helperText} className={className} />}
-      {error && <Error id={id} className={className} errMsg={errMsg} />}
+      {!showError && <HelperText id={id} helperText={helperText} className={className} />}
+      {showError && <Error id={id} className={className} errMsg={errMsg} />}
     </>
   );
 };

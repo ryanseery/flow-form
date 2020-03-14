@@ -6,6 +6,7 @@ import { Error, HelperText } from '../../messages';
 interface INumber extends IInputType {}
 
 export const Number: React.FC<INumber> = ({
+  step,
   id,
   type = 'number',
   className,
@@ -17,7 +18,8 @@ export const Number: React.FC<INumber> = ({
   helperText,
   style,
 }) => {
-  const { value, error, handleChange, handleBlur, handleFocus } = useFormData({
+  const { value, showError, handleChange, handleBlur, handleFocus } = useFormData({
+    step,
     id,
     value: 0,
     validate,
@@ -39,8 +41,8 @@ export const Number: React.FC<INumber> = ({
         required={required}
         autoComplete={autoComplete}
       />
-      {!error && <HelperText id={id} helperText={helperText} className={className} />}
-      {error && <Error id={id} className={className} errMsg={errMsg} />}
+      {!showError && <HelperText id={id} helperText={helperText} className={className} />}
+      {showError && <Error id={id} className={className} errMsg={errMsg} />}
     </>
   );
 };

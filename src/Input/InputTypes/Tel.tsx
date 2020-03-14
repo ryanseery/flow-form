@@ -8,6 +8,7 @@ interface ITel extends IInputType {
 }
 
 export const Tel: React.FC<ITel> = ({
+  step,
   id,
   type = 'tel',
   className,
@@ -20,7 +21,8 @@ export const Tel: React.FC<ITel> = ({
   helperText,
   style,
 }) => {
-  const { value, error, handleChange, handleBlur, handleFocus } = useFormData({
+  const { value, showError, handleChange, handleBlur, handleFocus } = useFormData({
+    step,
     id,
     value: '',
     validate,
@@ -44,8 +46,8 @@ export const Tel: React.FC<ITel> = ({
         autoComplete={autoComplete}
         pattern={pattern}
       />
-      {!error && <HelperText id={id} helperText={helperText} className={className} />}
-      {error && <Error id={id} className={className} errMsg={errMsg} />}
+      {!showError && <HelperText id={id} helperText={helperText} className={className} />}
+      {showError && <Error id={id} className={className} errMsg={errMsg} />}
     </>
   );
 };

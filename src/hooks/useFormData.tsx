@@ -1,18 +1,20 @@
 import * as React from 'react';
 import { FlowFormContext } from '../FlowFormWrapper';
+import { isObjectEmpty } from '../utils';
 
 export interface IUseFormData {
+  step: string | number;
   id: string;
   value: string | boolean | number | object;
   required: boolean;
   validate?: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => boolean;
 }
 
-export function useFormData({ id, value, required, validate }: IUseFormData) {
-  const { data, error, setValue, updateValue, updateBlur } = React.useContext(FlowFormContext);
+export function useFormData({ step, id, value, required, validate }: IUseFormData) {
+  const { data, error, showError, setValue, updateValue, updateBlur } = React.useContext(FlowFormContext);
 
   React.useEffect(() => {
-    setValue({ id, value });
+    setValue({ step, id, value, error: required ?? false });
   }, []);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
@@ -26,6 +28,7 @@ export function useFormData({ id, value, required, validate }: IUseFormData) {
     }
 
     updateValue({
+      step,
       id,
       value: e.target.type === 'number' ? parseFloat(e.target.value) : e.target.value,
       error: validation(),
@@ -42,16 +45,17 @@ export function useFormData({ id, value, required, validate }: IUseFormData) {
       return false;
     }
 
-    updateBlur({ id, error: validation() });
+    updateBlur({ step, id, showError: validation() });
   };
 
   const handleFocus = () => {
-    updateBlur({ id, error: false });
+    updateBlur({ step, id, showError: false });
   };
 
   return {
-    value: data[id],
-    error: error[id],
+    value: isObjectEmpty(data) ? data[id] : data[step][id],
+    error: isObjectEmpty(error) ? error[id] : error[step][id],
+    showError: isObjectEmpty(showError) ? showError[id] : showError[step][id],
     handleChange,
     handleBlur,
     handleFocus,

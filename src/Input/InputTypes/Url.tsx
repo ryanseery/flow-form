@@ -8,6 +8,7 @@ interface IUrl extends IInputType {
 }
 
 export const Url: React.FC<IUrl> = ({
+  step,
   id,
   type = 'url',
   className,
@@ -20,7 +21,8 @@ export const Url: React.FC<IUrl> = ({
   helperText,
   style,
 }) => {
-  const { value, error, handleChange, handleBlur, handleFocus } = useFormData({
+  const { value, showError, handleChange, handleBlur, handleFocus } = useFormData({
+    step,
     id,
     value: '',
     validate,
@@ -44,8 +46,8 @@ export const Url: React.FC<IUrl> = ({
         autoComplete={autoComplete}
         pattern={pattern}
       />
-      {!error && <HelperText id={id} helperText={helperText} className={className} />}
-      {error && <Error id={id} className={className} errMsg={errMsg} />}
+      {!showError && <HelperText id={id} helperText={helperText} className={className} />}
+      {showError && <Error id={id} className={className} errMsg={errMsg} />}
     </>
   );
 };
