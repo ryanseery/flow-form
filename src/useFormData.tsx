@@ -21,8 +21,9 @@ export function useFormData({ step, id, value, required, validate }: UseFormData
   }
 
   React.useEffect(() => {
+    console.log('MOUNTED');
     setValue({ step, id, value, error: required ?? false });
-  }, []);
+  }, [step, id]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     e.preventDefault();
@@ -41,10 +42,16 @@ export function useFormData({ step, id, value, required, validate }: UseFormData
     updateBlur({ step, id, showError: validation(e) });
   };
 
-  const handleFocus = () => {
-    console.log('FOCUS');
-    // updateBlur({ step, id, showError: false });
-  };
+  // const handleFocus = () => {
+  //   // updateBlur({ step, id, showError: false });
+  // };
+
+  // TODO need to see if id and step are in data before trying to return it.
+  // function isInState() {
+  //   if (!(id in data) && !(id in data[step])) return '';
+  //   if (id in data) return data[id];
+  //   if (id in data[step]) return data[step][id];
+  // }
 
   return {
     value: isObjectEmpty(data) ? data[id] : data[step][id],
@@ -52,6 +59,5 @@ export function useFormData({ step, id, value, required, validate }: UseFormData
     showError: isObjectEmpty(showError) ? showError[id] : showError[step][id],
     handleChange,
     handleBlur,
-    handleFocus,
   };
 }

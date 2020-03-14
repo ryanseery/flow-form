@@ -19,7 +19,7 @@ export const Number: React.FC<INumber> = ({
   helperText,
   style,
 }) => {
-  const { value, showError, handleChange, handleBlur, handleFocus } = useFormData({
+  const { value, showError, handleChange, handleBlur } = useFormData({
     step,
     id,
     value: 0,
@@ -34,7 +34,6 @@ export const Number: React.FC<INumber> = ({
         value={value || ''}
         onChange={handleChange}
         onBlur={handleBlur}
-        onFocus={handleFocus}
         type={type}
         placeholder={placeholder}
         style={style}

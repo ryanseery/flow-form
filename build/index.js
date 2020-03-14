@@ -288,8 +288,9 @@ function useFormData(_a) {
         return false;
     }
     React.useEffect(function () {
+        console.log('MOUNTED');
         setValue({ step: step, id: id, value: value, error: required !== null && required !== void 0 ? required : false });
-    }, []);
+    }, [step, id]);
     var handleChange = function (e) {
         e.preventDefault();
         updateValue({
@@ -303,17 +304,21 @@ function useFormData(_a) {
         e.preventDefault();
         updateBlur({ step: step, id: id, showError: validation(e) });
     };
-    var handleFocus = function () {
-        console.log('FOCUS');
-        // updateBlur({ step, id, showError: false });
-    };
+    // const handleFocus = () => {
+    //   // updateBlur({ step, id, showError: false });
+    // };
+    // TODO need to see if id and step are in data before trying to return it.
+    // function isInState() {
+    //   if (!(id in data) && !(id in data[step])) return '';
+    //   if (id in data) return data[id];
+    //   if (id in data[step]) return data[step][id];
+    // }
     return {
         value: isObjectEmpty(data) ? data[id] : data[step][id],
         error: isObjectEmpty(error) ? error[id] : error[step][id],
         showError: isObjectEmpty(showError) ? showError[id] : showError[step][id],
         handleChange: handleChange,
         handleBlur: handleBlur,
-        handleFocus: handleFocus,
     };
 }
 
@@ -338,9 +343,9 @@ var Text = function (_a) {
         value: '',
         validate: validate,
         required: required,
-    }), value = _d.value, showError = _d.showError, handleChange = _d.handleChange, handleBlur = _d.handleBlur, handleFocus = _d.handleFocus;
+    }), value = _d.value, showError = _d.showError, handleChange = _d.handleChange, handleBlur = _d.handleBlur;
     return (React.createElement(React.Fragment, null,
-        React.createElement("input", { id: id, name: id, value: value || '', onChange: handleChange, onBlur: handleBlur, onFocus: handleFocus, type: type, placeholder: placeholder, style: style, className: "flow-form-input " + className + "-input", required: required, autoComplete: autoComplete }),
+        React.createElement("input", { id: id, name: id, value: value || '', onChange: handleChange, onBlur: handleBlur, type: type, placeholder: placeholder, style: style, className: "flow-form-input " + className + "-input", required: required, autoComplete: autoComplete }),
         !showError && React.createElement(HelperText, { id: id, helperText: helperText, className: className }),
         showError && React.createElement(Error$1, { id: id, label: label, className: className, errMsg: errMsg })));
 };
@@ -353,9 +358,9 @@ var Number = function (_a) {
         value: 0,
         validate: validate,
         required: required,
-    }), value = _d.value, showError = _d.showError, handleChange = _d.handleChange, handleBlur = _d.handleBlur, handleFocus = _d.handleFocus;
+    }), value = _d.value, showError = _d.showError, handleChange = _d.handleChange, handleBlur = _d.handleBlur;
     return (React.createElement(React.Fragment, null,
-        React.createElement("input", { id: id, name: id, value: value || '', onChange: handleChange, onBlur: handleBlur, onFocus: handleFocus, type: type, placeholder: placeholder, style: style, className: "flow-form-input " + className + "-input", required: required, autoComplete: autoComplete }),
+        React.createElement("input", { id: id, name: id, value: value || '', onChange: handleChange, onBlur: handleBlur, type: type, placeholder: placeholder, style: style, className: "flow-form-input " + className + "-input", required: required, autoComplete: autoComplete }),
         !showError && React.createElement(HelperText, { id: id, helperText: helperText, className: className }),
         showError && React.createElement(Error$1, { id: id, label: label, className: className, errMsg: errMsg })));
 };
@@ -368,9 +373,9 @@ var Email = function (_a) {
         value: '',
         validate: validate,
         required: required,
-    }), value = _d.value, showError = _d.showError, handleChange = _d.handleChange, handleBlur = _d.handleBlur, handleFocus = _d.handleFocus;
+    }), value = _d.value, showError = _d.showError, handleChange = _d.handleChange, handleBlur = _d.handleBlur;
     return (React.createElement(React.Fragment, null,
-        React.createElement("input", { id: id, name: id, value: value || '', onChange: handleChange, onBlur: handleBlur, onFocus: handleFocus, type: type, placeholder: placeholder, style: style, className: "flow-form-input " + className + "-input", required: required, autoComplete: autoComplete }),
+        React.createElement("input", { id: id, name: id, value: value || '', onChange: handleChange, onBlur: handleBlur, type: type, placeholder: placeholder, style: style, className: "flow-form-input " + className + "-input", required: required, autoComplete: autoComplete }),
         !showError && React.createElement(HelperText, { id: id, helperText: helperText, className: className }),
         showError && React.createElement(Error$1, { id: id, label: label, className: className, errMsg: errMsg })));
 };
@@ -383,9 +388,9 @@ var Password = function (_a) {
         value: '',
         validate: validate,
         required: required,
-    }), value = _d.value, showError = _d.showError, handleChange = _d.handleChange, handleBlur = _d.handleBlur, handleFocus = _d.handleFocus;
+    }), value = _d.value, showError = _d.showError, handleChange = _d.handleChange, handleBlur = _d.handleBlur;
     return (React.createElement(React.Fragment, null,
-        React.createElement("input", { id: id, name: id, value: value || '', onChange: handleChange, onBlur: handleBlur, onFocus: handleFocus, type: type, placeholder: placeholder, style: style, className: "flow-form-input " + className + "-input", required: required, autoComplete: autoComplete }),
+        React.createElement("input", { id: id, name: id, value: value || '', onChange: handleChange, onBlur: handleBlur, type: type, placeholder: placeholder, style: style, className: "flow-form-input " + className + "-input", required: required, autoComplete: autoComplete }),
         !showError && React.createElement(HelperText, { id: id, helperText: helperText, className: className }),
         showError && React.createElement(Error$1, { id: id, label: label, className: className, errMsg: errMsg })));
 };
@@ -398,9 +403,9 @@ var Tel = function (_a) {
         value: '',
         validate: validate,
         required: required,
-    }), value = _e.value, showError = _e.showError, handleChange = _e.handleChange, handleBlur = _e.handleBlur, handleFocus = _e.handleFocus;
+    }), value = _e.value, showError = _e.showError, handleChange = _e.handleChange, handleBlur = _e.handleBlur;
     return (React.createElement(React.Fragment, null,
-        React.createElement("input", { id: id, name: id, value: value || '', onChange: handleChange, onBlur: handleBlur, onFocus: handleFocus, type: type, placeholder: placeholder, style: style, className: "flow-form-input " + className + "-input", required: required, autoComplete: autoComplete, pattern: pattern }),
+        React.createElement("input", { id: id, name: id, value: value || '', onChange: handleChange, onBlur: handleBlur, type: type, placeholder: placeholder, style: style, className: "flow-form-input " + className + "-input", required: required, autoComplete: autoComplete, pattern: pattern }),
         !showError && React.createElement(HelperText, { id: id, helperText: helperText, className: className }),
         showError && React.createElement(Error$1, { id: id, label: label, className: className, errMsg: errMsg })));
 };
@@ -413,9 +418,9 @@ var Url = function (_a) {
         value: '',
         validate: validate,
         required: required,
-    }), value = _e.value, showError = _e.showError, handleChange = _e.handleChange, handleBlur = _e.handleBlur, handleFocus = _e.handleFocus;
+    }), value = _e.value, showError = _e.showError, handleChange = _e.handleChange, handleBlur = _e.handleBlur;
     return (React.createElement(React.Fragment, null,
-        React.createElement("input", { id: id, name: id, value: value || '', onChange: handleChange, onBlur: handleBlur, onFocus: handleFocus, type: type, placeholder: placeholder, style: style, className: "flow-form-input " + className + "-input", required: required, autoComplete: autoComplete, pattern: pattern }),
+        React.createElement("input", { id: id, name: id, value: value || '', onChange: handleChange, onBlur: handleBlur, type: type, placeholder: placeholder, style: style, className: "flow-form-input " + className + "-input", required: required, autoComplete: autoComplete, pattern: pattern }),
         !showError && React.createElement(HelperText, { id: id, helperText: helperText, className: className }),
         showError && React.createElement(Error$1, { id: id, label: label, className: className, errMsg: errMsg })));
 };
@@ -428,9 +433,9 @@ var TextArea = function (_a) {
         value: '',
         validate: validate,
         required: required,
-    }), value = _e.value, showError = _e.showError, handleChange = _e.handleChange, handleBlur = _e.handleBlur, handleFocus = _e.handleFocus;
+    }), value = _e.value, showError = _e.showError, handleChange = _e.handleChange, handleBlur = _e.handleBlur;
     return (React.createElement(React.Fragment, null,
-        React.createElement("textarea", { id: id, name: id, value: value || '', onChange: handleChange, onBlur: handleBlur, onFocus: handleFocus, placeholder: placeholder, style: style, className: "flow-form-input " + className + "-input", required: required, autoComplete: autoComplete, rows: rows, cols: cols }),
+        React.createElement("textarea", { id: id, name: id, value: value || '', onChange: handleChange, onBlur: handleBlur, placeholder: placeholder, style: style, className: "flow-form-input " + className + "-input", required: required, autoComplete: autoComplete, rows: rows, cols: cols }),
         !showError && React.createElement(HelperText, { id: id, helperText: helperText, className: className }),
         showError && React.createElement(Error$1, { id: id, label: label, className: className, errMsg: errMsg })));
 };
@@ -443,9 +448,9 @@ var Color = function (_a) {
         value: '',
         validate: validate,
         required: required,
-    }), value = _d.value, showError = _d.showError, handleChange = _d.handleChange, handleBlur = _d.handleBlur, handleFocus = _d.handleFocus;
+    }), value = _d.value, showError = _d.showError, handleChange = _d.handleChange, handleBlur = _d.handleBlur;
     return (React.createElement(React.Fragment, null,
-        React.createElement("input", { id: id, name: id, value: value || '#519839', onChange: handleChange, onBlur: handleBlur, onFocus: handleFocus, type: type, placeholder: placeholder, style: style, className: "flow-form-input " + className + "-input", required: required, autoComplete: autoComplete }),
+        React.createElement("input", { id: id, name: id, value: value || '#519839', onChange: handleChange, onBlur: handleBlur, type: type, placeholder: placeholder, style: style, className: "flow-form-input " + className + "-input", required: required, autoComplete: autoComplete }),
         !showError && React.createElement(HelperText, { id: id, helperText: helperText, className: className }),
         showError && React.createElement(Error$1, { id: id, label: label, className: className, errMsg: errMsg })));
 };

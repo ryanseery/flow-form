@@ -19,7 +19,7 @@ export const Text: React.FC<IText> = ({
   helperText,
   style,
 }) => {
-  const { value, showError, handleChange, handleBlur, handleFocus } = useFormData({
+  const { value, showError, handleChange, handleBlur } = useFormData({
     step,
     id,
     value: '',
@@ -35,7 +35,6 @@ export const Text: React.FC<IText> = ({
         value={value || ''}
         onChange={handleChange}
         onBlur={handleBlur}
-        onFocus={handleFocus}
         type={type}
         placeholder={placeholder}
         style={style}

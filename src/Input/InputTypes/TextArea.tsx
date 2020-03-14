@@ -23,7 +23,7 @@ export const TextArea: React.FC<ITextArea> = ({
   helperText,
   style,
 }) => {
-  const { value, showError, handleChange, handleBlur, handleFocus } = useFormData({
+  const { value, showError, handleChange, handleBlur } = useFormData({
     step,
     id,
     value: '',
@@ -39,7 +39,6 @@ export const TextArea: React.FC<ITextArea> = ({
         value={value || ''}
         onChange={handleChange}
         onBlur={handleBlur}
-        onFocus={handleFocus}
         placeholder={placeholder}
         style={style}
         className={`flow-form-input ${className}-input`}

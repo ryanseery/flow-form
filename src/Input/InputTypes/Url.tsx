@@ -22,7 +22,7 @@ export const Url: React.FC<IUrl> = ({
   helperText,
   style,
 }) => {
-  const { value, showError, handleChange, handleBlur, handleFocus } = useFormData({
+  const { value, showError, handleChange, handleBlur } = useFormData({
     step,
     id,
     value: '',
@@ -38,7 +38,6 @@ export const Url: React.FC<IUrl> = ({
         value={value || ''}
         onChange={handleChange}
         onBlur={handleBlur}
-        onFocus={handleFocus}
         type={type}
         placeholder={placeholder}
         style={style}

@@ -19,7 +19,7 @@ export const Color: React.FC<IColor> = ({
   helperText,
   style,
 }) => {
-  const { value, showError, handleChange, handleBlur, handleFocus } = useFormData({
+  const { value, showError, handleChange, handleBlur } = useFormData({
     step,
     id,
     value: '',
@@ -35,7 +35,6 @@ export const Color: React.FC<IColor> = ({
         value={value || '#519839'}
         onChange={handleChange}
         onBlur={handleBlur}
-        onFocus={handleFocus}
         type={type}
         placeholder={placeholder}
         style={style}
