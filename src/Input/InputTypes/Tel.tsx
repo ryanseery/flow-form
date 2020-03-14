@@ -8,6 +8,7 @@ interface ITel extends IInputType {
 }
 
 export const Tel: React.FC<ITel> = ({
+  label,
   step,
   id,
   type = 'tel',
@@ -47,7 +48,7 @@ export const Tel: React.FC<ITel> = ({
         pattern={pattern}
       />
       {!showError && <HelperText id={id} helperText={helperText} className={className} />}
-      {showError && <Error id={id} className={className} errMsg={errMsg} />}
+      {showError && <Error id={id} label={label} className={className} errMsg={errMsg} />}
     </>
   );
 };

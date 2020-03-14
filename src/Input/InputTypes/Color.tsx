@@ -6,6 +6,7 @@ import { Error, HelperText } from '../../messages';
 interface IColor extends IInputType {}
 
 export const Color: React.FC<IColor> = ({
+  label,
   step,
   id,
   type = 'text',
@@ -43,7 +44,7 @@ export const Color: React.FC<IColor> = ({
         autoComplete={autoComplete}
       />
       {!showError && <HelperText id={id} helperText={helperText} className={className} />}
-      {showError && <Error id={id} className={className} errMsg={errMsg} />}
+      {showError && <Error id={id} label={label} className={className} errMsg={errMsg} />}
     </>
   );
 };

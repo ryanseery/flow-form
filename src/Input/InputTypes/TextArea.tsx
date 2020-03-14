@@ -9,6 +9,7 @@ interface ITextArea extends IInputType {
 }
 
 export const TextArea: React.FC<ITextArea> = ({
+  label,
   step,
   id,
   className,
@@ -48,7 +49,7 @@ export const TextArea: React.FC<ITextArea> = ({
         cols={cols}
       />
       {!showError && <HelperText id={id} helperText={helperText} className={className} />}
-      {showError && <Error id={id} className={className} errMsg={errMsg} />}
+      {showError && <Error id={id} label={label} className={className} errMsg={errMsg} />}
     </>
   );
 };

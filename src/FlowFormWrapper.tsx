@@ -14,7 +14,6 @@ export interface ICurrentStep {
 export interface IState {
   flow: IFlow;
   currentStep: ICurrentStep;
-  canStepProceed: boolean;
   data: {};
   error: {};
   showError: {};
@@ -30,7 +29,6 @@ const initialState: IState = {
     id: null,
     title: null,
   },
-  canStepProceed: false,
   data: {},
   error: {},
   showError: {},
@@ -139,12 +137,6 @@ const clearForm = (): ClearForm => ({
 
 type Actions = SetFlow | UpdateFlow | SetValue | UpdateValue | UpdateBlur | ClearForm;
 
-function checkIfStepProceed(obj: {}) {
-  return Object.keys(obj)
-    .reduce((acc, a) => [...acc, ...Object.keys(obj[a]).map((b: string) => obj[a][b])], [])
-    .every((c: boolean) => c === false);
-}
-
 function reducer(state: IState, action: Actions) {
   console.log(action);
 
@@ -155,7 +147,6 @@ function reducer(state: IState, action: Actions) {
         ...state,
         flow,
         currentStep,
-        canStepProceed: checkIfStepProceed(state.error),
       };
     }
     case ACTIONS.SET_VALUE: {
@@ -163,7 +154,6 @@ function reducer(state: IState, action: Actions) {
       if (!state.data[id] || !state[step].data[id]) {
         return {
           ...state,
-          canStepProceed: checkIfStepProceed(state.error),
           data: {
             ...state.data,
             [step]: {
@@ -194,7 +184,6 @@ function reducer(state: IState, action: Actions) {
       const { step, id, value, error } = action;
       return {
         ...state,
-        canStepProceed: checkIfStepProceed(state.error),
         data: {
           ...state.data,
           [step]: {
@@ -209,13 +198,38 @@ function reducer(state: IState, action: Actions) {
             [id]: error,
           },
         },
+        showError: {
+          ...state.showError,
+          [step]: {
+            ...state.showError[step],
+            [id]: error,
+          },
+        },
       };
     }
     case ACTIONS.UPDATE_BLUR: {
-      return state;
+      const { step, id, showError } = action;
+      return {
+        ...state,
+        showError: {
+          ...state.showError,
+          [step]: {
+            ...state.showError[step],
+            [id]: showError,
+          },
+        },
+      };
     }
     case ACTIONS.UPDATE_FLOW: {
-      return state;
+      if (state.flow.key !== state.flow.end) {
+        return {
+          ...state,
+          flow: {
+            ...state.flow,
+            key: state.flow.key + 1,
+          },
+        };
+      }
     }
     case ACTIONS.CLEAR_FORM:
       return { ...initialState };

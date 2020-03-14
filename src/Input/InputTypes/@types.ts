@@ -1,4 +1,5 @@
 export interface IInputType {
+  label?: string;
   index: number;
   step: string | number;
   id: string;

@@ -6,6 +6,7 @@ import { Error, HelperText } from '../../messages';
 interface IEmail extends IInputType {}
 
 export const Email: React.FC<IEmail> = ({
+  label,
   step,
   id,
   type = 'email',
@@ -43,7 +44,7 @@ export const Email: React.FC<IEmail> = ({
         autoComplete={autoComplete}
       />
       {!showError && <HelperText id={id} helperText={helperText} className={className} />}
-      {showError && <Error id={id} className={className} errMsg={errMsg} />}
+      {showError && <Error id={id} label={label} className={className} errMsg={errMsg} />}
     </>
   );
 };

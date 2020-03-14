@@ -8,6 +8,7 @@ interface IUrl extends IInputType {
 }
 
 export const Url: React.FC<IUrl> = ({
+  label,
   step,
   id,
   type = 'url',
@@ -47,7 +48,7 @@ export const Url: React.FC<IUrl> = ({
         pattern={pattern}
       />
       {!showError && <HelperText id={id} helperText={helperText} className={className} />}
-      {showError && <Error id={id} className={className} errMsg={errMsg} />}
+      {showError && <Error id={id} label={label} className={className} errMsg={errMsg} />}
     </>
   );
 };

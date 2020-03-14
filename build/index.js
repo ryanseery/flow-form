@@ -48,7 +48,6 @@ var initialState = {
         id: null,
         title: null,
     },
-    canStepProceed: false,
     data: {},
     error: {},
     showError: {},
@@ -106,36 +105,34 @@ var updateBlur = function (_a) {
 var clearForm = function () { return ({
     type: ACTIONS.CLEAR_FORM,
 }); };
-function checkIfStepProceed(obj) {
-    return Object.keys(obj)
-        .reduce(function (acc, a) { return __spreadArrays(acc, Object.keys(obj[a]).map(function (b) { return obj[a][b]; })); }, [])
-        .every(function (c) { return c === false; });
-}
 function reducer(state, action) {
-    var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k;
+    var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, _m, _o, _p;
     console.log(action);
     switch (action.type) {
         case ACTIONS.SET_INITIAL_FLOW: {
             var flow = action.flow, currentStep = action.currentStep;
             return __assign(__assign({}, state), { flow: flow,
-                currentStep: currentStep, canStepProceed: checkIfStepProceed(state.error) });
+                currentStep: currentStep });
         }
         case ACTIONS.SET_VALUE: {
             var step = action.step, id = action.id, value = action.value, error = action.error;
             if (!state.data[id] || !state[step].data[id]) {
-                return __assign(__assign({}, state), { canStepProceed: checkIfStepProceed(state.error), data: __assign(__assign({}, state.data), (_a = {}, _a[step] = __assign(__assign({}, state.data[step]), (_b = {}, _b[id] = value !== null && value !== void 0 ? value : '', _b)), _a)), error: __assign(__assign({}, state.error), (_c = {}, _c[step] = __assign(__assign({}, state.error[step]), (_d = {}, _d[id] = error, _d)), _c)), showError: __assign(__assign({}, state.showError), (_e = {}, _e[step] = __assign(__assign({}, state.showError[step]), (_f = {}, _f[id] = false, _f)), _e)) });
+                return __assign(__assign({}, state), { data: __assign(__assign({}, state.data), (_a = {}, _a[step] = __assign(__assign({}, state.data[step]), (_b = {}, _b[id] = value !== null && value !== void 0 ? value : '', _b)), _a)), error: __assign(__assign({}, state.error), (_c = {}, _c[step] = __assign(__assign({}, state.error[step]), (_d = {}, _d[id] = error, _d)), _c)), showError: __assign(__assign({}, state.showError), (_e = {}, _e[step] = __assign(__assign({}, state.showError[step]), (_f = {}, _f[id] = false, _f)), _e)) });
             }
             return state;
         }
         case ACTIONS.UPDATE_VALUE: {
             var step = action.step, id = action.id, value = action.value, error = action.error;
-            return __assign(__assign({}, state), { canStepProceed: checkIfStepProceed(state.error), data: __assign(__assign({}, state.data), (_g = {}, _g[step] = __assign(__assign({}, state.data[step]), (_h = {}, _h[id] = value, _h)), _g)), error: __assign(__assign({}, state.error), (_j = {}, _j[step] = __assign(__assign({}, state.error[step]), (_k = {}, _k[id] = error, _k)), _j)) });
+            return __assign(__assign({}, state), { data: __assign(__assign({}, state.data), (_g = {}, _g[step] = __assign(__assign({}, state.data[step]), (_h = {}, _h[id] = value, _h)), _g)), error: __assign(__assign({}, state.error), (_j = {}, _j[step] = __assign(__assign({}, state.error[step]), (_k = {}, _k[id] = error, _k)), _j)), showError: __assign(__assign({}, state.showError), (_l = {}, _l[step] = __assign(__assign({}, state.showError[step]), (_m = {}, _m[id] = error, _m)), _l)) });
         }
         case ACTIONS.UPDATE_BLUR: {
-            return state;
+            var step = action.step, id = action.id, showError = action.showError;
+            return __assign(__assign({}, state), { showError: __assign(__assign({}, state.showError), (_o = {}, _o[step] = __assign(__assign({}, state.showError[step]), (_p = {}, _p[id] = showError, _p)), _o)) });
         }
         case ACTIONS.UPDATE_FLOW: {
-            return state;
+            if (state.flow.key !== state.flow.end) {
+                return __assign(__assign({}, state), { flow: __assign(__assign({}, state.flow), { key: state.flow.key + 1 }) });
+            }
         }
         case ACTIONS.CLEAR_FORM:
             return __assign({}, initialState);
@@ -218,14 +215,19 @@ function isSingleChildAStep(children) {
     if (React.isValidElement(children)) {
         return (_a = [children.props.title]) !== null && _a !== void 0 ? _a : [0];
     }
-    return [0];
+    return null;
+}
+function checkIfStepProceed(obj) {
+    return Object.keys(obj)
+        .reduce(function (acc, a) { return __spreadArrays(acc, Object.keys(obj[a]).map(function (b) { return obj[a][b]; })); }, [])
+        .every(function (c) { return c === false; });
 }
 var FlowFormComponent = function (_a) {
     var children = _a.children, onSubmit = _a.onSubmit, className = _a.className, style = _a.style, reset = _a.reset;
-    var _b = React.useContext(FlowFormContext), setFlow = _b.setFlow, flow = _b.flow, currentStep = _b.currentStep, canStepProceed = _b.canStepProceed, data = _b.data, clearForm = _b.clearForm;
+    var _b = React.useContext(FlowFormContext), setFlow = _b.setFlow, updateFlow = _b.updateFlow, flow = _b.flow, currentStep = _b.currentStep, data = _b.data, error = _b.error, clearForm = _b.clearForm;
     var flowHeaders = React.useMemo(function () { return (Array.isArray(children) ? mapHeaders(children) : isSingleChildAStep(children)); }, []);
     React.useEffect(function () {
-        var initialFlow = { key: 0, end: Array.isArray(children) ? children.length - 1 : 0 };
+        var initialFlow = { key: 0, end: Array.isArray(flowHeaders) ? flowHeaders.length - 1 : 0 };
         var initialStep = {
             index: 0,
             id: Array.isArray(children) &&
@@ -249,8 +251,10 @@ var FlowFormComponent = function (_a) {
         Array.isArray(flowHeaders) && React.createElement("div", null, flowHeaders[flow.key]),
         React.createElement("fieldset", { disabled: false, "aria-busy": false, style: { border: "none" } },
             React.createElement(React.Fragment, null, Array.isArray(children) ? children[flow.key] : children),
-            flow.key !== currentStep.id && (React.createElement("button", { type: "button", className: "flow-form-back-button" }, "Back")),
-            flow.end !== currentStep.id ? (React.createElement("button", { type: "button", className: "flow-form-next-button" }, canStepProceed ? "Next" : "Can't Proceed")) : (React.createElement("button", { type: "submit", className: "flow-form-submit-button" }, "Submit")),
+            currentStep.index !== 0 && (React.createElement("button", { type: "button", className: "flow-form-back-button" }, "Back")),
+            flow.end !== currentStep.id ? (React.createElement("button", { type: "button", className: "flow-form-next-button", 
+                // disabled={checkIfStepProceed(error)}
+                onClick: updateFlow }, checkIfStepProceed(error) ? "Next" : "Can't Proceed")) : (React.createElement("button", { type: "submit", className: "flow-form-submit-button" }, "Submit")),
             reset && (React.createElement("button", { type: "button", className: "flow-form-reset", onClick: clearForm }, "Clear")),
             isThereShowData)));
 };
@@ -277,36 +281,31 @@ Step.defaultProps = {
 function useFormData(_a) {
     var step = _a.step, id = _a.id, value = _a.value, required = _a.required, validate = _a.validate;
     var _b = React.useContext(FlowFormContext), data = _b.data, error = _b.error, showError = _b.showError, setValue = _b.setValue, updateValue = _b.updateValue, updateBlur = _b.updateBlur;
+    function validation(e) {
+        if (required) {
+            return validate ? validate(e) : !e.target.value;
+        }
+        return false;
+    }
     React.useEffect(function () {
         setValue({ step: step, id: id, value: value, error: required !== null && required !== void 0 ? required : false });
     }, []);
     var handleChange = function (e) {
-        e.persist();
-        function validation() {
-            if (required) {
-                return validate ? validate(e) : false;
-            }
-            return false;
-        }
+        e.preventDefault();
         updateValue({
             step: step,
             id: id,
             value: e.target.type === 'number' ? parseFloat(e.target.value) : e.target.value,
-            error: validation(),
+            error: validation(e),
         });
     };
     var handleBlur = function (e) {
-        e.persist();
-        function validation() {
-            if (required) {
-                return validate ? validate(e) : false;
-            }
-            return false;
-        }
-        updateBlur({ step: step, id: id, showError: validation() });
+        e.preventDefault();
+        updateBlur({ step: step, id: id, showError: validation(e) });
     };
     var handleFocus = function () {
-        updateBlur({ step: step, id: id, showError: false });
+        console.log('FOCUS');
+        // updateBlur({ step, id, showError: false });
     };
     return {
         value: isObjectEmpty(data) ? data[id] : data[step][id],
@@ -319,8 +318,8 @@ function useFormData(_a) {
 }
 
 var Error$1 = function (_a) {
-    var id = _a.id, className = _a.className, errMsg = _a.errMsg;
-    return (React.createElement("small", { id: id + "-error", className: "flow-form-error " + className + "-error", style: { color: 'red' } }, typeof errMsg === 'string' ? errMsg : "Please provide a valid " + id + " "));
+    var label = _a.label, id = _a.id, className = _a.className, errMsg = _a.errMsg;
+    return (React.createElement("small", { id: id + "-error", className: "flow-form-error " + className + "-error", style: { color: 'red' } }, typeof errMsg === 'string' ? errMsg : "Please provide a valid " + label + " "));
 };
 
 var HelperText = function (_a) {
@@ -332,7 +331,7 @@ var HelperText = function (_a) {
 };
 
 var Text = function (_a) {
-    var step = _a.step, id = _a.id, _b = _a.type, type = _b === void 0 ? 'text' : _b, className = _a.className, placeholder = _a.placeholder, _c = _a.required, required = _c === void 0 ? false : _c, validate = _a.validate, errMsg = _a.errMsg, autoComplete = _a.autoComplete, helperText = _a.helperText, style = _a.style;
+    var label = _a.label, step = _a.step, id = _a.id, _b = _a.type, type = _b === void 0 ? 'text' : _b, className = _a.className, placeholder = _a.placeholder, _c = _a.required, required = _c === void 0 ? false : _c, validate = _a.validate, errMsg = _a.errMsg, autoComplete = _a.autoComplete, helperText = _a.helperText, style = _a.style;
     var _d = useFormData({
         step: step,
         id: id,
@@ -343,11 +342,11 @@ var Text = function (_a) {
     return (React.createElement(React.Fragment, null,
         React.createElement("input", { id: id, name: id, value: value || '', onChange: handleChange, onBlur: handleBlur, onFocus: handleFocus, type: type, placeholder: placeholder, style: style, className: "flow-form-input " + className + "-input", required: required, autoComplete: autoComplete }),
         !showError && React.createElement(HelperText, { id: id, helperText: helperText, className: className }),
-        showError && React.createElement(Error$1, { id: id, className: className, errMsg: errMsg })));
+        showError && React.createElement(Error$1, { id: id, label: label, className: className, errMsg: errMsg })));
 };
 
 var Number = function (_a) {
-    var step = _a.step, id = _a.id, _b = _a.type, type = _b === void 0 ? 'number' : _b, className = _a.className, placeholder = _a.placeholder, _c = _a.required, required = _c === void 0 ? false : _c, validate = _a.validate, errMsg = _a.errMsg, autoComplete = _a.autoComplete, helperText = _a.helperText, style = _a.style;
+    var label = _a.label, step = _a.step, id = _a.id, _b = _a.type, type = _b === void 0 ? 'number' : _b, className = _a.className, placeholder = _a.placeholder, _c = _a.required, required = _c === void 0 ? false : _c, validate = _a.validate, errMsg = _a.errMsg, autoComplete = _a.autoComplete, helperText = _a.helperText, style = _a.style;
     var _d = useFormData({
         step: step,
         id: id,
@@ -358,11 +357,11 @@ var Number = function (_a) {
     return (React.createElement(React.Fragment, null,
         React.createElement("input", { id: id, name: id, value: value || '', onChange: handleChange, onBlur: handleBlur, onFocus: handleFocus, type: type, placeholder: placeholder, style: style, className: "flow-form-input " + className + "-input", required: required, autoComplete: autoComplete }),
         !showError && React.createElement(HelperText, { id: id, helperText: helperText, className: className }),
-        showError && React.createElement(Error$1, { id: id, className: className, errMsg: errMsg })));
+        showError && React.createElement(Error$1, { id: id, label: label, className: className, errMsg: errMsg })));
 };
 
 var Email = function (_a) {
-    var step = _a.step, id = _a.id, _b = _a.type, type = _b === void 0 ? 'email' : _b, className = _a.className, placeholder = _a.placeholder, _c = _a.required, required = _c === void 0 ? false : _c, validate = _a.validate, errMsg = _a.errMsg, autoComplete = _a.autoComplete, helperText = _a.helperText, style = _a.style;
+    var label = _a.label, step = _a.step, id = _a.id, _b = _a.type, type = _b === void 0 ? 'email' : _b, className = _a.className, placeholder = _a.placeholder, _c = _a.required, required = _c === void 0 ? false : _c, validate = _a.validate, errMsg = _a.errMsg, autoComplete = _a.autoComplete, helperText = _a.helperText, style = _a.style;
     var _d = useFormData({
         step: step,
         id: id,
@@ -373,11 +372,11 @@ var Email = function (_a) {
     return (React.createElement(React.Fragment, null,
         React.createElement("input", { id: id, name: id, value: value || '', onChange: handleChange, onBlur: handleBlur, onFocus: handleFocus, type: type, placeholder: placeholder, style: style, className: "flow-form-input " + className + "-input", required: required, autoComplete: autoComplete }),
         !showError && React.createElement(HelperText, { id: id, helperText: helperText, className: className }),
-        showError && React.createElement(Error$1, { id: id, className: className, errMsg: errMsg })));
+        showError && React.createElement(Error$1, { id: id, label: label, className: className, errMsg: errMsg })));
 };
 
 var Password = function (_a) {
-    var step = _a.step, id = _a.id, _b = _a.type, type = _b === void 0 ? 'password' : _b, className = _a.className, placeholder = _a.placeholder, _c = _a.required, required = _c === void 0 ? false : _c, validate = _a.validate, errMsg = _a.errMsg, autoComplete = _a.autoComplete, helperText = _a.helperText, style = _a.style;
+    var label = _a.label, step = _a.step, id = _a.id, _b = _a.type, type = _b === void 0 ? 'password' : _b, className = _a.className, placeholder = _a.placeholder, _c = _a.required, required = _c === void 0 ? false : _c, validate = _a.validate, errMsg = _a.errMsg, autoComplete = _a.autoComplete, helperText = _a.helperText, style = _a.style;
     var _d = useFormData({
         step: step,
         id: id,
@@ -388,11 +387,11 @@ var Password = function (_a) {
     return (React.createElement(React.Fragment, null,
         React.createElement("input", { id: id, name: id, value: value || '', onChange: handleChange, onBlur: handleBlur, onFocus: handleFocus, type: type, placeholder: placeholder, style: style, className: "flow-form-input " + className + "-input", required: required, autoComplete: autoComplete }),
         !showError && React.createElement(HelperText, { id: id, helperText: helperText, className: className }),
-        showError && React.createElement(Error$1, { id: id, className: className, errMsg: errMsg })));
+        showError && React.createElement(Error$1, { id: id, label: label, className: className, errMsg: errMsg })));
 };
 
 var Tel = function (_a) {
-    var step = _a.step, id = _a.id, _b = _a.type, type = _b === void 0 ? 'tel' : _b, className = _a.className, placeholder = _a.placeholder, _c = _a.required, required = _c === void 0 ? false : _c, validate = _a.validate, errMsg = _a.errMsg, autoComplete = _a.autoComplete, _d = _a.pattern, pattern = _d === void 0 ? '[0-9]{3}-[0-9]{2}-[0-9]{3}' : _d, helperText = _a.helperText, style = _a.style;
+    var label = _a.label, step = _a.step, id = _a.id, _b = _a.type, type = _b === void 0 ? 'tel' : _b, className = _a.className, placeholder = _a.placeholder, _c = _a.required, required = _c === void 0 ? false : _c, validate = _a.validate, errMsg = _a.errMsg, autoComplete = _a.autoComplete, _d = _a.pattern, pattern = _d === void 0 ? '[0-9]{3}-[0-9]{2}-[0-9]{3}' : _d, helperText = _a.helperText, style = _a.style;
     var _e = useFormData({
         step: step,
         id: id,
@@ -403,11 +402,11 @@ var Tel = function (_a) {
     return (React.createElement(React.Fragment, null,
         React.createElement("input", { id: id, name: id, value: value || '', onChange: handleChange, onBlur: handleBlur, onFocus: handleFocus, type: type, placeholder: placeholder, style: style, className: "flow-form-input " + className + "-input", required: required, autoComplete: autoComplete, pattern: pattern }),
         !showError && React.createElement(HelperText, { id: id, helperText: helperText, className: className }),
-        showError && React.createElement(Error$1, { id: id, className: className, errMsg: errMsg })));
+        showError && React.createElement(Error$1, { id: id, label: label, className: className, errMsg: errMsg })));
 };
 
 var Url = function (_a) {
-    var step = _a.step, id = _a.id, _b = _a.type, type = _b === void 0 ? 'url' : _b, className = _a.className, placeholder = _a.placeholder, _c = _a.required, required = _c === void 0 ? false : _c, validate = _a.validate, errMsg = _a.errMsg, autoComplete = _a.autoComplete, _d = _a.pattern, pattern = _d === void 0 ? 'https://.*' : _d, helperText = _a.helperText, style = _a.style;
+    var label = _a.label, step = _a.step, id = _a.id, _b = _a.type, type = _b === void 0 ? 'url' : _b, className = _a.className, placeholder = _a.placeholder, _c = _a.required, required = _c === void 0 ? false : _c, validate = _a.validate, errMsg = _a.errMsg, autoComplete = _a.autoComplete, _d = _a.pattern, pattern = _d === void 0 ? 'https://.*' : _d, helperText = _a.helperText, style = _a.style;
     var _e = useFormData({
         step: step,
         id: id,
@@ -418,11 +417,11 @@ var Url = function (_a) {
     return (React.createElement(React.Fragment, null,
         React.createElement("input", { id: id, name: id, value: value || '', onChange: handleChange, onBlur: handleBlur, onFocus: handleFocus, type: type, placeholder: placeholder, style: style, className: "flow-form-input " + className + "-input", required: required, autoComplete: autoComplete, pattern: pattern }),
         !showError && React.createElement(HelperText, { id: id, helperText: helperText, className: className }),
-        showError && React.createElement(Error$1, { id: id, className: className, errMsg: errMsg })));
+        showError && React.createElement(Error$1, { id: id, label: label, className: className, errMsg: errMsg })));
 };
 
 var TextArea = function (_a) {
-    var step = _a.step, id = _a.id, className = _a.className, placeholder = _a.placeholder, _b = _a.required, required = _b === void 0 ? false : _b, validate = _a.validate, errMsg = _a.errMsg, autoComplete = _a.autoComplete, _c = _a.rows, rows = _c === void 0 ? 4 : _c, _d = _a.cols, cols = _d === void 0 ? 20 : _d, helperText = _a.helperText, style = _a.style;
+    var label = _a.label, step = _a.step, id = _a.id, className = _a.className, placeholder = _a.placeholder, _b = _a.required, required = _b === void 0 ? false : _b, validate = _a.validate, errMsg = _a.errMsg, autoComplete = _a.autoComplete, _c = _a.rows, rows = _c === void 0 ? 4 : _c, _d = _a.cols, cols = _d === void 0 ? 20 : _d, helperText = _a.helperText, style = _a.style;
     var _e = useFormData({
         step: step,
         id: id,
@@ -433,11 +432,11 @@ var TextArea = function (_a) {
     return (React.createElement(React.Fragment, null,
         React.createElement("textarea", { id: id, name: id, value: value || '', onChange: handleChange, onBlur: handleBlur, onFocus: handleFocus, placeholder: placeholder, style: style, className: "flow-form-input " + className + "-input", required: required, autoComplete: autoComplete, rows: rows, cols: cols }),
         !showError && React.createElement(HelperText, { id: id, helperText: helperText, className: className }),
-        showError && React.createElement(Error$1, { id: id, className: className, errMsg: errMsg })));
+        showError && React.createElement(Error$1, { id: id, label: label, className: className, errMsg: errMsg })));
 };
 
 var Color = function (_a) {
-    var step = _a.step, id = _a.id, _b = _a.type, type = _b === void 0 ? 'text' : _b, className = _a.className, placeholder = _a.placeholder, _c = _a.required, required = _c === void 0 ? false : _c, validate = _a.validate, errMsg = _a.errMsg, autoComplete = _a.autoComplete, helperText = _a.helperText, style = _a.style;
+    var label = _a.label, step = _a.step, id = _a.id, _b = _a.type, type = _b === void 0 ? 'text' : _b, className = _a.className, placeholder = _a.placeholder, _c = _a.required, required = _c === void 0 ? false : _c, validate = _a.validate, errMsg = _a.errMsg, autoComplete = _a.autoComplete, helperText = _a.helperText, style = _a.style;
     var _d = useFormData({
         step: step,
         id: id,
@@ -448,7 +447,7 @@ var Color = function (_a) {
     return (React.createElement(React.Fragment, null,
         React.createElement("input", { id: id, name: id, value: value || '#519839', onChange: handleChange, onBlur: handleBlur, onFocus: handleFocus, type: type, placeholder: placeholder, style: style, className: "flow-form-input " + className + "-input", required: required, autoComplete: autoComplete }),
         !showError && React.createElement(HelperText, { id: id, helperText: helperText, className: className }),
-        showError && React.createElement(Error$1, { id: id, className: className, errMsg: errMsg })));
+        showError && React.createElement(Error$1, { id: id, label: label, className: className, errMsg: errMsg })));
 };
 
 var Input = function (_a) {
@@ -456,6 +455,7 @@ var Input = function (_a) {
     var kebabCase = toKebabCase(children !== null && children !== void 0 ? children : '');
     var camelCase = toCamelCase(children !== null && children !== void 0 ? children : '');
     var defaultProps = {
+        label: children,
         index: index,
         step: step,
         id: camelCase,
@@ -470,9 +470,9 @@ var Input = function (_a) {
         rows: rows,
         cols: cols,
         helperText: helperText,
-        style: { margin: '0.5em 0 0 0', display: "block" },
+        style: { display: "block" },
     };
-    return (React.createElement("label", { htmlFor: camelCase, className: "flow-form-label " + kebabCase + "-label", style: __assign({ display: "block", minHeight: '3.5em' }, style) },
+    return (React.createElement("label", { htmlFor: camelCase, className: "flow-form-label " + kebabCase + "-label", style: __assign({ display: "block", minHeight: '4rem' }, style) },
         children,
         (function () {
             switch (type) {
@@ -508,8 +508,8 @@ Submit.defaultProps = {
 
 var ShowData = function (_a) {
     var style = _a.style;
-    var _b = React.useContext(FlowFormContext), flow = _b.flow, currentStep = _b.currentStep, canStepProceed = _b.canStepProceed, data = _b.data, error = _b.error, showError = _b.showError;
-    return (React.createElement("pre", { className: "flow-form-show-data", style: style }, JSON.stringify({ flow: flow, currentStep: currentStep, canStepProceed: canStepProceed, data: data, error: error, showError: showError }, null, 2)));
+    var _b = React.useContext(FlowFormContext), flow = _b.flow, currentStep = _b.currentStep, data = _b.data, error = _b.error, showError = _b.showError;
+    return (React.createElement("pre", { className: "flow-form-show-data", style: style }, JSON.stringify({ flow: flow, currentStep: currentStep, data: data, error: error, showError: showError }, null, 2)));
 };
 ShowData.defaultProps = {
     flowComp: FFComponent.SHOW_DATA,

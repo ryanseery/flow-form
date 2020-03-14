@@ -28,15 +28,21 @@ function mapHeaders(children: React.ReactNode): React.ReactText[] | number[] | n
   });
 }
 
-function isSingleChildAStep(children: React.ReactNode): string[] | number[] {
+function isSingleChildAStep(children: React.ReactNode): string[] | null {
   if (React.isValidElement<IStep>(children)) {
     return [children.props.title] ?? [0];
   }
-  return [0];
+  return null;
+}
+
+function checkIfStepProceed(obj: {}) {
+  return Object.keys(obj)
+    .reduce((acc, a) => [...acc, ...Object.keys(obj[a]).map((b: string) => obj[a][b])], [])
+    .every((c: boolean) => c === false);
 }
 
 const FlowFormComponent: React.FC<IForm> = ({ children, onSubmit, className, style, reset }) => {
-  const { setFlow, flow, currentStep, canStepProceed, data, clearForm } = React.useContext(FlowFormContext);
+  const { setFlow, updateFlow, flow, currentStep, data, error, clearForm } = React.useContext(FlowFormContext);
 
   const flowHeaders = React.useMemo(
     () => (Array.isArray(children) ? mapHeaders(children) : isSingleChildAStep(children)),
@@ -44,7 +50,7 @@ const FlowFormComponent: React.FC<IForm> = ({ children, onSubmit, className, sty
   );
 
   React.useEffect(() => {
-    const initialFlow = { key: 0, end: Array.isArray(children) ? children.length - 1 : 0 };
+    const initialFlow = { key: 0, end: Array.isArray(flowHeaders) ? flowHeaders.length - 1 : 0 };
     const initialStep = {
       index: 0,
       id:
@@ -81,15 +87,20 @@ const FlowFormComponent: React.FC<IForm> = ({ children, onSubmit, className, sty
       <fieldset disabled={false} aria-busy={false} style={{ border: `none` }}>
         <>{Array.isArray(children) ? children[flow.key] : children}</>
 
-        {flow.key !== currentStep.id && (
+        {currentStep.index !== 0 && (
           <button type="button" className="flow-form-back-button">
             Back
           </button>
         )}
 
         {flow.end !== currentStep.id ? (
-          <button type="button" className="flow-form-next-button">
-            {canStepProceed ? `Next` : `Can't Proceed`}
+          <button
+            type="button"
+            className="flow-form-next-button"
+            // disabled={checkIfStepProceed(error)}
+            onClick={updateFlow}
+          >
+            {checkIfStepProceed(error) ? `Next` : `Can't Proceed`}
           </button>
         ) : (
           <button type="submit" className="flow-form-submit-button">

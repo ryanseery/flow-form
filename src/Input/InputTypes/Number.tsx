@@ -6,6 +6,7 @@ import { Error, HelperText } from '../../messages';
 interface INumber extends IInputType {}
 
 export const Number: React.FC<INumber> = ({
+  label,
   step,
   id,
   type = 'number',
@@ -42,7 +43,7 @@ export const Number: React.FC<INumber> = ({
         autoComplete={autoComplete}
       />
       {!showError && <HelperText id={id} helperText={helperText} className={className} />}
-      {showError && <Error id={id} className={className} errMsg={errMsg} />}
+      {showError && <Error id={id} label={label} className={className} errMsg={errMsg} />}
     </>
   );
 };

@@ -40,6 +40,7 @@ export const Input: React.FC<IInput> = ({
   const camelCase = toCamelCase(children ?? '');
 
   const defaultProps = {
+    label: children,
     index,
     step,
     id: camelCase,
@@ -54,14 +55,14 @@ export const Input: React.FC<IInput> = ({
     rows,
     cols,
     helperText,
-    style: { margin: '0.5em 0 0 0', display: `block` },
+    style: { display: `block` },
   };
 
   return (
     <label
       htmlFor={camelCase}
       className={`flow-form-label ${kebabCase}-label`}
-      style={{ display: `block`, minHeight: '3.5em', ...style }}
+      style={{ display: `block`, minHeight: '4rem', ...style }}
     >
       {children}
       {(() => {
