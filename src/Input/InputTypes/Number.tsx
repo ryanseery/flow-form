@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { IInputType } from './@types';
-import { useFormData } from '../../hooks';
+import { useFormData } from '../../useFormData';
 import { Error, HelperText } from '../../messages';
 
 interface INumber extends IInputType {}
