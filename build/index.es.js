@@ -276,6 +276,7 @@ Step.defaultProps = {
 
 function useFormData(_a) {
     var step = _a.step, id = _a.id, value = _a.value, required = _a.required, validate = _a.validate;
+    console.log('In Hook');
     var _b = useContext(FlowFormContext), data = _b.data, error = _b.error, showError = _b.showError, setValue = _b.setValue, updateValue = _b.updateValue, updateBlur = _b.updateBlur;
     function validation(e) {
         if (required) {
@@ -284,9 +285,9 @@ function useFormData(_a) {
         return false;
     }
     useEffect(function () {
-        console.log('MOUNTED');
+        console.log('USEEEFECT');
         setValue({ step: step, id: id, value: value, error: required !== null && required !== void 0 ? required : false });
-    }, [step, id]);
+    }, []);
     var handleChange = function (e) {
         e.preventDefault();
         updateValue({
@@ -300,15 +301,7 @@ function useFormData(_a) {
         e.preventDefault();
         updateBlur({ step: step, id: id, showError: validation(e) });
     };
-    // const handleFocus = () => {
-    //   // updateBlur({ step, id, showError: false });
-    // };
     // TODO need to see if id and step are in data before trying to return it.
-    // function isInState() {
-    //   if (!(id in data) && !(id in data[step])) return '';
-    //   if (id in data) return data[id];
-    //   if (id in data[step]) return data[step][id];
-    // }
     return {
         value: isObjectEmpty(data) ? data[id] : data[step][id],
         error: isObjectEmpty(error) ? error[id] : error[step][id],

@@ -21,11 +21,11 @@ function App() {
       >
         <Step title="Step 1">
           <Input required>First Name</Input>
-          <Input type="email">Email Address</Input>
+          <Input>Last Name</Input>
         </Step>
 
         <Step title="Step 2">
-          <Input>Last Name</Input>
+          <Input type="email">Email Address</Input>
           <Input type="tel">Phone Number</Input>
         </Step>
         <ShowData />

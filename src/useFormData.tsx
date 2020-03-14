@@ -11,6 +11,7 @@ export interface UseFormData {
 }
 
 export function useFormData({ step, id, value, required, validate }: UseFormData) {
+  console.log('In Hook');
   const { data, error, showError, setValue, updateValue, updateBlur } = React.useContext(FlowFormContext);
 
   function validation(e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>): boolean {
@@ -21,9 +22,9 @@ export function useFormData({ step, id, value, required, validate }: UseFormData
   }
 
   React.useEffect(() => {
-    console.log('MOUNTED');
+    console.log('USEEEFECT');
     setValue({ step, id, value, error: required ?? false });
-  }, [step, id]);
+  }, []);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     e.preventDefault();
@@ -42,17 +43,7 @@ export function useFormData({ step, id, value, required, validate }: UseFormData
     updateBlur({ step, id, showError: validation(e) });
   };
 
-  // const handleFocus = () => {
-  //   // updateBlur({ step, id, showError: false });
-  // };
-
   // TODO need to see if id and step are in data before trying to return it.
-  // function isInState() {
-  //   if (!(id in data) && !(id in data[step])) return '';
-  //   if (id in data) return data[id];
-  //   if (id in data[step]) return data[step][id];
-  // }
-
   return {
     value: isObjectEmpty(data) ? data[id] : data[step][id],
     error: isObjectEmpty(error) ? error[id] : error[step][id],
