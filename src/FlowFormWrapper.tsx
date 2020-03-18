@@ -61,8 +61,6 @@ interface SetFlowArgs {
 
 interface SetFlow extends SetFlowArgs {
   type: ACTIONS.SET_INITIAL_FLOW;
-  flow: IFlow;
-  currentStep: ICurrentStep;
 }
 
 const setFlow = ({ flow, currentStep }: SetFlowArgs): SetFlow => ({
