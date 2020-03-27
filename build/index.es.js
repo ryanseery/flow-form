@@ -357,5 +357,16 @@ var FormGroup = function (_a) {
     return createElement("div", null, children);
 };
 
-export { Form, FormGroup, Input, ShowData };
+var Submit = function (_a) {
+    var className = _a.className, title = _a.title;
+    return (createElement("button", { type: "submit", className: "flow-form-submit " + className }, title ? title : "Submit"));
+};
+
+var Reset = function (_a) {
+    var className = _a.className, title = _a.title;
+    var clearForm = useContext(FormContext).clearForm;
+    return (createElement("button", { type: "submit", className: "flow-form-reset " + className, onClick: clearForm }, title ? title : "Reset"));
+};
+
+export { Form, FormGroup, Input, Reset, ShowData, Submit };
 //# sourceMappingURL=index.es.js.map

@@ -361,8 +361,21 @@ var FormGroup = function (_a) {
     return React.createElement("div", null, children);
 };
 
+var Submit = function (_a) {
+    var className = _a.className, title = _a.title;
+    return (React.createElement("button", { type: "submit", className: "flow-form-submit " + className }, title ? title : "Submit"));
+};
+
+var Reset = function (_a) {
+    var className = _a.className, title = _a.title;
+    var clearForm = React.useContext(FormContext).clearForm;
+    return (React.createElement("button", { type: "submit", className: "flow-form-reset " + className, onClick: clearForm }, title ? title : "Reset"));
+};
+
 exports.Form = Form;
 exports.FormGroup = FormGroup;
 exports.Input = Input;
+exports.Reset = Reset;
 exports.ShowData = ShowData;
+exports.Submit = Submit;
 //# sourceMappingURL=index.js.map
