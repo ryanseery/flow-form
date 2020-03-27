@@ -1,9 +1,9 @@
 import * as React from 'react';
-import { IState, FlowFormContext, FormWrapper } from './FlowFormWrapper';
+import { FlowFormContext, FormWrapper } from './FlowFormWrapper';
 
 interface IForm {
   children: React.ReactNode | React.ReactNode[];
-  onSubmit: (data: object) => IState;
+  onSubmit: (data: object) => void;
   className?: string;
   style?: {};
   customSubmit?: boolean;
