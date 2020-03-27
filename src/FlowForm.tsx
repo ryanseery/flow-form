@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { IState, FlowFormContext, FlowFormWrapper } from './FlowFormWrapper';
+import { FlowFormContext, FlowFormWrapper } from './FlowFormWrapper';
 import { FFComponent } from './@types/ffFormComponents';
 import { IStep } from './Step';
 import { IShowData } from './ShowData';
@@ -7,7 +7,7 @@ import { toCamelCase } from './utils';
 
 interface IForm {
   children: React.ReactNode;
-  onSubmit: (data: object) => IState;
+  onSubmit: (data: object) => void;
   className?: string;
   style?: {};
   reset?: boolean;
