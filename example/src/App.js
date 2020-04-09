@@ -1,5 +1,5 @@
 import React from 'react';
-import { FlowForm, Input, ShowData, Step } from 'flow-form';
+import { FlowForm2, Step2, Input2 } from 'flow-form';
 import './App.css';
 
 function App() {
@@ -14,22 +14,19 @@ function App() {
   // TODO initial Values
   return (
     <div style={{ height: '100vh', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-      <FlowForm
-        onSubmit={data => console.log('data: ', data)}
-        style={{ width: '30%' }}
-        initialValues={{ text: 'initial' }}
-      >
-        <Step title="Step 1">
-          <Input required>First Name</Input>
-          <Input>Last Name</Input>
-        </Step>
+      <FlowForm2>
+        <Input2 />
+      </FlowForm2>
 
-        <Step title="Step 2">
-          <Input type="email">Email Address</Input>
-          <Input type="tel">Phone Number</Input>
-        </Step>
-        <ShowData />
-      </FlowForm>
+      <FlowForm2>
+        <Step2 title="First Test">
+          <Input2 />
+        </Step2>
+
+        <Step2 title="Second Test">
+          <Input2 />
+        </Step2>
+      </FlowForm2>
     </div>
   );
 }

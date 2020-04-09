@@ -528,10 +528,126 @@ var Reset = function (_a) {
     return (React.createElement("button", { type: "submit", className: "flow-form-reset " + (className !== null && className !== void 0 ? className : ''), onClick: clearForm }, title !== null && title !== void 0 ? title : "Reset"));
 };
 
+var initialState$1 = {
+    isFlowForm: false,
+};
+var Context = React.createContext({});
+var ACTIONS$2;
+(function (ACTIONS) {
+    ACTIONS["SET_FORM"] = "SET_FORM";
+})(ACTIONS$2 || (ACTIONS$2 = {}));
+var setForm = function (isFlowForm) { return ({
+    type: ACTIONS$2.SET_FORM,
+    isFlowForm: isFlowForm,
+}); };
+function reducer$1(state, action) {
+    console.log({ action: action });
+    switch (action.type) {
+        case ACTIONS$2.SET_FORM: {
+            var isFlowForm = action.isFlowForm;
+            return __assign(__assign({}, state), { isFlowForm: isFlowForm });
+        }
+        default:
+            throw new Error("Context Reducer Received Unrecognized Action!");
+    }
+}
+var Wrapper = function (_a) {
+    var children = _a.children;
+    var _b = React.useReducer(reducer$1, initialState$1), state = _b[0], dispatch = _b[1];
+    var actions = React.useMemo(function () {
+        return {
+            setForm: function (isFlowForm) { return dispatch(setForm(isFlowForm)); },
+        };
+    }, []);
+    return React.createElement(Context.Provider, { value: __assign(__assign({}, state), actions) }, children);
+};
+
+var FFComponent$1;
+(function (FFComponent) {
+    FFComponent["FORM"] = "FORM";
+    FFComponent["INPUT"] = "INPUT";
+    FFComponent["STEP"] = "STEP";
+})(FFComponent$1 || (FFComponent$1 = {}));
+
+function handleChildArr(children) {
+    console.log('CHILD IS AN ARRAY: ', children);
+    var isFlowForm = false;
+    for (var i = 0; i < children.length; i++) {
+        if (React.isValidElement(children[i])) {
+            console.log('loop: ', children[i]);
+            isFlowForm = true;
+            break;
+        }
+    }
+    return isFlowForm;
+}
+function handleChildObj(children) {
+    console.log('CHILD IS AN OBJECT; ', children);
+    if (React.isValidElement(children)) {
+        return true;
+    }
+    return false;
+}
+var Form = function (_a) {
+    var children = _a.children;
+    var isFlowForm = React.useContext(Context).isFlowForm;
+    console.log('FORM: ', { isFlowForm: isFlowForm });
+    var formCheck = Array.isArray(children) ? handleChildArr(children) : handleChildObj(children);
+    console.log('formCheck: ', { children: children, formCheck: formCheck });
+    return (React.createElement("form", null,
+        React.createElement("fieldset", { style: { border: "none" } }, children)));
+};
+Form.defaultProps = {
+    ffComp: FFComponent$1.FORM,
+};
+var FlowForm2 = function (_a) {
+    var children = _a.children;
+    return (React.createElement(Wrapper, null,
+        React.createElement(Form, null, children)));
+};
+
+var Step2 = function (_a) {
+    var children = _a.children, title = _a.title;
+    if (!title) {
+        throw new Error("The title prop is mandatory on Step Component");
+    }
+    return (React.createElement("div", { "data-step-title": title, className: "flow-from-step " + (title && toKebabCase(title)) }, React.Children.map(children, function (child, index) {
+        // if child is Input component we clone props into it
+        if (React.isValidElement(child)) {
+            return React.cloneElement(child, {
+                index: index,
+                step: toCamelCase(title),
+            });
+        }
+        // else we return child naturally
+        else {
+            return child;
+        }
+    })));
+};
+Step2.defaultProps = {
+    ffComp: FFComponent$1.STEP,
+};
+
+var Input2 = function (_a) {
+    var step = _a.step, index = _a.index;
+    console.log('INPUT: ', { step: step, index: index });
+    return (React.createElement("label", { htmlFor: "name", style: { display: "block", minHeight: '4rem' } },
+        React.createElement("input", { type: "text" })));
+};
+Input2.defaultProps = {
+    ffComp: FFComponent$1.INPUT,
+    step: null,
+    index: 0,
+};
+
 exports.FlowForm = FlowForm;
+exports.FlowForm2 = FlowForm2;
 exports.Input = Input;
+exports.Input2 = Input2;
 exports.Reset = Reset;
 exports.ShowData = ShowData;
 exports.Step = Step;
+exports.Step2 = Step2;
 exports.Submit = Submit;
 //# sourceMappingURL=index.js.map

@@ -524,5 +524,118 @@ var Reset = function (_a) {
     return (createElement("button", { type: "submit", className: "flow-form-reset " + (className !== null && className !== void 0 ? className : ''), onClick: clearForm }, title !== null && title !== void 0 ? title : "Reset"));
 };
 
-export { FlowForm, Input, Reset, ShowData, Step, Submit };
+var initialState$1 = {
+    isFlowForm: false,
+};
+var Context = createContext({});
+var ACTIONS$2;
+(function (ACTIONS) {
+    ACTIONS["SET_FORM"] = "SET_FORM";
+})(ACTIONS$2 || (ACTIONS$2 = {}));
+var setForm = function (isFlowForm) { return ({
+    type: ACTIONS$2.SET_FORM,
+    isFlowForm: isFlowForm,
+}); };
+function reducer$1(state, action) {
+    console.log({ action: action });
+    switch (action.type) {
+        case ACTIONS$2.SET_FORM: {
+            var isFlowForm = action.isFlowForm;
+            return __assign(__assign({}, state), { isFlowForm: isFlowForm });
+        }
+        default:
+            throw new Error("Context Reducer Received Unrecognized Action!");
+    }
+}
+var Wrapper = function (_a) {
+    var children = _a.children;
+    var _b = useReducer(reducer$1, initialState$1), state = _b[0], dispatch = _b[1];
+    var actions = useMemo(function () {
+        return {
+            setForm: function (isFlowForm) { return dispatch(setForm(isFlowForm)); },
+        };
+    }, []);
+    return createElement(Context.Provider, { value: __assign(__assign({}, state), actions) }, children);
+};
+
+var FFComponent$1;
+(function (FFComponent) {
+    FFComponent["FORM"] = "FORM";
+    FFComponent["INPUT"] = "INPUT";
+    FFComponent["STEP"] = "STEP";
+})(FFComponent$1 || (FFComponent$1 = {}));
+
+function handleChildArr(children) {
+    console.log('CHILD IS AN ARRAY: ', children);
+    var isFlowForm = false;
+    for (var i = 0; i < children.length; i++) {
+        if (isValidElement(children[i])) {
+            console.log('loop: ', children[i]);
+            isFlowForm = true;
+            break;
+        }
+    }
+    return isFlowForm;
+}
+function handleChildObj(children) {
+    console.log('CHILD IS AN OBJECT; ', children);
+    if (isValidElement(children)) {
+        return true;
+    }
+    return false;
+}
+var Form = function (_a) {
+    var children = _a.children;
+    var isFlowForm = useContext(Context).isFlowForm;
+    console.log('FORM: ', { isFlowForm: isFlowForm });
+    var formCheck = Array.isArray(children) ? handleChildArr(children) : handleChildObj(children);
+    console.log('formCheck: ', { children: children, formCheck: formCheck });
+    return (createElement("form", null,
+        createElement("fieldset", { style: { border: "none" } }, children)));
+};
+Form.defaultProps = {
+    ffComp: FFComponent$1.FORM,
+};
+var FlowForm2 = function (_a) {
+    var children = _a.children;
+    return (createElement(Wrapper, null,
+        createElement(Form, null, children)));
+};
+
+var Step2 = function (_a) {
+    var children = _a.children, title = _a.title;
+    if (!title) {
+        throw new Error("The title prop is mandatory on Step Component");
+    }
+    return (createElement("div", { "data-step-title": title, className: "flow-from-step " + (title && toKebabCase(title)) }, Children.map(children, function (child, index) {
+        // if child is Input component we clone props into it
+        if (isValidElement(child)) {
+            return cloneElement(child, {
+                index: index,
+                step: toCamelCase(title),
+            });
+        }
+        // else we return child naturally
+        else {
+            return child;
+        }
+    })));
+};
+Step2.defaultProps = {
+    ffComp: FFComponent$1.STEP,
+};
+
+var Input2 = function (_a) {
+    var step = _a.step, index = _a.index;
+    console.log('INPUT: ', { step: step, index: index });
+    return (createElement("label", { htmlFor: "name", style: { display: "block", minHeight: '4rem' } },
+        createElement("input", { type: "text" })));
+};
+Input2.defaultProps = {
+    ffComp: FFComponent$1.INPUT,
+    step: null,
+    index: 0,
+};
+
+export { FlowForm, FlowForm2, Input, Input2, Reset, ShowData, Step, Step2, Submit };
 //# sourceMappingURL=index.es.js.map
