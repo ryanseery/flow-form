@@ -530,22 +530,31 @@ var Reset = function (_a) {
 
 var initialState$1 = {
     isFlowForm: false,
+    flow: {
+        key: 0,
+        end: 0,
+        steps: [],
+    },
 };
 var Context = React.createContext({});
 var ACTIONS$2;
 (function (ACTIONS) {
     ACTIONS["SET_FORM"] = "SET_FORM";
 })(ACTIONS$2 || (ACTIONS$2 = {}));
-var setForm = function (isFlowForm) { return ({
-    type: ACTIONS$2.SET_FORM,
-    isFlowForm: isFlowForm,
-}); };
+var setForm = function (_a) {
+    var isFlowForm = _a.isFlowForm, flow = _a.flow;
+    return ({
+        type: ACTIONS$2.SET_FORM,
+        isFlowForm: isFlowForm,
+        flow: flow,
+    });
+};
 function reducer$1(state, action) {
     console.log({ action: action });
     switch (action.type) {
         case ACTIONS$2.SET_FORM: {
-            var isFlowForm = action.isFlowForm;
-            return __assign(__assign({}, state), { isFlowForm: isFlowForm });
+            var isFlowForm = action.isFlowForm, flow = action.flow;
+            return __assign(__assign({}, state), { isFlowForm: isFlowForm, flow: flow });
         }
         default:
             throw new Error("Context Reducer Received Unrecognized Action!");
@@ -556,7 +565,10 @@ var Wrapper = function (_a) {
     var _b = React.useReducer(reducer$1, initialState$1), state = _b[0], dispatch = _b[1];
     var actions = React.useMemo(function () {
         return {
-            setForm: function (isFlowForm) { return dispatch(setForm(isFlowForm)); },
+            setForm: function (_a) {
+                var isFlowForm = _a.isFlowForm, flow = _a.flow;
+                return dispatch(setForm({ isFlowForm: isFlowForm, flow: flow }));
+            },
         };
     }, []);
     return React.createElement(Context.Provider, { value: __assign(__assign({}, state), actions) }, children);
@@ -569,31 +581,43 @@ var FFComponent$1;
     FFComponent["STEP"] = "STEP";
 })(FFComponent$1 || (FFComponent$1 = {}));
 
+// TODO find out why undefined an null are an expected return type
 function handleChildArr(children) {
-    console.log('CHILD IS AN ARRAY: ', children);
-    var isFlowForm = false;
-    for (var i = 0; i < children.length; i++) {
-        if (React.isValidElement(children[i])) {
-            console.log('loop: ', children[i]);
-            isFlowForm = true;
-            break;
+    return React.Children.map(children, function (child, index) {
+        if (!React.isValidElement(child)) {
+            return null;
         }
-    }
-    return isFlowForm;
+        if (child.props.ffComp === FFComponent$1.STEP) {
+            return { title: child.props.title, index: index };
+        }
+        return null;
+    });
 }
+// TODO find out why undefined an null are an expected return type
 function handleChildObj(children) {
-    console.log('CHILD IS AN OBJECT; ', children);
-    if (React.isValidElement(children)) {
-        return true;
+    if (!React.isValidElement(children)) {
+        return [];
     }
-    return false;
+    if (children.props.ffComp === FFComponent$1.STEP) {
+        return [{ title: children.props.title, index: 0 }];
+    }
+    return [];
 }
 var Form = function (_a) {
     var children = _a.children;
-    var isFlowForm = React.useContext(Context).isFlowForm;
-    console.log('FORM: ', { isFlowForm: isFlowForm });
-    var formCheck = Array.isArray(children) ? handleChildArr(children) : handleChildObj(children);
-    console.log('formCheck: ', { children: children, formCheck: formCheck });
+    var _b = React.useContext(Context), isFlowForm = _b.isFlowForm, flow = _b.flow, setForm = _b.setForm;
+    console.log('FLOW: ', { isFlowForm: isFlowForm, flow: flow });
+    React.useEffect(function () {
+        var steps = Array.isArray(children) ? handleChildArr(children) : handleChildObj(children);
+        setForm({
+            isFlowForm: (steps === null || steps === void 0 ? void 0 : steps.length) !== 0,
+            flow: {
+                key: 0,
+                end: Array.isArray(children) ? children.length - 1 : 0,
+                steps: steps,
+            },
+        });
+    }, []);
     return (React.createElement("form", null,
         React.createElement("fieldset", { style: { border: "none" } }, children)));
 };
@@ -629,9 +653,7 @@ Step2.defaultProps = {
     ffComp: FFComponent$1.STEP,
 };
 
-var Input2 = function (_a) {
-    var step = _a.step, index = _a.index;
-    console.log('INPUT: ', { step: step, index: index });
+var Input2 = function () {
     return (React.createElement("label", { htmlFor: "name", style: { display: "block", minHeight: '4rem' } },
         React.createElement("input", { type: "text" })));
 };

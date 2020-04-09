@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Context, Wrapper } from './Context';
+import { Context, Wrapper, IStepState } from './Context';
 import { FFComponent } from './FFComponent';
 import { IStep } from './Step2';
 
@@ -7,37 +7,51 @@ interface IForm {
   ffComp?: string;
 }
 
-function handleChildArr(children: React.ReactNode[]) {
-  console.log('CHILD IS AN ARRAY: ', children);
-  let isFlowForm: boolean = false;
-
-  for (let i = 0; i < children.length; i++) {
-    if (React.isValidElement<IStep>(children[i])) {
-      console.log('loop: ', children[i]);
-      isFlowForm = true;
-      break;
+// TODO find out why undefined an null are an expected return type
+function handleChildArr(children: React.ReactNode[]): IStepState[] | [] | undefined | null {
+  return React.Children.map(children, (child, index) => {
+    if (!React.isValidElement<IStep>(child)) {
+      return null;
     }
-  }
 
-  return isFlowForm;
+    if (child.props.ffComp === FFComponent.STEP) {
+      return { title: child.props.title, index };
+    }
+
+    return null;
+  });
 }
 
-function handleChildObj(children: React.ReactNode) {
-  console.log('CHILD IS AN OBJECT; ', children);
-  if (React.isValidElement<IStep>(children)) {
-    return true;
+// TODO find out why undefined an null are an expected return type
+function handleChildObj(children: React.ReactNode): IStepState[] | [] | undefined | null {
+  if (!React.isValidElement<IStep>(children)) {
+    return [];
   }
-  return false;
+
+  if (children.props.ffComp === FFComponent.STEP) {
+    return [{ title: children.props.title, index: 0 }];
+  }
+
+  return [];
 }
 
 const Form: React.FC<IForm> = ({ children }) => {
-  const { isFlowForm } = React.useContext(Context);
+  const { isFlowForm, flow, setForm } = React.useContext(Context);
 
-  console.log('FORM: ', { isFlowForm });
+  console.log('FLOW: ', { isFlowForm, flow });
 
-  const formCheck = Array.isArray(children) ? handleChildArr(children) : handleChildObj(children);
+  React.useEffect(() => {
+    const steps = Array.isArray(children) ? handleChildArr(children) : handleChildObj(children);
 
-  console.log('formCheck: ', { children, formCheck });
+    setForm({
+      isFlowForm: steps?.length !== 0,
+      flow: {
+        key: 0,
+        end: Array.isArray(children) ? children.length - 1 : 0,
+        steps,
+      },
+    });
+  }, []);
 
   return (
     <form>

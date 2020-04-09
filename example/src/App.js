@@ -19,6 +19,12 @@ function App() {
       </FlowForm2>
 
       <FlowForm2>
+        <Step2 title="Solo">
+          <Input2 />
+        </Step2>
+      </FlowForm2>
+
+      <FlowForm2>
         <Step2 title="First Test">
           <Input2 />
         </Step2>

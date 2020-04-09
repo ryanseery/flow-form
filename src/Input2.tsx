@@ -7,8 +7,7 @@ export interface IInput {
   index: number;
 }
 
-export const Input2: React.FC<IInput> = ({ step, index }) => {
-  console.log('INPUT: ', { step, index });
+export const Input2: React.FC<IInput> = () => {
   return (
     <label htmlFor="name" style={{ display: `block`, minHeight: '4rem' }}>
       <input type="text" />
