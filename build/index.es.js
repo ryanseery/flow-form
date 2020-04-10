@@ -541,6 +541,8 @@ var ACTIONS$2;
 (function (ACTIONS) {
     ACTIONS["SET_FORM"] = "SET_FORM";
     ACTIONS["SET_INPUT"] = "SET_INPUT";
+    ACTIONS["UPDATE_INPUT"] = "UPDATE_INPUT";
+    ACTIONS["UPDATE_BLUR"] = "UPDATE_BLUR";
 })(ACTIONS$2 || (ACTIONS$2 = {}));
 var setForm = function (_a) {
     var isFlowForm = _a.isFlowForm, flow = _a.flow;
@@ -560,9 +562,28 @@ var setInput = function (_a) {
         error: error,
     });
 };
+var updateInput = function (_a) {
+    var step = _a.step, id = _a.id, value = _a.value, error = _a.error;
+    return ({
+        type: ACTIONS$2.UPDATE_INPUT,
+        step: step,
+        id: id,
+        value: value,
+        error: error,
+    });
+};
+var updateBlur$1 = function (_a) {
+    var step = _a.step, id = _a.id, showError = _a.showError;
+    return ({
+        type: ACTIONS$2.UPDATE_BLUR,
+        step: step,
+        id: id,
+        showError: showError,
+    });
+};
 function reducer$1(state, action) {
-    var _a, _b, _c, _d, _e, _f;
-    console.log({ state: state, action: action });
+    var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, _m;
+    console.log('REDUCER: ', { state: state, action: action });
     switch (action.type) {
         case ACTIONS$2.SET_FORM: {
             var isFlowForm = action.isFlowForm, flow = action.flow;
@@ -575,6 +596,15 @@ function reducer$1(state, action) {
             }
             else if (step !== null) {
                 return __assign(__assign({}, state), { data: __assign(__assign({}, state.data), (_c = {}, _c[step] = __assign(__assign({}, state.data[step]), (_d = {}, _d[id] = value, _d)), _c)), error: __assign(__assign({}, state.error), (_e = {}, _e[step] = __assign(__assign({}, state.error[step]), (_f = {}, _f[id] = error, _f)), _e)) });
+            }
+        }
+        case ACTIONS$2.UPDATE_INPUT: {
+            var step = action.step, id = action.id, value = action.value, error = action.error;
+            if (step == null) {
+                return __assign(__assign({}, state), { data: __assign(__assign({}, state.data), (_g = {}, _g[id] = value, _g)), error: __assign(__assign({}, state.error), (_h = {}, _h[id] = error, _h)) });
+            }
+            else if (step !== null) {
+                return __assign(__assign({}, state), { data: __assign(__assign({}, state.data), (_j = {}, _j[step] = __assign(__assign({}, state.data[step]), (_k = {}, _k[id] = value, _k)), _j)), error: __assign(__assign({}, state.error), (_l = {}, _l[step] = __assign(__assign({}, state.error[step]), (_m = {}, _m[id] = error, _m)), _l)) });
             }
         }
         default:
@@ -593,6 +623,14 @@ var Wrapper = function (_a) {
             setInput: function (_a) {
                 var step = _a.step, id = _a.id, value = _a.value, error = _a.error;
                 return dispatch(setInput({ step: step, id: id, value: value, error: error }));
+            },
+            updateInput: function (_a) {
+                var step = _a.step, id = _a.id, value = _a.value, error = _a.error;
+                return dispatch(updateInput({ step: step, id: id, value: value, error: error }));
+            },
+            updateBlur: function (_a) {
+                var step = _a.step, id = _a.id, showError = _a.showError;
+                return dispatch(updateBlur$1({ step: step, id: id, showError: showError }));
             },
         };
     }, []);
@@ -629,9 +667,9 @@ function handleChildObj(children) {
     return [];
 }
 var Form = function (_a) {
-    var children = _a.children;
-    var _b = useContext(Context), isFlowForm = _b.isFlowForm, flow = _b.flow, data = _b.data, error = _b.error, setForm = _b.setForm;
-    console.log('FLOW: ', { isFlowForm: isFlowForm, flow: flow, data: data, error: error });
+    var children = _a.children, onSubmit = _a.onSubmit;
+    var _b = useContext(Context), data = _b.data, setForm = _b.setForm;
+    // console.log('FLOW: ', { isFlowForm, flow, data, error });
     // *** IF CURRENT STEP CHANGES? DEPENDENCY? ***
     useEffect(function () {
         var steps = Array.isArray(children) ? handleChildArr(children) : handleChildObj(children);
@@ -645,16 +683,19 @@ var Form = function (_a) {
             },
         });
     }, []);
-    return (createElement("form", null,
+    return (createElement("form", { onSubmit: function (e) {
+            e.preventDefault();
+            onSubmit(data);
+        } },
         createElement("fieldset", { style: { border: "none" } }, children)));
 };
 Form.defaultProps = {
     ffComp: FFComponent$1.FORM,
 };
 var FlowForm2 = function (_a) {
-    var children = _a.children;
+    var children = _a.children, onSubmit = _a.onSubmit;
     return (createElement(Wrapper, null,
-        createElement(Form, null, children)));
+        createElement(Form, { onSubmit: onSubmit }, children)));
 };
 
 var Step2 = function (_a) {
@@ -681,26 +722,47 @@ Step2.defaultProps = {
 };
 
 function useFormData2(_a) {
-    var step = _a.step, id = _a.id, value = _a.value;
-    var setInput = useContext(Context).setInput;
+    var step = _a.step, id = _a.id, value = _a.value, required = _a.required, validate = _a.validate;
+    var _b = useContext(Context), setInput = _b.setInput, data = _b.data, updateInput = _b.updateInput, updateBlur = _b.updateBlur;
     useEffect(function () {
         setInput({ step: step, id: id, value: value, error: false });
     }, [id]);
+    function validation(e) {
+        if (required) {
+            return validate ? validate(e) : !e.target.value;
+        }
+        return false;
+    }
+    var onChange = function (e) {
+        e.persist();
+        updateInput({
+            step: step,
+            id: e.target.name,
+            value: e.target.value,
+            error: false,
+        });
+    };
+    var onBlur = function (e) {
+        e.preventDefault();
+        updateBlur({ step: step, id: id, showError: validation(e) });
+    };
     return {
-        value: value,
+        value: isObjectEmpty(data) ? '' : step != null ? data[step][id] : data[id],
+        onChange: onChange,
+        onBlur: onBlur,
     };
 }
 
 var Input2 = function (_a) {
-    var step = _a.step, name = _a.name, children = _a.children, style = _a.style;
+    var step = _a.step, name = _a.name, children = _a.children, style = _a.style, _b = _a.required, required = _b === void 0 ? false : _b, validate = _a.validate;
     var id = children ? toCamelCase(children) : toCamelCase(name !== null && name !== void 0 ? name : '');
     var styleTag = children ? toKebabCase(children) : toKebabCase(name !== null && name !== void 0 ? name : '');
-    var value = useFormData2({ step: step, id: id, value: '' }).value;
+    var _c = useFormData2({ step: step, id: id, value: '', required: required, validate: validate }), value = _c.value, onChange = _c.onChange, onBlur = _c.onBlur;
     if (!name && !children) {
         throw new Error("Please provide a label(<Input>Label</Input>) or name prop.");
     }
     return (createElement("label", { htmlFor: id, className: "flow-form-label " + styleTag + "-label", style: __assign({ display: "block", minHeight: '4rem' }, style) }, children !== null && children !== void 0 ? children : name,
-        createElement("input", { type: "text", id: id, name: id, value: value || '', style: { display: "block" } })));
+        createElement("input", { type: "text", id: id, name: id, value: value || '', onChange: onChange, onBlur: onBlur, style: { display: "block" }, required: required })));
 };
 Input2.defaultProps = {
     ffComp: FFComponent$1.INPUT,

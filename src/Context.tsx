@@ -46,9 +46,17 @@ type ValueArgs = {
   error: boolean;
 };
 
+type SideEffectArgs = {
+  step: string | null;
+  id: string;
+  showError: boolean;
+};
+
 interface IContext extends IState {
   setForm: ({ isFlowForm, flow }: SetFormArgs) => void;
   setInput: ({ step, id, value, error }: ValueArgs) => void;
+  updateInput: ({ step, id, value, error }: ValueArgs) => void;
+  updateBlur: ({ step, id, showError }: SideEffectArgs) => void;
 }
 
 export const Context = React.createContext({} as IContext);
@@ -56,6 +64,8 @@ export const Context = React.createContext({} as IContext);
 enum ACTIONS {
   SET_FORM = 'SET_FORM',
   SET_INPUT = 'SET_INPUT',
+  UPDATE_INPUT = 'UPDATE_INPUT',
+  UPDATE_BLUR = 'UPDATE_BLUR',
 }
 
 interface SetForm extends SetFormArgs {
@@ -78,10 +88,31 @@ const setInput = ({ step, id, value, error }: ValueArgs): SetInput => ({
   error,
 });
 
-type Action = SetForm | SetInput;
+interface UpdateInput extends ValueArgs {
+  type: ACTIONS.UPDATE_INPUT;
+}
+const updateInput = ({ step, id, value, error }: ValueArgs): UpdateInput => ({
+  type: ACTIONS.UPDATE_INPUT,
+  step,
+  id,
+  value,
+  error,
+});
+
+interface UpdateBlur extends SideEffectArgs {
+  type: ACTIONS.UPDATE_BLUR;
+}
+const updateBlur = ({ step, id, showError }: SideEffectArgs): UpdateBlur => ({
+  type: ACTIONS.UPDATE_BLUR,
+  step,
+  id,
+  showError,
+});
+
+type Action = SetForm | SetInput | UpdateInput | UpdateBlur;
 
 function reducer(state: IState, action: Action): IState {
-  console.log({ state, action });
+  console.log('REDUCER: ', { state, action });
 
   switch (action.type) {
     case ACTIONS.SET_FORM: {
@@ -102,7 +133,7 @@ function reducer(state: IState, action: Action): IState {
             [id]: error,
           },
         };
-      } else if (step !== null) {
+      } else if (step != null) {
         return {
           ...state,
           data: {
@@ -122,6 +153,63 @@ function reducer(state: IState, action: Action): IState {
         };
       }
     }
+    case ACTIONS.UPDATE_INPUT: {
+      const { step, id, showError } = action;
+      if (step == null) {
+        return {
+          ...state,
+          data: {
+            ...state.data,
+            [id]: value,
+          },
+          error: {
+            ...state.error,
+            [id]: error,
+          },
+        };
+      } else if (step != null) {
+        return {
+          ...state,
+          data: {
+            ...state.data,
+            [step]: {
+              ...state.data[step],
+              [id]: value,
+            },
+          },
+          error: {
+            ...state.error,
+            [step]: {
+              ...state.error[step],
+              [id]: error,
+            },
+          },
+        };
+      }
+    }
+    case ACTIONS.UPDATE_BLUR: {
+      if (step == null) {
+        return {
+          ...state,
+          showError: {
+            ...state.showError,
+            [id]: [showError]
+          },
+        };
+      }
+      else if (step != null) {
+        return {
+          ...state,
+          showError: {
+            ...state.showError,
+            [step]: {
+              ...state.showError,
+              [id]: showError
+            }
+          }
+        }
+      }
+    }
     default:
       throw new Error(`Context Reducer Received Unrecognized Action!`);
   }
@@ -136,6 +224,8 @@ export const Wrapper: React.FC<IWrapper> = ({ children }) => {
     return {
       setForm: ({ isFlowForm, flow }: SetFormArgs) => dispatch(setForm({ isFlowForm, flow })),
       setInput: ({ step, id, value, error }: ValueArgs) => dispatch(setInput({ step, id, value, error })),
+      updateInput: ({ step, id, value, error }: ValueArgs) => dispatch(updateInput({ step, id, value, error })),
+      updateBlur: ({ step, id, showError }: SideEffectArgs) => dispatch(updateBlur({ step, id, showError })),
     };
   }, []);
 

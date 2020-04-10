@@ -6,6 +6,7 @@ import { toCamelCase } from './utils';
 
 interface IForm {
   ffComp?: string;
+  onSubmit: (data: {}) => void;
 }
 
 // TODO find out why undefined an null are an expected return type
@@ -36,10 +37,10 @@ function handleChildObj(children: React.ReactNode): IStepState[] | [] | undefine
   return [];
 }
 
-const Form: React.FC<IForm> = ({ children }) => {
-  const { isFlowForm, flow, data, error, setForm } = React.useContext(Context);
+const Form: React.FC<IForm> = ({ children, onSubmit }) => {
+  const { data, setForm } = React.useContext(Context);
 
-  console.log('FLOW: ', { isFlowForm, flow, data, error });
+  // console.log('FLOW: ', { isFlowForm, flow, data, error });
 
   // *** IF CURRENT STEP CHANGES? DEPENDENCY? ***
   React.useEffect(() => {
@@ -57,7 +58,12 @@ const Form: React.FC<IForm> = ({ children }) => {
   }, []);
 
   return (
-    <form>
+    <form
+      onSubmit={e => {
+        e.preventDefault();
+        onSubmit(data);
+      }}
+    >
       <fieldset style={{ border: `none` }}>{children}</fieldset>
     </form>
   );
@@ -67,12 +73,12 @@ Form.defaultProps = {
   ffComp: FFComponent.FORM,
 };
 
-interface IFlowForm {}
+interface IFlowForm extends IForm {}
 
-export const FlowForm2: React.FC<IFlowForm> = ({ children }) => {
+export const FlowForm2: React.FC<IFlowForm> = ({ children, onSubmit }) => {
   return (
     <Wrapper>
-      <Form>{children}</Form>
+      <Form onSubmit={onSubmit}>{children}</Form>
     </Wrapper>
   );
 };
