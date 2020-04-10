@@ -530,12 +530,17 @@ var initialState$1 = {
         key: 0,
         end: 0,
         steps: [],
+        currentStep: null,
     },
+    data: {},
+    error: {},
+    showError: {},
 };
 var Context = createContext({});
 var ACTIONS$2;
 (function (ACTIONS) {
     ACTIONS["SET_FORM"] = "SET_FORM";
+    ACTIONS["SET_INPUT"] = "SET_INPUT";
 })(ACTIONS$2 || (ACTIONS$2 = {}));
 var setForm = function (_a) {
     var isFlowForm = _a.isFlowForm, flow = _a.flow;
@@ -545,12 +550,32 @@ var setForm = function (_a) {
         flow: flow,
     });
 };
+var setInput = function (_a) {
+    var step = _a.step, id = _a.id, value = _a.value, error = _a.error;
+    return ({
+        type: ACTIONS$2.SET_INPUT,
+        step: step,
+        id: id,
+        value: value,
+        error: error,
+    });
+};
 function reducer$1(state, action) {
-    console.log({ action: action });
+    var _a, _b, _c, _d, _e, _f;
+    console.log({ state: state, action: action });
     switch (action.type) {
         case ACTIONS$2.SET_FORM: {
             var isFlowForm = action.isFlowForm, flow = action.flow;
             return __assign(__assign({}, state), { isFlowForm: isFlowForm, flow: flow });
+        }
+        case ACTIONS$2.SET_INPUT: {
+            var step = action.step, id = action.id, value = action.value, error = action.error;
+            if (step == null) {
+                return __assign(__assign({}, state), { data: __assign(__assign({}, state.data), (_a = {}, _a[id] = value, _a)), error: __assign(__assign({}, state.error), (_b = {}, _b[id] = error, _b)) });
+            }
+            else if (step !== null) {
+                return __assign(__assign({}, state), { data: __assign(__assign({}, state.data), (_c = {}, _c[step] = __assign(__assign({}, state.data[step]), (_d = {}, _d[id] = value, _d)), _c)), error: __assign(__assign({}, state.error), (_e = {}, _e[step] = __assign(__assign({}, state.error[step]), (_f = {}, _f[id] = error, _f)), _e)) });
+            }
         }
         default:
             throw new Error("Context Reducer Received Unrecognized Action!");
@@ -564,6 +589,10 @@ var Wrapper = function (_a) {
             setForm: function (_a) {
                 var isFlowForm = _a.isFlowForm, flow = _a.flow;
                 return dispatch(setForm({ isFlowForm: isFlowForm, flow: flow }));
+            },
+            setInput: function (_a) {
+                var step = _a.step, id = _a.id, value = _a.value, error = _a.error;
+                return dispatch(setInput({ step: step, id: id, value: value, error: error }));
             },
         };
     }, []);
@@ -584,7 +613,7 @@ function handleChildArr(children) {
             return null;
         }
         if (child.props.ffComp === FFComponent$1.STEP) {
-            return { title: child.props.title, index: index };
+            return { id: toCamelCase(child.props.title), title: child.props.title, index: index };
         }
         return null;
     });
@@ -595,14 +624,15 @@ function handleChildObj(children) {
         return [];
     }
     if (children.props.ffComp === FFComponent$1.STEP) {
-        return [{ title: children.props.title, index: 0 }];
+        return [{ id: toCamelCase(children.props.title), title: children.props.title, index: 0 }];
     }
     return [];
 }
 var Form = function (_a) {
     var children = _a.children;
-    var _b = useContext(Context), isFlowForm = _b.isFlowForm, flow = _b.flow, setForm = _b.setForm;
-    console.log('FLOW: ', { isFlowForm: isFlowForm, flow: flow });
+    var _b = useContext(Context), isFlowForm = _b.isFlowForm, flow = _b.flow, data = _b.data, error = _b.error, setForm = _b.setForm;
+    console.log('FLOW: ', { isFlowForm: isFlowForm, flow: flow, data: data, error: error });
+    // *** IF CURRENT STEP CHANGES? DEPENDENCY? ***
     useEffect(function () {
         var steps = Array.isArray(children) ? handleChildArr(children) : handleChildObj(children);
         setForm({
@@ -611,6 +641,7 @@ var Form = function (_a) {
                 key: 0,
                 end: Array.isArray(children) ? children.length - 1 : 0,
                 steps: steps,
+                currentStep: Array.isArray(steps) && steps.length !== 0 ? steps[0] : null,
             },
         });
     }, []);
@@ -649,9 +680,27 @@ Step2.defaultProps = {
     ffComp: FFComponent$1.STEP,
 };
 
-var Input2 = function () {
-    return (createElement("label", { htmlFor: "name", style: { display: "block", minHeight: '4rem' } },
-        createElement("input", { type: "text" })));
+function useFormData2(_a) {
+    var step = _a.step, id = _a.id, value = _a.value;
+    var setInput = useContext(Context).setInput;
+    useEffect(function () {
+        setInput({ step: step, id: id, value: value, error: false });
+    }, [id]);
+    return {
+        value: value,
+    };
+}
+
+var Input2 = function (_a) {
+    var step = _a.step, name = _a.name, children = _a.children, style = _a.style;
+    var id = children ? toCamelCase(children) : toCamelCase(name !== null && name !== void 0 ? name : '');
+    var styleTag = children ? toKebabCase(children) : toKebabCase(name !== null && name !== void 0 ? name : '');
+    var value = useFormData2({ step: step, id: id, value: '' }).value;
+    if (!name && !children) {
+        throw new Error("Please provide a label(<Input>Label</Input>) or name prop.");
+    }
+    return (createElement("label", { htmlFor: id, className: "flow-form-label " + styleTag + "-label", style: __assign({ display: "block", minHeight: '4rem' }, style) }, children !== null && children !== void 0 ? children : name,
+        createElement("input", { type: "text", id: id, name: id, value: value || '', style: { display: "block" } })));
 };
 Input2.defaultProps = {
     ffComp: FFComponent$1.INPUT,

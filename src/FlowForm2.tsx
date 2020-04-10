@@ -2,6 +2,7 @@ import * as React from 'react';
 import { Context, Wrapper, IStepState } from './Context';
 import { FFComponent } from './FFComponent';
 import { IStep } from './Step2';
+import { toCamelCase } from './utils';
 
 interface IForm {
   ffComp?: string;
@@ -15,7 +16,7 @@ function handleChildArr(children: React.ReactNode[]): IStepState[] | [] | undefi
     }
 
     if (child.props.ffComp === FFComponent.STEP) {
-      return { title: child.props.title, index };
+      return { id: toCamelCase(child.props.title), title: child.props.title, index };
     }
 
     return null;
@@ -29,17 +30,18 @@ function handleChildObj(children: React.ReactNode): IStepState[] | [] | undefine
   }
 
   if (children.props.ffComp === FFComponent.STEP) {
-    return [{ title: children.props.title, index: 0 }];
+    return [{ id: toCamelCase(children.props.title), title: children.props.title, index: 0 }];
   }
 
   return [];
 }
 
 const Form: React.FC<IForm> = ({ children }) => {
-  const { isFlowForm, flow, setForm } = React.useContext(Context);
+  const { isFlowForm, flow, data, error, setForm } = React.useContext(Context);
 
-  console.log('FLOW: ', { isFlowForm, flow });
+  console.log('FLOW: ', { isFlowForm, flow, data, error });
 
+  // *** IF CURRENT STEP CHANGES? DEPENDENCY? ***
   React.useEffect(() => {
     const steps = Array.isArray(children) ? handleChildArr(children) : handleChildObj(children);
 
@@ -49,6 +51,7 @@ const Form: React.FC<IForm> = ({ children }) => {
         key: 0,
         end: Array.isArray(children) ? children.length - 1 : 0,
         steps,
+        currentStep: Array.isArray(steps) && steps.length !== 0 ? steps[0] : null,
       },
     });
   }, []);

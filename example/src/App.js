@@ -15,22 +15,23 @@ function App() {
   return (
     <div style={{ height: '100vh', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
       <FlowForm2>
-        <Input2 />
+        <Input2>Test 1</Input2>
       </FlowForm2>
 
       <FlowForm2>
-        <Step2 title="Solo">
-          <Input2 />
+        <Step2 title="Solo Flow">
+          <Input2>Test 2</Input2>
         </Step2>
       </FlowForm2>
 
       <FlowForm2>
-        <Step2 title="First Test">
-          <Input2 />
+        <Step2 title="First Flow">
+          <Input2>Test 3</Input2>
         </Step2>
 
-        <Step2 title="Second Test">
-          <Input2 />
+        <Step2 title="Second Flow">
+          <Input2>Test 4</Input2>
+          <Input2>Test 5</Input2>
         </Step2>
       </FlowForm2>
     </div>
