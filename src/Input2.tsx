@@ -16,22 +16,34 @@ export interface IInput {
 }
 
 export const Input2: React.FC<IInput> = ({ step, name, children, style, required = false, validate }) => {
-  const id = children ? toCamelCase(children) : toCamelCase(name ?? '');
-  const styleTag = children ? toKebabCase(children) : toKebabCase(name ?? '');
-
-  const { value, onChange, onBlur } = useFormData2({ step, id, value: '', required, validate });
   if (!name && !children) {
     throw new Error(`Please provide a label(<Input>Label</Input>) or name prop.`);
   }
 
+  const id = children ? toCamelCase(children) : toCamelCase(name ?? '');
+  const styleTag = children ? toKebabCase(children) : toKebabCase(name ?? '');
+
+  const { value, onChange, onBlur } = useFormData2({ step, id, value: '', required, validate });
+
   return (
     <label
+      data-label-id={id}
       htmlFor={id}
       className={`flow-form-label ${styleTag}-label`}
       style={{ display: `block`, minHeight: '4rem', ...style }}
     >
       {children ?? name}
-      <input type="text" id={id} name={id} value={value || ''} onChange={onChange} onBlur={onBlur} style={{ display: `block` }}  required={required} />
+      <input
+        data-input-id={id}
+        type="text"
+        id={id}
+        name={id}
+        value={value || ''}
+        onChange={onChange}
+        onBlur={onBlur}
+        style={{ display: `block` }}
+        required={required}
+      />
     </label>
   );
 };

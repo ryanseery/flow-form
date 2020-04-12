@@ -154,17 +154,13 @@ function reducer(state: IState, action: Action): IState {
       }
     }
     case ACTIONS.UPDATE_INPUT: {
-      const { step, id, showError } = action;
+      const { step, id, value } = action;
       if (step == null) {
         return {
           ...state,
           data: {
             ...state.data,
             [id]: value,
-          },
-          error: {
-            ...state.error,
-            [id]: error,
           },
         };
       } else if (step != null) {
@@ -177,37 +173,30 @@ function reducer(state: IState, action: Action): IState {
               [id]: value,
             },
           },
-          error: {
-            ...state.error,
-            [step]: {
-              ...state.error[step],
-              [id]: error,
-            },
-          },
         };
       }
     }
     case ACTIONS.UPDATE_BLUR: {
+      const { step, id, showError } = action;
       if (step == null) {
         return {
           ...state,
           showError: {
             ...state.showError,
-            [id]: [showError]
+            [id]: [showError],
           },
         };
-      }
-      else if (step != null) {
+      } else if (step != null) {
         return {
           ...state,
           showError: {
             ...state.showError,
             [step]: {
               ...state.showError,
-              [id]: showError
-            }
-          }
-        }
+              [id]: showError,
+            },
+          },
+        };
       }
     }
     default:

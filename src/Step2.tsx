@@ -14,7 +14,7 @@ export const Step2: React.FC<IStep> = ({ children, title }) => {
   }
 
   return (
-    <div data-step-title={title} className={`flow-from-step ${title && toKebabCase(title)}`}>
+    <div data-step-id={toCamelCase(title)} className={`flow-from-step ${title && toKebabCase(title)}`}>
       {React.Children.map(children, (child, index) => {
         // if child is Input component we clone props into it
         if (React.isValidElement<IInput>(child)) {
