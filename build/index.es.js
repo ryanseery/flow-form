@@ -500,54 +500,30 @@ Submit.defaultProps = {
     flowComp: FFComponent.STEP,
 };
 
-var ShowData = function (_a) {
-    var style = _a.style;
-    var _b = useContext(FlowFormContext), flow = _b.flow, currentStep = _b.currentStep, data = _b.data, error = _b.error, showError = _b.showError;
-    return (createElement("pre", { className: "flow-form-show-data", style: style }, JSON.stringify({ flow: flow, currentStep: currentStep, data: data, error: error, showError: showError }, null, 2)));
-};
-ShowData.defaultProps = {
-    flowComp: FFComponent.SHOW_DATA,
-};
-
-var FormContext = createContext({});
-var ACTIONS$1;
-(function (ACTIONS) {
-    ACTIONS["SET_DEFAULT_VALUE"] = "SET_DEFAULT_VALUE";
-    ACTIONS["UPDATE_VALUE"] = "UPDATE_VALUE";
-    ACTIONS["UPDATE_BLUR"] = "UPDATE_BLUR";
-    ACTIONS["CLEAR_FORM"] = "CLEAR_FORM";
-})(ACTIONS$1 || (ACTIONS$1 = {}));
-
-var Reset = function (_a) {
-    var className = _a.className, title = _a.title;
-    var clearForm = useContext(FormContext).clearForm;
-    return (createElement("button", { type: "submit", className: "flow-form-reset " + (className !== null && className !== void 0 ? className : ''), onClick: clearForm }, title !== null && title !== void 0 ? title : "Reset"));
-};
-
 var initialState$1 = {
     isFlowForm: false,
     flow: {
         key: 0,
         end: 0,
-        steps: [],
         currentStep: null,
+        steps: [],
     },
     data: {},
     error: {},
     showError: {},
 };
 var Context = createContext({});
-var ACTIONS$2;
+var ACTIONS$1;
 (function (ACTIONS) {
     ACTIONS["SET_FORM"] = "SET_FORM";
     ACTIONS["SET_INPUT"] = "SET_INPUT";
     ACTIONS["UPDATE_INPUT"] = "UPDATE_INPUT";
     ACTIONS["UPDATE_BLUR"] = "UPDATE_BLUR";
-})(ACTIONS$2 || (ACTIONS$2 = {}));
+})(ACTIONS$1 || (ACTIONS$1 = {}));
 var setForm = function (_a) {
     var isFlowForm = _a.isFlowForm, flow = _a.flow;
     return ({
-        type: ACTIONS$2.SET_FORM,
+        type: ACTIONS$1.SET_FORM,
         isFlowForm: isFlowForm,
         flow: flow,
     });
@@ -555,7 +531,7 @@ var setForm = function (_a) {
 var setInput = function (_a) {
     var step = _a.step, id = _a.id, value = _a.value, error = _a.error;
     return ({
-        type: ACTIONS$2.SET_INPUT,
+        type: ACTIONS$1.SET_INPUT,
         step: step,
         id: id,
         value: value,
@@ -565,7 +541,7 @@ var setInput = function (_a) {
 var updateInput = function (_a) {
     var step = _a.step, id = _a.id, value = _a.value, error = _a.error;
     return ({
-        type: ACTIONS$2.UPDATE_INPUT,
+        type: ACTIONS$1.UPDATE_INPUT,
         step: step,
         id: id,
         value: value,
@@ -575,36 +551,51 @@ var updateInput = function (_a) {
 var updateBlur$1 = function (_a) {
     var step = _a.step, id = _a.id, showError = _a.showError;
     return ({
-        type: ACTIONS$2.UPDATE_BLUR,
+        type: ACTIONS$1.UPDATE_BLUR,
         step: step,
         id: id,
         showError: showError,
     });
 };
 function reducer$1(state, action) {
-    var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, _m;
+    var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, _m, _o, _p, _q;
     console.log('REDUCER: ', { state: state, action: action });
     switch (action.type) {
-        case ACTIONS$2.SET_FORM: {
+        case ACTIONS$1.SET_FORM: {
             var isFlowForm = action.isFlowForm, flow = action.flow;
             return __assign(__assign({}, state), { isFlowForm: isFlowForm, flow: flow });
         }
-        case ACTIONS$2.SET_INPUT: {
+        case ACTIONS$1.SET_INPUT: {
             var step = action.step, id = action.id, value = action.value, error = action.error;
             if (step == null) {
                 return __assign(__assign({}, state), { data: __assign(__assign({}, state.data), (_a = {}, _a[id] = value, _a)), error: __assign(__assign({}, state.error), (_b = {}, _b[id] = error, _b)) });
             }
-            else if (step !== null) {
+            else if (step != null) {
                 return __assign(__assign({}, state), { data: __assign(__assign({}, state.data), (_c = {}, _c[step] = __assign(__assign({}, state.data[step]), (_d = {}, _d[id] = value, _d)), _c)), error: __assign(__assign({}, state.error), (_e = {}, _e[step] = __assign(__assign({}, state.error[step]), (_f = {}, _f[id] = error, _f)), _e)) });
             }
+            else {
+                return state;
+            }
         }
-        case ACTIONS$2.UPDATE_INPUT: {
+        case ACTIONS$1.UPDATE_INPUT: {
             var step = action.step, id = action.id, value = action.value, error = action.error;
             if (step == null) {
                 return __assign(__assign({}, state), { data: __assign(__assign({}, state.data), (_g = {}, _g[id] = value, _g)), error: __assign(__assign({}, state.error), (_h = {}, _h[id] = error, _h)) });
             }
-            else if (step !== null) {
+            else if (step != null) {
                 return __assign(__assign({}, state), { data: __assign(__assign({}, state.data), (_j = {}, _j[step] = __assign(__assign({}, state.data[step]), (_k = {}, _k[id] = value, _k)), _j)), error: __assign(__assign({}, state.error), (_l = {}, _l[step] = __assign(__assign({}, state.error[step]), (_m = {}, _m[id] = error, _m)), _l)) });
+            }
+            else {
+                return state;
+            }
+        }
+        case ACTIONS$1.UPDATE_BLUR: {
+            var step = action.step, id = action.id, showError = action.showError;
+            if (step == null) {
+                return __assign(__assign({}, state), { showError: __assign(__assign({}, state.showError), (_o = {}, _o[id] = [showError], _o)) });
+            }
+            else if (step != null) {
+                return __assign(__assign({}, state), { showError: __assign(__assign({}, state.showError), (_p = {}, _p[step] = __assign(__assign({}, state.showError), (_q = {}, _q[id] = showError, _q)), _p)) });
             }
         }
         default:
@@ -642,7 +633,32 @@ var FFComponent$1;
     FFComponent["FORM"] = "FORM";
     FFComponent["INPUT"] = "INPUT";
     FFComponent["STEP"] = "STEP";
+    FFComponent["SHOW_DATA"] = "SHOW_DATA";
 })(FFComponent$1 || (FFComponent$1 = {}));
+
+var ShowData = function (_a) {
+    var style = _a.style;
+    var _b = useContext(Context), isFlowForm = _b.isFlowForm, flow = _b.flow, data = _b.data, error = _b.error, showError = _b.showError;
+    return (createElement("pre", { className: "flow-form-show-data", style: style }, JSON.stringify({ isFlowForm: isFlowForm, flow: flow, data: data, error: error, showError: showError }, null, 2)));
+};
+ShowData.defaultProps = {
+    flowComp: FFComponent$1.SHOW_DATA,
+};
+
+var FormContext = createContext({});
+var ACTIONS$2;
+(function (ACTIONS) {
+    ACTIONS["SET_DEFAULT_VALUE"] = "SET_DEFAULT_VALUE";
+    ACTIONS["UPDATE_VALUE"] = "UPDATE_VALUE";
+    ACTIONS["UPDATE_BLUR"] = "UPDATE_BLUR";
+    ACTIONS["CLEAR_FORM"] = "CLEAR_FORM";
+})(ACTIONS$2 || (ACTIONS$2 = {}));
+
+var Reset = function (_a) {
+    var className = _a.className, title = _a.title;
+    var clearForm = useContext(FormContext).clearForm;
+    return (createElement("button", { type: "submit", className: "flow-form-reset " + (className !== null && className !== void 0 ? className : ''), onClick: clearForm }, title !== null && title !== void 0 ? title : "Reset"));
+};
 
 // TODO find out why undefined an null are an expected return type
 function handleChildArr(children) {
@@ -703,7 +719,7 @@ var Step2 = function (_a) {
     if (!title) {
         throw new Error("The title prop is mandatory on Step Component");
     }
-    return (createElement("div", { "data-step-title": title, className: "flow-from-step " + (title && toKebabCase(title)) }, Children.map(children, function (child, index) {
+    return (createElement("div", { "data-step-id": toCamelCase(title), className: "flow-from-step " + (title && toKebabCase(title)) }, Children.map(children, function (child, index) {
         // if child is Input component we clone props into it
         if (isValidElement(child)) {
             return cloneElement(child, {
@@ -755,14 +771,14 @@ function useFormData2(_a) {
 
 var Input2 = function (_a) {
     var step = _a.step, name = _a.name, children = _a.children, style = _a.style, _b = _a.required, required = _b === void 0 ? false : _b, validate = _a.validate;
-    var id = children ? toCamelCase(children) : toCamelCase(name !== null && name !== void 0 ? name : '');
-    var styleTag = children ? toKebabCase(children) : toKebabCase(name !== null && name !== void 0 ? name : '');
-    var _c = useFormData2({ step: step, id: id, value: '', required: required, validate: validate }), value = _c.value, onChange = _c.onChange, onBlur = _c.onBlur;
     if (!name && !children) {
         throw new Error("Please provide a label(<Input>Label</Input>) or name prop.");
     }
-    return (createElement("label", { htmlFor: id, className: "flow-form-label " + styleTag + "-label", style: __assign({ display: "block", minHeight: '4rem' }, style) }, children !== null && children !== void 0 ? children : name,
-        createElement("input", { type: "text", id: id, name: id, value: value || '', onChange: onChange, onBlur: onBlur, style: { display: "block" }, required: required })));
+    var id = children ? toCamelCase(children) : toCamelCase(name !== null && name !== void 0 ? name : '');
+    var styleTag = children ? toKebabCase(children) : toKebabCase(name !== null && name !== void 0 ? name : '');
+    var _c = useFormData2({ step: step, id: id, value: '', required: required, validate: validate }), value = _c.value, onChange = _c.onChange, onBlur = _c.onBlur;
+    return (createElement("label", { "data-label-id": id, htmlFor: id, className: "flow-form-label " + styleTag + "-label", style: __assign({ display: "block", minHeight: '4rem' }, style) }, children !== null && children !== void 0 ? children : name,
+        createElement("input", { "data-input-id": id, type: "text", id: id, name: id, value: value || '', onChange: onChange, onBlur: onBlur, style: { display: "block" }, required: required })));
 };
 Input2.defaultProps = {
     ffComp: FFComponent$1.INPUT,

@@ -1,6 +1,6 @@
 import * as React from 'react';
-import { FlowFormContext } from './FlowFormWrapper';
-import { FFComponent } from './@types/ffFormComponents';
+import { Context } from './Context';
+import { FFComponent } from './FFComponent';
 
 export interface IShowData {
   flowComp: string;
@@ -8,11 +8,11 @@ export interface IShowData {
 }
 
 export const ShowData: React.FC<IShowData> = ({ style }) => {
-  const { flow, currentStep, data, error, showError } = React.useContext(FlowFormContext);
+  const { isFlowForm, flow, data, error, showError } = React.useContext(Context);
 
   return (
     <pre className="flow-form-show-data" style={style}>
-      {JSON.stringify({ flow, currentStep, data, error, showError }, null, 2)}
+      {JSON.stringify({ isFlowForm, flow, data, error, showError }, null, 2)}
     </pre>
   );
 };

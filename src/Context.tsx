@@ -26,8 +26,8 @@ const initialState: IState = {
   flow: {
     key: 0,
     end: 0,
-    steps: [],
     currentStep: null,
+    steps: [],
   },
   data: {},
   error: {},
@@ -132,6 +132,10 @@ function reducer(state: IState, action: Action): IState {
             ...state.error,
             [id]: error,
           },
+          showError: {
+            ...state.showError,
+            [id]: error,
+          },
         };
       } else if (step != null) {
         return {
@@ -147,6 +151,13 @@ function reducer(state: IState, action: Action): IState {
             ...state.error,
             [step]: {
               ...state.error[step],
+              [id]: error,
+            },
+          },
+          showError: {
+            ...state.showError,
+            [step]: {
+              ...state.showError[step],
               [id]: error,
             },
           },
@@ -168,6 +179,10 @@ function reducer(state: IState, action: Action): IState {
             ...state.error,
             [id]: error,
           },
+          showError: {
+            ...state.showError,
+            [id]: error,
+          },
         };
       } else if (step != null) {
         return {
@@ -183,6 +198,13 @@ function reducer(state: IState, action: Action): IState {
             ...state.error,
             [step]: {
               ...state.error[step],
+              [id]: error,
+            },
+          },
+          showError: {
+            ...state.showError,
+            [step]: {
+              ...state.showError[step],
               [id]: error,
             },
           },
