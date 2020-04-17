@@ -13,7 +13,7 @@ function App() {
 
   // TODO initial Values
   return (
-    <div style={{ height: '100vh', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+    <div style={{ height: '100vh', display: 'flex', justifyContent: 'center' }}>
       <FlowForm2>
         <Input2 validate={checkString}>Test 1</Input2>
 

@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { FFComponent } from './FFComponent';
 import { toKebabCase, toCamelCase } from './utils';
-import { IInput } from './Input2';
+import { IInput } from './Input2/Input2';
 
 export interface IStep {
   ffComp: string;

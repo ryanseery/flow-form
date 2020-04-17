@@ -3,4 +3,5 @@ export enum FFComponent {
   INPUT = 'INPUT',
   STEP = 'STEP',
   SHOW_DATA = 'SHOW_DATA',
+  TEXT = 'TEXT',
 }

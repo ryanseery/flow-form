@@ -3,8 +3,9 @@ import { toKebabCase, toCamelCase } from '../utils';
 import { Text, Number, Email, Password, Tel, Url, TextArea, Color } from './InputTypes';
 
 interface IInput {
+  step: string | null;
   index: number;
-  step: string | number;
+  name?: string;
   children?: string;
   type?: string;
   placeholder?: string;
