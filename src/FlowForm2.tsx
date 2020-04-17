@@ -1,12 +1,14 @@
 import * as React from 'react';
 import { Context, Wrapper, IStepState } from './Context';
 import { FFComponent } from './FFComponent';
-import { IStep } from './Step2';
+import { IStep } from './Step';
 import { toCamelCase } from './utils';
 
 interface IForm {
   ffComp?: string;
   onSubmit: (data: {}) => void;
+  className?: string;
+  style?: {};
 }
 
 // TODO find out why undefined an null are an expected return type
@@ -37,7 +39,7 @@ function handleChildObj(children: React.ReactNode): IStepState[] | [] | undefine
   return [];
 }
 
-const Form: React.FC<IForm> = ({ children, onSubmit }) => {
+const Form: React.FC<IForm> = ({ children, onSubmit, className, style }) => {
   const { data, setForm } = React.useContext(Context);
 
   // console.log('FLOW: ', { isFlowForm, flow, data, error });
@@ -63,6 +65,8 @@ const Form: React.FC<IForm> = ({ children, onSubmit }) => {
         e.preventDefault();
         onSubmit(data);
       }}
+      className={`flow-form ${className}`}
+      style={style}
     >
       <fieldset style={{ border: `none` }}>{children}</fieldset>
     </form>
@@ -75,10 +79,12 @@ Form.defaultProps = {
 
 interface IFlowForm extends IForm {}
 
-export const FlowForm2: React.FC<IFlowForm> = ({ children, onSubmit }) => {
+export const FlowForm2: React.FC<IFlowForm> = ({ children, onSubmit, className, style }) => {
   return (
     <Wrapper>
-      <Form onSubmit={onSubmit}>{children}</Form>
+      <Form onSubmit={onSubmit} className={className} style={style}>
+        {children}
+      </Form>
     </Wrapper>
   );
 };

@@ -20,7 +20,7 @@ function mapHeaders(children: React.ReactNode): React.ReactText[] | number[] | n
       return null;
     }
 
-    if (child.props.flowComp === FFComponent.STEP) {
+    if (child.props.ffComp === FFComponent.STEP) {
       return child.props.title ?? index;
     }
 

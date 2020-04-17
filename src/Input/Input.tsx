@@ -1,93 +1,84 @@
 import * as React from 'react';
-import { toKebabCase, toCamelCase } from '../utils';
-import { Text, Number, Email, Password, Tel, Url, TextArea, Color } from './InputTypes';
+import { FFComponent } from '../FFComponent';
+import { toCamelCase, toKebabCase } from '../utils';
+import { Text, Number } from './InputTypes';
 
-interface IInput {
+export interface IInput {
+  ffComp?: string;
   step: string | null;
   index: number;
+  type?: string;
   name?: string;
   children?: string;
-  type?: string;
-  placeholder?: string;
-  required?: boolean;
-  validate?: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => boolean;
-  errMsg?: string;
-  autoComplete?: string;
-  pattern?: string;
-  rows?: number;
-  cols?: number;
-  helperText?: boolean | string;
+  className?: string;
   style?: {};
+  required?: boolean;
+  autoComplete?: string;
+  placeholder?: string;
+  errMsg?: string;
+  validate?: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => boolean;
 }
 
 export const Input: React.FC<IInput> = ({
-  index,
   step,
-  children,
+  index,
+  name,
   type,
-  placeholder,
-  required,
-  validate,
-  errMsg,
-  autoComplete,
-  pattern,
-  rows,
-  cols,
-  helperText,
+  children,
   style,
+  required = false,
+  validate,
+  autoComplete,
+  placeholder,
+  errMsg,
 }) => {
-  const kebabCase = toKebabCase(children ?? '');
+  if (!name && !children) {
+    throw new Error(`Please provide a label(<Input>Label</Input>) or name prop(<Input name="label" />).`);
+  }
 
-  const camelCase = toCamelCase(children ?? '');
+  const id = children ? toCamelCase(children) : toCamelCase(name ?? '');
+  const className = children ? toKebabCase(children) : toKebabCase(name ?? '');
 
   const defaultProps = {
-    label: children,
-    index,
+    id,
     step,
-    id: camelCase,
+    index,
     type,
-    className: kebabCase,
-    placeholder,
     required,
     validate,
-    errMsg,
-    autoComplete: autoComplete ?? 'off',
-    pattern,
-    rows,
-    cols,
-    helperText,
+    autoComplete,
+    placeholder,
+    className,
+    label: children ?? name,
     style: { display: `block` },
+    errMsg,
   };
 
   return (
     <label
-      htmlFor={camelCase}
-      className={`flow-form-label ${kebabCase}-label`}
+      id={`${id}-label`}
+      data-label-id={`${id}-label`}
+      htmlFor={id}
+      className={`flow-form-label ${className}-label`}
       style={{ display: `block`, minHeight: '4rem', ...style }}
     >
-      {children}
+      {id}
       {(() => {
         switch (type) {
           case 'text':
             return <Text {...defaultProps} />;
           case 'number':
             return <Number {...defaultProps} />;
-          case 'email':
-            return <Email {...defaultProps} />;
-          case 'password':
-            return <Password {...defaultProps} />;
-          case 'tel':
-            return <Tel {...defaultProps} />;
-          case 'url':
-            return <Url {...defaultProps} />;
-          case 'textarea':
-            return <TextArea {...defaultProps} />;
-          case 'color':
-            return <Color {...defaultProps} />;
           default:
             return <Text {...defaultProps} />;
         }
       })()}
     </label>
   );
+};
+
+Input.defaultProps = {
+  ffComp: FFComponent.INPUT,
+  step: null,
+  index: 0,
 };

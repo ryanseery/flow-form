@@ -16,13 +16,16 @@ interface IFlow {
 interface IState {
   isFlowForm: boolean;
   flow: IFlow;
+  canProceed: boolean;
   data: {};
   error: {};
   showError: {};
+  touched: {};
 }
 
 const initialState: IState = {
   isFlowForm: false,
+  canProceed: false,
   flow: {
     key: 0,
     end: 0,
@@ -32,6 +35,7 @@ const initialState: IState = {
   data: {},
   error: {},
   showError: {},
+  touched: {},
 };
 
 type SetFormArgs = {
@@ -46,17 +50,23 @@ type ValueArgs = {
   error: boolean;
 };
 
-type SideEffectArgs = {
+type BlurArgs = {
   step: string | null;
   id: string;
   showError: boolean;
+};
+
+type FocusArgs = {
+  step: string | null;
+  id: string;
 };
 
 interface IContext extends IState {
   setForm: ({ isFlowForm, flow }: SetFormArgs) => void;
   setInput: ({ step, id, value, error }: ValueArgs) => void;
   updateInput: ({ step, id, value, error }: ValueArgs) => void;
-  updateBlur: ({ step, id, showError }: SideEffectArgs) => void;
+  updateBlur: ({ step, id, showError }: BlurArgs) => void;
+  updateFocus: ({ step, id }: FocusArgs) => void;
 }
 
 export const Context = React.createContext({} as IContext);
@@ -66,6 +76,7 @@ enum ACTIONS {
   SET_INPUT = 'SET_INPUT',
   UPDATE_INPUT = 'UPDATE_INPUT',
   UPDATE_BLUR = 'UPDATE_BLUR',
+  UPDATE_FOCUS = 'UPDATE_FOCUS',
 }
 
 interface SetForm extends SetFormArgs {
@@ -99,17 +110,26 @@ const updateInput = ({ step, id, value, error }: ValueArgs): UpdateInput => ({
   error,
 });
 
-interface UpdateBlur extends SideEffectArgs {
+interface UpdateBlur extends BlurArgs {
   type: ACTIONS.UPDATE_BLUR;
 }
-const updateBlur = ({ step, id, showError }: SideEffectArgs): UpdateBlur => ({
+const updateBlur = ({ step, id, showError }: BlurArgs): UpdateBlur => ({
   type: ACTIONS.UPDATE_BLUR,
   step,
   id,
   showError,
 });
 
-type Action = SetForm | SetInput | UpdateInput | UpdateBlur;
+interface UpdateFocus extends FocusArgs {
+  type: ACTIONS.UPDATE_FOCUS;
+}
+const updateFocus = ({ step, id }: FocusArgs): UpdateFocus => ({
+  type: ACTIONS.UPDATE_FOCUS,
+  step,
+  id,
+});
+
+type Action = SetForm | SetInput | UpdateInput | UpdateBlur | UpdateFocus;
 
 function reducer(state: IState, action: Action): IState {
   console.log('REDUCER: ', { state, action });
@@ -134,7 +154,11 @@ function reducer(state: IState, action: Action): IState {
           },
           showError: {
             ...state.showError,
-            [id]: error,
+            [id]: false,
+          },
+          touched: {
+            ...state.touched,
+            [id]: false,
           },
         };
       } else if (step != null) {
@@ -158,7 +182,14 @@ function reducer(state: IState, action: Action): IState {
             ...state.showError,
             [step]: {
               ...state.showError[step],
-              [id]: error,
+              [id]: false,
+            },
+          },
+          touched: {
+            ...state.touched,
+            [step]: {
+              ...state.touched[step],
+              [id]: false,
             },
           },
         };
@@ -187,6 +218,7 @@ function reducer(state: IState, action: Action): IState {
       } else if (step != null) {
         return {
           ...state,
+          canProceed: Object.values({ ...state.error, [id]: error }).every(v => v === false),
           data: {
             ...state.data,
             [step]: {
@@ -220,20 +252,59 @@ function reducer(state: IState, action: Action): IState {
           ...state,
           showError: {
             ...state.showError,
-            [id]: [showError],
+            [id]: showError,
+          },
+          touched: {
+            ...state.touched,
+            [id]: false,
           },
         };
       } else if (step != null) {
         return {
           ...state,
+          canProceed: Object.values(state.error).every(v => v === false),
           showError: {
             ...state.showError,
             [step]: {
-              ...state.showError,
+              ...state.showError[step],
               [id]: showError,
             },
           },
+          touched: {
+            ...state.touched,
+            [step]: {
+              ...state.touched[step],
+              [id]: false,
+            },
+          },
         };
+      } else {
+        return state;
+      }
+    }
+    case ACTIONS.UPDATE_FOCUS: {
+      const { step, id } = action;
+      if (step == null) {
+        return {
+          ...state,
+          touched: {
+            ...state.touched,
+            [id]: true,
+          },
+        };
+      } else if (step != null) {
+        return {
+          ...state,
+          touched: {
+            ...state.touched,
+            [step]: {
+              ...state.touched[step],
+              [id]: true,
+            },
+          },
+        };
+      } else {
+        return state;
       }
     }
     default:
@@ -251,7 +322,8 @@ export const Wrapper: React.FC<IWrapper> = ({ children }) => {
       setForm: ({ isFlowForm, flow }: SetFormArgs) => dispatch(setForm({ isFlowForm, flow })),
       setInput: ({ step, id, value, error }: ValueArgs) => dispatch(setInput({ step, id, value, error })),
       updateInput: ({ step, id, value, error }: ValueArgs) => dispatch(updateInput({ step, id, value, error })),
-      updateBlur: ({ step, id, showError }: SideEffectArgs) => dispatch(updateBlur({ step, id, showError })),
+      updateBlur: ({ step, id, showError }: BlurArgs) => dispatch(updateBlur({ step, id, showError })),
+      updateFocus: ({ step, id }: FocusArgs) => dispatch(updateFocus({ step, id })),
     };
   }, []);
 

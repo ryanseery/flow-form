@@ -1,49 +1,46 @@
 import * as React from 'react';
-import { IInputType } from './@types';
-import { useFormData } from '../../useFormData';
-import { Error, HelperText } from '../../messages';
+import { useFormData2 } from '../../useFormData2';
+import { IInput } from '../Input';
+import { Error } from '../../Error';
 
-interface IText extends IInputType {}
+interface IText extends IInput {
+  id: string;
+  label?: string;
+}
 
 export const Text: React.FC<IText> = ({
-  label,
   step,
   id,
-  type = 'text',
-  className,
-  placeholder,
+  type,
   required = false,
   validate,
-  errMsg,
+  placeholder,
   autoComplete,
-  helperText,
   style,
+  className,
+  label,
+  errMsg,
 }) => {
-  const { value, showError, handleChange, handleBlur } = useFormData({
-    step,
-    id,
-    value: '',
-    validate,
-    required,
-  });
+  const { value, onChange, onBlur, onFocus, showError } = useFormData2({ step, id, value: '', required, validate });
 
   return (
     <>
       <input
-        id={id}
+        id={`${id}-input-text`}
+        data-input-id={`${id}-input-text`}
         name={id}
-        value={value || ''}
-        onChange={handleChange}
-        onBlur={handleBlur}
         type={type}
-        placeholder={placeholder}
-        style={style}
-        className={`flow-form-input ${className}-input`}
+        value={value || ''}
         required={required}
+        onChange={onChange}
+        onBlur={onBlur}
+        onFocus={onFocus}
+        className={`flow-form-input flow-form-text ${className}-input`}
+        placeholder={placeholder}
         autoComplete={autoComplete}
+        style={style}
       />
-      {!showError && <HelperText id={id} helperText={helperText} className={className} />}
-      {showError && <Error id={id} label={label} className={className} errMsg={errMsg} />}
+      {showError && <Error id={id} className={className} label={label} errMsg={errMsg} />}
     </>
   );
 };
