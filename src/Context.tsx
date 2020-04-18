@@ -218,7 +218,7 @@ function reducer(state: IState, action: Action): IState {
       } else if (step != null) {
         return {
           ...state,
-          canProceed: Object.values({ ...state.error, [id]: error }).every(v => v === false),
+          canProceed: Object.entries({ ...state.error[step], [id]: error }).every(([_, v]) => v === false),
           data: {
             ...state.data,
             [step]: {
@@ -250,6 +250,10 @@ function reducer(state: IState, action: Action): IState {
       if (step == null) {
         return {
           ...state,
+          error: {
+            ...state.error,
+            [id]: showError,
+          },
           showError: {
             ...state.showError,
             [id]: showError,
@@ -262,7 +266,14 @@ function reducer(state: IState, action: Action): IState {
       } else if (step != null) {
         return {
           ...state,
-          canProceed: Object.values(state.error).every(v => v === false),
+          canProceed: Object.entries({ ...state.error[step], [id]: showError }).every(([_, v]) => v === false),
+          error: {
+            ...state.error,
+            [step]: {
+              ...state.error[step],
+              [id]: showError,
+            },
+          },
           showError: {
             ...state.showError,
             [step]: {

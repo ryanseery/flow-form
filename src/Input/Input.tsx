@@ -62,7 +62,7 @@ export const Input: React.FC<IInput> = ({
       className={`flow-form-label ${className}-label`}
       style={{ display: `block`, minHeight: '4rem', ...style }}
     >
-      {id}
+      {children ?? name}
       {(() => {
         switch (type) {
           case 'text':

@@ -341,7 +341,7 @@ var updateFocus = function (_a) {
     });
 };
 function reducer$1(state, action) {
-    var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, _m, _o, _p, _q, _r, _s, _t, _u, _v, _w, _x, _y, _z, _0, _1, _2, _3, _4, _5, _6;
+    var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, _m, _o, _p, _q, _r, _s, _t, _u, _v, _w, _x, _y, _z, _0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10;
     console.log('REDUCER: ', { state: state, action: action });
     switch (action.type) {
         case ACTIONS$1.SET_FORM: {
@@ -366,7 +366,10 @@ function reducer$1(state, action) {
                 return __assign(__assign({}, state), { data: __assign(__assign({}, state.data), (_o = {}, _o[id] = value, _o)), error: __assign(__assign({}, state.error), (_p = {}, _p[id] = error, _p)), showError: __assign(__assign({}, state.showError), (_q = {}, _q[id] = error, _q)) });
             }
             else if (step != null) {
-                return __assign(__assign({}, state), { canProceed: Object.values(__assign(__assign({}, state.error), (_r = {}, _r[id] = error, _r))).every(function (v) { return v === false; }), data: __assign(__assign({}, state.data), (_s = {}, _s[step] = __assign(__assign({}, state.data[step]), (_t = {}, _t[id] = value, _t)), _s)), error: __assign(__assign({}, state.error), (_u = {}, _u[step] = __assign(__assign({}, state.error[step]), (_v = {}, _v[id] = error, _v)), _u)), showError: __assign(__assign({}, state.showError), (_w = {}, _w[step] = __assign(__assign({}, state.showError[step]), (_x = {}, _x[id] = error, _x)), _w)) });
+                return __assign(__assign({}, state), { canProceed: Object.entries(__assign(__assign({}, state.error[step]), (_r = {}, _r[id] = error, _r))).every(function (_a) {
+                        var _ = _a[0], v = _a[1];
+                        return v === false;
+                    }), data: __assign(__assign({}, state.data), (_s = {}, _s[step] = __assign(__assign({}, state.data[step]), (_t = {}, _t[id] = value, _t)), _s)), error: __assign(__assign({}, state.error), (_u = {}, _u[step] = __assign(__assign({}, state.error[step]), (_v = {}, _v[id] = error, _v)), _u)), showError: __assign(__assign({}, state.showError), (_w = {}, _w[step] = __assign(__assign({}, state.showError[step]), (_x = {}, _x[id] = error, _x)), _w)) });
             }
             else {
                 return state;
@@ -375,10 +378,13 @@ function reducer$1(state, action) {
         case ACTIONS$1.UPDATE_BLUR: {
             var step = action.step, id = action.id, showError = action.showError;
             if (step == null) {
-                return __assign(__assign({}, state), { showError: __assign(__assign({}, state.showError), (_y = {}, _y[id] = showError, _y)), touched: __assign(__assign({}, state.touched), (_z = {}, _z[id] = false, _z)) });
+                return __assign(__assign({}, state), { error: __assign(__assign({}, state.error), (_y = {}, _y[id] = showError, _y)), showError: __assign(__assign({}, state.showError), (_z = {}, _z[id] = showError, _z)), touched: __assign(__assign({}, state.touched), (_0 = {}, _0[id] = false, _0)) });
             }
             else if (step != null) {
-                return __assign(__assign({}, state), { canProceed: Object.values(state.error).every(function (v) { return v === false; }), showError: __assign(__assign({}, state.showError), (_0 = {}, _0[step] = __assign(__assign({}, state.showError[step]), (_1 = {}, _1[id] = showError, _1)), _0)), touched: __assign(__assign({}, state.touched), (_2 = {}, _2[step] = __assign(__assign({}, state.touched[step]), (_3 = {}, _3[id] = false, _3)), _2)) });
+                return __assign(__assign({}, state), { canProceed: Object.entries(__assign(__assign({}, state.error[step]), (_1 = {}, _1[id] = showError, _1))).every(function (_a) {
+                        var _ = _a[0], v = _a[1];
+                        return v === false;
+                    }), error: __assign(__assign({}, state.error), (_2 = {}, _2[step] = __assign(__assign({}, state.error[step]), (_3 = {}, _3[id] = showError, _3)), _2)), showError: __assign(__assign({}, state.showError), (_4 = {}, _4[step] = __assign(__assign({}, state.showError[step]), (_5 = {}, _5[id] = showError, _5)), _4)), touched: __assign(__assign({}, state.touched), (_6 = {}, _6[step] = __assign(__assign({}, state.touched[step]), (_7 = {}, _7[id] = false, _7)), _6)) });
             }
             else {
                 return state;
@@ -387,10 +393,10 @@ function reducer$1(state, action) {
         case ACTIONS$1.UPDATE_FOCUS: {
             var step = action.step, id = action.id;
             if (step == null) {
-                return __assign(__assign({}, state), { touched: __assign(__assign({}, state.touched), (_4 = {}, _4[id] = true, _4)) });
+                return __assign(__assign({}, state), { touched: __assign(__assign({}, state.touched), (_8 = {}, _8[id] = true, _8)) });
             }
             else if (step != null) {
-                return __assign(__assign({}, state), { touched: __assign(__assign({}, state.touched), (_5 = {}, _5[step] = __assign(__assign({}, state.touched[step]), (_6 = {}, _6[id] = true, _6)), _5)) });
+                return __assign(__assign({}, state), { touched: __assign(__assign({}, state.touched), (_9 = {}, _9[step] = __assign(__assign({}, state.touched[step]), (_10 = {}, _10[id] = true, _10)), _9)) });
             }
             else {
                 return state;
@@ -547,9 +553,11 @@ function useFormData2(_a) {
         setInput({ step: step, id: id, value: value, error: false });
     }, [id]);
     function validation(e) {
-        if (required || typeof validate === 'function') {
+        if (required || validate) {
+            console.log('INSIDE VALIDATE');
             return validate ? validate(e) : !e.target.value;
         }
+        console.log('OUTSIDE VALIDATE');
         return false;
     }
     var onChange = function (e) {
@@ -558,7 +566,7 @@ function useFormData2(_a) {
             step: step,
             id: e.target.name,
             value: e.target.type === 'number' ? parseFloat(e.target.value) : e.target.value,
-            error: false,
+            error: validation(e),
         });
     };
     var onBlur = function (e) {
@@ -620,8 +628,7 @@ var Input = function (_a) {
         style: { display: "block" },
         errMsg: errMsg,
     };
-    return (React.createElement("label", { id: id + "-label", "data-label-id": id + "-label", htmlFor: id, className: "flow-form-label " + className + "-label", style: __assign({ display: "block", minHeight: '4rem' }, style) },
-        id,
+    return (React.createElement("label", { id: id + "-label", "data-label-id": id + "-label", htmlFor: id, className: "flow-form-label " + className + "-label", style: __assign({ display: "block", minHeight: '4rem' }, style) }, children !== null && children !== void 0 ? children : name,
         (function () {
             switch (type) {
                 case 'text':

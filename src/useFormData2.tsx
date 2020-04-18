@@ -18,7 +18,7 @@ export function useFormData2({ step, id, value, required, validate }: IUseFormDa
   }, [id]);
 
   function validation(e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>): boolean {
-    if (required || typeof validate === 'function') {
+    if (required || validate) {
       return validate ? validate(e) : !e.target.value;
     }
     return false;
@@ -31,7 +31,7 @@ export function useFormData2({ step, id, value, required, validate }: IUseFormDa
       step,
       id: e.target.name,
       value: e.target.type === 'number' ? parseFloat(e.target.value) : e.target.value,
-      error: false,
+      error: validation(e),
     });
   };
 
