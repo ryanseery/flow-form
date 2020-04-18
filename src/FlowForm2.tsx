@@ -3,6 +3,7 @@ import { Context, Wrapper, IStepState } from './Context';
 import { FFComponent } from './FFComponent';
 import { IStep } from './Step';
 import { toCamelCase } from './utils';
+import { IShowData } from './ShowData';
 
 interface IForm {
   ffComp?: string;
@@ -40,7 +41,7 @@ function handleChildObj(children: React.ReactNode): IStepState[] | [] | undefine
 }
 
 const Form: React.FC<IForm> = ({ children, onSubmit, className, style }) => {
-  const { data, setForm } = React.useContext(Context);
+  const { flow, data, setForm } = React.useContext(Context);
 
   // console.log('FLOW: ', { isFlowForm, flow, data, error });
 
@@ -59,6 +60,15 @@ const Form: React.FC<IForm> = ({ children, onSubmit, className, style }) => {
     });
   }, []);
 
+  const isThereShowData = React.useMemo(
+    () =>
+      Array.isArray(children) &&
+      children.filter(child =>
+        React.isValidElement<IShowData>(child) && child.props.flowComp === FFComponent.SHOW_DATA ? child : null,
+      ),
+    [],
+  );
+
   return (
     <form
       onSubmit={e => {
@@ -68,7 +78,11 @@ const Form: React.FC<IForm> = ({ children, onSubmit, className, style }) => {
       className={`flow-form ${className}`}
       style={style}
     >
-      <fieldset style={{ border: `none` }}>{children}</fieldset>
+      <fieldset style={{ border: `none` }}>
+        <>{Array.isArray(children) ? children[flow.key] : children}</>
+      </fieldset>
+
+      {isThereShowData}
     </form>
   );
 };

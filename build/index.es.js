@@ -489,7 +489,7 @@ function handleChildObj(children) {
 }
 var Form = function (_a) {
     var children = _a.children, onSubmit = _a.onSubmit, className = _a.className, style = _a.style;
-    var _b = useContext(Context), data = _b.data, setForm = _b.setForm;
+    var _b = useContext(Context), flow = _b.flow, data = _b.data, setForm = _b.setForm;
     // console.log('FLOW: ', { isFlowForm, flow, data, error });
     // *** IF CURRENT STEP CHANGES? DEPENDENCY? ***
     useEffect(function () {
@@ -504,11 +504,19 @@ var Form = function (_a) {
             },
         });
     }, []);
+    var isThereShowData = useMemo(function () {
+        return Array.isArray(children) &&
+            children.filter(function (child) {
+                return isValidElement(child) && child.props.flowComp === FFComponent$1.SHOW_DATA ? child : null;
+            });
+    }, []);
     return (createElement("form", { onSubmit: function (e) {
             e.preventDefault();
             onSubmit(data);
         }, className: "flow-form " + className, style: style },
-        createElement("fieldset", { style: { border: "none" } }, children)));
+        createElement("fieldset", { style: { border: "none" } },
+            createElement(Fragment, null, Array.isArray(children) ? children[flow.key] : children)),
+        isThereShowData));
 };
 Form.defaultProps = {
     ffComp: FFComponent$1.FORM,
@@ -550,10 +558,8 @@ function useFormData2(_a) {
     }, [id]);
     function validation(e) {
         if (required || validate) {
-            console.log('INSIDE VALIDATE');
             return validate ? validate(e) : !e.target.value;
         }
-        console.log('OUTSIDE VALIDATE');
         return false;
     }
     var onChange = function (e) {
