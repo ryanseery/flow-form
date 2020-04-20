@@ -63,20 +63,22 @@ type FocusArgs = {
 
 interface IContext extends IState {
   setForm: ({ isFlowForm, flow }: SetFormArgs) => void;
-  setInput: ({ step, id, value, error }: ValueArgs) => void;
-  updateInput: ({ step, id, value, error }: ValueArgs) => void;
+  setField: ({ step, id, value, error }: ValueArgs) => void;
+  updateField: ({ step, id, value, error }: ValueArgs) => void;
   updateBlur: ({ step, id, showError }: BlurArgs) => void;
   updateFocus: ({ step, id }: FocusArgs) => void;
+  updateForm: () => void;
 }
 
 export const Context = React.createContext({} as IContext);
 
 enum ACTIONS {
   SET_FORM = 'SET_FORM',
-  SET_INPUT = 'SET_INPUT',
-  UPDATE_INPUT = 'UPDATE_INPUT',
+  SET_FIELD = 'SET_FIELD',
+  UPDATE_FIELD = 'UPDATE_FIELD',
   UPDATE_BLUR = 'UPDATE_BLUR',
   UPDATE_FOCUS = 'UPDATE_FOCUS',
+  UPDATE_FORM = 'UPDATE_FORM',
 }
 
 interface SetForm extends SetFormArgs {
@@ -88,22 +90,22 @@ const setForm = ({ isFlowForm, flow }: SetFormArgs): SetForm => ({
   flow,
 });
 
-interface SetInput extends ValueArgs {
-  type: ACTIONS.SET_INPUT;
+interface SetField extends ValueArgs {
+  type: ACTIONS.SET_FIELD;
 }
-const setInput = ({ step, id, value, error }: ValueArgs): SetInput => ({
-  type: ACTIONS.SET_INPUT,
+const setInput = ({ step, id, value, error }: ValueArgs): SetField => ({
+  type: ACTIONS.SET_FIELD,
   step,
   id,
   value,
   error,
 });
 
-interface UpdateInput extends ValueArgs {
-  type: ACTIONS.UPDATE_INPUT;
+interface UpdateField extends ValueArgs {
+  type: ACTIONS.UPDATE_FIELD;
 }
-const updateInput = ({ step, id, value, error }: ValueArgs): UpdateInput => ({
-  type: ACTIONS.UPDATE_INPUT,
+const updateInput = ({ step, id, value, error }: ValueArgs): UpdateField => ({
+  type: ACTIONS.UPDATE_FIELD,
   step,
   id,
   value,
@@ -129,17 +131,22 @@ const updateFocus = ({ step, id }: FocusArgs): UpdateFocus => ({
   id,
 });
 
-type Action = SetForm | SetInput | UpdateInput | UpdateBlur | UpdateFocus;
+interface UpdateForm {
+  type: ACTIONS.UPDATE_FORM;
+}
+const updateForm = (): UpdateForm => ({
+  type: ACTIONS.UPDATE_FORM,
+});
+
+type Action = SetForm | SetField | UpdateField | UpdateBlur | UpdateFocus | UpdateForm;
 
 function reducer(state: IState, action: Action): IState {
-  console.log('REDUCER: ', { state, action });
-
   switch (action.type) {
     case ACTIONS.SET_FORM: {
       const { isFlowForm, flow } = action;
       return { ...state, isFlowForm, flow };
     }
-    case ACTIONS.SET_INPUT: {
+    case ACTIONS.SET_FIELD: {
       const { step, id, value, error } = action;
       if (step == null) {
         return {
@@ -197,7 +204,7 @@ function reducer(state: IState, action: Action): IState {
         return state;
       }
     }
-    case ACTIONS.UPDATE_INPUT: {
+    case ACTIONS.UPDATE_FIELD: {
       const { step, id, value, error } = action;
       if (step == null) {
         return {
@@ -318,6 +325,17 @@ function reducer(state: IState, action: Action): IState {
         return state;
       }
     }
+    case ACTIONS.UPDATE_FORM: {
+      const key = state.flow.key + 1;
+      return {
+        ...state,
+        flow: {
+          ...state.flow,
+          key,
+          currentStep: state?.flow?.steps?.[key],
+        },
+      };
+    }
     default:
       throw new Error(`Context Reducer Received Unrecognized Action!`);
   }
@@ -331,10 +349,11 @@ export const Wrapper: React.FC<IWrapper> = ({ children }) => {
   const actions = React.useMemo(() => {
     return {
       setForm: ({ isFlowForm, flow }: SetFormArgs) => dispatch(setForm({ isFlowForm, flow })),
-      setInput: ({ step, id, value, error }: ValueArgs) => dispatch(setInput({ step, id, value, error })),
-      updateInput: ({ step, id, value, error }: ValueArgs) => dispatch(updateInput({ step, id, value, error })),
+      setField: ({ step, id, value, error }: ValueArgs) => dispatch(setInput({ step, id, value, error })),
+      updateField: ({ step, id, value, error }: ValueArgs) => dispatch(updateInput({ step, id, value, error })),
       updateBlur: ({ step, id, showError }: BlurArgs) => dispatch(updateBlur({ step, id, showError })),
       updateFocus: ({ step, id }: FocusArgs) => dispatch(updateFocus({ step, id })),
+      updateForm: () => dispatch(updateForm()),
     };
   }, []);
 

@@ -1,9 +1,9 @@
 import * as React from 'react';
-import { useFormData2 } from '../../useFormData2';
-import { IInput } from '../Input';
+import { useFormData } from '../../useFormData';
+import { IField } from '../Field';
 import { Error } from '../../Error';
 
-interface INumber extends IInput {
+interface INumber extends IField {
   id: string;
   label?: string;
 }
@@ -21,7 +21,7 @@ export const Number: React.FC<INumber> = ({
   label,
   errMsg,
 }) => {
-  const { value, onChange, onBlur, onFocus, showError } = useFormData2({ step, id, value: '', required, validate });
+  const { value, onChange, onBlur, onFocus, showError } = useFormData({ step, id, value: '', required, validate });
 
   return (
     <>

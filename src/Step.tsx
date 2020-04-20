@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { FFComponent } from './FFComponent';
 import { toKebabCase, toCamelCase } from './utils';
-import { IInput } from './Input/Input';
+import { IField } from './Field/Field';
 
 export interface IStep {
   ffComp: string;
@@ -16,9 +16,9 @@ export const Step: React.FC<IStep> = ({ children, title }) => {
   return (
     <div data-step-id={toCamelCase(title)} className={`flow-from-step ${title && toKebabCase(title)}`}>
       {React.Children.map(children, (child, index) => {
-        // if child is Input component we clone props into it
-        if (React.isValidElement<IInput>(child)) {
-          return React.cloneElement(child as React.ReactElement<IInput>, {
+        // if child is Field component we clone props into it
+        if (React.isValidElement<IField>(child)) {
+          return React.cloneElement(child as React.ReactElement<IField>, {
             index,
             step: toCamelCase(title),
           });

@@ -1,54 +1,60 @@
 import * as React from 'react';
-import { FlowFormContext } from './FlowFormWrapper';
+import { Context } from './Context';
 import { isObjectEmpty } from './utils';
 
-export interface UseFormData {
-  step: string | number;
+interface IUseFormData {
+  step: string | null;
   id: string;
-  value: string | boolean | number | object;
+  value: string;
   required: boolean;
   validate?: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => boolean;
 }
 
-export function useFormData({ step, id, value, required, validate }: UseFormData) {
-  console.log('In Hook');
-  const { data, error, showError, setValue, updateValue, updateBlur } = React.useContext(FlowFormContext);
+export function useFormData({ step, id, value, required, validate }: IUseFormData) {
+  const { setField, data, error, updateField, updateBlur, updateFocus, showError, flow } = React.useContext(Context);
+
+  React.useEffect(() => {
+    console.log('SET FIELD');
+
+    setField({ step, id, value, error: required || validate ? true : false });
+  }, [flow.key]);
 
   function validation(e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>): boolean {
-    if (required) {
+    if (required || validate) {
       return validate ? validate(e) : !e.target.value;
     }
     return false;
   }
 
-  React.useEffect(() => {
-    console.log('USEEEFECT');
-    setValue({ step, id, value, error: required ?? false });
-  }, []);
+  const onChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+    e.persist();
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
-    e.preventDefault();
-
-    updateValue({
+    updateField({
       step,
-      id,
+      id: e.target.name,
       value: e.target.type === 'number' ? parseFloat(e.target.value) : e.target.value,
       error: validation(e),
     });
   };
 
-  const handleBlur = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+  const onBlur = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     e.preventDefault();
 
     updateBlur({ step, id, showError: validation(e) });
   };
 
-  // TODO need to see if id and step are in data before trying to return it.
+  const onFocus = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+    e.preventDefault();
+
+    updateFocus({ step, id });
+  };
+
   return {
-    value: isObjectEmpty(data) ? data[id] : data[step][id],
-    error: isObjectEmpty(error) ? error[id] : error[step][id],
-    showError: isObjectEmpty(showError) ? showError[id] : showError[step][id],
-    handleChange,
-    handleBlur,
+    value: isObjectEmpty(data) ? '' : step != null ? data[step][id] : data[id],
+    error: isObjectEmpty(error) ? '' : step != null ? error[step][id] : error[id],
+    showError: isObjectEmpty(showError) ? false : step != null ? showError[step][id] : showError[id],
+    onChange,
+    onBlur,
+    onFocus,
   };
 }

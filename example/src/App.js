@@ -1,5 +1,5 @@
 import React from 'react';
-import { FlowForm2, Step, Input, ShowData } from 'flow-form';
+import { FlowForm, Step, Field, ShowData } from 'flow-form';
 import './App.css';
 
 function App() {
@@ -14,26 +14,26 @@ function App() {
   // TODO initial Values
   return (
     <div style={{ height: '100vh', display: 'flex', justifyContent: 'center' }}>
-      <FlowForm2>
-        <Input validate={checkString}>Test 1</Input>
+      <FlowForm>
+        <Field validate={checkString}>Test 1</Field>
 
         <ShowData />
-      </FlowForm2>
+      </FlowForm>
 
-      <FlowForm2>
+      <FlowForm>
         <Step title="First Step">
-          <Input validate={checkString}>Test 3</Input>
+          <Field validate={checkString}>Test 3</Field>
         </Step>
 
         <Step title="Second Step">
-          <Input>Test 4</Input>
-          <Input type="number" validate={checkNumber}>
+          <Field>Test 4</Field>
+          <Field type="number" validate={checkNumber}>
             Number
-          </Input>
+          </Field>
         </Step>
 
         <ShowData />
-      </FlowForm2>
+      </FlowForm>
     </div>
   );
 }

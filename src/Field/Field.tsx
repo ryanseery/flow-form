@@ -3,7 +3,7 @@ import { FFComponent } from '../FFComponent';
 import { toCamelCase, toKebabCase } from '../utils';
 import { Text, Number } from './InputTypes';
 
-export interface IInput {
+export interface IField {
   ffComp?: string;
   step: string | null;
   index: number;
@@ -19,7 +19,7 @@ export interface IInput {
   validate?: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => boolean;
 }
 
-export const Input: React.FC<IInput> = ({
+export const Field: React.FC<IField> = ({
   step,
   index,
   name,
@@ -33,7 +33,7 @@ export const Input: React.FC<IInput> = ({
   errMsg,
 }) => {
   if (!name && !children) {
-    throw new Error(`Please provide a label(<Input>Label</Input>) or name prop(<Input name="label" />).`);
+    throw new Error(`Please provide a label(<Field>Label</Field>) or name prop(<Field name="label" />).`);
   }
 
   const id = children ? toCamelCase(children) : toCamelCase(name ?? '');
@@ -77,8 +77,8 @@ export const Input: React.FC<IInput> = ({
   );
 };
 
-Input.defaultProps = {
-  ffComp: FFComponent.INPUT,
+Field.defaultProps = {
+  ffComp: FFComponent.FIELD,
   step: null,
   index: 0,
 };
