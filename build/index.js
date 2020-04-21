@@ -107,8 +107,8 @@ var goBack = function () { return ({
     type: ACTIONS.GO_BACK,
 }); };
 function reducer(state, action) {
-    var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, _m, _o, _p, _q, _r, _s, _t, _u, _v, _w, _x, _y, _z, _0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10;
-    var _11, _12, _13, _14, _15, _16;
+    var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, _m, _o, _p, _q, _r, _s, _t, _u, _v, _w, _x, _y, _z, _0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12;
+    var _13, _14, _15, _16, _17, _18;
     switch (action.type) {
         case ACTIONS.SET_FORM: {
             var isFlowForm = action.isFlowForm, flow = action.flow;
@@ -119,7 +119,7 @@ function reducer(state, action) {
             if (step == null && !state.data[id]) {
                 return __assign(__assign({}, state), { data: __assign(__assign({}, state.data), (_a = {}, _a[id] = value, _a)), error: __assign(__assign({}, state.error), (_b = {}, _b[id] = error, _b)), showError: __assign(__assign({}, state.showError), (_c = {}, _c[id] = false, _c)), touched: __assign(__assign({}, state.touched), (_d = {}, _d[id] = false, _d)) });
             }
-            else if (step != null && !((_12 = (_11 = state.data) === null || _11 === void 0 ? void 0 : _11[step]) === null || _12 === void 0 ? void 0 : _12[id])) {
+            else if (step != null && !((_14 = (_13 = state.data) === null || _13 === void 0 ? void 0 : _13[step]) === null || _14 === void 0 ? void 0 : _14[id])) {
                 return __assign(__assign({}, state), { data: __assign(__assign({}, state.data), (_e = {}, _e[step] = __assign(__assign({}, state.data[step]), (_f = {}, _f[id] = value, _f)), _e)), error: __assign(__assign({}, state.error), (_g = {}, _g[step] = __assign(__assign({}, state.error[step]), (_h = {}, _h[id] = error, _h)), _g)), showError: __assign(__assign({}, state.showError), (_j = {}, _j[step] = __assign(__assign({}, state.showError[step]), (_k = {}, _k[id] = false, _k)), _j)), touched: __assign(__assign({}, state.touched), (_l = {}, _l[step] = __assign(__assign({}, state.touched[step]), (_m = {}, _m[id] = false, _m)), _l)) });
             }
             else {
@@ -129,13 +129,16 @@ function reducer(state, action) {
         case ACTIONS.UPDATE_FIELD: {
             var step = action.step, id = action.id, value = action.value, error = action.error;
             if (step == null) {
-                return __assign(__assign({}, state), { data: __assign(__assign({}, state.data), (_o = {}, _o[id] = value, _o)), error: __assign(__assign({}, state.error), (_p = {}, _p[id] = error, _p)), showError: __assign(__assign({}, state.showError), (_q = {}, _q[id] = error, _q)) });
-            }
-            else if (step != null) {
-                return __assign(__assign({}, state), { canProceed: Object.entries(__assign(__assign({}, state.error[step]), (_r = {}, _r[id] = error, _r))).every(function (_a) {
+                return __assign(__assign({}, state), { canProceed: Object.entries(__assign(__assign({}, state.error), (_o = {}, _o[id] = error, _o))).every(function (_a) {
                         var _ = _a[0], v = _a[1];
                         return v === false;
-                    }), data: __assign(__assign({}, state.data), (_s = {}, _s[step] = __assign(__assign({}, state.data[step]), (_t = {}, _t[id] = value, _t)), _s)), error: __assign(__assign({}, state.error), (_u = {}, _u[step] = __assign(__assign({}, state.error[step]), (_v = {}, _v[id] = error, _v)), _u)), showError: __assign(__assign({}, state.showError), (_w = {}, _w[step] = __assign(__assign({}, state.showError[step]), (_x = {}, _x[id] = error, _x)), _w)) });
+                    }), data: __assign(__assign({}, state.data), (_p = {}, _p[id] = value, _p)), error: __assign(__assign({}, state.error), (_q = {}, _q[id] = error, _q)), showError: __assign(__assign({}, state.showError), (_r = {}, _r[id] = error, _r)) });
+            }
+            else if (step != null) {
+                return __assign(__assign({}, state), { canProceed: Object.entries(__assign(__assign({}, state.error[step]), (_s = {}, _s[id] = error, _s))).every(function (_a) {
+                        var _ = _a[0], v = _a[1];
+                        return v === false;
+                    }), data: __assign(__assign({}, state.data), (_t = {}, _t[step] = __assign(__assign({}, state.data[step]), (_u = {}, _u[id] = value, _u)), _t)), error: __assign(__assign({}, state.error), (_v = {}, _v[step] = __assign(__assign({}, state.error[step]), (_w = {}, _w[id] = error, _w)), _v)), showError: __assign(__assign({}, state.showError), (_x = {}, _x[step] = __assign(__assign({}, state.showError[step]), (_y = {}, _y[id] = error, _y)), _x)) });
             }
             else {
                 return state;
@@ -144,13 +147,16 @@ function reducer(state, action) {
         case ACTIONS.UPDATE_BLUR: {
             var step = action.step, id = action.id, showError = action.showError;
             if (step == null) {
-                return __assign(__assign({}, state), { error: __assign(__assign({}, state.error), (_y = {}, _y[id] = showError, _y)), showError: __assign(__assign({}, state.showError), (_z = {}, _z[id] = showError, _z)), touched: __assign(__assign({}, state.touched), (_0 = {}, _0[id] = false, _0)) });
-            }
-            else if (step != null) {
-                return __assign(__assign({}, state), { canProceed: Object.entries(__assign(__assign({}, state.error[step]), (_1 = {}, _1[id] = showError, _1))).every(function (_a) {
+                return __assign(__assign({}, state), { canProceed: Object.entries(__assign(__assign({}, state.error), (_z = {}, _z[id] = showError, _z))).every(function (_a) {
                         var _ = _a[0], v = _a[1];
                         return v === false;
-                    }), error: __assign(__assign({}, state.error), (_2 = {}, _2[step] = __assign(__assign({}, state.error[step]), (_3 = {}, _3[id] = showError, _3)), _2)), showError: __assign(__assign({}, state.showError), (_4 = {}, _4[step] = __assign(__assign({}, state.showError[step]), (_5 = {}, _5[id] = showError, _5)), _4)), touched: __assign(__assign({}, state.touched), (_6 = {}, _6[step] = __assign(__assign({}, state.touched[step]), (_7 = {}, _7[id] = false, _7)), _6)) });
+                    }), error: __assign(__assign({}, state.error), (_0 = {}, _0[id] = showError, _0)), showError: __assign(__assign({}, state.showError), (_1 = {}, _1[id] = showError, _1)), touched: __assign(__assign({}, state.touched), (_2 = {}, _2[id] = false, _2)) });
+            }
+            else if (step != null) {
+                return __assign(__assign({}, state), { canProceed: Object.entries(__assign(__assign({}, state.error[step]), (_3 = {}, _3[id] = showError, _3))).every(function (_a) {
+                        var _ = _a[0], v = _a[1];
+                        return v === false;
+                    }), error: __assign(__assign({}, state.error), (_4 = {}, _4[step] = __assign(__assign({}, state.error[step]), (_5 = {}, _5[id] = showError, _5)), _4)), showError: __assign(__assign({}, state.showError), (_6 = {}, _6[step] = __assign(__assign({}, state.showError[step]), (_7 = {}, _7[id] = showError, _7)), _6)), touched: __assign(__assign({}, state.touched), (_8 = {}, _8[step] = __assign(__assign({}, state.touched[step]), (_9 = {}, _9[id] = false, _9)), _8)) });
             }
             else {
                 return state;
@@ -159,10 +165,10 @@ function reducer(state, action) {
         case ACTIONS.UPDATE_FOCUS: {
             var step = action.step, id = action.id;
             if (step == null) {
-                return __assign(__assign({}, state), { touched: __assign(__assign({}, state.touched), (_8 = {}, _8[id] = true, _8)) });
+                return __assign(__assign({}, state), { touched: __assign(__assign({}, state.touched), (_10 = {}, _10[id] = true, _10)) });
             }
             else if (step != null) {
-                return __assign(__assign({}, state), { touched: __assign(__assign({}, state.touched), (_9 = {}, _9[step] = __assign(__assign({}, state.touched[step]), (_10 = {}, _10[id] = true, _10)), _9)) });
+                return __assign(__assign({}, state), { touched: __assign(__assign({}, state.touched), (_11 = {}, _11[step] = __assign(__assign({}, state.touched[step]), (_12 = {}, _12[id] = true, _12)), _11)) });
             }
             else {
                 return state;
@@ -170,11 +176,11 @@ function reducer(state, action) {
         }
         case ACTIONS.UPDATE_FORM: {
             var key = state.flow.key + 1;
-            return __assign(__assign({}, state), { flow: __assign(__assign({}, state.flow), { key: key, currentStep: (_14 = (_13 = state === null || state === void 0 ? void 0 : state.flow) === null || _13 === void 0 ? void 0 : _13.steps) === null || _14 === void 0 ? void 0 : _14[key] }) });
+            return __assign(__assign({}, state), { flow: __assign(__assign({}, state.flow), { key: key, currentStep: (_16 = (_15 = state === null || state === void 0 ? void 0 : state.flow) === null || _15 === void 0 ? void 0 : _15.steps) === null || _16 === void 0 ? void 0 : _16[key] }) });
         }
         case ACTIONS.GO_BACK: {
             var key = state.flow.key - 1;
-            return __assign(__assign({}, state), { flow: __assign(__assign({}, state.flow), { key: key, currentStep: (_16 = (_15 = state === null || state === void 0 ? void 0 : state.flow) === null || _15 === void 0 ? void 0 : _15.steps) === null || _16 === void 0 ? void 0 : _16[key] }) });
+            return __assign(__assign({}, state), { flow: __assign(__assign({}, state.flow), { key: key, currentStep: (_18 = (_17 = state === null || state === void 0 ? void 0 : state.flow) === null || _17 === void 0 ? void 0 : _17.steps) === null || _18 === void 0 ? void 0 : _18[key] }) });
         }
         default:
             throw new Error("Context Reducer Received Unrecognized Action!");
@@ -227,6 +233,11 @@ var FFComponent;
     FFComponent["TEL"] = "TEL";
     FFComponent["TEXTAREA"] = "TEXTAREA";
     FFComponent["URL"] = "URL";
+    FFComponent["PROGRESS"] = "PROGRESS";
+    FFComponent["DOUGHNUT"] = "DOUGHNUT";
+    FFComponent["DEFAULT_SUBMIT"] = "DEFAULT_SUBMIT";
+    FFComponent["DEFAULT_NEXT"] = "DEFAULT_NEXT";
+    FFComponent["DEFAULT_BACK"] = "DEFAULT_BACK";
 })(FFComponent || (FFComponent = {}));
 
 function toKebabCase(str) {
@@ -252,49 +263,115 @@ function isObjectEmpty(obj) {
     return Object.keys(obj).length === 0 && obj.constructor === Object;
 }
 
-// TODO find out why undefined an null are an expected return type
+var DefaultSubmit = function (_a) {
+    var disabled = _a.disabled;
+    return (React.createElement("button", { type: "submit", className: "flow-form-submit-btm", disabled: disabled }, "Submit"));
+};
+DefaultSubmit.defaultProps = {
+    ffComp: FFComponent.DEFAULT_SUBMIT,
+};
+
+var DefaultNext = function (_a) {
+    var disabled = _a.disabled, onClick = _a.onClick;
+    return (React.createElement("button", { type: "button", className: "flow-form-next-btn", disabled: disabled, onClick: onClick }, "Next"));
+};
+DefaultNext.defaultProps = {
+    ffComp: FFComponent.DEFAULT_NEXT,
+};
+
+var DefaultBack = function (_a) {
+    var onClick = _a.onClick;
+    return (React.createElement("button", { type: "button", className: "flow-form-back-btn", onClick: onClick }, "Back"));
+};
+DefaultBack.defaultProps = {
+    ffComp: FFComponent.DEFAULT_BACK,
+};
+
+var colors = {
+    blue: '#00A0DF',
+    grey: '#E6E6E6',
+    white: '#ffffff',
+};
+
+var Doughnut = function (_a) {
+    var isActive = _a.isActive;
+    return (React.createElement("span", { className: "flow-form-doughnut", style: {
+            background: isActive
+                ? "radial-gradient(circle, transparent 30%, " + colors.blue + " 40%)"
+                : "radial-gradient(circle, transparent 30%, " + colors.grey + " 40%)",
+            borderRadius: '80%',
+            height: '15px',
+            width: '18px',
+            marginRight: '1px',
+            paddingTop: '3px',
+            fontSize: '1em',
+            textAlign: 'center',
+            color: "" + colors.white,
+        } }));
+};
+Doughnut.defaultProps = {
+    ffComp: FFComponent.DOUGHNUT,
+};
+var Progress = function (_a) {
+    var steps = _a.steps, currentStep = _a.currentStep;
+    return (React.createElement("div", { className: "flow-form-progress", style: {
+            display: 'flex',
+            flexDirection: 'row',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            borderBottom: "1px solid " + colors.grey,
+            paddingBottom: '5px',
+            marginBottom: '5px',
+        } }, steps === null || steps === void 0 ? void 0 : steps.map(function (step) { return (React.createElement("div", { key: step.id, className: "flow-form-title-container", style: { display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'center' } },
+        React.createElement(Doughnut, { isActive: step.index === (currentStep === null || currentStep === void 0 ? void 0 : currentStep.index) }),
+        React.createElement("span", { className: "flow-form-title", style: {
+                color: step.index === (currentStep === null || currentStep === void 0 ? void 0 : currentStep.index) ? "" + colors.blue : "" + colors.grey,
+                fontSize: '1em',
+            } }, step.title))); })));
+};
+Progress.defaultProps = {
+    ffComp: FFComponent.PROGRESS,
+};
+
 function handleChildArr(children) {
-    return React.Children.map(children, function (child, index) {
-        if (!React.isValidElement(child)) {
-            return null;
+    var arr = [];
+    React.Children.map(children, function (child, index) {
+        if (React.isValidElement(child)) {
+            if (child.props.ffComp === FFComponent.STEP) {
+                arr.push({ id: toCamelCase(child.props.title), title: child.props.title, index: index });
+            }
         }
-        if (child.props.ffComp === FFComponent.STEP) {
-            return { id: toCamelCase(child.props.title), title: child.props.title, index: index };
-        }
-        return null;
     });
+    return arr;
 }
-// TODO find out why undefined an null are an expected return type
 function handleChildObj(children) {
-    if (!React.isValidElement(children)) {
-        return [];
-    }
-    if (children.props.ffComp === FFComponent.STEP) {
+    if (React.isValidElement(children)) {
         return [{ id: toCamelCase(children.props.title), title: children.props.title, index: 0 }];
     }
-    return [];
+    else {
+        return [];
+    }
 }
 var Form = function (_a) {
     var children = _a.children, onSubmit = _a.onSubmit, className = _a.className, style = _a.style;
     var _b, _c;
-    var _d = React.useContext(Context), isFlowForm = _d.isFlowForm, canProceed = _d.canProceed, flow = _d.flow, data = _d.data, error = _d.error, setForm = _d.setForm, updateForm = _d.updateForm, goBack = _d.goBack;
-    console.log('FLOW: ', { isFlowForm: isFlowForm, flow: flow, data: data, error: error });
+    var _d = React.useContext(Context), isFlowForm = _d.isFlowForm, canProceed = _d.canProceed, flow = _d.flow, data = _d.data, setForm = _d.setForm, updateForm = _d.updateForm, goBack = _d.goBack;
     React.useEffect(function () {
         var steps = Array.isArray(children) ? handleChildArr(children) : handleChildObj(children);
         setForm({
             isFlowForm: (steps === null || steps === void 0 ? void 0 : steps.length) !== 0,
             flow: {
                 key: 0,
-                end: Array.isArray(steps) ? steps.length - 1 : 0,
+                end: steps.length > 0 ? steps.length - 1 : 0,
                 steps: steps,
-                currentStep: Array.isArray(steps) && steps.length !== 0 ? steps[0] : null,
+                currentStep: steps.length !== 0 ? steps[0] : null,
             },
         });
     }, []);
     var isThereShowData = React.useMemo(function () {
         return Array.isArray(children) &&
             children.filter(function (child) {
-                return React.isValidElement(child) && child.props.flowComp === FFComponent.SHOW_DATA ? child : null;
+                return React.isValidElement(child) && child.props.ffComp === FFComponent.SHOW_DATA ? child : null;
             });
     }, []);
     return (React.createElement("form", { onSubmit: function (e) {
@@ -302,11 +379,11 @@ var Form = function (_a) {
             onSubmit(data);
         }, className: "flow-form " + className, style: style },
         React.createElement("fieldset", { style: { border: "none" } },
+            isFlowForm && React.createElement(Progress, { steps: flow.steps, currentStep: flow.currentStep }),
             React.createElement(React.Fragment, null, Array.isArray(children) ? children[flow.key] : children),
-            !isFlowForm && (React.createElement("button", { type: "submit", className: "flow-form-submit-btn" }, "Submit")),
-            isFlowForm && (React.createElement(React.Fragment, null,
-                flow.currentStep != null && ((_b = flow.currentStep) === null || _b === void 0 ? void 0 : _b.index) > 0 && (React.createElement("button", { type: "button", className: "flow-form-back-btn", onClick: function () { return goBack(); } }, "Back")),
-                flow.end !== ((_c = flow.currentStep) === null || _c === void 0 ? void 0 : _c.index) ? (React.createElement("button", { type: "button", className: "flow-form-next-btn", disabled: !canProceed, onClick: function () { return updateForm(); } }, canProceed ? "Next" : "Can't Proceed")) : (React.createElement("button", { type: "submit", className: "flow-form-submit-btm" }, "Submit")))),
+            isFlowForm ? (React.createElement(React.Fragment, null,
+                flow.currentStep != null && ((_b = flow.currentStep) === null || _b === void 0 ? void 0 : _b.index) > 0 && React.createElement(DefaultBack, { onClick: function () { return goBack(); } }),
+                flow.end !== ((_c = flow.currentStep) === null || _c === void 0 ? void 0 : _c.index) ? (React.createElement(DefaultNext, { disabled: !canProceed, onClick: function () { return updateForm(); } })) : (React.createElement(DefaultSubmit, { disabled: !canProceed })))) : (React.createElement(DefaultSubmit, { disabled: !canProceed })),
             isThereShowData)));
 };
 Form.defaultProps = {
@@ -534,7 +611,7 @@ var ShowData = function (_a) {
     return (React.createElement("pre", { className: "flow-form-show-data", style: style }, JSON.stringify({ isFlowForm: isFlowForm, canProceed: canProceed, flow: flow, data: data, error: error, showError: showError, touched: touched }, null, 2)));
 };
 ShowData.defaultProps = {
-    flowComp: FFComponent.SHOW_DATA,
+    ffComp: FFComponent.SHOW_DATA,
 };
 
 var Submit = function (_a) {

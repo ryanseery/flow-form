@@ -9,8 +9,8 @@ export interface IStepState {
 interface IFlow {
   key: number;
   end: number;
-  steps: IStepState[] | [] | null | undefined;
-  currentStep: IStepState | null | undefined;
+  steps: IStepState[] | [];
+  currentStep: IStepState | null;
 }
 
 interface IState {
@@ -218,6 +218,7 @@ function reducer(state: IState, action: Action): IState {
       if (step == null) {
         return {
           ...state,
+          canProceed: Object.entries({ ...state.error, [id]: error }).every(([_, v]) => v === false),
           data: {
             ...state.data,
             [id]: value,
@@ -266,6 +267,7 @@ function reducer(state: IState, action: Action): IState {
       if (step == null) {
         return {
           ...state,
+          canProceed: Object.entries({ ...state.error, [id]: showError }).every(([_, v]) => v === false),
           error: {
             ...state.error,
             [id]: showError,

@@ -3,7 +3,7 @@ import { Context } from './Context';
 import { FFComponent } from './FFComponent';
 
 export interface IShowData {
-  flowComp: string;
+  ffComp: string;
   style?: {};
 }
 
@@ -18,5 +18,5 @@ export const ShowData: React.FC<IShowData> = ({ style }) => {
 };
 
 ShowData.defaultProps = {
-  flowComp: FFComponent.SHOW_DATA,
+  ffComp: FFComponent.SHOW_DATA,
 };
