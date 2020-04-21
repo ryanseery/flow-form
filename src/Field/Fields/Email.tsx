@@ -4,15 +4,15 @@ import { useFormData } from '../../useFormData';
 import { IField } from '../Field';
 import { Error } from '../../Error';
 
-interface IText extends IField {
+interface IEmail extends IField {
   id: string;
   label?: string;
 }
 
-export const Text: React.FC<IText> = ({
+export const Email: React.FC<IEmail> = ({
   step,
   id,
-  type = 'text',
+  type = 'email',
   required = false,
   validate,
   placeholder,
@@ -27,8 +27,8 @@ export const Text: React.FC<IText> = ({
   return (
     <>
       <input
-        id={`${id}-field-text`}
-        data-input-id={`${id}-field-text`}
+        id={`${id}-field-email`}
+        data-input-id={`${id}-field-email`}
         name={id}
         type={type}
         value={value || ''}
@@ -36,7 +36,7 @@ export const Text: React.FC<IText> = ({
         onChange={onChange}
         onBlur={onBlur}
         onFocus={onFocus}
-        className={`flow-form-field flow-form-text ${className}-field`}
+        className={`flow-form-field flow-form-email ${className}-field`}
         placeholder={placeholder}
         autoComplete={autoComplete}
         style={style}
@@ -46,6 +46,6 @@ export const Text: React.FC<IText> = ({
   );
 };
 
-Text.defaultProps = {
-  ffComp: FFComponent.TEXT,
+Email.defaultProps = {
+  ffComp: FFComponent.EMAIL,
 };

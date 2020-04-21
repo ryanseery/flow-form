@@ -68,6 +68,7 @@ interface IContext extends IState {
   updateBlur: ({ step, id, showError }: BlurArgs) => void;
   updateFocus: ({ step, id }: FocusArgs) => void;
   updateForm: () => void;
+  goBack: () => void;
 }
 
 export const Context = React.createContext({} as IContext);
@@ -79,6 +80,7 @@ enum ACTIONS {
   UPDATE_BLUR = 'UPDATE_BLUR',
   UPDATE_FOCUS = 'UPDATE_FOCUS',
   UPDATE_FORM = 'UPDATE_FORM',
+  GO_BACK = 'GO_BACK',
 }
 
 interface SetForm extends SetFormArgs {
@@ -138,7 +140,14 @@ const updateForm = (): UpdateForm => ({
   type: ACTIONS.UPDATE_FORM,
 });
 
-type Action = SetForm | SetField | UpdateField | UpdateBlur | UpdateFocus | UpdateForm;
+interface GoBack {
+  type: ACTIONS.GO_BACK;
+}
+const goBack = (): GoBack => ({
+  type: ACTIONS.GO_BACK,
+});
+
+type Action = SetForm | SetField | UpdateField | UpdateBlur | UpdateFocus | UpdateForm | GoBack;
 
 function reducer(state: IState, action: Action): IState {
   switch (action.type) {
@@ -336,6 +345,17 @@ function reducer(state: IState, action: Action): IState {
         },
       };
     }
+    case ACTIONS.GO_BACK: {
+      const key = state.flow.key - 1;
+      return {
+        ...state,
+        flow: {
+          ...state.flow,
+          key,
+          currentStep: state?.flow?.steps?.[key],
+        },
+      };
+    }
     default:
       throw new Error(`Context Reducer Received Unrecognized Action!`);
   }
@@ -354,6 +374,7 @@ export const Wrapper: React.FC<IWrapper> = ({ children }) => {
       updateBlur: ({ step, id, showError }: BlurArgs) => dispatch(updateBlur({ step, id, showError })),
       updateFocus: ({ step, id }: FocusArgs) => dispatch(updateFocus({ step, id })),
       updateForm: () => dispatch(updateForm()),
+      goBack: () => dispatch(goBack()),
     };
   }, []);
 

@@ -4,12 +4,13 @@ import { useFormData } from '../../useFormData';
 import { IField } from '../Field';
 import { Error } from '../../Error';
 
-interface IText extends IField {
+interface IUrl extends IField {
   id: string;
   label?: string;
+  pattern?: string;
 }
 
-export const Text: React.FC<IText> = ({
+export const Url: React.FC<IUrl> = ({
   step,
   id,
   type = 'text',
@@ -21,14 +22,15 @@ export const Text: React.FC<IText> = ({
   className,
   label,
   errMsg,
+  pattern = 'https://.*',
 }) => {
   const { value, onChange, onBlur, onFocus, showError } = useFormData({ step, id, value: '', required, validate });
 
   return (
     <>
       <input
-        id={`${id}-field-text`}
-        data-input-id={`${id}-field-text`}
+        id={`${id}-filed-url`}
+        data-input-id={`${id}-field-url`}
         name={id}
         type={type}
         value={value || ''}
@@ -36,16 +38,17 @@ export const Text: React.FC<IText> = ({
         onChange={onChange}
         onBlur={onBlur}
         onFocus={onFocus}
-        className={`flow-form-field flow-form-text ${className}-field`}
+        className={`flow-form-field flow-form-url ${className}-field`}
         placeholder={placeholder}
         autoComplete={autoComplete}
         style={style}
+        pattern={pattern}
       />
       {showError && <Error id={id} className={className} label={label} errMsg={errMsg} />}
     </>
   );
 };
 
-Text.defaultProps = {
-  ffComp: FFComponent.TEXT,
+Url.defaultProps = {
+  ffComp: FFComponent.URL,
 };

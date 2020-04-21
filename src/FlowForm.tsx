@@ -41,7 +41,7 @@ function handleChildObj(children: React.ReactNode): IStepState[] | [] | undefine
 }
 
 const Form: React.FC<IForm> = ({ children, onSubmit, className, style }) => {
-  const { isFlowForm, canProceed, flow, data, setForm, updateForm, error } = React.useContext(Context);
+  const { isFlowForm, canProceed, flow, data, error, setForm, updateForm, goBack } = React.useContext(Context);
 
   console.log('FLOW: ', { isFlowForm, flow, data, error });
 
@@ -92,7 +92,7 @@ const Form: React.FC<IForm> = ({ children, onSubmit, className, style }) => {
         {isFlowForm && (
           <>
             {flow.currentStep != null && flow.currentStep?.index > 0 && (
-              <button type="button" className="flow-form-back-btn">
+              <button type="button" className="flow-form-back-btn" onClick={() => goBack()}>
                 Back
               </button>
             )}

@@ -4,15 +4,16 @@ import { useFormData } from '../../useFormData';
 import { IField } from '../Field';
 import { Error } from '../../Error';
 
-interface IText extends IField {
+interface ITextArea extends IField {
   id: string;
   label?: string;
+  rows?: number;
+  cols?: number;
 }
 
-export const Text: React.FC<IText> = ({
+export const TextArea: React.FC<ITextArea> = ({
   step,
   id,
-  type = 'text',
   required = false,
   validate,
   placeholder,
@@ -21,31 +22,34 @@ export const Text: React.FC<IText> = ({
   className,
   label,
   errMsg,
+  rows = 4,
+  cols = 20,
 }) => {
   const { value, onChange, onBlur, onFocus, showError } = useFormData({ step, id, value: '', required, validate });
 
   return (
     <>
-      <input
-        id={`${id}-field-text`}
-        data-input-id={`${id}-field-text`}
+      <textarea
+        id={`${id}-field-textarea`}
+        data-input-id={`${id}-field-textarea`}
         name={id}
-        type={type}
         value={value || ''}
         required={required}
         onChange={onChange}
         onBlur={onBlur}
         onFocus={onFocus}
-        className={`flow-form-field flow-form-text ${className}-field`}
+        className={`flow-form-field flow-form-textarea ${className}-field`}
         placeholder={placeholder}
         autoComplete={autoComplete}
         style={style}
+        rows={rows}
+        cols={cols}
       />
       {showError && <Error id={id} className={className} label={label} errMsg={errMsg} />}
     </>
   );
 };
 
-Text.defaultProps = {
-  ffComp: FFComponent.TEXT,
+TextArea.defaultProps = {
+  ffComp: FFComponent.TEXTAREA,
 };

@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { FFComponent } from '../FFComponent';
 import { toCamelCase, toKebabCase } from '../utils';
-import { Text, Number } from './Fields';
+import { Text, Number, Email, Password, Tel, Url, Color, TextArea } from './Fields';
 
 export interface IField {
   ffComp?: string;
@@ -69,6 +69,18 @@ export const Field: React.FC<IField> = ({
             return <Text {...defaultProps} />;
           case 'number':
             return <Number {...defaultProps} />;
+          case 'email':
+            return <Email {...defaultProps} />;
+          case 'password':
+            return <Password {...defaultProps} />;
+          case 'tel':
+            return <Tel {...defaultProps} />;
+          case 'url':
+            return <Url {...defaultProps} />;
+          case 'color':
+            return <Color {...defaultProps} />;
+          case 'textarea':
+            return <TextArea {...defaultProps} />;
           default:
             return <Text {...defaultProps} />;
         }

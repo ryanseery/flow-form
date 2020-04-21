@@ -4,15 +4,15 @@ import { useFormData } from '../../useFormData';
 import { IField } from '../Field';
 import { Error } from '../../Error';
 
-interface IText extends IField {
+interface IColor extends IField {
   id: string;
   label?: string;
 }
 
-export const Text: React.FC<IText> = ({
+export const Color: React.FC<IColor> = ({
   step,
   id,
-  type = 'text',
+  type = 'color',
   required = false,
   validate,
   placeholder,
@@ -27,16 +27,16 @@ export const Text: React.FC<IText> = ({
   return (
     <>
       <input
-        id={`${id}-field-text`}
-        data-input-id={`${id}-field-text`}
+        id={`${id}-field-color`}
+        data-input-id={`${id}-field-color`}
         name={id}
         type={type}
-        value={value || ''}
+        value={value || '#519839'}
         required={required}
         onChange={onChange}
         onBlur={onBlur}
         onFocus={onFocus}
-        className={`flow-form-field flow-form-text ${className}-field`}
+        className={`flow-form-field flow-form-color ${className}-field`}
         placeholder={placeholder}
         autoComplete={autoComplete}
         style={style}
@@ -46,6 +46,6 @@ export const Text: React.FC<IText> = ({
   );
 };
 
-Text.defaultProps = {
-  ffComp: FFComponent.TEXT,
+Color.defaultProps = {
+  ffComp: FFComponent.COLOR,
 };

@@ -14,7 +14,6 @@ export function useFormData({ step, id, value, required, validate }: IUseFormDat
   const { setField, data, error, updateField, updateBlur, updateFocus, showError, flow } = React.useContext(Context);
 
   React.useEffect(() => {
-    console.log('SET_FIELD: ');
     setField({ step, id, value, error: required || validate ? true : false });
   }, [step, id, flow.currentStep, flow.key]);
 

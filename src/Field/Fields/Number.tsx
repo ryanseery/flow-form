@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { FFComponent } from '../../FFComponent';
 import { useFormData } from '../../useFormData';
 import { IField } from '../Field';
 import { Error } from '../../Error';
@@ -26,8 +27,8 @@ export const Number: React.FC<INumber> = ({
   return (
     <>
       <input
-        id={`${id}-input-number`}
-        data-input-id={`${id}-input-number`}
+        id={`${id}-field-number`}
+        data-input-id={`${id}-field-number`}
         name={id}
         type={type}
         value={value || ''}
@@ -35,7 +36,7 @@ export const Number: React.FC<INumber> = ({
         onChange={onChange}
         onBlur={onBlur}
         onFocus={onFocus}
-        className={`flow-form-input flow-form-number ${className}-input`}
+        className={`flow-form-field flow-form-number ${className}-field`}
         placeholder={placeholder}
         autoComplete={autoComplete}
         style={style}
@@ -43,4 +44,8 @@ export const Number: React.FC<INumber> = ({
       {showError && <Error id={id} className={className} label={label} errMsg={errMsg} />}
     </>
   );
+};
+
+Number.defaultProps = {
+  ffComp: FFComponent.NUMBER,
 };

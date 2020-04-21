@@ -4,24 +4,6 @@ Object.defineProperty(exports, '__esModule', { value: true });
 
 var React = require('react');
 
-var FFComponent;
-(function (FFComponent) {
-    FFComponent["FORM"] = "FORM";
-    FFComponent["FIELD"] = "FIELD";
-    FFComponent["STEP"] = "STEP";
-    FFComponent["SHOW_DATA"] = "SHOW_DATA";
-    FFComponent["TEXT"] = "TEXT";
-    FFComponent["SUBMIT"] = "SUBMIT";
-})(FFComponent || (FFComponent = {}));
-
-var Submit = function (_a) {
-    var className = _a.className, title = _a.title;
-    return (React.createElement("button", { type: "submit", className: "flow-form-submit-btn " + (className !== null && className !== void 0 ? className : '') }, title !== null && title !== void 0 ? title : "Submit"));
-};
-Submit.defaultProps = {
-    ffComp: FFComponent.SUBMIT,
-};
-
 /*! *****************************************************************************
 Copyright (c) Microsoft Corporation. All rights reserved.
 Licensed under the Apache License, Version 2.0 (the "License"); you may not use
@@ -71,6 +53,7 @@ var ACTIONS;
     ACTIONS["UPDATE_BLUR"] = "UPDATE_BLUR";
     ACTIONS["UPDATE_FOCUS"] = "UPDATE_FOCUS";
     ACTIONS["UPDATE_FORM"] = "UPDATE_FORM";
+    ACTIONS["GO_BACK"] = "GO_BACK";
 })(ACTIONS || (ACTIONS = {}));
 var setForm = function (_a) {
     var isFlowForm = _a.isFlowForm, flow = _a.flow;
@@ -120,9 +103,12 @@ var updateFocus = function (_a) {
 var updateForm = function () { return ({
     type: ACTIONS.UPDATE_FORM,
 }); };
+var goBack = function () { return ({
+    type: ACTIONS.GO_BACK,
+}); };
 function reducer(state, action) {
     var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, _m, _o, _p, _q, _r, _s, _t, _u, _v, _w, _x, _y, _z, _0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10;
-    var _11, _12;
+    var _11, _12, _13, _14;
     switch (action.type) {
         case ACTIONS.SET_FORM: {
             var isFlowForm = action.isFlowForm, flow = action.flow;
@@ -186,6 +172,10 @@ function reducer(state, action) {
             var key = state.flow.key + 1;
             return __assign(__assign({}, state), { flow: __assign(__assign({}, state.flow), { key: key, currentStep: (_12 = (_11 = state === null || state === void 0 ? void 0 : state.flow) === null || _11 === void 0 ? void 0 : _11.steps) === null || _12 === void 0 ? void 0 : _12[key] }) });
         }
+        case ACTIONS.GO_BACK: {
+            var key = state.flow.key - 1;
+            return __assign(__assign({}, state), { flow: __assign(__assign({}, state.flow), { key: key, currentStep: (_14 = (_13 = state === null || state === void 0 ? void 0 : state.flow) === null || _13 === void 0 ? void 0 : _13.steps) === null || _14 === void 0 ? void 0 : _14[key] }) });
+        }
         default:
             throw new Error("Context Reducer Received Unrecognized Action!");
     }
@@ -216,34 +206,28 @@ var Wrapper = function (_a) {
                 return dispatch(updateFocus({ step: step, id: id }));
             },
             updateForm: function () { return dispatch(updateForm()); },
+            goBack: function () { return dispatch(goBack()); },
         };
     }, []);
     return React.createElement(Context.Provider, { value: __assign(__assign({}, state), actions) }, children);
 };
 
-var ShowData = function (_a) {
-    var style = _a.style;
-    var _b = React.useContext(Context), isFlowForm = _b.isFlowForm, canProceed = _b.canProceed, flow = _b.flow, data = _b.data, error = _b.error, touched = _b.touched, showError = _b.showError;
-    return (React.createElement("pre", { className: "flow-form-show-data", style: style }, JSON.stringify({ isFlowForm: isFlowForm, canProceed: canProceed, flow: flow, data: data, error: error, showError: showError, touched: touched }, null, 2)));
-};
-ShowData.defaultProps = {
-    flowComp: FFComponent.SHOW_DATA,
-};
-
-var FormContext = React.createContext({});
-var ACTIONS$1;
-(function (ACTIONS) {
-    ACTIONS["SET_DEFAULT_VALUE"] = "SET_DEFAULT_VALUE";
-    ACTIONS["UPDATE_VALUE"] = "UPDATE_VALUE";
-    ACTIONS["UPDATE_BLUR"] = "UPDATE_BLUR";
-    ACTIONS["CLEAR_FORM"] = "CLEAR_FORM";
-})(ACTIONS$1 || (ACTIONS$1 = {}));
-
-var Reset = function (_a) {
-    var className = _a.className, title = _a.title;
-    var clearForm = React.useContext(FormContext).clearForm;
-    return (React.createElement("button", { type: "submit", className: "flow-form-reset " + (className !== null && className !== void 0 ? className : ''), onClick: clearForm }, title !== null && title !== void 0 ? title : "Reset"));
-};
+var FFComponent;
+(function (FFComponent) {
+    FFComponent["FORM"] = "FORM";
+    FFComponent["FIELD"] = "FIELD";
+    FFComponent["STEP"] = "STEP";
+    FFComponent["SHOW_DATA"] = "SHOW_DATA";
+    FFComponent["SUBMIT"] = "SUBMIT";
+    FFComponent["TEXT"] = "TEXT";
+    FFComponent["NUMBER"] = "NUMBER";
+    FFComponent["COLOR"] = "COLOR";
+    FFComponent["EMAIL"] = "EMAIL";
+    FFComponent["PASSWORD"] = "PASSWORD";
+    FFComponent["TEL"] = "TEL";
+    FFComponent["TEXTAREA"] = "TEXTAREA";
+    FFComponent["URL"] = "URL";
+})(FFComponent || (FFComponent = {}));
 
 function toKebabCase(str) {
     if (typeof str !== 'string') {
@@ -293,7 +277,7 @@ function handleChildObj(children) {
 var Form = function (_a) {
     var children = _a.children, onSubmit = _a.onSubmit, className = _a.className, style = _a.style;
     var _b, _c;
-    var _d = React.useContext(Context), isFlowForm = _d.isFlowForm, canProceed = _d.canProceed, flow = _d.flow, data = _d.data, setForm = _d.setForm, updateForm = _d.updateForm, error = _d.error;
+    var _d = React.useContext(Context), isFlowForm = _d.isFlowForm, canProceed = _d.canProceed, flow = _d.flow, data = _d.data, error = _d.error, setForm = _d.setForm, updateForm = _d.updateForm, goBack = _d.goBack;
     console.log('FLOW: ', { isFlowForm: isFlowForm, flow: flow, data: data, error: error });
     // *** IF CURRENT STEP CHANGES? DEPENDENCY? ***
     React.useEffect(function () {
@@ -324,7 +308,7 @@ var Form = function (_a) {
             React.createElement(React.Fragment, null, Array.isArray(children) ? children[flow.key] : children),
             !isFlowForm && (React.createElement("button", { type: "submit", className: "flow-form-submit-btn" }, "Submit")),
             isFlowForm && (React.createElement(React.Fragment, null,
-                flow.currentStep != null && ((_b = flow.currentStep) === null || _b === void 0 ? void 0 : _b.index) > 0 && (React.createElement("button", { type: "button", className: "flow-form-back-btn" }, "Back")),
+                flow.currentStep != null && ((_b = flow.currentStep) === null || _b === void 0 ? void 0 : _b.index) > 0 && (React.createElement("button", { type: "button", className: "flow-form-back-btn", onClick: function () { return goBack(); } }, "Back")),
                 flow.end !== ((_c = flow.currentStep) === null || _c === void 0 ? void 0 : _c.index) ? (React.createElement("button", { type: "button", className: "flow-form-next-btn", disabled: !canProceed, onClick: function () { return updateForm(); } }, canProceed ? "Next" : "Can't Proceed")) : (React.createElement("button", { type: "submit", className: "flow-form-submit-btm" }, "Submit")))),
             isThereShowData)));
 };
@@ -365,7 +349,6 @@ function useFormData(_a) {
     var _b, _c, _d, _e, _f, _g, _h, _j, _k;
     var _l = React.useContext(Context), setField = _l.setField, data = _l.data, error = _l.error, updateField = _l.updateField, updateBlur = _l.updateBlur, updateFocus = _l.updateFocus, showError = _l.showError, flow = _l.flow;
     React.useEffect(function () {
-        console.log('SET_FIELD: ');
         setField({ step: step, id: id, value: value, error: required || validate ? true : false });
     }, [step, id, flow.currentStep, flow.key]);
     function validation(e) {
@@ -410,19 +393,91 @@ var Error$1 = function (_a) {
 };
 
 var Text = function (_a) {
-    var step = _a.step, id = _a.id, type = _a.type, _b = _a.required, required = _b === void 0 ? false : _b, validate = _a.validate, placeholder = _a.placeholder, autoComplete = _a.autoComplete, style = _a.style, className = _a.className, label = _a.label, errMsg = _a.errMsg;
-    var _c = useFormData({ step: step, id: id, value: '', required: required, validate: validate }), value = _c.value, onChange = _c.onChange, onBlur = _c.onBlur, onFocus = _c.onFocus, showError = _c.showError;
+    var step = _a.step, id = _a.id, _b = _a.type, type = _b === void 0 ? 'text' : _b, _c = _a.required, required = _c === void 0 ? false : _c, validate = _a.validate, placeholder = _a.placeholder, autoComplete = _a.autoComplete, style = _a.style, className = _a.className, label = _a.label, errMsg = _a.errMsg;
+    var _d = useFormData({ step: step, id: id, value: '', required: required, validate: validate }), value = _d.value, onChange = _d.onChange, onBlur = _d.onBlur, onFocus = _d.onFocus, showError = _d.showError;
     return (React.createElement(React.Fragment, null,
-        React.createElement("input", { id: id + "-input-text", "data-input-id": id + "-input-text", name: id, type: type, value: value || '', required: required, onChange: onChange, onBlur: onBlur, onFocus: onFocus, className: "flow-form-input flow-form-text " + className + "-input", placeholder: placeholder, autoComplete: autoComplete, style: style }),
+        React.createElement("input", { id: id + "-field-text", "data-input-id": id + "-field-text", name: id, type: type, value: value || '', required: required, onChange: onChange, onBlur: onBlur, onFocus: onFocus, className: "flow-form-field flow-form-text " + className + "-field", placeholder: placeholder, autoComplete: autoComplete, style: style }),
         showError && React.createElement(Error$1, { id: id, className: className, label: label, errMsg: errMsg })));
+};
+Text.defaultProps = {
+    ffComp: FFComponent.TEXT,
 };
 
 var Number = function (_a) {
     var step = _a.step, id = _a.id, type = _a.type, _b = _a.required, required = _b === void 0 ? false : _b, validate = _a.validate, placeholder = _a.placeholder, autoComplete = _a.autoComplete, style = _a.style, className = _a.className, label = _a.label, errMsg = _a.errMsg;
     var _c = useFormData({ step: step, id: id, value: '', required: required, validate: validate }), value = _c.value, onChange = _c.onChange, onBlur = _c.onBlur, onFocus = _c.onFocus, showError = _c.showError;
     return (React.createElement(React.Fragment, null,
-        React.createElement("input", { id: id + "-input-number", "data-input-id": id + "-input-number", name: id, type: type, value: value || '', required: required, onChange: onChange, onBlur: onBlur, onFocus: onFocus, className: "flow-form-input flow-form-number " + className + "-input", placeholder: placeholder, autoComplete: autoComplete, style: style }),
+        React.createElement("input", { id: id + "-field-number", "data-input-id": id + "-field-number", name: id, type: type, value: value || '', required: required, onChange: onChange, onBlur: onBlur, onFocus: onFocus, className: "flow-form-field flow-form-number " + className + "-field", placeholder: placeholder, autoComplete: autoComplete, style: style }),
         showError && React.createElement(Error$1, { id: id, className: className, label: label, errMsg: errMsg })));
+};
+Number.defaultProps = {
+    ffComp: FFComponent.NUMBER,
+};
+
+var Email = function (_a) {
+    var step = _a.step, id = _a.id, _b = _a.type, type = _b === void 0 ? 'email' : _b, _c = _a.required, required = _c === void 0 ? false : _c, validate = _a.validate, placeholder = _a.placeholder, autoComplete = _a.autoComplete, style = _a.style, className = _a.className, label = _a.label, errMsg = _a.errMsg;
+    var _d = useFormData({ step: step, id: id, value: '', required: required, validate: validate }), value = _d.value, onChange = _d.onChange, onBlur = _d.onBlur, onFocus = _d.onFocus, showError = _d.showError;
+    return (React.createElement(React.Fragment, null,
+        React.createElement("input", { id: id + "-field-email", "data-input-id": id + "-field-email", name: id, type: type, value: value || '', required: required, onChange: onChange, onBlur: onBlur, onFocus: onFocus, className: "flow-form-field flow-form-email " + className + "-field", placeholder: placeholder, autoComplete: autoComplete, style: style }),
+        showError && React.createElement(Error$1, { id: id, className: className, label: label, errMsg: errMsg })));
+};
+Email.defaultProps = {
+    ffComp: FFComponent.EMAIL,
+};
+
+var Password = function (_a) {
+    var step = _a.step, id = _a.id, _b = _a.type, type = _b === void 0 ? 'password' : _b, _c = _a.required, required = _c === void 0 ? false : _c, validate = _a.validate, placeholder = _a.placeholder, autoComplete = _a.autoComplete, style = _a.style, className = _a.className, label = _a.label, errMsg = _a.errMsg;
+    var _d = useFormData({ step: step, id: id, value: '', required: required, validate: validate }), value = _d.value, onChange = _d.onChange, onBlur = _d.onBlur, onFocus = _d.onFocus, showError = _d.showError;
+    return (React.createElement(React.Fragment, null,
+        React.createElement("input", { id: id + "-field-password", "data-input-id": id + "-field-password", name: id, type: type, value: value || '', required: required, onChange: onChange, onBlur: onBlur, onFocus: onFocus, className: "flow-form-field flow-form-password " + className + "-field", placeholder: placeholder, autoComplete: autoComplete, style: style }),
+        showError && React.createElement(Error$1, { id: id, className: className, label: label, errMsg: errMsg })));
+};
+Password.defaultProps = {
+    ffComp: FFComponent.PASSWORD,
+};
+
+var Tel = function (_a) {
+    var step = _a.step, id = _a.id, _b = _a.type, type = _b === void 0 ? 'text' : _b, _c = _a.required, required = _c === void 0 ? false : _c, validate = _a.validate, placeholder = _a.placeholder, autoComplete = _a.autoComplete, style = _a.style, className = _a.className, label = _a.label, errMsg = _a.errMsg, _d = _a.pattern, pattern = _d === void 0 ? '[0-9]{3}-[0-9]{2}-[0-9]{3}' : _d;
+    var _e = useFormData({ step: step, id: id, value: '', required: required, validate: validate }), value = _e.value, onChange = _e.onChange, onBlur = _e.onBlur, onFocus = _e.onFocus, showError = _e.showError;
+    return (React.createElement(React.Fragment, null,
+        React.createElement("input", { id: id + "-field-tel", "data-input-id": id + "-field-tel", name: id, type: type, value: value || '', required: required, onChange: onChange, onBlur: onBlur, onFocus: onFocus, className: "flow-form-field flow-form-tel " + className + "-field", placeholder: placeholder, autoComplete: autoComplete, style: style, pattern: pattern }),
+        showError && React.createElement(Error$1, { id: id, className: className, label: label, errMsg: errMsg })));
+};
+Tel.defaultProps = {
+    ffComp: FFComponent.TEL,
+};
+
+var Url = function (_a) {
+    var step = _a.step, id = _a.id, _b = _a.type, type = _b === void 0 ? 'text' : _b, _c = _a.required, required = _c === void 0 ? false : _c, validate = _a.validate, placeholder = _a.placeholder, autoComplete = _a.autoComplete, style = _a.style, className = _a.className, label = _a.label, errMsg = _a.errMsg, _d = _a.pattern, pattern = _d === void 0 ? 'https://.*' : _d;
+    var _e = useFormData({ step: step, id: id, value: '', required: required, validate: validate }), value = _e.value, onChange = _e.onChange, onBlur = _e.onBlur, onFocus = _e.onFocus, showError = _e.showError;
+    return (React.createElement(React.Fragment, null,
+        React.createElement("input", { id: id + "-filed-url", "data-input-id": id + "-field-url", name: id, type: type, value: value || '', required: required, onChange: onChange, onBlur: onBlur, onFocus: onFocus, className: "flow-form-field flow-form-url " + className + "-field", placeholder: placeholder, autoComplete: autoComplete, style: style, pattern: pattern }),
+        showError && React.createElement(Error$1, { id: id, className: className, label: label, errMsg: errMsg })));
+};
+Url.defaultProps = {
+    ffComp: FFComponent.URL,
+};
+
+var Color = function (_a) {
+    var step = _a.step, id = _a.id, _b = _a.type, type = _b === void 0 ? 'color' : _b, _c = _a.required, required = _c === void 0 ? false : _c, validate = _a.validate, placeholder = _a.placeholder, autoComplete = _a.autoComplete, style = _a.style, className = _a.className, label = _a.label, errMsg = _a.errMsg;
+    var _d = useFormData({ step: step, id: id, value: '', required: required, validate: validate }), value = _d.value, onChange = _d.onChange, onBlur = _d.onBlur, onFocus = _d.onFocus, showError = _d.showError;
+    return (React.createElement(React.Fragment, null,
+        React.createElement("input", { id: id + "-field-color", "data-input-id": id + "-field-color", name: id, type: type, value: value || '#519839', required: required, onChange: onChange, onBlur: onBlur, onFocus: onFocus, className: "flow-form-field flow-form-color " + className + "-field", placeholder: placeholder, autoComplete: autoComplete, style: style }),
+        showError && React.createElement(Error$1, { id: id, className: className, label: label, errMsg: errMsg })));
+};
+Color.defaultProps = {
+    ffComp: FFComponent.COLOR,
+};
+
+var TextArea = function (_a) {
+    var step = _a.step, id = _a.id, _b = _a.required, required = _b === void 0 ? false : _b, validate = _a.validate, placeholder = _a.placeholder, autoComplete = _a.autoComplete, style = _a.style, className = _a.className, label = _a.label, errMsg = _a.errMsg, _c = _a.rows, rows = _c === void 0 ? 4 : _c, _d = _a.cols, cols = _d === void 0 ? 20 : _d;
+    var _e = useFormData({ step: step, id: id, value: '', required: required, validate: validate }), value = _e.value, onChange = _e.onChange, onBlur = _e.onBlur, onFocus = _e.onFocus, showError = _e.showError;
+    return (React.createElement(React.Fragment, null,
+        React.createElement("textarea", { id: id + "-field-textarea", "data-input-id": id + "-field-textarea", name: id, value: value || '', required: required, onChange: onChange, onBlur: onBlur, onFocus: onFocus, className: "flow-form-field flow-form-textarea " + className + "-field", placeholder: placeholder, autoComplete: autoComplete, style: style, rows: rows, cols: cols }),
+        showError && React.createElement(Error$1, { id: id, className: className, label: label, errMsg: errMsg })));
+};
+TextArea.defaultProps = {
+    ffComp: FFComponent.TEXTAREA,
 };
 
 var Field = function (_a) {
@@ -432,7 +487,6 @@ var Field = function (_a) {
     }
     var id = children ? toCamelCase(children) : toCamelCase(name !== null && name !== void 0 ? name : '');
     var className = children ? toKebabCase(children) : toKebabCase(name !== null && name !== void 0 ? name : '');
-    // console.log('RENDER: ', type);
     var defaultProps = {
         id: id,
         step: step,
@@ -454,6 +508,18 @@ var Field = function (_a) {
                     return React.createElement(Text, __assign({}, defaultProps));
                 case 'number':
                     return React.createElement(Number, __assign({}, defaultProps));
+                case 'email':
+                    return React.createElement(Email, __assign({}, defaultProps));
+                case 'password':
+                    return React.createElement(Password, __assign({}, defaultProps));
+                case 'tel':
+                    return React.createElement(Tel, __assign({}, defaultProps));
+                case 'url':
+                    return React.createElement(Url, __assign({}, defaultProps));
+                case 'color':
+                    return React.createElement(Color, __assign({}, defaultProps));
+                case 'textarea':
+                    return React.createElement(TextArea, __assign({}, defaultProps));
                 default:
                     return React.createElement(Text, __assign({}, defaultProps));
             }
@@ -465,9 +531,25 @@ Field.defaultProps = {
     index: 0,
 };
 
+var ShowData = function (_a) {
+    var style = _a.style;
+    var _b = React.useContext(Context), isFlowForm = _b.isFlowForm, canProceed = _b.canProceed, flow = _b.flow, data = _b.data, error = _b.error, touched = _b.touched, showError = _b.showError;
+    return (React.createElement("pre", { className: "flow-form-show-data", style: style }, JSON.stringify({ isFlowForm: isFlowForm, canProceed: canProceed, flow: flow, data: data, error: error, showError: showError, touched: touched }, null, 2)));
+};
+ShowData.defaultProps = {
+    flowComp: FFComponent.SHOW_DATA,
+};
+
+var Submit = function (_a) {
+    var className = _a.className, title = _a.title;
+    return (React.createElement("button", { type: "submit", className: "flow-form-submit-btn " + (className !== null && className !== void 0 ? className : '') }, title !== null && title !== void 0 ? title : "Submit"));
+};
+Submit.defaultProps = {
+    ffComp: FFComponent.SUBMIT,
+};
+
 exports.Field = Field;
 exports.FlowForm = FlowForm;
-exports.Reset = Reset;
 exports.ShowData = ShowData;
 exports.Step = Step;
 exports.Submit = Submit;
