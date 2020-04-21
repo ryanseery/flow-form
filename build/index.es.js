@@ -289,7 +289,7 @@ function handleChildObj(children) {
 var Form = function (_a) {
     var children = _a.children, onSubmit = _a.onSubmit, className = _a.className, style = _a.style;
     var _b, _c;
-    var _d = useContext(Context), isFlowForm = _d.isFlowForm, canProceed = _d.canProceed, flow = _d.flow, data = _d.data, error = _d.error, setForm = _d.setForm, updateForm = _d.updateForm;
+    var _d = useContext(Context), isFlowForm = _d.isFlowForm, canProceed = _d.canProceed, flow = _d.flow, data = _d.data, setForm = _d.setForm, updateForm = _d.updateForm, error = _d.error;
     console.log('FLOW: ', { isFlowForm: isFlowForm, flow: flow, data: data, error: error });
     // *** IF CURRENT STEP CHANGES? DEPENDENCY? ***
     useEffect(function () {
@@ -312,7 +312,9 @@ var Form = function (_a) {
     }, []);
     return (createElement("form", { onSubmit: function (e) {
             e.preventDefault();
-            onSubmit(data);
+            if (typeof onSubmit === 'function') {
+                onSubmit(data);
+            }
         }, className: "flow-form " + className, style: style },
         createElement("fieldset", { style: { border: "none" } },
             createElement(Fragment, null, Array.isArray(children) ? children[flow.key] : children),
@@ -356,11 +358,12 @@ Step.defaultProps = {
 
 function useFormData(_a) {
     var step = _a.step, id = _a.id, value = _a.value, required = _a.required, validate = _a.validate;
-    var _b = useContext(Context), setField = _b.setField, data = _b.data, error = _b.error, updateField = _b.updateField, updateBlur = _b.updateBlur, updateFocus = _b.updateFocus, showError = _b.showError, flow = _b.flow;
+    var _b, _c, _d, _e, _f, _g, _h, _j, _k;
+    var _l = useContext(Context), setField = _l.setField, data = _l.data, error = _l.error, updateField = _l.updateField, updateBlur = _l.updateBlur, updateFocus = _l.updateFocus, showError = _l.showError, flow = _l.flow;
     useEffect(function () {
-        console.log('SET FIELD');
+        console.log('SET_FIELD: ');
         setField({ step: step, id: id, value: value, error: required || validate ? true : false });
-    }, [flow.key]);
+    }, [step, id, flow.currentStep, flow.key]);
     function validation(e) {
         if (required || validate) {
             return validate ? validate(e) : !e.target.value;
@@ -385,9 +388,12 @@ function useFormData(_a) {
         updateFocus({ step: step, id: id });
     };
     return {
-        value: isObjectEmpty(data) ? '' : step != null ? data[step][id] : data[id],
-        error: isObjectEmpty(error) ? '' : step != null ? error[step][id] : error[id],
-        showError: isObjectEmpty(showError) ? false : step != null ? showError[step][id] : showError[id],
+        value: isObjectEmpty(data) ? '' : step != null ? (_c = (_b = data === null || data === void 0 ? void 0 : data[step]) === null || _b === void 0 ? void 0 : _b[id]) !== null && _c !== void 0 ? _c : '' : (_d = data === null || data === void 0 ? void 0 : data[id]) !== null && _d !== void 0 ? _d : '',
+        error: isObjectEmpty(error) ? false : step != null ? (_f = (_e = error === null || error === void 0 ? void 0 : error[step]) === null || _e === void 0 ? void 0 : _e[id]) !== null && _f !== void 0 ? _f : false : (_g = error === null || error === void 0 ? void 0 : error[id]) !== null && _g !== void 0 ? _g : false,
+        showError: isObjectEmpty(showError)
+            ? false
+            : step != null
+                ? (_j = (_h = showError === null || showError === void 0 ? void 0 : showError[step]) === null || _h === void 0 ? void 0 : _h[id]) !== null && _j !== void 0 ? _j : false : (_k = showError === null || showError === void 0 ? void 0 : showError[id]) !== null && _k !== void 0 ? _k : false,
         onChange: onChange,
         onBlur: onBlur,
         onFocus: onFocus,
@@ -422,6 +428,7 @@ var Field = function (_a) {
     }
     var id = children ? toCamelCase(children) : toCamelCase(name !== null && name !== void 0 ? name : '');
     var className = children ? toKebabCase(children) : toKebabCase(name !== null && name !== void 0 ? name : '');
+    // console.log('RENDER: ', type);
     var defaultProps = {
         id: id,
         step: step,

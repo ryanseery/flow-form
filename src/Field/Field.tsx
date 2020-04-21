@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { FFComponent } from '../FFComponent';
 import { toCamelCase, toKebabCase } from '../utils';
-import { Text, Number } from './InputTypes';
+import { Text, Number } from './Fields';
 
 export interface IField {
   ffComp?: string;

@@ -14,10 +14,9 @@ export function useFormData({ step, id, value, required, validate }: IUseFormDat
   const { setField, data, error, updateField, updateBlur, updateFocus, showError, flow } = React.useContext(Context);
 
   React.useEffect(() => {
-    console.log('SET FIELD');
-
+    console.log('SET_FIELD: ');
     setField({ step, id, value, error: required || validate ? true : false });
-  }, [flow.key]);
+  }, [step, id, flow.currentStep, flow.key]);
 
   function validation(e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>): boolean {
     if (required || validate) {
@@ -50,9 +49,13 @@ export function useFormData({ step, id, value, required, validate }: IUseFormDat
   };
 
   return {
-    value: isObjectEmpty(data) ? '' : step != null ? data[step][id] : data[id],
-    error: isObjectEmpty(error) ? '' : step != null ? error[step][id] : error[id],
-    showError: isObjectEmpty(showError) ? false : step != null ? showError[step][id] : showError[id],
+    value: isObjectEmpty(data) ? '' : step != null ? data?.[step]?.[id] ?? '' : data?.[id] ?? '',
+    error: isObjectEmpty(error) ? false : step != null ? error?.[step]?.[id] ?? false : error?.[id] ?? false,
+    showError: isObjectEmpty(showError)
+      ? false
+      : step != null
+      ? showError?.[step]?.[id] ?? false
+      : showError?.[id] ?? false,
     onChange,
     onBlur,
     onFocus,

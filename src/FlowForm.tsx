@@ -41,7 +41,7 @@ function handleChildObj(children: React.ReactNode): IStepState[] | [] | undefine
 }
 
 const Form: React.FC<IForm> = ({ children, onSubmit, className, style }) => {
-  const { isFlowForm, canProceed, flow, data, error, setForm, updateForm } = React.useContext(Context);
+  const { isFlowForm, canProceed, flow, data, setForm, updateForm, error } = React.useContext(Context);
 
   console.log('FLOW: ', { isFlowForm, flow, data, error });
 
@@ -73,7 +73,9 @@ const Form: React.FC<IForm> = ({ children, onSubmit, className, style }) => {
     <form
       onSubmit={e => {
         e.preventDefault();
-        onSubmit(data);
+        if (typeof onSubmit === 'function') {
+          onSubmit(data);
+        }
       }}
       className={`flow-form ${className}`}
       style={style}
