@@ -14,13 +14,13 @@ function App() {
   // TODO initial Values
   return (
     <div style={{ height: '100vh', display: 'flex', justifyContent: 'center' }}>
-      <FlowForm>
+      <FlowForm onSubmit={data => console.log('onSubmit: ', data)}>
         <Field validate={checkString}>Test 1</Field>
 
         <ShowData />
       </FlowForm>
 
-      <FlowForm>
+      <FlowForm onSubmit={data => console.log('onSubmit: ', data)}>
         <Step title="First Step">
           <Field validate={checkString}>Test 3</Field>
         </Step>

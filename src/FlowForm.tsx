@@ -45,7 +45,6 @@ const Form: React.FC<IForm> = ({ children, onSubmit, className, style }) => {
 
   console.log('FLOW: ', { isFlowForm, flow, data, error });
 
-  // *** IF CURRENT STEP CHANGES? DEPENDENCY? ***
   React.useEffect(() => {
     const steps = Array.isArray(children) ? handleChildArr(children) : handleChildObj(children);
 
@@ -73,9 +72,7 @@ const Form: React.FC<IForm> = ({ children, onSubmit, className, style }) => {
     <form
       onSubmit={e => {
         e.preventDefault();
-        if (typeof onSubmit === 'function') {
-          onSubmit(data);
-        }
+        onSubmit(data);
       }}
       className={`flow-form ${className}`}
       style={style}

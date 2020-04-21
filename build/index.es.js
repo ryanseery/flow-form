@@ -104,7 +104,7 @@ var goBack = function () { return ({
 }); };
 function reducer(state, action) {
     var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, _m, _o, _p, _q, _r, _s, _t, _u, _v, _w, _x, _y, _z, _0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10;
-    var _11, _12, _13, _14;
+    var _11, _12, _13, _14, _15, _16;
     switch (action.type) {
         case ACTIONS.SET_FORM: {
             var isFlowForm = action.isFlowForm, flow = action.flow;
@@ -112,10 +112,10 @@ function reducer(state, action) {
         }
         case ACTIONS.SET_FIELD: {
             var step = action.step, id = action.id, value = action.value, error = action.error;
-            if (step == null) {
+            if (step == null && !state.data[id]) {
                 return __assign(__assign({}, state), { data: __assign(__assign({}, state.data), (_a = {}, _a[id] = value, _a)), error: __assign(__assign({}, state.error), (_b = {}, _b[id] = error, _b)), showError: __assign(__assign({}, state.showError), (_c = {}, _c[id] = false, _c)), touched: __assign(__assign({}, state.touched), (_d = {}, _d[id] = false, _d)) });
             }
-            else if (step != null) {
+            else if (step != null && !((_12 = (_11 = state.data) === null || _11 === void 0 ? void 0 : _11[step]) === null || _12 === void 0 ? void 0 : _12[id])) {
                 return __assign(__assign({}, state), { data: __assign(__assign({}, state.data), (_e = {}, _e[step] = __assign(__assign({}, state.data[step]), (_f = {}, _f[id] = value, _f)), _e)), error: __assign(__assign({}, state.error), (_g = {}, _g[step] = __assign(__assign({}, state.error[step]), (_h = {}, _h[id] = error, _h)), _g)), showError: __assign(__assign({}, state.showError), (_j = {}, _j[step] = __assign(__assign({}, state.showError[step]), (_k = {}, _k[id] = false, _k)), _j)), touched: __assign(__assign({}, state.touched), (_l = {}, _l[step] = __assign(__assign({}, state.touched[step]), (_m = {}, _m[id] = false, _m)), _l)) });
             }
             else {
@@ -166,11 +166,11 @@ function reducer(state, action) {
         }
         case ACTIONS.UPDATE_FORM: {
             var key = state.flow.key + 1;
-            return __assign(__assign({}, state), { flow: __assign(__assign({}, state.flow), { key: key, currentStep: (_12 = (_11 = state === null || state === void 0 ? void 0 : state.flow) === null || _11 === void 0 ? void 0 : _11.steps) === null || _12 === void 0 ? void 0 : _12[key] }) });
+            return __assign(__assign({}, state), { flow: __assign(__assign({}, state.flow), { key: key, currentStep: (_14 = (_13 = state === null || state === void 0 ? void 0 : state.flow) === null || _13 === void 0 ? void 0 : _13.steps) === null || _14 === void 0 ? void 0 : _14[key] }) });
         }
         case ACTIONS.GO_BACK: {
             var key = state.flow.key - 1;
-            return __assign(__assign({}, state), { flow: __assign(__assign({}, state.flow), { key: key, currentStep: (_14 = (_13 = state === null || state === void 0 ? void 0 : state.flow) === null || _13 === void 0 ? void 0 : _13.steps) === null || _14 === void 0 ? void 0 : _14[key] }) });
+            return __assign(__assign({}, state), { flow: __assign(__assign({}, state.flow), { key: key, currentStep: (_16 = (_15 = state === null || state === void 0 ? void 0 : state.flow) === null || _15 === void 0 ? void 0 : _15.steps) === null || _16 === void 0 ? void 0 : _16[key] }) });
         }
         default:
             throw new Error("Context Reducer Received Unrecognized Action!");
@@ -275,7 +275,6 @@ var Form = function (_a) {
     var _b, _c;
     var _d = useContext(Context), isFlowForm = _d.isFlowForm, canProceed = _d.canProceed, flow = _d.flow, data = _d.data, error = _d.error, setForm = _d.setForm, updateForm = _d.updateForm, goBack = _d.goBack;
     console.log('FLOW: ', { isFlowForm: isFlowForm, flow: flow, data: data, error: error });
-    // *** IF CURRENT STEP CHANGES? DEPENDENCY? ***
     useEffect(function () {
         var steps = Array.isArray(children) ? handleChildArr(children) : handleChildObj(children);
         setForm({
@@ -296,9 +295,7 @@ var Form = function (_a) {
     }, []);
     return (createElement("form", { onSubmit: function (e) {
             e.preventDefault();
-            if (typeof onSubmit === 'function') {
-                onSubmit(data);
-            }
+            onSubmit(data);
         }, className: "flow-form " + className, style: style },
         createElement("fieldset", { style: { border: "none" } },
             createElement(Fragment, null, Array.isArray(children) ? children[flow.key] : children),
@@ -318,11 +315,11 @@ var FlowForm = function (_a) {
 };
 
 var Step = function (_a) {
-    var children = _a.children, title = _a.title;
+    var children = _a.children, title = _a.title, style = _a.style;
     if (!title) {
         throw new Error("The title prop is mandatory on Step Component");
     }
-    return (createElement("div", { "data-step-id": toCamelCase(title), className: "flow-from-step " + (title && toKebabCase(title)) }, Children.map(children, function (child, index) {
+    return (createElement("div", { "data-step-id": toCamelCase(title), className: "flow-from-step " + (title && toKebabCase(title)), style: style }, Children.map(children, function (child, index) {
         // if child is Field component we clone props into it
         if (isValidElement(child)) {
             return cloneElement(child, {

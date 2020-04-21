@@ -157,7 +157,7 @@ function reducer(state: IState, action: Action): IState {
     }
     case ACTIONS.SET_FIELD: {
       const { step, id, value, error } = action;
-      if (step == null) {
+      if (step == null && !state.data[id]) {
         return {
           ...state,
           data: {
@@ -177,7 +177,7 @@ function reducer(state: IState, action: Action): IState {
             [id]: false,
           },
         };
-      } else if (step != null) {
+      } else if (step != null && !state.data?.[step]?.[id]) {
         return {
           ...state,
           data: {
