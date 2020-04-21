@@ -1,60 +1,113 @@
 import * as React from 'react';
-import { FlowFormContext, FormWrapper } from './FlowFormWrapper';
+import { Context, Wrapper, IStepState } from './Context';
+import { FFComponent } from './FFComponent';
+import { IStep } from './Step';
+import { toCamelCase } from './utils';
+import { IShowData } from './ShowData';
+import { DefaultSubmit, DefaultNext, DefaultBack } from './buttons';
+import { Progress } from './Progress';
 
 interface IForm {
-  children: React.ReactNode | React.ReactNode[];
-  onSubmit: (data: object) => void;
+  ffComp?: string;
+  onSubmit: (data: {}) => void;
   className?: string;
   style?: {};
-  customSubmit?: boolean;
-  reset?: boolean;
 }
 
-const FormComponent: React.FC<IForm> = ({ children, onSubmit, className, style, customSubmit, reset }) => {
-  const { data, clearForm } = React.useContext(FlowFormContext);
+function handleChildArr(children: React.ReactNode[]): IStepState[] | [] {
+  let arr: IStepState[] = [];
+
+  React.Children.map(children, (child, index) => {
+    if (React.isValidElement<IStep>(child)) {
+      if (child.props.ffComp === FFComponent.STEP) {
+        arr.push({ id: toCamelCase(child.props.title), title: child.props.title, index });
+      }
+    }
+  });
+
+  return arr;
+}
+
+function handleChildObj(children: React.ReactNode): IStepState[] | [] {
+  if (React.isValidElement<IStep>(children)) {
+    return [{ id: toCamelCase(children.props.title), title: children.props.title, index: 0 }];
+  } else {
+    return [];
+  }
+}
+
+const Form: React.FC<IForm> = ({ children, onSubmit, className, style }) => {
+  const { isFlowForm, canProceed, flow, data, setForm, updateForm, goBack } = React.useContext(Context);
+
+  React.useEffect(() => {
+    const steps = Array.isArray(children) ? handleChildArr(children) : handleChildObj(children);
+
+    setForm({
+      isFlowForm: steps?.length !== 0,
+      flow: {
+        key: 0,
+        end: steps.length > 0 ? steps.length - 1 : 0,
+        steps,
+        currentStep: steps.length !== 0 ? steps[0] : null,
+      },
+    });
+  }, []);
+
+  const isThereShowData = React.useMemo(
+    () =>
+      Array.isArray(children) &&
+      children.filter(child =>
+        React.isValidElement<IShowData>(child) && child.props.ffComp === FFComponent.SHOW_DATA ? child : null,
+      ),
+    [],
+  );
 
   return (
     <form
-      className={`flow-form ${className}`}
-      style={style}
       onSubmit={e => {
         e.preventDefault();
         onSubmit(data);
       }}
+      className={`flow-form ${className}`}
+      style={style}
     >
-      <fieldset disabled={false} aria-busy={false} style={{ border: `none` }}>
-        {children}
-        {!customSubmit && (
-          <button type="submit" className="flow-form-submit">
-            Submit
-          </button>
+      <fieldset style={{ border: `none` }}>
+        {isFlowForm && <Progress steps={flow.steps} currentStep={flow.currentStep} />}
+
+        <>{Array.isArray(children) ? children[flow.key] : children}</>
+
+        {isFlowForm ? (
+          <>
+            {flow.currentStep != null && flow.currentStep?.index > 0 && <DefaultBack onClick={() => goBack()} />}
+
+            {flow.end !== flow.currentStep?.index ? (
+              <DefaultNext disabled={!canProceed} onClick={() => updateForm()} />
+            ) : (
+              <DefaultSubmit disabled={!canProceed} />
+            )}
+          </>
+        ) : (
+          <DefaultSubmit disabled={!canProceed} />
         )}
-        {reset && (
-          <button type="button" className="flow-form-reset" onClick={clearForm}>
-            Clear
-          </button>
-        )}
+
+        {isThereShowData}
       </fieldset>
     </form>
   );
 };
 
-interface IFlowFrom extends IForm {
-  initialValues?: {};
-}
+Form.defaultProps = {
+  ffComp: FFComponent.FORM,
+};
 
-export const Form: React.FC<IFlowFrom> = ({
-  children,
-  onSubmit,
-  className,
-  style,
-  customSubmit,
-  reset,
-  initialValues = {},
-}) => (
-  <FormWrapper initialValues={initialValues}>
-    <FormComponent onSubmit={onSubmit} className={className} style={style} customSubmit={customSubmit} reset={reset}>
-      {children}
-    </FormComponent>
-  </FormWrapper>
-);
+interface IFlowForm extends IForm {}
+
+export const FlowForm: React.FC<IFlowForm> = ({ children, onSubmit, className, style }) => {
+  return (
+    <Wrapper>
+      <Form onSubmit={onSubmit} className={className} style={style}>
+        {children}
+      </Form>
+    </Wrapper>
+  );
+};

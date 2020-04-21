@@ -1,20 +1,38 @@
 import * as React from 'react';
+import { FFComponent } from './FFComponent';
 import { toKebabCase, toCamelCase } from './utils';
+import { IField } from './Field/Field';
 
-interface IStep {
+export interface IStep {
+  ffComp: string;
   title: string;
+  style?: {};
 }
 
-// TODO only insert index/step if child is Input
-export const Step: React.FC<IStep> = ({ children, title }) => {
+export const Step: React.FC<IStep> = ({ children, title, style }) => {
+  if (!title) {
+    throw new Error(`The title prop is mandatory on Step Component`);
+  }
+
   return (
-    <div className={`flow-from-step ${toKebabCase(title)}`}>
-      {React.Children.map(children, (child, index) =>
-        React.cloneElement(child as React.ReactElement<any>, {
-          index,
-          step: toCamelCase(title),
-        }),
-      )}
+    <div data-step-id={toCamelCase(title)} className={`flow-from-step ${title && toKebabCase(title)}`} style={style}>
+      {React.Children.map(children, (child, index) => {
+        // if child is Field component we clone props into it
+        if (React.isValidElement<IField>(child)) {
+          return React.cloneElement(child as React.ReactElement<IField>, {
+            index,
+            step: toCamelCase(title),
+          });
+        }
+        // else we return child naturally
+        else {
+          return child;
+        }
+      })}
     </div>
   );
+};
+
+Step.defaultProps = {
+  ffComp: FFComponent.STEP,
 };

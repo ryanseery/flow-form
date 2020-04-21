@@ -4,5 +4,5 @@ export { Email } from './Email';
 export { Password } from './Password';
 export { Tel } from './Tel';
 export { Url } from './Url';
-export { TextArea } from './TextArea';
 export { Color } from './Color';
+export { TextArea } from './TextArea';
