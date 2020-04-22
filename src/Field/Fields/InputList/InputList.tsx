@@ -3,7 +3,7 @@ import { FFComponent } from '../../../FFComponent';
 import { Context } from '../../../Context';
 import { IProps, Input } from '../@types';
 // import { Error } from '../../Error';
-import { toCamelCase, isObjectEmpty, generateId } from '../../../utils';
+import { toCamelCase, isObjectEmpty } from '../../../utils';
 import { Row } from './Row';
 import { Item } from './Item';
 
@@ -60,10 +60,34 @@ export const InputList: React.FC<IInputList> = ({
       {!isObjectEmpty(formData) && step != null ? (
         <>
           {formData?.[step]?.[id].map((field: {}, index: number) => (
-            <Row key={generateId(id)} className={className}>
+            <Row key={index} className={className}>
               {Object.entries(field).map(([k, v], i: number) => (
-                <div key={generateId(k)}>
+                <Item
+                  key={i}
+                  objKey={k}
+                  fieldIndex={i}
+                  type={inputTypes?.[i] ?? 'text'}
+                  value={(v as string | number) || ''}
+                  required={required}
+                  onChange={handleChange(index)}
+                  // onBlur={onBlur}
+                  // onFocus={onFocus}
+                  autoComplete={autoComplete}
+                  style={style}
+                />
+              ))}
+              {/* {showError && <Error id={id} className={className} label={label} errMsg={errMsg} />} */}
+            </Row>
+          ))}
+        </>
+      ) : (
+        <>
+          {!isObjectEmpty(formData) &&
+            formData?.[id].map((field: {}, index: number) => (
+              <Row key={index} className={className}>
+                {Object.entries(field).map(([k, v], i: number) => (
                   <Item
+                    key={i}
                     objKey={k}
                     fieldIndex={i}
                     type={inputTypes?.[i] ?? 'text'}
@@ -75,34 +99,8 @@ export const InputList: React.FC<IInputList> = ({
                     autoComplete={autoComplete}
                     style={style}
                   />
-                  {/* {showError && <Error id={id} className={className} label={label} errMsg={errMsg} />} */}
-                </div>
-              ))}
-            </Row>
-          ))}
-        </>
-      ) : (
-        <>
-          {!isObjectEmpty(formData) &&
-            formData?.[id].map((field: {}, index: number) => (
-              <Row key={generateId(id)} className={className}>
-                {Object.entries(field).map(([k, v], i: number) => (
-                  <div key={generateId(k)}>
-                    <Item
-                      objKey={k}
-                      fieldIndex={i}
-                      type={inputTypes?.[i] ?? 'text'}
-                      value={(v as string | number) || ''}
-                      required={required}
-                      onChange={handleChange(index)}
-                      // onBlur={onBlur}
-                      // onFocus={onFocus}
-                      autoComplete={autoComplete}
-                      style={style}
-                    />
-                    {/* {showError && <Error id={id} className={className} label={label} errMsg={errMsg} />} */}
-                  </div>
                 ))}
+                {/* {showError && <Error id={id} className={className} label={label} errMsg={errMsg} />} */}
               </Row>
             ))}
         </>

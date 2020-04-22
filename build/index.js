@@ -307,12 +307,6 @@ function isObjectEmpty(obj) {
     return Object.keys(obj).length === 0 && obj.constructor === Object;
 }
 
-function generateId(str) {
-    return Math.random()
-        .toString(36)
-        .replace('0.', str || '');
-}
-
 function capitalize(str) {
     return str.charAt(0).toUpperCase() + str.slice(1);
 }
@@ -665,22 +659,20 @@ var InputList = function (_a) {
         updateInputListItem({ step: step, id: id, index: index, name: name, value: type === 'number' ? parseFloat(value) : value });
     }; };
     console.log('RENDER: ', formData);
-    return (React.createElement("div", { className: "flow-form-inputList-container " + className + "-inputList-container" }, !isObjectEmpty(formData) && step != null ? (React.createElement(React.Fragment, null, (_c = formData === null || formData === void 0 ? void 0 : formData[step]) === null || _c === void 0 ? void 0 : _c[id].map(function (field, index) { return (React.createElement(Row, { key: generateId(id), className: className }, Object.entries(field).map(function (_a, i) {
+    return (React.createElement("div", { className: "flow-form-inputList-container " + className + "-inputList-container" }, !isObjectEmpty(formData) && step != null ? (React.createElement(React.Fragment, null, (_c = formData === null || formData === void 0 ? void 0 : formData[step]) === null || _c === void 0 ? void 0 : _c[id].map(function (field, index) { return (React.createElement(Row, { key: index, className: className }, Object.entries(field).map(function (_a, i) {
         var k = _a[0], v = _a[1];
         var _b;
-        return (React.createElement("div", { key: generateId(k) },
-            React.createElement(Item, { objKey: k, fieldIndex: i, type: (_b = inputTypes === null || inputTypes === void 0 ? void 0 : inputTypes[i]) !== null && _b !== void 0 ? _b : 'text', value: v || '', required: required, onChange: handleChange(index), 
-                // onBlur={onBlur}
-                // onFocus={onFocus}
-                autoComplete: autoComplete, style: style })));
-    }))); }))) : (React.createElement(React.Fragment, null, !isObjectEmpty(formData) && (formData === null || formData === void 0 ? void 0 : formData[id].map(function (field, index) { return (React.createElement(Row, { key: generateId(id), className: className }, Object.entries(field).map(function (_a, i) {
+        return (React.createElement(Item, { key: i, objKey: k, fieldIndex: i, type: (_b = inputTypes === null || inputTypes === void 0 ? void 0 : inputTypes[i]) !== null && _b !== void 0 ? _b : 'text', value: v || '', required: required, onChange: handleChange(index), 
+            // onBlur={onBlur}
+            // onFocus={onFocus}
+            autoComplete: autoComplete, style: style }));
+    }))); }))) : (React.createElement(React.Fragment, null, !isObjectEmpty(formData) && (formData === null || formData === void 0 ? void 0 : formData[id].map(function (field, index) { return (React.createElement(Row, { key: index, className: className }, Object.entries(field).map(function (_a, i) {
         var k = _a[0], v = _a[1];
         var _b;
-        return (React.createElement("div", { key: generateId(k) },
-            React.createElement(Item, { objKey: k, fieldIndex: i, type: (_b = inputTypes === null || inputTypes === void 0 ? void 0 : inputTypes[i]) !== null && _b !== void 0 ? _b : 'text', value: v || '', required: required, onChange: handleChange(index), 
-                // onBlur={onBlur}
-                // onFocus={onFocus}
-                autoComplete: autoComplete, style: style })));
+        return (React.createElement(Item, { key: i, objKey: k, fieldIndex: i, type: (_b = inputTypes === null || inputTypes === void 0 ? void 0 : inputTypes[i]) !== null && _b !== void 0 ? _b : 'text', value: v || '', required: required, onChange: handleChange(index), 
+            // onBlur={onBlur}
+            // onFocus={onFocus}
+            autoComplete: autoComplete, style: style }));
     }))); }))))));
 };
 InputList.defaultProps = {
