@@ -1,12 +1,10 @@
 import * as React from 'react';
 import { FFComponent } from '../../FFComponent';
 import { useFormData } from '../../useFormData';
-import { IField } from '../Field';
+import { IProps } from './@types';
 import { Error } from '../../Error';
 
-interface IUrl extends IField {
-  id: string;
-  label?: string;
+interface IUrl extends IProps {
   pattern?: string;
 }
 

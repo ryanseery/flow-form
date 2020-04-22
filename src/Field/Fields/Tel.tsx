@@ -1,14 +1,13 @@
 import * as React from 'react';
 import { FFComponent } from '../../FFComponent';
 import { useFormData } from '../../useFormData';
-import { IField } from '../Field';
+import { IProps } from './@types';
 import { Error } from '../../Error';
 
-interface ITel extends IField {
-  id: string;
-  label?: string;
+interface ITel extends IProps {
   pattern?: string;
 }
+
 export const Tel: React.FC<ITel> = ({
   step,
   id,

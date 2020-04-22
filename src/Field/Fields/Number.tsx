@@ -1,13 +1,10 @@
 import * as React from 'react';
 import { FFComponent } from '../../FFComponent';
 import { useFormData } from '../../useFormData';
-import { IField } from '../Field';
+import { IProps } from './@types';
 import { Error } from '../../Error';
 
-interface INumber extends IField {
-  id: string;
-  label?: string;
-}
+interface INumber extends IProps {}
 
 export const Number: React.FC<INumber> = ({
   step,

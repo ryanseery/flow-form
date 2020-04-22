@@ -2,6 +2,13 @@ import React from 'react';
 import { FlowForm, Step, Field, ShowData } from 'flow-form';
 import './App.css';
 
+const testSelect = [
+  { name: 'Volvo', value: 'volvo' },
+  { name: 'Saab', value: 'saab' },
+  { name: 'Mercedes', value: 'mercedes' },
+  { name: 'Audi', value: 'audi' },
+];
+
 function App() {
   const checkString = e => {
     return !e.target.value || !e.target.value.length;
@@ -23,6 +30,22 @@ function App() {
       <FlowForm onSubmit={data => console.log('onSubmit: ', data)}>
         <Step title="First Step">
           <Field validate={checkString}>Test 3</Field>
+
+          <Field type="select" options={testSelect}>
+            Cars
+          </Field>
+
+          <Field
+            type="inputList"
+            listName="architects"
+            inputs={[
+              { name: 'Name', type: 'text' },
+              { name: 'Email', type: 'email' },
+            ]}
+            add
+          >
+            Add Architect
+          </Field>
         </Step>
 
         <Step title="Second Step">

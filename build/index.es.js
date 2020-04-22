@@ -229,6 +229,8 @@ var FFComponent;
     FFComponent["TEL"] = "TEL";
     FFComponent["TEXTAREA"] = "TEXTAREA";
     FFComponent["URL"] = "URL";
+    FFComponent["SELECT"] = "SELECT";
+    FFComponent["INPUT_LIST"] = "INPUT_LIST";
     FFComponent["PROGRESS"] = "PROGRESS";
     FFComponent["DOUGHNUT"] = "DOUGHNUT";
     FFComponent["DEFAULT_SUBMIT"] = "DEFAULT_SUBMIT";
@@ -550,8 +552,49 @@ TextArea.defaultProps = {
     ffComp: FFComponent.TEXTAREA,
 };
 
+var Select = function (_a) {
+    var step = _a.step, id = _a.id, _b = _a.required, required = _b === void 0 ? false : _b, validate = _a.validate, placeholder = _a.placeholder, autoComplete = _a.autoComplete, style = _a.style, className = _a.className, label = _a.label, errMsg = _a.errMsg, options = _a.options;
+    var _c = useFormData({ step: step, id: id, value: '', required: required, validate: validate }), value = _c.value, onChange = _c.onChange, onBlur = _c.onBlur, onFocus = _c.onFocus, showError = _c.showError;
+    return (createElement(Fragment, null,
+        createElement("select", { id: id + "-field-text", "data-input-id": id + "-field-text", name: id, value: value || '', required: required, onChange: onChange, onBlur: onBlur, onFocus: onFocus, className: "flow-form-field flow-form-text " + className + "-field", placeholder: placeholder, autoComplete: autoComplete, style: style }, options &&
+            options.map(function (option) { return (createElement("option", { key: option.name, value: option.value }, option.name)); })),
+        showError && createElement(Error$1, { id: id, className: className, label: label, errMsg: errMsg })));
+};
+Select.defaultProps = {
+    ffComp: FFComponent.SELECT,
+};
+
+var InputList = function (_a) {
+    var _b;
+    var 
+    // step,
+    id = _a.id, _c = _a.required, required = _c === void 0 ? false : _c, 
+    // validate,
+    placeholder = _a.placeholder, autoComplete = _a.autoComplete, style = _a.style, className = _a.className, 
+    // label,
+    // errMsg,
+    listName = _a.listName, inputs = _a.inputs;
+    var blankInput = inputs && inputs.reduce(function (acc, input) {
+        var _a;
+        return (__assign(__assign({}, acc), (_a = {}, _a[toCamelCase(input.name)] = '', _a)));
+    }, {});
+    console.log('blankInputs: ', listName && (_b = {}, _b[listName] = blankInput, _b));
+    return (createElement(Fragment, null,
+        createElement("input", { id: id + "-field-text", "data-input-id": id + "-field-text", name: id, 
+            // type={type}
+            // value={value || ''}
+            required: required, 
+            // onChange={onChange}
+            // onBlur={onBlur}
+            // onFocus={onFocus}
+            className: "flow-form-field flow-form-text " + className + "-field", placeholder: placeholder, autoComplete: autoComplete, style: style })));
+};
+InputList.defaultProps = {
+    ffComp: FFComponent.INPUT_LIST,
+};
+
 var Field = function (_a) {
-    var step = _a.step, index = _a.index, name = _a.name, type = _a.type, children = _a.children, style = _a.style, _b = _a.required, required = _b === void 0 ? false : _b, validate = _a.validate, autoComplete = _a.autoComplete, placeholder = _a.placeholder, errMsg = _a.errMsg;
+    var step = _a.step, index = _a.index, name = _a.name, type = _a.type, children = _a.children, style = _a.style, _b = _a.required, required = _b === void 0 ? false : _b, validate = _a.validate, autoComplete = _a.autoComplete, placeholder = _a.placeholder, errMsg = _a.errMsg, options = _a.options, listName = _a.listName, inputs = _a.inputs;
     if (!name && !children) {
         throw new Error("Please provide a label(<Field>Label</Field>) or name prop(<Field name=\"label\" />).");
     }
@@ -570,6 +613,9 @@ var Field = function (_a) {
         label: children !== null && children !== void 0 ? children : name,
         style: { display: "block" },
         errMsg: errMsg,
+        options: options,
+        listName: listName,
+        inputs: inputs,
     };
     return (createElement("label", { id: id + "-label", "data-label-id": id + "-label", htmlFor: id, className: "flow-form-label " + className + "-label", style: __assign({ display: "block", minHeight: '4rem' }, style) }, children !== null && children !== void 0 ? children : name,
         (function () {
@@ -590,6 +636,10 @@ var Field = function (_a) {
                     return createElement(Color, __assign({}, defaultProps));
                 case 'textarea':
                     return createElement(TextArea, __assign({}, defaultProps));
+                case 'select':
+                    return createElement(Select, __assign({}, defaultProps));
+                case 'inputList':
+                    return createElement(InputList, __assign({}, defaultProps));
                 default:
                     return createElement(Text, __assign({}, defaultProps));
             }
