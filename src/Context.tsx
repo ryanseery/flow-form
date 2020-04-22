@@ -49,7 +49,7 @@ type SetFormArgs = {
 };
 
 interface ValueArgs extends Args {
-  value: string | boolean | number | object;
+  value: string | boolean | number | object | [];
   error: boolean;
 }
 

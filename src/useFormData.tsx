@@ -5,7 +5,7 @@ import { isObjectEmpty } from './utils';
 interface IUseFormData {
   step: string | null;
   id: string;
-  value: string;
+  value: string | boolean | number | object | [];
   required: boolean;
   validation?: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => boolean;
 }

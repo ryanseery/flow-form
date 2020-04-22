@@ -37,7 +37,7 @@ function App() {
 
           <Field
             type="inputList"
-            listName="architects"
+            // listName="architects"
             inputs={[
               { name: 'Name', type: 'text' },
               { name: 'Email', type: 'email' },
