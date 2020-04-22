@@ -12,7 +12,6 @@ export const InputList: React.FC<IInputList> = ({
   id,
   required = false,
   validate,
-  placeholder,
   autoComplete,
   style,
   className,
@@ -21,8 +20,10 @@ export const InputList: React.FC<IInputList> = ({
   listName,
   inputs,
 }) => {
-  const blankInput =
-    inputs && inputs.reduce((acc: {}, input: Input) => ({ ...acc, [toCamelCase(input.name)]: '' }), {});
+  const blankInput = React.useMemo(
+    () => inputs && inputs.reduce((acc: {}, input: Input) => ({ ...acc, [toCamelCase(input.name)]: '' }), {}),
+    [],
+  );
 
   // TODO need custom set, handleUpdate. handleAdd, handleDelete
   const { value, onChange, onBlur, onFocus, showError } = useFormData({
@@ -33,7 +34,7 @@ export const InputList: React.FC<IInputList> = ({
     validate,
   });
 
-  console.log('blankInputs: ', listName && { [listName]: blankInput });
+  console.log('blankInputs: ', listName && { [listName]: [{ ...blankInput }] });
 
   return (
     <>
