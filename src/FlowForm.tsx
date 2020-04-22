@@ -9,7 +9,7 @@ import { Progress } from './Progress';
 
 interface IForm {
   ffComp?: string;
-  onSubmit: (data: {}) => void;
+  onSubmit: (formData: {}) => void;
   className?: string;
   style?: {};
 }
@@ -37,7 +37,7 @@ function handleChildObj(children: React.ReactNode): IStepState[] | [] {
 }
 
 const Form: React.FC<IForm> = ({ children, onSubmit, className, style }) => {
-  const { isFlowForm, canProceed, flow, data, setForm, updateForm, goBack } = React.useContext(Context);
+  const { isFlowForm, canProceed, flow, formData, setForm, updateForm, goBack } = React.useContext(Context);
 
   React.useEffect(() => {
     const steps = Array.isArray(children) ? handleChildArr(children) : handleChildObj(children);
@@ -66,7 +66,7 @@ const Form: React.FC<IForm> = ({ children, onSubmit, className, style }) => {
     <form
       onSubmit={e => {
         e.preventDefault();
-        onSubmit(data);
+        onSubmit(formData);
       }}
       className={`flow-form ${className}`}
       style={style}

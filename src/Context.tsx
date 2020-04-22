@@ -17,7 +17,7 @@ interface IState {
   isFlowForm: boolean;
   flow: IFlow;
   canProceed: boolean;
-  data: {};
+  formData: {};
   error: {};
   showError: {};
   touched: {};
@@ -32,7 +32,7 @@ const initialState: IState = {
     currentStep: null,
     steps: [],
   },
-  data: {},
+  formData: {},
   error: {},
   showError: {},
   touched: {},
@@ -157,11 +157,11 @@ function reducer(state: IState, action: Action): IState {
     }
     case ACTIONS.SET_FIELD: {
       const { step, id, value, error } = action;
-      if (step == null && !state.data[id]) {
+      if (step == null && !state.formData[id]) {
         return {
           ...state,
-          data: {
-            ...state.data,
+          formData: {
+            ...state.formData,
             [id]: value,
           },
           error: {
@@ -177,13 +177,13 @@ function reducer(state: IState, action: Action): IState {
             [id]: false,
           },
         };
-      } else if (step != null && !state.data?.[step]?.[id]) {
+      } else if (step != null && !state.formData?.[step]?.[id]) {
         return {
           ...state,
-          data: {
-            ...state.data,
+          formData: {
+            ...state.formData,
             [step]: {
-              ...state.data[step],
+              ...state.formData[step],
               [id]: value,
             },
           },
@@ -219,8 +219,8 @@ function reducer(state: IState, action: Action): IState {
         return {
           ...state,
           canProceed: Object.entries({ ...state.error, [id]: error }).every(([_, v]) => v === false),
-          data: {
-            ...state.data,
+          formData: {
+            ...state.formData,
             [id]: value,
           },
           error: {
@@ -236,10 +236,10 @@ function reducer(state: IState, action: Action): IState {
         return {
           ...state,
           canProceed: Object.entries({ ...state.error[step], [id]: error }).every(([_, v]) => v === false),
-          data: {
-            ...state.data,
+          formData: {
+            ...state.formData,
             [step]: {
-              ...state.data[step],
+              ...state.formData[step],
               [id]: value,
             },
           },

@@ -11,7 +11,9 @@ interface IUseFormData {
 }
 
 export function useFormData({ step, id, value, required, validate }: IUseFormData) {
-  const { setField, data, error, updateField, updateBlur, updateFocus, showError, flow } = React.useContext(Context);
+  const { setField, formData, error, updateField, updateBlur, updateFocus, showError, flow } = React.useContext(
+    Context,
+  );
 
   React.useEffect(() => {
     setField({ step, id, value, error: required || validate ? true : false });
@@ -48,7 +50,7 @@ export function useFormData({ step, id, value, required, validate }: IUseFormDat
   };
 
   return {
-    value: isObjectEmpty(data) ? '' : step != null ? data?.[step]?.[id] ?? '' : data?.[id] ?? '',
+    value: isObjectEmpty(formData) ? '' : step != null ? formData?.[step]?.[id] ?? '' : formData?.[id] ?? '',
     error: isObjectEmpty(error) ? false : step != null ? error?.[step]?.[id] ?? false : error?.[id] ?? false,
     showError: isObjectEmpty(showError)
       ? false
