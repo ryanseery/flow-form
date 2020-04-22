@@ -1,12 +1,10 @@
 import * as React from 'react';
 import { FFComponent } from '../../FFComponent';
 import { useFormData } from '../../useFormData';
-import { IField } from '../Field';
+import { IProps } from './@types';
 import { Error } from '../../Error';
 
-interface IUrl extends IField {
-  id: string;
-  label?: string;
+interface IUrl extends IProps {
   pattern?: string;
 }
 
@@ -15,7 +13,7 @@ export const Url: React.FC<IUrl> = ({
   id,
   type = 'text',
   required = false,
-  validate,
+  validation,
   placeholder,
   autoComplete,
   style,
@@ -24,7 +22,7 @@ export const Url: React.FC<IUrl> = ({
   errMsg,
   pattern = 'https://.*',
 }) => {
-  const { value, onChange, onBlur, onFocus, showError } = useFormData({ step, id, value: '', required, validate });
+  const { value, onChange, onBlur, onFocus, showError } = useFormData({ step, id, value: '', required, validation });
 
   return (
     <>

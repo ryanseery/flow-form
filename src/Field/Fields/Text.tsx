@@ -1,20 +1,17 @@
 import * as React from 'react';
 import { FFComponent } from '../../FFComponent';
 import { useFormData } from '../../useFormData';
-import { IField } from '../Field';
+import { IProps } from './@types';
 import { Error } from '../../Error';
 
-interface IText extends IField {
-  id: string;
-  label?: string;
-}
+interface IText extends IProps {}
 
 export const Text: React.FC<IText> = ({
   step,
   id,
   type = 'text',
   required = false,
-  validate,
+  validation,
   placeholder,
   autoComplete,
   style,
@@ -22,7 +19,7 @@ export const Text: React.FC<IText> = ({
   label,
   errMsg,
 }) => {
-  const { value, onChange, onBlur, onFocus, showError } = useFormData({ step, id, value: '', required, validate });
+  const { value, onChange, onBlur, onFocus, showError } = useFormData({ step, id, value: '', required, validation });
 
   return (
     <>

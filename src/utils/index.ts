@@ -1,7 +1,8 @@
 export { toKebabCase } from './toKebabCase';
 export { toCamelCase } from './toCamelCase';
-
-export { isValidArray } from './isValidArray';
 export { isObjectEmpty } from './isObjectEmpty';
+export { capitalize } from './capitalize';
 
+// TODO is this still used
+export { isValidArray } from './isValidArray';
 export { generateId } from './generateId';

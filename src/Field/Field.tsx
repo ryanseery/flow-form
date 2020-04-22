@@ -1,7 +1,8 @@
 import * as React from 'react';
 import { FFComponent } from '../FFComponent';
 import { toCamelCase, toKebabCase } from '../utils';
-import { Text, Number, Email, Password, Tel, Url, Color, TextArea } from './Fields';
+import { Text, Number, Email, Password, Tel, Url, Color, TextArea, Select, InputList } from './Fields';
+import { Option, Input } from './Fields/@types';
 
 export interface IField {
   ffComp?: string;
@@ -16,7 +17,11 @@ export interface IField {
   autoComplete?: string;
   placeholder?: string;
   errMsg?: string;
-  validate?: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => boolean;
+  validation?: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => boolean;
+  options?: Option[];
+  listName?: string;
+  inputs?: Input[];
+  add?: boolean;
 }
 
 export const Field: React.FC<IField> = ({
@@ -27,10 +32,14 @@ export const Field: React.FC<IField> = ({
   children,
   style,
   required = false,
-  validate,
-  autoComplete,
+  validation,
+  autoComplete = 'off',
   placeholder,
   errMsg,
+  options,
+  listName,
+  inputs,
+  add,
 }) => {
   if (!name && !children) {
     throw new Error(`Please provide a label(<Field>Label</Field>) or name prop(<Field name="label" />).`);
@@ -45,13 +54,17 @@ export const Field: React.FC<IField> = ({
     index,
     type,
     required,
-    validate,
+    validation,
     autoComplete,
     placeholder,
     className,
     label: children ?? name,
     style: { display: `block` },
     errMsg,
+    options,
+    listName,
+    inputs,
+    add,
   };
 
   return (
@@ -81,6 +94,10 @@ export const Field: React.FC<IField> = ({
             return <Color {...defaultProps} />;
           case 'textarea':
             return <TextArea {...defaultProps} />;
+          case 'select':
+            return <Select {...defaultProps} />;
+          case 'inputList':
+            return <InputList {...defaultProps} />;
           default:
             return <Text {...defaultProps} />;
         }

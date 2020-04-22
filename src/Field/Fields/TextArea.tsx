@@ -1,12 +1,10 @@
 import * as React from 'react';
 import { FFComponent } from '../../FFComponent';
 import { useFormData } from '../../useFormData';
-import { IField } from '../Field';
+import { IProps } from './@types';
 import { Error } from '../../Error';
 
-interface ITextArea extends IField {
-  id: string;
-  label?: string;
+interface ITextArea extends IProps {
   rows?: number;
   cols?: number;
 }
@@ -15,7 +13,7 @@ export const TextArea: React.FC<ITextArea> = ({
   step,
   id,
   required = false,
-  validate,
+  validation,
   placeholder,
   autoComplete,
   style,
@@ -25,7 +23,7 @@ export const TextArea: React.FC<ITextArea> = ({
   rows = 4,
   cols = 20,
 }) => {
-  const { value, onChange, onBlur, onFocus, showError } = useFormData({ step, id, value: '', required, validate });
+  const { value, onChange, onBlur, onFocus, showError } = useFormData({ step, id, value: '', required, validation });
 
   return (
     <>

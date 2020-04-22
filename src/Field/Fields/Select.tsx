@@ -1,17 +1,14 @@
 import * as React from 'react';
 import { FFComponent } from '../../FFComponent';
 import { useFormData } from '../../useFormData';
-import { IProps } from './@types';
+import { IProps, Option } from './@types';
 import { Error } from '../../Error';
 
-interface ITel extends IProps {
-  pattern?: string;
-}
+interface ISelect extends IProps {}
 
-export const Tel: React.FC<ITel> = ({
+export const Select: React.FC<ISelect> = ({
   step,
   id,
-  type = 'text',
   required = false,
   validation,
   placeholder,
@@ -20,33 +17,38 @@ export const Tel: React.FC<ITel> = ({
   className,
   label,
   errMsg,
-  pattern = '[0-9]{3}-[0-9]{2}-[0-9]{3}',
+  options,
 }) => {
   const { value, onChange, onBlur, onFocus, showError } = useFormData({ step, id, value: '', required, validation });
 
   return (
     <>
-      <input
-        id={`${id}-field-tel`}
-        data-input-id={`${id}-field-tel`}
+      <select
+        id={`${id}-field-text`}
+        data-input-id={`${id}-field-text`}
         name={id}
-        type={type}
         value={value || ''}
         required={required}
         onChange={onChange}
         onBlur={onBlur}
         onFocus={onFocus}
-        className={`flow-form-field flow-form-tel ${className}-field`}
+        className={`flow-form-field flow-form-text ${className}-field`}
         placeholder={placeholder}
         autoComplete={autoComplete}
         style={style}
-        pattern={pattern}
-      />
+      >
+        {options &&
+          options.map((option: Option) => (
+            <option key={option.name} value={option.value}>
+              {option.name}
+            </option>
+          ))}
+      </select>
       {showError && <Error id={id} className={className} label={label} errMsg={errMsg} />}
     </>
   );
 };
 
-Tel.defaultProps = {
-  ffComp: FFComponent.TEL,
+Select.defaultProps = {
+  ffComp: FFComponent.SELECT,
 };
