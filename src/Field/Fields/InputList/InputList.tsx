@@ -6,6 +6,8 @@ import { IProps, Input } from '../@types';
 import { toCamelCase, isObjectEmpty } from '../../../utils';
 import { Row } from './Row';
 import { Item } from './Item';
+import { ListButton } from './ListButton';
+import { colors } from '../../../colors';
 
 interface IInputList extends IProps {}
 
@@ -13,7 +15,7 @@ export const InputList: React.FC<IInputList> = ({
   step,
   id,
   required = false,
-  validate,
+  validation,
   autoComplete,
   style,
   className,
@@ -21,8 +23,9 @@ export const InputList: React.FC<IInputList> = ({
   // errMsg,
   // listName,
   inputs,
+  add,
 }) => {
-  const { setField, flow, formData, updateInputListItem } = React.useContext(Context);
+  const { setField, flow, formData, updateInputListItem, addInputList, removeInputList } = React.useContext(Context);
 
   const blankInput = React.useMemo(
     () => inputs && inputs.reduce((acc: {}, input: Input) => ({ ...acc, [toCamelCase(input.name)]: '' }), {}),
@@ -39,7 +42,7 @@ export const InputList: React.FC<IInputList> = ({
       step,
       id,
       value: [{ ...blankInput }],
-      error: required || validate ? true : false,
+      error: required || validation ? true : false,
     });
   }, [step, id, flow.currentStep, flow.key]);
 
@@ -51,7 +54,6 @@ export const InputList: React.FC<IInputList> = ({
     updateInputListItem({ step, id, index, name, value: type === 'number' ? parseFloat(value) : value });
   };
 
-  console.log('RENDER: ', formData);
   return (
     <div
       className={`flow-form-inputList-container ${className}-inputList-container`}
@@ -62,32 +64,8 @@ export const InputList: React.FC<IInputList> = ({
           {formData?.[step]?.[id].map((field: {}, index: number) => (
             <Row key={index} className={className}>
               {Object.entries(field).map(([k, v], i: number) => (
-                <Item
-                  key={i}
-                  objKey={k}
-                  fieldIndex={i}
-                  type={inputTypes?.[i] ?? 'text'}
-                  value={(v as string | number) || ''}
-                  required={required}
-                  onChange={handleChange(index)}
-                  // onBlur={onBlur}
-                  // onFocus={onFocus}
-                  autoComplete={autoComplete}
-                  style={style}
-                />
-              ))}
-              {/* {showError && <Error id={id} className={className} label={label} errMsg={errMsg} />} */}
-            </Row>
-          ))}
-        </>
-      ) : (
-        <>
-          {!isObjectEmpty(formData) &&
-            formData?.[id].map((field: {}, index: number) => (
-              <Row key={index} className={className}>
-                {Object.entries(field).map(([k, v], i: number) => (
+                <React.Fragment key={i}>
                   <Item
-                    key={i}
                     objKey={k}
                     fieldIndex={i}
                     type={inputTypes?.[i] ?? 'text'}
@@ -99,8 +77,66 @@ export const InputList: React.FC<IInputList> = ({
                     autoComplete={autoComplete}
                     style={style}
                   />
+                  {/* {showError && <Error id={id} className={className} label={label} errMsg={errMsg} />} */}
+                </React.Fragment>
+              ))}
+              {add && (
+                <>
+                  {index === 0 ? (
+                    <ListButton
+                      color={colors.green}
+                      onClick={() => addInputList({ step, id, blankInput: blankInput ?? {} })}
+                    >
+                      +
+                    </ListButton>
+                  ) : (
+                    <ListButton color={colors.red} onClick={() => removeInputList({ step, id, index })}>
+                      -
+                    </ListButton>
+                  )}
+                </>
+              )}
+            </Row>
+          ))}
+        </>
+      ) : (
+        <>
+          {!isObjectEmpty(formData) &&
+            formData?.[id].map((field: {}, index: number) => (
+              <Row key={index} className={className}>
+                {Object.entries(field).map(([k, v], i: number) => (
+                  <React.Fragment key={i}>
+                    <Item
+                      objKey={k}
+                      fieldIndex={i}
+                      type={inputTypes?.[i] ?? 'text'}
+                      value={(v as string | number) || ''}
+                      required={required}
+                      onChange={handleChange(index)}
+                      // onBlur={onBlur}
+                      // onFocus={onFocus}
+                      autoComplete={autoComplete}
+                      style={style}
+                    />
+                    {/* {showError && <Error id={id} className={className} label={label} errMsg={errMsg} />} */}
+                  </React.Fragment>
                 ))}
-                {/* {showError && <Error id={id} className={className} label={label} errMsg={errMsg} />} */}
+                {add && (
+                  <>
+                    {index === 0 ? (
+                      <ListButton
+                        color={colors.green}
+                        onClick={() => addInputList({ step, id, blankInput: blankInput ?? {} })}
+                      >
+                        +
+                      </ListButton>
+                    ) : (
+                      <ListButton color={colors.red} onClick={() => removeInputList({ step, id, index })}>
+                        -
+                      </ListButton>
+                    )}
+                  </>
+                )}
               </Row>
             ))}
         </>

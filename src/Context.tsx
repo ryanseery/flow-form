@@ -38,46 +38,50 @@ const initialState: IState = {
   touched: {},
 };
 
+type Args = {
+  step: string | null;
+  id: string;
+};
+
 type SetFormArgs = {
   isFlowForm: boolean;
   flow: IFlow;
 };
 
-type ValueArgs = {
-  step: string | null;
-  id: string;
+interface ValueArgs extends Args {
   value: string | boolean | number | object;
   error: boolean;
-};
+}
 
-type BlurArgs = {
-  step: string | null;
-  id: string;
+interface BlurArgs extends Args {
   showError: boolean;
-};
+}
 
-type FocusArgs = {
-  step: string | null;
-  id: string;
-};
-
-type InputListItemArgs = {
-  step: string | null;
-  id: string;
+interface InputListItemArgs extends Args {
   index: number;
   name: string;
   value: string | number;
-};
+}
+
+interface AddListArgs extends Args {
+  blankInput: {};
+}
+
+interface RemoveListArgs extends Args {
+  index: number;
+}
 
 interface IContext extends IState {
   setForm: ({ isFlowForm, flow }: SetFormArgs) => void;
   setField: ({ step, id, value, error }: ValueArgs) => void;
   updateField: ({ step, id, value, error }: ValueArgs) => void;
   updateBlur: ({ step, id, showError }: BlurArgs) => void;
-  updateFocus: ({ step, id }: FocusArgs) => void;
+  updateFocus: ({ step, id }: Args) => void;
   updateForm: () => void;
   goBack: () => void;
-  updateInputListItem: (args: InputListItemArgs) => void;
+  updateInputListItem: ({ step, id, index, name, value }: InputListItemArgs) => void;
+  addInputList: ({ step, id, blankInput }: AddListArgs) => void;
+  removeInputList: ({ step, id, index }: RemoveListArgs) => void;
 }
 
 export const Context = React.createContext({} as IContext);
@@ -91,6 +95,8 @@ enum ACTIONS {
   UPDATE_FORM = 'UPDATE_FORM',
   GO_BACK = 'GO_BACK',
   UPDATE_INPUT_LIST_ITEM = 'UPDATE_INPUT_LIST_ITEM',
+  ADD_INPUT_LIST = 'ADD_INPUT_LIST',
+  REMOVE_INPUT_LIST = 'REMOVE_INPUT_LIST',
 }
 
 interface SetForm extends SetFormArgs {
@@ -134,10 +140,10 @@ const updateBlur = ({ step, id, showError }: BlurArgs): UpdateBlur => ({
   showError,
 });
 
-interface UpdateFocus extends FocusArgs {
+interface UpdateFocus extends Args {
   type: ACTIONS.UPDATE_FOCUS;
 }
-const updateFocus = ({ step, id }: FocusArgs): UpdateFocus => ({
+const updateFocus = ({ step, id }: Args): UpdateFocus => ({
   type: ACTIONS.UPDATE_FOCUS,
   step,
   id,
@@ -169,7 +175,37 @@ const updateInputListItem = ({ step, id, index, name, value }: InputListItemArgs
   value,
 });
 
-type Action = SetForm | SetField | UpdateField | UpdateBlur | UpdateFocus | UpdateForm | GoBack | UpdateInputListItem;
+interface AddInputList extends AddListArgs {
+  type: ACTIONS.ADD_INPUT_LIST;
+}
+const addInputList = ({ step, id, blankInput }: AddListArgs): AddInputList => ({
+  type: ACTIONS.ADD_INPUT_LIST,
+  step,
+  id,
+  blankInput,
+});
+
+interface RemoveInputList extends RemoveListArgs {
+  type: ACTIONS.REMOVE_INPUT_LIST;
+}
+const removeInputList = ({ step, id, index }: RemoveListArgs): RemoveInputList => ({
+  type: ACTIONS.REMOVE_INPUT_LIST,
+  step,
+  id,
+  index,
+});
+
+type Action =
+  | SetForm
+  | SetField
+  | UpdateField
+  | UpdateBlur
+  | UpdateFocus
+  | UpdateForm
+  | GoBack
+  | UpdateInputListItem
+  | AddInputList
+  | RemoveInputList;
 
 function reducer(state: IState, action: Action): IState {
   switch (action.type) {
@@ -413,6 +449,61 @@ function reducer(state: IState, action: Action): IState {
         return state;
       }
     }
+    case ACTIONS.ADD_INPUT_LIST: {
+      const { step, id, blankInput } = action;
+
+      if (step == null) {
+        return {
+          ...state,
+          formData: {
+            ...state.formData,
+            [id]: [...state.formData[id], { ...blankInput }],
+          },
+        };
+      } else if (step != null) {
+        return {
+          ...state,
+          formData: {
+            ...state.formData,
+            [step]: {
+              ...state.formData[step],
+              [id]: [...state.formData[step][id], { ...blankInput }],
+            },
+          },
+        };
+      } else {
+        return state;
+      }
+    }
+    case ACTIONS.REMOVE_INPUT_LIST: {
+      const { step, id, index } = action;
+      if (step == null) {
+        const updatedArr = state.formData[id].filter((_: {}, i: number) => i !== index);
+
+        return {
+          ...state,
+          formData: {
+            ...state.formData,
+            [id]: [...updatedArr],
+          },
+        };
+      } else if (step != null) {
+        const updatedArr = state.formData[step][id].filter((_: {}, i: number) => i !== index);
+
+        return {
+          ...state,
+          formData: {
+            ...state.formData,
+            [step]: {
+              ...state.formData[step],
+              [id]: [...updatedArr],
+            },
+          },
+        };
+      } else {
+        return state;
+      }
+    }
     default:
       throw new Error(`Context Reducer Received Unrecognized Action!`);
   }
@@ -429,11 +520,13 @@ export const Wrapper: React.FC<IWrapper> = ({ children }) => {
       setField: ({ step, id, value, error }: ValueArgs) => dispatch(setInput({ step, id, value, error })),
       updateField: ({ step, id, value, error }: ValueArgs) => dispatch(updateInput({ step, id, value, error })),
       updateBlur: ({ step, id, showError }: BlurArgs) => dispatch(updateBlur({ step, id, showError })),
-      updateFocus: ({ step, id }: FocusArgs) => dispatch(updateFocus({ step, id })),
+      updateFocus: ({ step, id }: Args) => dispatch(updateFocus({ step, id })),
       updateForm: () => dispatch(updateForm()),
       goBack: () => dispatch(goBack()),
       updateInputListItem: ({ step, id, index, name, value }: InputListItemArgs) =>
         dispatch(updateInputListItem({ step, id, index, name, value })),
+      addInputList: ({ step, id, blankInput }: AddListArgs) => dispatch(addInputList({ step, id, blankInput })),
+      removeInputList: ({ step, id, index }: RemoveListArgs) => dispatch(removeInputList({ step, id, index })),
     };
   }, []);
 

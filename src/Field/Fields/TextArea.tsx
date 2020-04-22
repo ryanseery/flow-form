@@ -13,7 +13,7 @@ export const TextArea: React.FC<ITextArea> = ({
   step,
   id,
   required = false,
-  validate,
+  validation,
   placeholder,
   autoComplete,
   style,
@@ -23,7 +23,7 @@ export const TextArea: React.FC<ITextArea> = ({
   rows = 4,
   cols = 20,
 }) => {
-  const { value, onChange, onBlur, onFocus, showError } = useFormData({ step, id, value: '', required, validate });
+  const { value, onChange, onBlur, onFocus, showError } = useFormData({ step, id, value: '', required, validation });
 
   return (
     <>

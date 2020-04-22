@@ -13,7 +13,7 @@ export const Tel: React.FC<ITel> = ({
   id,
   type = 'text',
   required = false,
-  validate,
+  validation,
   placeholder,
   autoComplete,
   style,
@@ -22,7 +22,7 @@ export const Tel: React.FC<ITel> = ({
   errMsg,
   pattern = '[0-9]{3}-[0-9]{2}-[0-9]{3}',
 }) => {
-  const { value, onChange, onBlur, onFocus, showError } = useFormData({ step, id, value: '', required, validate });
+  const { value, onChange, onBlur, onFocus, showError } = useFormData({ step, id, value: '', required, validation });
 
   return (
     <>

@@ -7,21 +7,21 @@ interface IUseFormData {
   id: string;
   value: string;
   required: boolean;
-  validate?: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => boolean;
+  validation?: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => boolean;
 }
 
-export function useFormData({ step, id, value, required, validate }: IUseFormData) {
+export function useFormData({ step, id, value, required, validation }: IUseFormData) {
   const { setField, formData, error, updateField, updateBlur, updateFocus, showError, flow } = React.useContext(
     Context,
   );
 
   React.useEffect(() => {
-    setField({ step, id, value, error: required || validate ? true : false });
+    setField({ step, id, value, error: required || validation ? true : false });
   }, [step, id, flow.currentStep, flow.key]);
 
-  function validation(e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>): boolean {
-    if (required || validate) {
-      return validate ? validate(e) : !e.target.value;
+  function validate(e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>): boolean {
+    if (required || validation) {
+      return validation ? validation(e) : !e.target.value;
     }
     return false;
   }
@@ -33,14 +33,14 @@ export function useFormData({ step, id, value, required, validate }: IUseFormDat
       step,
       id: e.target.name,
       value: e.target.type === 'number' ? parseFloat(e.target.value) : e.target.value,
-      error: validation(e),
+      error: validate(e),
     });
   };
 
   const onBlur = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     e.preventDefault();
 
-    updateBlur({ step, id, showError: validation(e) });
+    updateBlur({ step, id, showError: validate(e) });
   };
 
   const onFocus = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {

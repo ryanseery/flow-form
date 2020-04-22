@@ -11,7 +11,7 @@ export const Color: React.FC<IColor> = ({
   id,
   type = 'color',
   required = false,
-  validate,
+  validation,
   placeholder,
   autoComplete,
   style,
@@ -19,7 +19,7 @@ export const Color: React.FC<IColor> = ({
   label,
   errMsg,
 }) => {
-  const { value, onChange, onBlur, onFocus, showError } = useFormData({ step, id, value: '', required, validate });
+  const { value, onChange, onBlur, onFocus, showError } = useFormData({ step, id, value: '', required, validation });
 
   return (
     <>

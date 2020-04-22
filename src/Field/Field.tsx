@@ -17,10 +17,11 @@ export interface IField {
   autoComplete?: string;
   placeholder?: string;
   errMsg?: string;
-  validate?: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => boolean;
+  validation?: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => boolean;
   options?: Option[];
   listName?: string;
   inputs?: Input[];
+  add?: boolean;
 }
 
 export const Field: React.FC<IField> = ({
@@ -31,13 +32,14 @@ export const Field: React.FC<IField> = ({
   children,
   style,
   required = false,
-  validate,
+  validation,
   autoComplete = 'off',
   placeholder,
   errMsg,
   options,
   listName,
   inputs,
+  add,
 }) => {
   if (!name && !children) {
     throw new Error(`Please provide a label(<Field>Label</Field>) or name prop(<Field name="label" />).`);
@@ -52,7 +54,7 @@ export const Field: React.FC<IField> = ({
     index,
     type,
     required,
-    validate,
+    validation,
     autoComplete,
     placeholder,
     className,
@@ -62,6 +64,7 @@ export const Field: React.FC<IField> = ({
     options,
     listName,
     inputs,
+    add,
   };
 
   return (

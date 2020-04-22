@@ -11,7 +11,7 @@ export const Email: React.FC<IEmail> = ({
   id,
   type = 'email',
   required = false,
-  validate,
+  validation,
   placeholder,
   autoComplete,
   style,
@@ -19,7 +19,7 @@ export const Email: React.FC<IEmail> = ({
   label,
   errMsg,
 }) => {
-  const { value, onChange, onBlur, onFocus, showError } = useFormData({ step, id, value: '', required, validate });
+  const { value, onChange, onBlur, onFocus, showError } = useFormData({ step, id, value: '', required, validation });
 
   return (
     <>

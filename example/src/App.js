@@ -22,14 +22,14 @@ function App() {
   return (
     <div style={{ height: '100vh', display: 'flex', justifyContent: 'center' }}>
       <FlowForm onSubmit={data => console.log('onSubmit: ', data)}>
-        <Field validate={checkString}>Test 1</Field>
+        <Field validation={checkString}>Test 1</Field>
 
         <ShowData />
       </FlowForm>
 
       <FlowForm onSubmit={data => console.log('onSubmit: ', data)}>
         <Step title="First Step">
-          <Field validate={checkString}>Test 3</Field>
+          <Field validation={checkString}>Test 3</Field>
 
           <Field type="select" options={testSelect}>
             Cars
@@ -51,7 +51,7 @@ function App() {
 
         <Step title="Second Step">
           <Field>Test 4</Field>
-          <Field type="number" validate={checkNumber}>
+          <Field type="number" validation={checkNumber}>
             Number
           </Field>
         </Step>

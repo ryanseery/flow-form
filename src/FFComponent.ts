@@ -14,6 +14,7 @@ export enum FFComponent {
   URL = 'URL',
   SELECT = 'SELECT',
   INPUT_LIST = 'INPUT_LIST',
+  LIST_BUTTON = 'LIST_BUTTON',
   ROW = 'ROW',
   ITEM = 'ITEM',
   PROGRESS = 'PROGRESS',

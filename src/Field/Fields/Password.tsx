@@ -11,7 +11,7 @@ export const Password: React.FC<IPassword> = ({
   id,
   type = 'password',
   required = false,
-  validate,
+  validation,
   placeholder,
   autoComplete,
   style,
@@ -19,7 +19,7 @@ export const Password: React.FC<IPassword> = ({
   label,
   errMsg,
 }) => {
-  const { value, onChange, onBlur, onFocus, showError } = useFormData({ step, id, value: '', required, validate });
+  const { value, onChange, onBlur, onFocus, showError } = useFormData({ step, id, value: '', required, validation });
 
   return (
     <>
