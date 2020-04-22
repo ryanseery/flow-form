@@ -1,5 +1,5 @@
 import React from 'react';
-import { FlowForm, Step, Field, ShowData } from 'flow-form';
+import { FlowForm, Step, Field, ShowData, FieldList } from 'flow-form';
 import './App.css';
 
 const testSelect = [
@@ -47,6 +47,12 @@ function App() {
           >
             Add Architect
           </Field>
+
+          {/* <FieldList label="Add Architect" add>
+            <FieldItem>Name</FieldItem>
+            <FieldItem type="email">Email</FieldItem>
+            <FieldItem type="tel">Phone Number</FieldItem>
+          </FieldList> */}
         </Step>
 
         <Step title="Second Step">

@@ -57,6 +57,7 @@ var ACTIONS;
 (function (ACTIONS) {
     ACTIONS["SET_FORM"] = "SET_FORM";
     ACTIONS["SET_FIELD"] = "SET_FIELD";
+    ACTIONS["SET_FIELD_LIST"] = "SET_FIELD_LIST";
     ACTIONS["UPDATE_FIELD"] = "UPDATE_FIELD";
     ACTIONS["UPDATE_BLUR"] = "UPDATE_BLUR";
     ACTIONS["UPDATE_FOCUS"] = "UPDATE_FOCUS";
@@ -82,6 +83,17 @@ var setInput = function (_a) {
         id: id,
         value: value,
         error: error,
+    });
+};
+var setFieldList = function (_a) {
+    var step = _a.step, id = _a.id, value = _a.value, error = _a.error, listTitle = _a.listTitle;
+    return ({
+        type: ACTIONS.SET_FIELD_LIST,
+        step: step,
+        id: id,
+        value: value,
+        error: error,
+        listTitle: listTitle,
     });
 };
 var updateInput = function (_a) {
@@ -281,6 +293,10 @@ var Wrapper = function (_a) {
                 var step = _a.step, id = _a.id, value = _a.value, error = _a.error;
                 return dispatch(setInput({ step: step, id: id, value: value, error: error }));
             },
+            setFieldList: function (_a) {
+                var step = _a.step, id = _a.id, value = _a.value, error = _a.error, listTitle = _a.listTitle;
+                return dispatch(setFieldList({ step: step, id: id, value: value, error: error, listTitle: listTitle }));
+            },
             updateField: function (_a) {
                 var step = _a.step, id = _a.id, value = _a.value, error = _a.error;
                 return dispatch(updateInput({ step: step, id: id, value: value, error: error }));
@@ -316,6 +332,7 @@ var FFComponent;
 (function (FFComponent) {
     FFComponent["FORM"] = "FORM";
     FFComponent["FIELD"] = "FIELD";
+    FFComponent["FIELD_LIST"] = "FIELD_LIST";
     FFComponent["STEP"] = "STEP";
     FFComponent["SHOW_DATA"] = "SHOW_DATA";
     FFComponent["SUBMIT"] = "SUBMIT";
@@ -501,11 +518,11 @@ var FlowForm = function (_a) {
 };
 
 var Step = function (_a) {
-    var children = _a.children, title = _a.title, style = _a.style;
+    var children = _a.children, title = _a.title, className = _a.className, style = _a.style;
     if (!title) {
-        throw new Error("The title prop is mandatory on Step Component");
+        throw new Error("The title prop is mandatory on Step Component.");
     }
-    return (React.createElement("div", { "data-step-id": toCamelCase(title), className: "flow-from-step " + (title && toKebabCase(title)), style: style }, React.Children.map(children, function (child, index) {
+    return (React.createElement("div", { "data-step-id": toCamelCase(title), className: "flow-form-step " + className, style: style }, React.Children.map(children, function (child, index) {
         // if child is Field component we clone props into it
         if (React.isValidElement(child)) {
             return React.cloneElement(child, {
@@ -825,7 +842,19 @@ Submit.defaultProps = {
     ffComp: FFComponent.SUBMIT,
 };
 
+var FieldList = function (_a) {
+    var label = _a.label, className = _a.className, style = _a.style, children = _a.children;
+    if (!label) {
+        throw new Error("THe label prop is mandatory on FieldList Component.");
+    }
+    return (React.createElement("div", { "data-field-list-id": toCamelCase(label), className: "flow-form-field-list " + className, style: style }, children));
+};
+FieldList.defaultProps = {
+    ffComp: FFComponent.FIELD_LIST,
+};
+
 exports.Field = Field;
+exports.FieldList = FieldList;
 exports.FlowForm = FlowForm;
 exports.ShowData = ShowData;
 exports.Step = Step;
