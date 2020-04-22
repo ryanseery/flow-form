@@ -9,9 +9,9 @@ import { Item } from './Item';
 import { ListButton } from './ListButton';
 import { colors } from '../../../colors';
 
-interface IInputList extends IProps {}
+interface IList extends IProps {}
 
-export const InputList: React.FC<IInputList> = ({
+export const List: React.FC<IList> = ({
   step,
   id,
   required = false,
@@ -145,6 +145,6 @@ export const InputList: React.FC<IInputList> = ({
   );
 };
 
-InputList.defaultProps = {
-  ffComp: FFComponent.INPUT_LIST,
+List.defaultProps = {
+  ffComp: FFComponent.LIST,
 };

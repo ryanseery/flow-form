@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { FFComponent } from '../FFComponent';
 import { toCamelCase, toKebabCase } from '../utils';
-import { Text, Number, Email, Password, Tel, Url, Color, TextArea, Select, InputList } from './Fields';
+import { Text, Number, Email, Password, Tel, Url, Color, TextArea, Select, List } from './Fields';
 import { Option, Input } from './Fields/@types';
 
 export interface IField {
@@ -70,9 +70,9 @@ export const Field: React.FC<IField> = ({
   return (
     <label
       id={`${id}-label`}
-      data-label-id={`${id}-label`}
+      data-field-id={`${id}-label`}
       htmlFor={id}
-      className={`flow-form-label ${className}-label`}
+      className={`flow-form-field ${className}-label`}
       style={{ display: `block`, minHeight: '4rem', ...style }}
     >
       {children ?? name}
@@ -96,8 +96,8 @@ export const Field: React.FC<IField> = ({
             return <TextArea {...defaultProps} />;
           case 'select':
             return <Select {...defaultProps} />;
-          case 'inputList':
-            return <InputList {...defaultProps} />;
+          case 'list':
+            return <List {...defaultProps} />;
           default:
             return <Text {...defaultProps} />;
         }

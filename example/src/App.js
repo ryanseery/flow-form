@@ -36,7 +36,7 @@ function App() {
           </Field>
 
           <Field
-            type="inputList"
+            type="list"
             // listName="architects"
             inputs={[
               { name: 'Name', type: 'text' },

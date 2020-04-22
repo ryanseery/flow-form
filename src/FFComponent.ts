@@ -14,7 +14,7 @@ export enum FFComponent {
   TEXTAREA = 'TEXTAREA',
   URL = 'URL',
   SELECT = 'SELECT',
-  INPUT_LIST = 'INPUT_LIST',
+  LIST = 'LIST',
   LIST_BUTTON = 'LIST_BUTTON',
   ROW = 'ROW',
   ITEM = 'ITEM',

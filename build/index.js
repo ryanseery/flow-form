@@ -345,7 +345,7 @@ var FFComponent;
     FFComponent["TEXTAREA"] = "TEXTAREA";
     FFComponent["URL"] = "URL";
     FFComponent["SELECT"] = "SELECT";
-    FFComponent["INPUT_LIST"] = "INPUT_LIST";
+    FFComponent["LIST"] = "LIST";
     FFComponent["LIST_BUTTON"] = "LIST_BUTTON";
     FFComponent["ROW"] = "ROW";
     FFComponent["ITEM"] = "ITEM";
@@ -715,7 +715,7 @@ ListButton.defaultProps = {
     ffComp: FFComponent.LIST_BUTTON,
 };
 
-var InputList = function (_a) {
+var List = function (_a) {
     var step = _a.step, id = _a.id, _b = _a.required, required = _b === void 0 ? false : _b, validation = _a.validation, autoComplete = _a.autoComplete, style = _a.style, className = _a.className, 
     // label,
     // errMsg,
@@ -762,8 +762,8 @@ var InputList = function (_a) {
         }),
         add && (React.createElement(React.Fragment, null, index === 0 ? (React.createElement(ListButton, { color: colors.green, onClick: function () { return addInputList({ step: step, id: id, blankInput: blankInput !== null && blankInput !== void 0 ? blankInput : {} }); } }, "+")) : (React.createElement(ListButton, { color: colors.red, onClick: function () { return removeInputList({ step: step, id: id, index: index }); } }, "-")))))); }))))));
 };
-InputList.defaultProps = {
-    ffComp: FFComponent.INPUT_LIST,
+List.defaultProps = {
+    ffComp: FFComponent.LIST,
 };
 
 var Field = function (_a) {
@@ -791,7 +791,7 @@ var Field = function (_a) {
         inputs: inputs,
         add: add,
     };
-    return (React.createElement("label", { id: id + "-label", "data-label-id": id + "-label", htmlFor: id, className: "flow-form-label " + className + "-label", style: __assign({ display: "block", minHeight: '4rem' }, style) }, children !== null && children !== void 0 ? children : name,
+    return (React.createElement("label", { id: id + "-label", "data-field-id": id + "-label", htmlFor: id, className: "flow-form-field " + className + "-label", style: __assign({ display: "block", minHeight: '4rem' }, style) }, children !== null && children !== void 0 ? children : name,
         (function () {
             switch (type) {
                 case 'text':
@@ -812,8 +812,8 @@ var Field = function (_a) {
                     return React.createElement(TextArea, __assign({}, defaultProps));
                 case 'select':
                     return React.createElement(Select, __assign({}, defaultProps));
-                case 'inputList':
-                    return React.createElement(InputList, __assign({}, defaultProps));
+                case 'list':
+                    return React.createElement(List, __assign({}, defaultProps));
                 default:
                     return React.createElement(Text, __assign({}, defaultProps));
             }
