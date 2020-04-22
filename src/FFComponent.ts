@@ -1,6 +1,7 @@
 export enum FFComponent {
   FORM = 'FORM',
   FIELD = 'FIELD',
+  FIELD_LIST = 'FIELD_LIST',
   STEP = 'STEP',
   SHOW_DATA = 'SHOW_DATA',
   SUBMIT = 'SUBMIT',
