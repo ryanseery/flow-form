@@ -61,6 +61,14 @@ type FocusArgs = {
   id: string;
 };
 
+type InputListItemArgs = {
+  step: string | null;
+  id: string;
+  index: number;
+  name: string;
+  value: string | number;
+};
+
 interface IContext extends IState {
   setForm: ({ isFlowForm, flow }: SetFormArgs) => void;
   setField: ({ step, id, value, error }: ValueArgs) => void;
@@ -69,6 +77,7 @@ interface IContext extends IState {
   updateFocus: ({ step, id }: FocusArgs) => void;
   updateForm: () => void;
   goBack: () => void;
+  updateInputListItem: (args: InputListItemArgs) => void;
 }
 
 export const Context = React.createContext({} as IContext);
@@ -81,6 +90,7 @@ enum ACTIONS {
   UPDATE_FOCUS = 'UPDATE_FOCUS',
   UPDATE_FORM = 'UPDATE_FORM',
   GO_BACK = 'GO_BACK',
+  UPDATE_INPUT_LIST_ITEM = 'UPDATE_INPUT_LIST_ITEM',
 }
 
 interface SetForm extends SetFormArgs {
@@ -147,7 +157,19 @@ const goBack = (): GoBack => ({
   type: ACTIONS.GO_BACK,
 });
 
-type Action = SetForm | SetField | UpdateField | UpdateBlur | UpdateFocus | UpdateForm | GoBack;
+interface UpdateInputListItem extends InputListItemArgs {
+  type: ACTIONS.UPDATE_INPUT_LIST_ITEM;
+}
+const updateInputListItem = ({ step, id, index, name, value }: InputListItemArgs): UpdateInputListItem => ({
+  type: ACTIONS.UPDATE_INPUT_LIST_ITEM,
+  step,
+  id,
+  index,
+  name,
+  value,
+});
+
+type Action = SetForm | SetField | UpdateField | UpdateBlur | UpdateFocus | UpdateForm | GoBack | UpdateInputListItem;
 
 function reducer(state: IState, action: Action): IState {
   switch (action.type) {
@@ -358,6 +380,39 @@ function reducer(state: IState, action: Action): IState {
         },
       };
     }
+    case ACTIONS.UPDATE_INPUT_LIST_ITEM: {
+      const { step, id, index, name, value } = action;
+      if (step == null) {
+        const mutable = [...state.formData[id]];
+
+        mutable[index][name] = value;
+
+        return {
+          ...state,
+          formData: {
+            ...state.formData,
+            [id]: [...mutable],
+          },
+        };
+      } else if (step != null) {
+        const mutable = [...state.formData[step][id]];
+
+        mutable[index][name] = value;
+
+        return {
+          ...state,
+          formData: {
+            ...state.formData,
+            [step]: {
+              ...state.formData[step],
+              [id]: [...mutable],
+            },
+          },
+        };
+      } else {
+        return state;
+      }
+    }
     default:
       throw new Error(`Context Reducer Received Unrecognized Action!`);
   }
@@ -377,6 +432,8 @@ export const Wrapper: React.FC<IWrapper> = ({ children }) => {
       updateFocus: ({ step, id }: FocusArgs) => dispatch(updateFocus({ step, id })),
       updateForm: () => dispatch(updateForm()),
       goBack: () => dispatch(goBack()),
+      updateInputListItem: ({ step, id, index, name, value }: InputListItemArgs) =>
+        dispatch(updateInputListItem({ step, id, index, name, value })),
     };
   }, []);
 

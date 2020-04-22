@@ -41,6 +41,7 @@ function App() {
             inputs={[
               { name: 'Name', type: 'text' },
               { name: 'Email', type: 'email' },
+              // { name: 'PhoneNumber', type: 'tel' },
             ]}
             add
           >

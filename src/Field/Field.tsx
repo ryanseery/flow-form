@@ -32,7 +32,7 @@ export const Field: React.FC<IField> = ({
   style,
   required = false,
   validate,
-  autoComplete,
+  autoComplete = 'off',
   placeholder,
   errMsg,
   options,
