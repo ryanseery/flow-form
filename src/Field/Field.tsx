@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { FFComponent } from '../FFComponent';
-import { toCamelCase, toKebabCase } from '../utils';
+import { toCamelCase, toKebabCase, capitalize } from '../utils';
 import { Text, Number, Email, Password, Tel, Url, Color, TextArea, Select, List } from './Fields';
 import { Option, Input } from './Fields/@types';
 
@@ -45,8 +45,8 @@ export const Field: React.FC<IField> = ({
     throw new Error(`Please provide a label(<Field>Label</Field>) or name prop(<Field name="label" />).`);
   }
 
-  const id = children ? toCamelCase(children) : toCamelCase(name ?? '');
-  const className = children ? toKebabCase(children) : toKebabCase(name ?? '');
+  const id = name ? toCamelCase(name) : toCamelCase(children ?? '');
+  const className = name ? toKebabCase(name) : toKebabCase(children ?? '');
 
   const defaultProps = {
     id,
@@ -75,7 +75,7 @@ export const Field: React.FC<IField> = ({
       className={`flow-form-field ${className}-label`}
       style={{ display: `block`, minHeight: '4rem', ...style }}
     >
-      {children ?? name}
+      {children ? children : capitalize(name ?? '')}
       {(() => {
         switch (type) {
           case 'text':

@@ -771,8 +771,8 @@ var Field = function (_a) {
     if (!name && !children) {
         throw new Error("Please provide a label(<Field>Label</Field>) or name prop(<Field name=\"label\" />).");
     }
-    var id = children ? toCamelCase(children) : toCamelCase(name !== null && name !== void 0 ? name : '');
-    var className = children ? toKebabCase(children) : toKebabCase(name !== null && name !== void 0 ? name : '');
+    var id = name ? toCamelCase(name) : toCamelCase(children !== null && children !== void 0 ? children : '');
+    var className = name ? toKebabCase(name) : toKebabCase(children !== null && children !== void 0 ? children : '');
     var defaultProps = {
         id: id,
         step: step,
@@ -791,7 +791,8 @@ var Field = function (_a) {
         inputs: inputs,
         add: add,
     };
-    return (React.createElement("label", { id: id + "-label", "data-field-id": id + "-label", htmlFor: id, className: "flow-form-field " + className + "-label", style: __assign({ display: "block", minHeight: '4rem' }, style) }, children !== null && children !== void 0 ? children : name,
+    return (React.createElement("label", { id: id + "-label", "data-field-id": id + "-label", htmlFor: id, className: "flow-form-field " + className + "-label", style: __assign({ display: "block", minHeight: '4rem' }, style) },
+        children ? children : capitalize(name !== null && name !== void 0 ? name : ''),
         (function () {
             switch (type) {
                 case 'text':
@@ -834,29 +835,8 @@ ShowData.defaultProps = {
     ffComp: FFComponent.SHOW_DATA,
 };
 
-var Submit = function (_a) {
-    var className = _a.className, title = _a.title;
-    return (React.createElement("button", { type: "submit", className: "flow-form-submit-btn " + (className !== null && className !== void 0 ? className : '') }, title !== null && title !== void 0 ? title : "Submit"));
-};
-Submit.defaultProps = {
-    ffComp: FFComponent.SUBMIT,
-};
-
-var FieldList = function (_a) {
-    var label = _a.label, className = _a.className, style = _a.style, children = _a.children;
-    if (!label) {
-        throw new Error("THe label prop is mandatory on FieldList Component.");
-    }
-    return (React.createElement("div", { "data-field-list-id": toCamelCase(label), className: "flow-form-field-list " + className, style: style }, children));
-};
-FieldList.defaultProps = {
-    ffComp: FFComponent.FIELD_LIST,
-};
-
 exports.Field = Field;
-exports.FieldList = FieldList;
 exports.FlowForm = FlowForm;
 exports.ShowData = ShowData;
 exports.Step = Step;
-exports.Submit = Submit;
 //# sourceMappingURL=index.js.map
