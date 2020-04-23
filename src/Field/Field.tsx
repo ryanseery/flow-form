@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { FFComponent } from '../FFComponent';
-import { toCamelCase, toKebabCase } from '../utils';
-import { Text, Number, Email, Password, Tel, Url, Color, TextArea, Select, InputList } from './Fields';
+import { toCamelCase, toKebabCase, capitalize } from '../utils';
+import { Text, Number, Email, Password, Tel, Url, Color, TextArea, Select, List } from './Fields';
 import { Option, Input } from './Fields/@types';
 
 export interface IField {
@@ -45,8 +45,8 @@ export const Field: React.FC<IField> = ({
     throw new Error(`Please provide a label(<Field>Label</Field>) or name prop(<Field name="label" />).`);
   }
 
-  const id = children ? toCamelCase(children) : toCamelCase(name ?? '');
-  const className = children ? toKebabCase(children) : toKebabCase(name ?? '');
+  const id = name ? toCamelCase(name) : toCamelCase(children ?? '');
+  const className = name ? toKebabCase(name) : toKebabCase(children ?? '');
 
   const defaultProps = {
     id,
@@ -70,12 +70,12 @@ export const Field: React.FC<IField> = ({
   return (
     <label
       id={`${id}-label`}
-      data-label-id={`${id}-label`}
+      data-field-id={`${id}-label`}
       htmlFor={id}
-      className={`flow-form-label ${className}-label`}
+      className={`flow-form-field ${className}-label`}
       style={{ display: `block`, minHeight: '4rem', ...style }}
     >
-      {children ?? name}
+      {children ? children : capitalize(name ?? '')}
       {(() => {
         switch (type) {
           case 'text':
@@ -96,8 +96,8 @@ export const Field: React.FC<IField> = ({
             return <TextArea {...defaultProps} />;
           case 'select':
             return <Select {...defaultProps} />;
-          case 'inputList':
-            return <InputList {...defaultProps} />;
+          case 'list':
+            return <List {...defaultProps} />;
           default:
             return <Text {...defaultProps} />;
         }

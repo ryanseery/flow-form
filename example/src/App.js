@@ -31,13 +31,15 @@ function App() {
         <Step title="First Step">
           <Field validation={checkString}>Test 3</Field>
 
+          <Field name="color" type="color" />
+
           <Field type="select" options={testSelect}>
             Cars
           </Field>
 
           <Field
-            type="inputList"
-            listName="architects"
+            type="list"
+            name="architects"
             inputs={[
               { name: 'Name', type: 'text' },
               { name: 'Email', type: 'email' },
