@@ -8,11 +8,6 @@ import { ItemInput } from './ItemInput';
 import { ListButton } from './ListButton';
 import { colors } from '../colors';
 
-enum ARR_TYPE {
-  BLANK_INPUT = 'BLANK_INPUT',
-  INPUT_TYPE = 'INPUT_TYPE',
-}
-
 type IFieldListProps = {
   ffComp?: string;
   step: string | null;
@@ -37,31 +32,30 @@ function handleBlankArr(children: React.ReactNode[]): {} {
   );
 }
 
-function handleTypeArr(children: React.ReactNode[]): {} {
-  return React.Children.toArray(children).reduce(
-    (acc: [], child) =>
-      React.isValidElement<IItem>(child) ? [...acc, child.props.type ? child.props.type : 'text'] : acc,
-    [],
-  );
-}
-
-function handleChildObj(children: React.ReactNode, type: string): {}[] | string[] {
+function handleChildObj(children: React.ReactNode): {}[] | string[] {
   if (React.isValidElement<IItem>(children)) {
-    if (type === ARR_TYPE.BLANK_INPUT) {
-      return [toCamelCase(children.props.name ? children.props.name : children.props.children ?? '')];
-    }
-
-    if (type == ARR_TYPE.INPUT_TYPE) {
-      return [children?.props?.type ?? 'text'];
-    }
-
-    return [];
+    return [toCamelCase(children.props.name ? children.props.name : children.props.children ?? '')];
   } else {
     return [];
   }
 }
 
-// TODO put function code into own hook?
+// TODO fix return type issues. should be IItem
+function handleInputPropsArr(children: React.ReactNode[]) {
+  return React.Children.toArray(children).reduce(
+    (acc: [], child) => (React.isValidElement<IItem>(child) ? [...acc, { ...child.props }] : acc),
+    [],
+  );
+}
+
+function handleInputPropsObj(children: React.ReactNode) {
+  if (React.isValidElement<IItem>(children)) {
+    return [{ ...children.props }];
+  }
+  return [];
+}
+
+// TODO put state function code into own hook?
 export const FieldList: IFieldList<IFieldListProps> = ({ step, label, name, className, style, children, add }) => {
   const { flow, setField, formData, updateInputListItem, addInputList, removeInputList } = React.useContext(Context);
 
@@ -76,13 +70,12 @@ export const FieldList: IFieldList<IFieldListProps> = ({ step, label, name, clas
   const id = React.useMemo(() => toCamelCase(name ? name : label), [name, label]);
 
   const blankInput = React.useMemo(
-    () => (Array.isArray(children) ? handleBlankArr(children) : handleChildObj(children, ARR_TYPE.BLANK_INPUT)),
+    () => (Array.isArray(children) ? handleBlankArr(children) : handleChildObj(children)),
     [],
   );
 
-  // TODO rebuild to take all input props
-  const inputTypes = React.useMemo(
-    () => (Array.isArray(children) ? handleTypeArr(children) : handleChildObj(children, ARR_TYPE.INPUT_TYPE)),
+  const inputProps = React.useMemo(
+    () => (Array.isArray(children) ? handleInputPropsArr(children) : handleInputPropsObj(children)),
     [],
   );
 
@@ -104,7 +97,11 @@ export const FieldList: IFieldList<IFieldListProps> = ({ step, label, name, clas
   };
 
   return (
-    <label data-field-list-id={id} className={`flow-form-field-list ${className}`} style={style}>
+    <label
+      data-field-list-id={id}
+      className={`flow-form-field-list ${className}`}
+      style={{ ...style, textTransform: 'capitalize' }}
+    >
       {label}
       {!isObjectEmpty(formData) && step != null ? (
         <>
@@ -115,14 +112,14 @@ export const FieldList: IFieldList<IFieldListProps> = ({ step, label, name, clas
                   <ItemInput
                     objKey={k}
                     fieldIndex={i}
-                    type={inputTypes?.[i] ?? 'text'}
+                    type={inputProps?.[i].type ?? 'text'}
                     value={(v as string | number) || ''}
-                    // required='false'
+                    required={inputProps?.[i].required ?? false}
                     onChange={handleChange(index)}
                     // onBlur={onBlur}
                     // onFocus={onFocus}
-                    autoComplete="off"
-                    style={style}
+                    autoComplete={inputProps?.[i].autoComplete ?? 'off'}
+                    // style={style}
                   />
                   {/* {showError && <Error id={id} className={className} label={label} errMsg={errMsg} />} */}
                 </React.Fragment>
@@ -156,14 +153,14 @@ export const FieldList: IFieldList<IFieldListProps> = ({ step, label, name, clas
                     <ItemInput
                       objKey={k}
                       fieldIndex={i}
-                      type={inputTypes?.[i] ?? 'text'}
+                      type={inputProps?.[i].type ?? 'text'}
                       value={(v as string | number) || ''}
-                      // required={required}
+                      required={inputProps?.[i].required ?? false}
                       onChange={handleChange(index)}
                       // onBlur={onBlur}
                       // onFocus={onFocus}
-                      autoComplete="off"
-                      style={style}
+                      autoComplete={inputProps?.[i].autoComplete ?? 'off'}
+                      // style={style}
                     />
                     {/* {showError && <Error id={id} className={className} label={label} errMsg={errMsg} />} */}
                   </React.Fragment>

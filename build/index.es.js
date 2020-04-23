@@ -753,11 +753,11 @@ Row.defaultProps = {
 };
 
 var ItemInput = function (_a) {
-    var objKey = _a.objKey, fieldIndex = _a.fieldIndex, type = _a.type, value = _a.value, required = _a.required, autoComplete = _a.autoComplete, style = _a.style, onChange = _a.onChange;
+    var objKey = _a.objKey, fieldIndex = _a.fieldIndex, type = _a.type, value = _a.value, required = _a.required, autoComplete = _a.autoComplete, onChange = _a.onChange;
     return (createElement("input", { id: objKey + "-field-field-list-item-" + fieldIndex, "data-input-id": objKey + "-field-field-list-item-" + fieldIndex, name: objKey, type: type, value: value, required: required, onChange: onChange, 
         // onBlur={onBlur}
         // onFocus={onFocus}
-        className: "flow-form-field flow-form-field-list-item " + objKey + "-field-list-item", placeholder: objKey, autoComplete: autoComplete, style: __assign(__assign({}, style), { marginRight: '5px', textTransform: 'capitalize' }) }));
+        className: "flow-form-field flow-form-field-list-item " + objKey + "-field-list-item", placeholder: objKey, autoComplete: autoComplete, style: { marginRight: '5px' } }));
 };
 ItemInput.defaultProps = {
     ffComp: FFComponent.ITEM_INPUT,
@@ -771,11 +771,6 @@ ListButton.defaultProps = {
     ffComp: FFComponent.LIST_BUTTON,
 };
 
-var ARR_TYPE;
-(function (ARR_TYPE) {
-    ARR_TYPE["BLANK_INPUT"] = "BLANK_INPUT";
-    ARR_TYPE["INPUT_TYPE"] = "INPUT_TYPE";
-})(ARR_TYPE || (ARR_TYPE = {}));
 function handleBlankArr(children) {
     return Children.toArray(children).reduce(function (acc, child) {
         var _a;
@@ -784,27 +779,26 @@ function handleBlankArr(children) {
             ? __assign(__assign({}, acc), (_a = {}, _a[toCamelCase(child.props.name ? child.props.name : (_b = child.props.children) !== null && _b !== void 0 ? _b : '')] = '', _a)) : acc;
     }, {});
 }
-function handleTypeArr(children) {
-    return Children.toArray(children).reduce(function (acc, child) {
-        return isValidElement(child) ? __spreadArrays(acc, [child.props.type ? child.props.type : 'text']) : acc;
-    }, []);
-}
-function handleChildObj$1(children, type) {
-    var _a, _b, _c;
+function handleChildObj$1(children) {
+    var _a;
     if (isValidElement(children)) {
-        if (type === ARR_TYPE.BLANK_INPUT) {
-            return [toCamelCase(children.props.name ? children.props.name : (_a = children.props.children) !== null && _a !== void 0 ? _a : '')];
-        }
-        if (type == ARR_TYPE.INPUT_TYPE) {
-            return [(_c = (_b = children === null || children === void 0 ? void 0 : children.props) === null || _b === void 0 ? void 0 : _b.type) !== null && _c !== void 0 ? _c : 'text'];
-        }
-        return [];
+        return [toCamelCase(children.props.name ? children.props.name : (_a = children.props.children) !== null && _a !== void 0 ? _a : '')];
     }
     else {
         return [];
     }
 }
-// TODO put function code into own hook?
+// TODO fix return type issues. should be IItem
+function handleInputPropsArr(children) {
+    return Children.toArray(children).reduce(function (acc, child) { return (isValidElement(child) ? __spreadArrays(acc, [__assign({}, child.props)]) : acc); }, []);
+}
+function handleInputPropsObj(children) {
+    if (isValidElement(children)) {
+        return [__assign({}, children.props)];
+    }
+    return [];
+}
+// TODO put state function code into own hook?
 var FieldList = function (_a) {
     var step = _a.step, label = _a.label, name = _a.name, className = _a.className, style = _a.style, children = _a.children, add = _a.add;
     var _b;
@@ -816,9 +810,8 @@ var FieldList = function (_a) {
         throw new Error("The label prop is mandatory on FieldList Component.");
     }
     var id = useMemo(function () { return toCamelCase(name ? name : label); }, [name, label]);
-    var blankInput = useMemo(function () { return (Array.isArray(children) ? handleBlankArr(children) : handleChildObj$1(children, ARR_TYPE.BLANK_INPUT)); }, []);
-    // TODO rebuild to take all input props
-    var inputTypes = useMemo(function () { return (Array.isArray(children) ? handleTypeArr(children) : handleChildObj$1(children, ARR_TYPE.INPUT_TYPE)); }, []);
+    var blankInput = useMemo(function () { return (Array.isArray(children) ? handleBlankArr(children) : handleChildObj$1(children)); }, []);
+    var inputProps = useMemo(function () { return (Array.isArray(children) ? handleInputPropsArr(children) : handleInputPropsObj(children)); }, []);
     useEffect(function () {
         setField({
             step: step,
@@ -831,31 +824,27 @@ var FieldList = function (_a) {
         var _a = e.target, type = _a.type, name = _a.name, value = _a.value;
         updateInputListItem({ step: step, id: id, index: index, name: name, value: type === 'number' ? parseFloat(value) : value });
     }; };
-    return (createElement("label", { "data-field-list-id": id, className: "flow-form-field-list " + className, style: style },
+    return (createElement("label", { "data-field-list-id": id, className: "flow-form-field-list " + className, style: __assign(__assign({}, style), { textTransform: 'capitalize' }) },
         label,
         !isObjectEmpty(formData) && step != null ? (createElement(Fragment, null, (_b = formData === null || formData === void 0 ? void 0 : formData[step]) === null || _b === void 0 ? void 0 : _b[id].map(function (field, index) { return (createElement(Row, { key: index, className: className },
             Object.entries(field).map(function (_a, i) {
                 var k = _a[0], v = _a[1];
-                var _b;
+                var _b, _c, _d;
                 return (createElement(Fragment, { key: i },
-                    createElement(ItemInput, { objKey: k, fieldIndex: i, type: (_b = inputTypes === null || inputTypes === void 0 ? void 0 : inputTypes[i]) !== null && _b !== void 0 ? _b : 'text', value: v || '', 
-                        // required='false'
-                        onChange: handleChange(index), 
+                    createElement(ItemInput, { objKey: k, fieldIndex: i, type: (_b = inputProps === null || inputProps === void 0 ? void 0 : inputProps[i].type) !== null && _b !== void 0 ? _b : 'text', value: v || '', required: (_c = inputProps === null || inputProps === void 0 ? void 0 : inputProps[i].required) !== null && _c !== void 0 ? _c : false, onChange: handleChange(index), 
                         // onBlur={onBlur}
                         // onFocus={onFocus}
-                        autoComplete: "off", style: style })));
+                        autoComplete: (_d = inputProps === null || inputProps === void 0 ? void 0 : inputProps[i].autoComplete) !== null && _d !== void 0 ? _d : 'off' })));
             }),
             add && (createElement(Fragment, null, index === 0 ? (createElement(ListButton, { color: colors.green, onClick: function () { return addInputList({ step: step, id: id, blankInput: blankInput !== null && blankInput !== void 0 ? blankInput : {} }); } }, "+")) : (createElement(ListButton, { color: colors.red, onClick: function () { return removeInputList({ step: step, id: id, index: index }); } }, "-")))))); }))) : (createElement(Fragment, null, !isObjectEmpty(formData) && (formData === null || formData === void 0 ? void 0 : formData[id].map(function (field, index) { return (createElement(Row, { key: index, className: className },
             Object.entries(field).map(function (_a, i) {
                 var k = _a[0], v = _a[1];
-                var _b;
+                var _b, _c, _d;
                 return (createElement(Fragment, { key: i },
-                    createElement(ItemInput, { objKey: k, fieldIndex: i, type: (_b = inputTypes === null || inputTypes === void 0 ? void 0 : inputTypes[i]) !== null && _b !== void 0 ? _b : 'text', value: v || '', 
-                        // required={required}
-                        onChange: handleChange(index), 
+                    createElement(ItemInput, { objKey: k, fieldIndex: i, type: (_b = inputProps === null || inputProps === void 0 ? void 0 : inputProps[i].type) !== null && _b !== void 0 ? _b : 'text', value: v || '', required: (_c = inputProps === null || inputProps === void 0 ? void 0 : inputProps[i].required) !== null && _c !== void 0 ? _c : false, onChange: handleChange(index), 
                         // onBlur={onBlur}
                         // onFocus={onFocus}
-                        autoComplete: "off", style: style })));
+                        autoComplete: (_d = inputProps === null || inputProps === void 0 ? void 0 : inputProps[i].autoComplete) !== null && _d !== void 0 ? _d : 'off' })));
             }),
             add && (createElement(Fragment, null, index === 0 ? (createElement(ListButton, { color: colors.green, onClick: function () { return addInputList({ step: step, id: id, blankInput: blankInput !== null && blankInput !== void 0 ? blankInput : {} }); } }, "+")) : (createElement(ListButton, { color: colors.red, onClick: function () { return removeInputList({ step: step, id: id, index: index }); } }, "-")))))); }))))));
 };

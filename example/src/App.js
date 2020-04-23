@@ -38,7 +38,7 @@ function App() {
           </Field>
 
           <FieldList label="Field List" add>
-            <FieldList.Item>Name</FieldList.Item>
+            <FieldList.Item validation={checkString}>Name</FieldList.Item>
             <FieldList.Item type="email" name="email" />
           </FieldList>
         </Step>
