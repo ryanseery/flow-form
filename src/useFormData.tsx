@@ -49,6 +49,7 @@ export function useFormData({ step, id, value, required, validation }: IUseFormD
     updateFocus({ step, id });
   };
 
+  // TODO clean this mess up
   return {
     value: isObjectEmpty(formData) ? '' : step != null ? formData?.[step]?.[id] ?? '' : formData?.[id] ?? '',
     error: isObjectEmpty(error) ? false : step != null ? error?.[step]?.[id] ?? false : error?.[id] ?? false,

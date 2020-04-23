@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { FFComponent } from './FFComponent';
+import { FFComponent } from '../FFComponent';
 
 interface ISubmit {
   ffComp: string;

@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { FFComponent } from '../FFComponent';
-import { toCamelCase, toKebabCase, capitalize } from '../utils';
+import { toCamelCase, toKebabCase } from '../utils';
 import { Text, Number, Email, Password, Tel, Url, Color, TextArea, Select, List } from './Fields';
 import { Option, Input } from './Fields/@types';
 
@@ -73,9 +73,9 @@ export const Field: React.FC<IField> = ({
       data-field-id={`${id}-label`}
       htmlFor={id}
       className={`flow-form-field ${className}-label`}
-      style={{ display: `block`, minHeight: '4rem', ...style }}
+      style={{ display: `block`, minHeight: '4rem', textTransform: 'capitalize', ...style }}
     >
-      {children ? children : capitalize(name ?? '')}
+      {children ? children : name ?? ''}
       {(() => {
         switch (type) {
           case 'text':

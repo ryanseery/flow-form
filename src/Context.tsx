@@ -53,11 +53,6 @@ interface ValueArgs extends Args {
   error: boolean;
 }
 
-// test
-interface SetFieldListArgs extends ValueArgs {
-  listTitle: boolean | string;
-}
-
 interface BlurArgs extends Args {
   showError: boolean;
 }
@@ -79,7 +74,6 @@ interface RemoveListArgs extends Args {
 interface IContext extends IState {
   setForm: ({ isFlowForm, flow }: SetFormArgs) => void;
   setField: ({ step, id, value, error }: ValueArgs) => void;
-  setFieldList: ({ step, id, value, error, listTitle }: SetFieldListArgs) => void;
   updateField: ({ step, id, value, error }: ValueArgs) => void;
   updateBlur: ({ step, id, showError }: BlurArgs) => void;
   updateFocus: ({ step, id }: Args) => void;
@@ -92,10 +86,11 @@ interface IContext extends IState {
 
 export const Context = React.createContext({} as IContext);
 
+// TODO update Actions i.e. SET_BLUR, SET_FOCUS, PROGRESS_FORM, REVERT_FORM
+// TODO redo input list for <FieldList />
 enum ACTIONS {
   SET_FORM = 'SET_FORM',
   SET_FIELD = 'SET_FIELD',
-  SET_FIELD_LIST = 'SET_FIELD_LIST',
   UPDATE_FIELD = 'UPDATE_FIELD',
   UPDATE_BLUR = 'UPDATE_BLUR',
   UPDATE_FOCUS = 'UPDATE_FOCUS',
@@ -124,18 +119,6 @@ const setInput = ({ step, id, value, error }: ValueArgs): SetField => ({
   id,
   value,
   error,
-});
-
-interface SetFieldList extends SetFieldListArgs {
-  type: ACTIONS.SET_FIELD_LIST;
-}
-const setFieldList = ({ step, id, value, error, listTitle }: SetFieldListArgs): SetFieldList => ({
-  type: ACTIONS.SET_FIELD_LIST,
-  step,
-  id,
-  value,
-  error,
-  listTitle,
 });
 
 interface UpdateField extends ValueArgs {
@@ -217,7 +200,6 @@ const removeInputList = ({ step, id, index }: RemoveListArgs): RemoveInputList =
 type Action =
   | SetForm
   | SetField
-  | SetFieldList
   | UpdateField
   | UpdateBlur
   | UpdateFocus
@@ -538,8 +520,6 @@ export const Wrapper: React.FC<IWrapper> = ({ children }) => {
     return {
       setForm: ({ isFlowForm, flow }: SetFormArgs) => dispatch(setForm({ isFlowForm, flow })),
       setField: ({ step, id, value, error }: ValueArgs) => dispatch(setInput({ step, id, value, error })),
-      setFieldList: ({ step, id, value, error, listTitle }: SetFieldListArgs) =>
-        dispatch(setFieldList({ step, id, value, error, listTitle })),
       updateField: ({ step, id, value, error }: ValueArgs) => dispatch(updateInput({ step, id, value, error })),
       updateBlur: ({ step, id, showError }: BlurArgs) => dispatch(updateBlur({ step, id, showError })),
       updateFocus: ({ step, id }: Args) => dispatch(updateFocus({ step, id })),
