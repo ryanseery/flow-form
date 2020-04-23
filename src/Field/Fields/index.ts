@@ -7,4 +7,3 @@ export { Url } from './Url';
 export { Color } from './Color';
 export { TextArea } from './TextArea';
 export { Select } from './Select';
-export { List } from './List';

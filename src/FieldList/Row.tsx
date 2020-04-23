@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { FFComponent } from '../../../FFComponent';
+import { FFComponent } from '../FFComponent';
 
 interface IRow {
   ffComp?: string;
@@ -8,7 +8,7 @@ interface IRow {
 
 export const Row: React.FC<IRow> = ({ className, children }) => (
   <div
-    className={`flow-form-inputList-row ${className}-inputList-row`}
+    className={`flow-form-field-row ${className}`}
     style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', marginBottom: `10px` }}
   >
     {children}

@@ -1,6 +1,6 @@
 import * as React from 'react';
-import { FFComponent } from '../../../FFComponent';
-import { colors } from '../../../colors';
+import { FFComponent } from '../FFComponent';
+import { colors } from '../colors';
 
 interface IListButton {
   ffComp?: string;

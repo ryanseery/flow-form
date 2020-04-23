@@ -14,13 +14,14 @@ interface IForm {
   style?: {};
 }
 
+// TODO clean up with toArray(children).reduce
 function handleChildArr(children: React.ReactNode[]): IStepState[] | [] {
   let arr: IStepState[] = [];
 
   React.Children.map(children, (child, index) => {
     if (React.isValidElement<IStep>(child)) {
       if (child.props.ffComp === FFComponent.STEP) {
-        arr.push({ id: toCamelCase(child.props.title), title: child.props.title, index });
+        arr.push({ id: toCamelCase(child.props.label), label: child.props.label, index });
       }
     }
   });
@@ -30,7 +31,7 @@ function handleChildArr(children: React.ReactNode[]): IStepState[] | [] {
 
 function handleChildObj(children: React.ReactNode): IStepState[] | [] {
   if (React.isValidElement<IStep>(children)) {
-    return [{ id: toCamelCase(children.props.title), title: children.props.title, index: 0 }];
+    return [{ id: toCamelCase(children.props.label), label: children.props.label, index: 0 }];
   } else {
     return [];
   }

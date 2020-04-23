@@ -4,13 +4,13 @@ import { FFComponent } from '../FFComponent';
 interface ISubmit {
   ffComp: string;
   className?: string;
-  title?: string;
+  label?: string;
 }
 
-export const Submit: React.FC<ISubmit> = ({ className, title }) => {
+export const Submit: React.FC<ISubmit> = ({ className, label }) => {
   return (
     <button type="submit" className={`flow-form-submit-btn ${className ?? ''}`}>
-      {title ?? `Submit`}
+      {label ?? `Submit`}
     </button>
   );
 };

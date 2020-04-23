@@ -53,18 +53,18 @@ export const Progress: React.FC<IProgress> = ({ steps, currentStep }) => (
     {steps?.map((step: IStepState) => (
       <div
         key={step.id}
-        className="flow-form-title-container"
+        className="flow-form-label-container"
         style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}
       >
         <Doughnut isActive={step.index === currentStep?.index} />
         <span
-          className="flow-form-title"
+          className="flow-form-label"
           style={{
             color: step.index === currentStep?.index ? `${colors.blue}` : `${colors.grey}`,
             fontSize: '1em',
           }}
         >
-          {step.title}
+          {step.label}
         </span>
       </div>
     ))}

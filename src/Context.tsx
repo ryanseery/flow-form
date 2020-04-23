@@ -2,7 +2,7 @@ import * as React from 'react';
 
 export interface IStepState {
   id: string;
-  title: string;
+  label: string;
   index: number;
 }
 

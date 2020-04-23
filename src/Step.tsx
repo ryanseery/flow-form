@@ -5,28 +5,26 @@ import { IField } from './Field/Field';
 
 export interface IStep {
   ffComp: string;
-  title: string;
+  label: string;
+  name?: string;
   className?: string;
   style?: {};
 }
 
-export const Step: React.FC<IStep> = ({ children, title, className, style }) => {
-  if (!title) {
-    throw new Error(`The title prop is mandatory on Step Component.`);
+export const Step: React.FC<IStep> = ({ children, name, label, className, style }) => {
+  if (!label) {
+    throw new Error(`The label prop is mandatory on Step Component.`);
   }
 
   return (
-    <div data-step-id={toCamelCase(title)} className={`flow-form-step ${className}`} style={style}>
+    <div data-step-id={toCamelCase(name ? name : label)} className={`flow-form-step ${className}`} style={style}>
       {React.Children.map(children, (child, index) => {
-        // if child is Field component we clone props into it
         if (React.isValidElement<IField>(child)) {
           return React.cloneElement(child as React.ReactElement<IField>, {
             index,
-            step: toCamelCase(title),
+            step: toCamelCase(name ? name : label),
           });
-        }
-        // else we return child naturally
-        else {
+        } else {
           return child;
         }
       })}

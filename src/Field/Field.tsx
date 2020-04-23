@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { FFComponent } from '../FFComponent';
 import { toCamelCase, toKebabCase } from '../utils';
-import { Text, Number, Email, Password, Tel, Url, Color, TextArea, Select, List } from './Fields';
+import { Text, Number, Email, Password, Tel, Url, Color, TextArea, Select } from './Fields';
 import { Option, Input } from './Fields/@types';
 
 export interface IField {
@@ -19,9 +19,7 @@ export interface IField {
   errMsg?: string;
   validation?: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => boolean;
   options?: Option[];
-  listName?: string;
   inputs?: Input[];
-  add?: boolean;
 }
 
 export const Field: React.FC<IField> = ({
@@ -37,9 +35,7 @@ export const Field: React.FC<IField> = ({
   placeholder,
   errMsg,
   options,
-  listName,
   inputs,
-  add,
 }) => {
   if (!name && !children) {
     throw new Error(`Please provide a label(<Field>Label</Field>) or name prop(<Field name="label" />).`);
@@ -62,9 +58,7 @@ export const Field: React.FC<IField> = ({
     style: { display: `block` },
     errMsg,
     options,
-    listName,
     inputs,
-    add,
   };
 
   return (
@@ -96,8 +90,6 @@ export const Field: React.FC<IField> = ({
             return <TextArea {...defaultProps} />;
           case 'select':
             return <Select {...defaultProps} />;
-          case 'list':
-            return <List {...defaultProps} />;
           default:
             return <Text {...defaultProps} />;
         }
