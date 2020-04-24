@@ -1,5 +1,3 @@
-// type KeyValue = { value: [string, unknown]; index: number; array: [string, unknown][] };
-
 function handleArr(arr: { [key: string]: boolean }[]) {
   return arr
     .map((a: { [key: string]: boolean }) => Object.entries(a).every(([_, v]) => v === false))
