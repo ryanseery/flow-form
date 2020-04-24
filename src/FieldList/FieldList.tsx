@@ -17,7 +17,9 @@ import {
   handleFocusArr,
   handleFocusObj,
 } from './fieldListUtils';
+import { DisplayError } from '../DisplayError';
 
+// TODO check add
 type IFieldListProps = {
   ffComp?: string;
   step: string | null;
@@ -34,9 +36,17 @@ type IFieldList<P> = React.FunctionComponent<P> & {
 
 // TODO put state function code into own hook?
 export const FieldList: IFieldList<IFieldListProps> = ({ step, label, name, className, style, children, add }) => {
-  const { flow, setFieldList, formData, updateFieldListItem, addFieldList, removeFieldList } = React.useContext(
-    Context,
-  );
+  const {
+    flow,
+    setFieldList,
+    formData,
+    updateFieldListItem,
+    addFieldList,
+    removeFieldList,
+    setFieldListBlur,
+    setFieldListFocus,
+    showError,
+  } = React.useContext(Context);
 
   if (!children) {
     throw new Error(`<FieldList> expects to have <FieldList.Item> for child components.`);
@@ -78,16 +88,16 @@ export const FieldList: IFieldList<IFieldListProps> = ({ step, label, name, clas
     });
   }, [step, label, flow.currentStep, flow.key]);
 
+  function validate(e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>, index: number) {
+    if (inputProps[index].required || inputProps[index].validation) {
+      return inputProps[index].validation ? inputProps[index].validation(e) : !e.target.value;
+    }
+  }
+
   const handleChange = (index: number) => (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>,
   ) => {
     const { type, name, value } = e.target;
-
-    function validate(e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) {
-      if (inputProps[index].required || inputProps[index].validation) {
-        return inputProps[index].validation ? inputProps[index].validation(e) : !e.target.value;
-      }
-    }
 
     updateFieldListItem({
       step,
@@ -95,7 +105,38 @@ export const FieldList: IFieldList<IFieldListProps> = ({ step, label, name, clas
       index,
       name,
       value: type === 'number' ? parseFloat(value) : value,
-      error: validate(e),
+      error: validate(e, index),
+    });
+  };
+
+  const handleBlur = (index: number) => (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>,
+  ) => {
+    e.preventDefault();
+
+    const { name } = e.target;
+
+    setFieldListBlur({
+      step,
+      id,
+      index,
+      name,
+      error: validate(e, index),
+    });
+  };
+
+  const handleFocus = (index: number) => (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>,
+  ) => {
+    e.preventDefault();
+
+    const { name } = e.target;
+
+    setFieldListFocus({
+      step,
+      id,
+      index,
+      name,
     });
   };
 
@@ -103,7 +144,7 @@ export const FieldList: IFieldList<IFieldListProps> = ({ step, label, name, clas
     <label
       data-field-list-id={id}
       className={`flow-form-field-list ${className}`}
-      style={{ ...style, textTransform: 'capitalize' }}
+      style={{ ...style, display: 'block', textTransform: 'capitalize' }}
     >
       {label}
       {!isObjectEmpty(formData) && step != null ? (
@@ -111,7 +152,7 @@ export const FieldList: IFieldList<IFieldListProps> = ({ step, label, name, clas
           {formData?.[step]?.[id].map((field: {}, index: number) => (
             <Row key={index} className={className}>
               {Object.entries(field).map(([k, v], i: number) => (
-                <React.Fragment key={i}>
+                <div key={i} style={{ display: 'flex', flexDirection: 'column' }}>
                   <ItemInput
                     objKey={k}
                     fieldIndex={i}
@@ -119,12 +160,21 @@ export const FieldList: IFieldList<IFieldListProps> = ({ step, label, name, clas
                     value={(v as string | number) || ''}
                     required={inputProps?.[i].required ?? false}
                     onChange={handleChange(index)}
-                    // onBlur={onBlur}
-                    // onFocus={onFocus}
+                    onBlur={handleBlur(index)}
+                    onFocus={handleFocus(index)}
                     autoComplete={inputProps?.[i].autoComplete ?? 'off'}
                   />
-                  {/* {showError && <Error id={id} className={className} label={label} errMsg={errMsg} />} */}
-                </React.Fragment>
+                  {showError?.[step]?.[id]?.[i]?.[k] && (
+                    <>
+                      <DisplayError
+                        id={k}
+                        className={inputProps[i].className}
+                        label={k}
+                        errMsg={inputProps[i].errMsg}
+                      />
+                    </>
+                  )}
+                </div>
               ))}
               {add && (
                 <>
@@ -151,7 +201,7 @@ export const FieldList: IFieldList<IFieldListProps> = ({ step, label, name, clas
             formData?.[id].map((field: {}, index: number) => (
               <Row key={index} className={className}>
                 {Object.entries(field).map(([k, v], i: number) => (
-                  <React.Fragment key={i}>
+                  <div key={i} style={{ display: 'flex', flexDirection: 'column' }}>
                     <ItemInput
                       objKey={k}
                       fieldIndex={i}
@@ -159,12 +209,19 @@ export const FieldList: IFieldList<IFieldListProps> = ({ step, label, name, clas
                       value={(v as string | number) || ''}
                       required={inputProps?.[i].required ?? false}
                       onChange={handleChange(index)}
-                      // onBlur={onBlur}
-                      // onFocus={onFocus}
+                      onBlur={handleBlur(index)}
+                      onFocus={handleFocus(index)}
                       autoComplete={inputProps?.[i].autoComplete ?? 'off'}
                     />
-                    {/* {showError && <Error id={id} className={className} label={label} errMsg={errMsg} />} */}
-                  </React.Fragment>
+                    {showError?.[id]?.[index]?.[k] && (
+                      <DisplayError
+                        id={k}
+                        className={inputProps[i].className}
+                        label={k}
+                        errMsg={inputProps[i].errMsg}
+                      />
+                    )}
+                  </div>
                 ))}
                 {add && (
                   <>

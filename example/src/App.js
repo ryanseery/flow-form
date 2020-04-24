@@ -52,7 +52,7 @@ function App() {
             Number
           </Field>
 
-          <FieldList label="Friends" add>
+          <FieldList label="Friends">
             <FieldList.Item validation={checkString}>Name</FieldList.Item>
             <FieldList.Item type="email" name="email" />
           </FieldList>

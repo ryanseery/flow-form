@@ -48,7 +48,7 @@ const Form: React.FC<IForm> = ({ children, onSubmit, className, style, showData 
     revertForm,
     error,
     showError,
-    touched,
+    focus,
   } = React.useContext(Context);
 
   React.useEffect(() => {
@@ -65,7 +65,7 @@ const Form: React.FC<IForm> = ({ children, onSubmit, className, style, showData 
     });
   }, []);
 
-  showData && console.log({ isFlowForm, canProceed, flow, formData, error, showError, touched });
+  showData && console.log({ isFlowForm, canProceed, flow, formData, error, showError, focus });
 
   return (
     <form

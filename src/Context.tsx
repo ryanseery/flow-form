@@ -20,7 +20,7 @@ interface IState {
   formData: {};
   error: {};
   showError: {};
-  touched: {};
+  focus: {};
 }
 
 const initialState: IState = {
@@ -35,7 +35,7 @@ const initialState: IState = {
   formData: {},
   error: {},
   showError: {},
-  touched: {},
+  focus: {},
 };
 
 type Args = {
@@ -78,6 +78,15 @@ interface RemoveFieldArgs extends Args {
   index: number;
 }
 
+interface FieldListItemSideEffectsArgs extends Args {
+  index: number;
+  name: string;
+}
+
+interface FieldListItemBlurArgs extends FieldListItemSideEffectsArgs {
+  error: boolean;
+}
+
 interface IContext extends IState {
   setForm: ({ isFlowForm, flow }: SetFormArgs) => void;
   setField: ({ step, id, value, error }: ValueArgs) => void;
@@ -90,11 +99,12 @@ interface IContext extends IState {
   updateFieldListItem: ({ step, id, index, name, value }: FieldListItemArgs) => void;
   addFieldList: ({ step, id, blankInput }: AddFieldItemArgs) => void;
   removeFieldList: ({ step, id, index }: RemoveFieldArgs) => void;
+  setFieldListBlur: ({ step, id, index, name, error }: FieldListItemBlurArgs) => void;
+  setFieldListFocus: ({ step, id, index, name }: FieldListItemSideEffectsArgs) => void;
 }
 
 export const Context = React.createContext({} as IContext);
 
-// TODO redo input list for <FieldList />
 enum ACTIONS {
   SET_FORM = 'SET_FORM',
   SET_FIELD = 'SET_FIELD',
@@ -107,6 +117,8 @@ enum ACTIONS {
   UPDATE_FIELD_LIST_ITEM = 'UPDATE_FIELD_LIST_ITEM',
   ADD_FIELD_LIST = 'ADD_FIELD_LIST',
   REMOVE_FIELD_LIST = 'REMOVE_FIELD_LIST',
+  SET_FIELD_LIST_BLUR = 'SET_FIELD_LIST_BLUR',
+  SET_FIELD_LIST_FOCUS = 'SET_FIELD_LIST_FOCUS',
 }
 
 interface SetForm extends SetFormArgs {
@@ -171,16 +183,16 @@ const setFocus = ({ step, id }: Args): SetFocus => ({
   id,
 });
 
-interface ProgressForm {
+type ProgressForm = {
   type: ACTIONS.PROGRESS_FORM;
-}
+};
 const progressForm = (): ProgressForm => ({
   type: ACTIONS.PROGRESS_FORM,
 });
 
-interface RevertForm {
+type RevertForm = {
   type: ACTIONS.REVERT_FORM;
-}
+};
 const revertForm = (): RevertForm => ({
   type: ACTIONS.REVERT_FORM,
 });
@@ -218,6 +230,29 @@ const removeFieldList = ({ step, id, index }: RemoveFieldArgs): RemoveFieldList 
   index,
 });
 
+interface SetFieldListBLur extends FieldListItemBlurArgs {
+  type: ACTIONS.SET_FIELD_LIST_BLUR;
+}
+const setFieldListBlur = ({ step, id, index, name, error }: FieldListItemBlurArgs): SetFieldListBLur => ({
+  type: ACTIONS.SET_FIELD_LIST_BLUR,
+  step,
+  id,
+  index,
+  name,
+  error,
+});
+
+interface SetFieldListFocus extends FieldListItemSideEffectsArgs {
+  type: ACTIONS.SET_FIELD_LIST_FOCUS;
+}
+const setFieldListFocus = ({ step, id, index, name }: FieldListItemSideEffectsArgs): SetFieldListFocus => ({
+  type: ACTIONS.SET_FIELD_LIST_FOCUS,
+  step,
+  id,
+  index,
+  name,
+});
+
 type Action =
   | SetForm
   | SetField
@@ -229,7 +264,9 @@ type Action =
   | RevertForm
   | UpdateFieldListItem
   | AddFieldList
-  | RemoveFieldList;
+  | RemoveFieldList
+  | SetFieldListBLur
+  | SetFieldListFocus;
 
 function reducer(state: IState, action: Action): IState {
   switch (action.type) {
@@ -254,8 +291,8 @@ function reducer(state: IState, action: Action): IState {
             ...state.showError,
             [id]: false,
           },
-          touched: {
-            ...state.touched,
+          focus: {
+            ...state.focus,
             [id]: false,
           },
         };
@@ -283,10 +320,10 @@ function reducer(state: IState, action: Action): IState {
               [id]: false,
             },
           },
-          touched: {
-            ...state.touched,
+          focus: {
+            ...state.focus,
             [step]: {
-              ...state.touched[step],
+              ...state.focus[step],
               [id]: false,
             },
           },
@@ -296,63 +333,61 @@ function reducer(state: IState, action: Action): IState {
       }
     }
     case ACTIONS.SET_FIELD_LIST: {
-      {
-        const { step, id, value, error, focus } = action;
-        if (step == null && !state.formData[id]) {
-          return {
-            ...state,
-            formData: {
-              ...state.formData,
+      const { step, id, value, error, focus } = action;
+      if (step == null && !state.formData[id]) {
+        return {
+          ...state,
+          formData: {
+            ...state.formData,
+            [id]: value,
+          },
+          error: {
+            ...state.error,
+            [id]: error,
+          },
+          showError: {
+            ...state.showError,
+            [id]: focus,
+          },
+          focus: {
+            ...state.focus,
+            [id]: focus,
+          },
+        };
+      } else if (step != null && !state.formData?.[step]?.[id]) {
+        return {
+          ...state,
+          formData: {
+            ...state.formData,
+            [step]: {
+              ...state.formData[step],
               [id]: value,
             },
-            error: {
-              ...state.error,
+          },
+          error: {
+            ...state.error,
+            [step]: {
+              ...state.error[step],
               [id]: error,
             },
-            showError: {
-              ...state.showError,
+          },
+          showError: {
+            ...state.showError,
+            [step]: {
+              ...state.showError[step],
               [id]: focus,
             },
-            touched: {
-              ...state.touched,
+          },
+          focus: {
+            ...state.focus,
+            [step]: {
+              ...state.focus[step],
               [id]: focus,
             },
-          };
-        } else if (step != null && !state.formData?.[step]?.[id]) {
-          return {
-            ...state,
-            formData: {
-              ...state.formData,
-              [step]: {
-                ...state.formData[step],
-                [id]: value,
-              },
-            },
-            error: {
-              ...state.error,
-              [step]: {
-                ...state.error[step],
-                [id]: error,
-              },
-            },
-            showError: {
-              ...state.showError,
-              [step]: {
-                ...state.showError[step],
-                [id]: focus,
-              },
-            },
-            touched: {
-              ...state.touched,
-              [step]: {
-                ...state.touched[step],
-                [id]: focus,
-              },
-            },
-          };
-        } else {
-          return state;
-        }
+          },
+        };
+      } else {
+        return state;
       }
     }
     case ACTIONS.UPDATE_FIELD: {
@@ -418,8 +453,8 @@ function reducer(state: IState, action: Action): IState {
             ...state.showError,
             [id]: showError,
           },
-          touched: {
-            ...state.touched,
+          focus: {
+            ...state.focus,
             [id]: false,
           },
         };
@@ -441,10 +476,10 @@ function reducer(state: IState, action: Action): IState {
               [id]: showError,
             },
           },
-          touched: {
-            ...state.touched,
+          focus: {
+            ...state.focus,
             [step]: {
-              ...state.touched[step],
+              ...state.focus[step],
               [id]: false,
             },
           },
@@ -458,19 +493,19 @@ function reducer(state: IState, action: Action): IState {
       if (step == null) {
         return {
           ...state,
-          touched: {
-            ...state.touched,
-            [id]: true,
+          focus: {
+            ...state.focus,
+            [id]: !state.focus[id],
           },
         };
       } else if (step != null) {
         return {
           ...state,
-          touched: {
-            ...state.touched,
+          focus: {
+            ...state.focus,
             [step]: {
-              ...state.touched[step],
-              [id]: true,
+              ...state.focus[step],
+              [id]: !state.focus[step][id],
             },
           },
         };
@@ -607,6 +642,82 @@ function reducer(state: IState, action: Action): IState {
         return state;
       }
     }
+    case ACTIONS.SET_FIELD_LIST_BLUR: {
+      const { step, id, index, name, error } = action;
+      if (step == null) {
+        const mutableError = [...state.error[id]];
+
+        mutableError[index][name] = error;
+        return {
+          ...state,
+          error: {
+            ...state.error,
+            [id]: [...mutableError],
+          },
+          showError: {
+            ...state.showError,
+            [id]: [...mutableError],
+          },
+        };
+      } else if (step != null) {
+        const mutableError = [...state.error[step][id]];
+
+        mutableError[index][name] = error;
+
+        return {
+          ...state,
+          error: {
+            ...state.error,
+            [step]: {
+              ...state.error[step],
+              [id]: [...mutableError],
+            },
+          },
+          showError: {
+            ...state.showError,
+            [step]: {
+              ...state.showError[step],
+              [id]: [...mutableError],
+            },
+          },
+        };
+      }
+      return state;
+    }
+    case ACTIONS.SET_FIELD_LIST_FOCUS: {
+      const { step, id, index, name } = action;
+
+      if (step == null) {
+        const mutableFocus = [...state.focus[id]];
+
+        mutableFocus[index][name] = !mutableFocus[index][name];
+
+        return {
+          ...state,
+          focus: {
+            ...state.focus,
+            [id]: [...mutableFocus],
+          },
+        };
+      } else if (step != null) {
+        const mutableFocus = [...state.focus[step][id]];
+
+        mutableFocus[index][name] = !mutableFocus[index][name];
+
+        return {
+          ...state,
+          focus: {
+            ...state.focus,
+            [step]: {
+              ...state.focus[step],
+              [id]: [...mutableFocus],
+            },
+          },
+        };
+      } else {
+        return state;
+      }
+    }
     default:
       throw new Error(`Context Reducer Received Unrecognized Action!`);
   }
@@ -632,6 +743,10 @@ export const Wrapper: React.FC<IWrapper> = ({ children }) => {
         dispatch(updateInputListItem({ step, id, index, name, value, error })),
       addFieldList: ({ step, id, blankInput }: AddFieldItemArgs) => dispatch(addFieldList({ step, id, blankInput })),
       removeFieldList: ({ step, id, index }: RemoveFieldArgs) => dispatch(removeFieldList({ step, id, index })),
+      setFieldListBlur: ({ step, id, index, name, error }: FieldListItemBlurArgs) =>
+        dispatch(setFieldListBlur({ step, id, index, name, error })),
+      setFieldListFocus: ({ step, id, index, name }: FieldListItemSideEffectsArgs) =>
+        dispatch(setFieldListFocus({ step, id, index, name })),
     };
   }, []);
 

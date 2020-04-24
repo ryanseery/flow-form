@@ -11,6 +11,8 @@ interface IItemInput {
   autoComplete?: string;
   style?: {};
   onChange: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => void;
+  onBlur: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => void;
+  onFocus: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => void;
 }
 
 export const ItemInput: React.FC<IItemInput> = ({
@@ -19,8 +21,10 @@ export const ItemInput: React.FC<IItemInput> = ({
   type,
   value,
   required,
-  autoComplete,
+  autoComplete = 'off',
   onChange,
+  onBlur,
+  onFocus,
 }) => (
   <input
     data-field-id={`${objKey}-field-field-list-item-${fieldIndex}`}
@@ -30,8 +34,8 @@ export const ItemInput: React.FC<IItemInput> = ({
     value={value}
     required={required}
     onChange={onChange}
-    // onBlur={onBlur}
-    // onFocus={onFocus}
+    onBlur={onBlur}
+    onFocus={onFocus}
     className={`flow-form-field flow-form-field-list-item ${objKey}-field-list-item`}
     placeholder={objKey}
     autoComplete={autoComplete}

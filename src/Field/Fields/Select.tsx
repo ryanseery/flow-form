@@ -2,7 +2,7 @@ import * as React from 'react';
 import { FFComponent } from '../../FFComponent';
 import { useFormData } from '../../useFormData';
 import { IProps, Option } from './@types';
-import { Error } from '../../Error';
+import { DisplayError } from '../../DisplayError';
 
 interface ISelect extends IProps {}
 
@@ -44,7 +44,7 @@ export const Select: React.FC<ISelect> = ({
             </option>
           ))}
       </select>
-      {showError && <Error id={id} className={className} label={label} errMsg={errMsg} />}
+      {showError && <DisplayError id={id} className={className} label={label} errMsg={errMsg} />}
     </>
   );
 };

@@ -2,7 +2,7 @@ import * as React from 'react';
 import { FFComponent } from '../../FFComponent';
 import { useFormData } from '../../useFormData';
 import { IProps } from './@types';
-import { Error } from '../../Error';
+import { DisplayError } from '../../DisplayError';
 
 interface ITextArea extends IProps {
   rows?: number;
@@ -43,7 +43,7 @@ export const TextArea: React.FC<ITextArea> = ({
         rows={rows}
         cols={cols}
       />
-      {showError && <Error id={id} className={className} label={label} errMsg={errMsg} />}
+      {showError && <DisplayError id={id} className={className} label={label} errMsg={errMsg} />}
     </>
   );
 };

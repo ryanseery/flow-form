@@ -2,7 +2,7 @@ import * as React from 'react';
 import { FFComponent } from '../../FFComponent';
 import { useFormData } from '../../useFormData';
 import { IProps } from './@types';
-import { Error } from '../../Error';
+import { DisplayError } from '../../DisplayError';
 
 interface ITel extends IProps {
   pattern?: string;
@@ -42,7 +42,7 @@ export const Tel: React.FC<ITel> = ({
         style={style}
         pattern={pattern}
       />
-      {showError && <Error id={id} className={className} label={label} errMsg={errMsg} />}
+      {showError && <DisplayError id={id} className={className} label={label} errMsg={errMsg} />}
     </>
   );
 };
