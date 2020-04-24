@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { deepCheck } from './utils';
 
 export interface IStepState {
   id: string;
@@ -395,7 +396,7 @@ function reducer(state: IState, action: Action): IState {
       if (step == null) {
         return {
           ...state,
-          canProceed: Object.entries({ ...state.error, [id]: error }).every(([_, v]) => v === false),
+          canProceed: deepCheck({ ...state.error, [id]: error }),
           formData: {
             ...state.formData,
             [id]: value,
@@ -412,7 +413,7 @@ function reducer(state: IState, action: Action): IState {
       } else if (step != null) {
         return {
           ...state,
-          canProceed: Object.entries({ ...state.error[step], [id]: error }).every(([_, v]) => v === false),
+          canProceed: deepCheck({ ...state.error[step], [id]: error }),
           formData: {
             ...state.formData,
             [step]: {
@@ -444,7 +445,7 @@ function reducer(state: IState, action: Action): IState {
       if (step == null) {
         return {
           ...state,
-          canProceed: Object.entries({ ...state.error, [id]: showError }).every(([_, v]) => v === false),
+          canProceed: deepCheck({ ...state.error, [id]: showError }),
           error: {
             ...state.error,
             [id]: showError,
@@ -461,7 +462,7 @@ function reducer(state: IState, action: Action): IState {
       } else if (step != null) {
         return {
           ...state,
-          canProceed: Object.entries({ ...state.error[step], [id]: showError }).every(([_, v]) => v === false),
+          canProceed: deepCheck({ ...state.error[step], [id]: showError }),
           error: {
             ...state.error,
             [step]: {
@@ -548,6 +549,7 @@ function reducer(state: IState, action: Action): IState {
 
         return {
           ...state,
+          canProceed: deepCheck({ ...state.error, [id]: [...mutateError] }),
           formData: {
             ...state.formData,
             [id]: [...mutableValue],
@@ -568,6 +570,7 @@ function reducer(state: IState, action: Action): IState {
 
         return {
           ...state,
+          canProceed: deepCheck({ ...state.error[step], [id]: [...mutableError] }),
           formData: {
             ...state.formData,
             [step]: {
