@@ -1,5 +1,5 @@
 import React from 'react';
-import { FlowForm, Step, Field, ShowData, FieldList } from 'flow-form';
+import { FlowForm, Step, Field, FieldList } from 'flow-form';
 import './App.css';
 
 const testSelect = [
@@ -21,13 +21,16 @@ function App() {
   // TODO initial Values
   return (
     <div style={{ height: '100vh', display: 'flex', justifyContent: 'center' }}>
-      <FlowForm onSubmit={data => console.log('onSubmit: ', data)}>
+      <FlowForm onSubmit={data => console.log('onSubmit: ', data)} showData>
         <Field validation={checkString}>Test 1</Field>
 
-        <ShowData />
+        <FieldList label="Tools" add>
+          <FieldList.Item validation={checkString}>Name</FieldList.Item>
+          <FieldList.Item type="email" name="email" />
+        </FieldList>
       </FlowForm>
 
-      <FlowForm onSubmit={data => console.log('onSubmit: ', data)}>
+      <FlowForm onSubmit={data => console.log('onSubmit: ', data)} showData>
         <Step label="First Step">
           <Field validation={checkString}>Test 3</Field>
 
@@ -48,9 +51,12 @@ function App() {
           <Field type="number" validation={checkNumber}>
             Number
           </Field>
-        </Step>
 
-        <ShowData />
+          <FieldList label="Friends" add>
+            <FieldList.Item validation={checkString}>Name</FieldList.Item>
+            <FieldList.Item type="email" name="email" />
+          </FieldList>
+        </Step>
       </FlowForm>
     </div>
   );

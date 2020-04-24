@@ -3,7 +3,6 @@ import { Context, Wrapper, IStepState } from './Context';
 import { FFComponent } from './FFComponent';
 import { IStep } from './Step';
 import { toCamelCase } from './utils';
-import { IShowData } from './ShowData';
 import { DefaultSubmit, DefaultNext, DefaultBack } from './buttons';
 import { Progress } from './Progress';
 
@@ -12,6 +11,7 @@ interface IForm {
   onSubmit: (formData: {}) => void;
   className?: string;
   style?: {};
+  showData?: boolean;
 }
 
 // TODO clean up with toArray(children).reduce
@@ -37,8 +37,19 @@ function handleChildObj(children: React.ReactNode): IStepState[] | [] {
   }
 }
 
-const Form: React.FC<IForm> = ({ children, onSubmit, className, style }) => {
-  const { isFlowForm, canProceed, flow, formData, setForm, updateForm, goBack } = React.useContext(Context);
+const Form: React.FC<IForm> = ({ children, onSubmit, className, style, showData }) => {
+  const {
+    isFlowForm,
+    canProceed,
+    flow,
+    formData,
+    setForm,
+    progressForm,
+    revertForm,
+    error,
+    showError,
+    touched,
+  } = React.useContext(Context);
 
   React.useEffect(() => {
     const steps = Array.isArray(children) ? handleChildArr(children) : handleChildObj(children);
@@ -54,14 +65,7 @@ const Form: React.FC<IForm> = ({ children, onSubmit, className, style }) => {
     });
   }, []);
 
-  const isThereShowData = React.useMemo(
-    () =>
-      Array.isArray(children) &&
-      children.filter(child =>
-        React.isValidElement<IShowData>(child) && child.props.ffComp === FFComponent.SHOW_DATA ? child : null,
-      ),
-    [],
-  );
+  showData && console.log({ isFlowForm, canProceed, flow, formData, error, showError, touched });
 
   return (
     <form
@@ -75,14 +79,14 @@ const Form: React.FC<IForm> = ({ children, onSubmit, className, style }) => {
       <fieldset style={{ border: `none` }}>
         {isFlowForm && <Progress steps={flow.steps} currentStep={flow.currentStep} />}
 
-        <>{Array.isArray(children) ? children[flow.key] : children}</>
+        <>{isFlowForm ? children?.[flow.key] : children}</>
 
         {isFlowForm ? (
           <>
-            {flow.currentStep != null && flow.currentStep?.index > 0 && <DefaultBack onClick={() => goBack()} />}
+            {flow.currentStep != null && flow.currentStep?.index > 0 && <DefaultBack onClick={() => revertForm()} />}
 
             {flow.end !== flow.currentStep?.index ? (
-              <DefaultNext disabled={!canProceed} onClick={() => updateForm()} />
+              <DefaultNext disabled={!canProceed} onClick={() => progressForm()} />
             ) : (
               <DefaultSubmit disabled={!canProceed} />
             )}
@@ -90,8 +94,6 @@ const Form: React.FC<IForm> = ({ children, onSubmit, className, style }) => {
         ) : (
           <DefaultSubmit disabled={!canProceed} />
         )}
-
-        {isThereShowData}
       </fieldset>
     </form>
   );
@@ -103,10 +105,10 @@ Form.defaultProps = {
 
 interface IFlowForm extends IForm {}
 
-export const FlowForm: React.FC<IFlowForm> = ({ children, onSubmit, className, style }) => {
+export const FlowForm: React.FC<IFlowForm> = ({ children, onSubmit, className, style, showData }) => {
   return (
     <Wrapper>
-      <Form onSubmit={onSubmit} className={className} style={style}>
+      <Form onSubmit={onSubmit} className={className} style={style} showData={showData}>
         {children}
       </Form>
     </Wrapper>

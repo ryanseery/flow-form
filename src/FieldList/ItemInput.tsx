@@ -23,8 +23,8 @@ export const ItemInput: React.FC<IItemInput> = ({
   onChange,
 }) => (
   <input
-    id={`${objKey}-field-field-list-item-${fieldIndex}`}
-    data-input-id={`${objKey}-field-field-list-item-${fieldIndex}`}
+    data-field-id={`${objKey}-field-field-list-item-${fieldIndex}`}
+    id={`${objKey}-field-list-field-${type}`}
     name={objKey}
     type={type}
     value={value}
@@ -35,7 +35,7 @@ export const ItemInput: React.FC<IItemInput> = ({
     className={`flow-form-field flow-form-field-list-item ${objKey}-field-list-item`}
     placeholder={objKey}
     autoComplete={autoComplete}
-    style={{ marginRight: '10px' }}
+    style={{ marginRight: '10px', textTransform: 'capitalize' }}
   />
 );
 

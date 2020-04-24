@@ -11,9 +11,7 @@ interface IUseFormData {
 }
 
 export function useFormData({ step, id, value, required, validation }: IUseFormData) {
-  const { setField, formData, error, updateField, updateBlur, updateFocus, showError, flow } = React.useContext(
-    Context,
-  );
+  const { setField, formData, error, updateField, setBlur, setFocus, showError, flow } = React.useContext(Context);
 
   React.useEffect(() => {
     setField({ step, id, value, error: required || validation ? true : false });
@@ -40,13 +38,13 @@ export function useFormData({ step, id, value, required, validation }: IUseFormD
   const onBlur = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     e.preventDefault();
 
-    updateBlur({ step, id, showError: validate(e) });
+    setBlur({ step, id, showError: validate(e) });
   };
 
   const onFocus = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     e.preventDefault();
 
-    updateFocus({ step, id });
+    setFocus({ step, id });
   };
 
   // TODO clean this mess up

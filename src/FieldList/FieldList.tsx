@@ -1,12 +1,22 @@
 import * as React from 'react';
 import { FFComponent } from '../FFComponent';
-import { toCamelCase, isObjectEmpty } from '../utils';
-import { Item, IItem } from './Item';
 import { Context } from '../Context';
+import { toCamelCase, isObjectEmpty } from '../utils';
+import { Item } from './Item';
 import { Row } from './Row';
 import { ItemInput } from './ItemInput';
 import { ListButton } from './ListButton';
 import { colors } from '../colors';
+import {
+  handleBlankArr,
+  handleBlankObj,
+  handleInputPropsArr,
+  handleInputPropsObj,
+  handleErrorArr,
+  handleErrorObj,
+  handleFocusArr,
+  handleFocusObj,
+} from './fieldListUtils';
 
 type IFieldListProps = {
   ffComp?: string;
@@ -22,42 +32,11 @@ type IFieldList<P> = React.FunctionComponent<P> & {
   Item: typeof Item;
 };
 
-function handleBlankArr(children: React.ReactNode[]): {} {
-  return React.Children.toArray(children).reduce(
-    (acc: {}, child) =>
-      React.isValidElement<IItem>(child)
-        ? { ...acc, [toCamelCase(child.props.name ? child.props.name : child.props.children ?? '')]: '' }
-        : acc,
-    {},
-  );
-}
-
-function handleChildObj(children: React.ReactNode): {}[] | string[] {
-  if (React.isValidElement<IItem>(children)) {
-    return [toCamelCase(children.props.name ? children.props.name : children.props.children ?? '')];
-  } else {
-    return [];
-  }
-}
-
-// TODO fix return type issues. should be IItem
-function handleInputPropsArr(children: React.ReactNode[]) {
-  return React.Children.toArray(children).reduce(
-    (acc: [], child) => (React.isValidElement<IItem>(child) ? [...acc, { ...child.props }] : acc),
-    [],
-  );
-}
-
-function handleInputPropsObj(children: React.ReactNode) {
-  if (React.isValidElement<IItem>(children)) {
-    return [{ ...children.props }];
-  }
-  return [];
-}
-
 // TODO put state function code into own hook?
 export const FieldList: IFieldList<IFieldListProps> = ({ step, label, name, className, style, children, add }) => {
-  const { flow, setField, formData, updateInputListItem, addInputList, removeInputList } = React.useContext(Context);
+  const { flow, setFieldList, formData, updateFieldListItem, addFieldList, removeFieldList } = React.useContext(
+    Context,
+  );
 
   if (!children) {
     throw new Error(`<FieldList> expects to have <FieldList.Item> for child components.`);
@@ -70,7 +49,7 @@ export const FieldList: IFieldList<IFieldListProps> = ({ step, label, name, clas
   const id = React.useMemo(() => toCamelCase(name ? name : label), [name, label]);
 
   const blankInput = React.useMemo(
-    () => (Array.isArray(children) ? handleBlankArr(children) : handleChildObj(children)),
+    () => (Array.isArray(children) ? handleBlankArr(children) : handleBlankObj(children)),
     [],
   );
 
@@ -79,12 +58,23 @@ export const FieldList: IFieldList<IFieldListProps> = ({ step, label, name, clas
     [],
   );
 
+  const constructErrors = React.useMemo(
+    () => (Array.isArray(children) ? handleErrorArr(children) : handleErrorObj(children)),
+    [],
+  );
+
+  const constructFocus = React.useMemo(
+    () => (Array.isArray(children) ? handleFocusArr(children) : handleFocusObj(children)),
+    [],
+  );
+
   React.useEffect(() => {
-    setField({
+    setFieldList({
       step,
       id,
       value: [{ ...blankInput }],
-      error: false,
+      error: [{ ...constructErrors }],
+      focus: [{ ...constructFocus }],
     });
   }, [step, label, flow.currentStep, flow.key]);
 
@@ -93,7 +83,20 @@ export const FieldList: IFieldList<IFieldListProps> = ({ step, label, name, clas
   ) => {
     const { type, name, value } = e.target;
 
-    updateInputListItem({ step, id, index, name, value: type === 'number' ? parseFloat(value) : value });
+    function validate(e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) {
+      if (inputProps[index].required || inputProps[index].validation) {
+        return inputProps[index].validation ? inputProps[index].validation(e) : !e.target.value;
+      }
+    }
+
+    updateFieldListItem({
+      step,
+      id,
+      index,
+      name,
+      value: type === 'number' ? parseFloat(value) : value,
+      error: validate(e),
+    });
   };
 
   return (
@@ -119,7 +122,6 @@ export const FieldList: IFieldList<IFieldListProps> = ({ step, label, name, clas
                     // onBlur={onBlur}
                     // onFocus={onFocus}
                     autoComplete={inputProps?.[i].autoComplete ?? 'off'}
-                    // style={style}
                   />
                   {/* {showError && <Error id={id} className={className} label={label} errMsg={errMsg} />} */}
                 </React.Fragment>
@@ -129,12 +131,12 @@ export const FieldList: IFieldList<IFieldListProps> = ({ step, label, name, clas
                   {index === 0 ? (
                     <ListButton
                       color={colors.green}
-                      onClick={() => addInputList({ step, id, blankInput: blankInput ?? {} })}
+                      onClick={() => addFieldList({ step, id, blankInput: blankInput ?? {} })}
                     >
                       +
                     </ListButton>
                   ) : (
-                    <ListButton color={colors.red} onClick={() => removeInputList({ step, id, index })}>
+                    <ListButton color={colors.red} onClick={() => removeFieldList({ step, id, index })}>
                       -
                     </ListButton>
                   )}
@@ -160,7 +162,6 @@ export const FieldList: IFieldList<IFieldListProps> = ({ step, label, name, clas
                       // onBlur={onBlur}
                       // onFocus={onFocus}
                       autoComplete={inputProps?.[i].autoComplete ?? 'off'}
-                      // style={style}
                     />
                     {/* {showError && <Error id={id} className={className} label={label} errMsg={errMsg} />} */}
                   </React.Fragment>
@@ -170,12 +171,12 @@ export const FieldList: IFieldList<IFieldListProps> = ({ step, label, name, clas
                     {index === 0 ? (
                       <ListButton
                         color={colors.green}
-                        onClick={() => addInputList({ step, id, blankInput: blankInput ?? {} })}
+                        onClick={() => addFieldList({ step, id, blankInput: blankInput ?? {} })}
                       >
                         +
                       </ListButton>
                     ) : (
-                      <ListButton color={colors.red} onClick={() => removeInputList({ step, id, index })}>
+                      <ListButton color={colors.red} onClick={() => removeFieldList({ step, id, index })}>
                         -
                       </ListButton>
                     )}
