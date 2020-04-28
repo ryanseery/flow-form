@@ -859,7 +859,6 @@ var DragAndDrop = function (_a) {
             return;
         fileRef.current.click();
     };
-    console.log('VALUE: ', value);
     return (React.createElement(React.Fragment, null,
         React.createElement("div", { className: "flow-form-file-upload", style: {
                 border: "1px solid " + colors.grey,
@@ -873,6 +872,23 @@ var DragAndDrop = function (_a) {
             React.createElement("input", { ref: fileRef, multiple: true, id: id + "-field-file", "data-input-id": id + "-field-file", name: id, type: "file", 
                 // value={value || ''}
                 required: required, onChange: onFileChange, onBlur: onBlur, onFocus: onFocus, className: "flow-form-field flow-form-file " + className + "-field", autoComplete: autoComplete, style: { display: 'none' } })),
+        value.length > 0 && (React.createElement("ul", { style: { listStyle: 'none', padding: 0 } }, value.map(function (file, index) { return (React.createElement("li", { key: index, style: {
+                display: 'flex',
+                flexDirection: 'row',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+                paddingBottom: '0.3rem',
+            } },
+            React.createElement("span", null, file.name),
+            ' ',
+            React.createElement("a", { style: {
+                    cursor: 'pointer',
+                    width: '20px',
+                    height: '20px',
+                    backgroundColor: "" + colors.red,
+                    color: "" + colors.white,
+                    textAlign: 'center',
+                } }, "\u00D7"))); }))),
         showError && React.createElement(DisplayError, { id: id, className: className, label: label, errMsg: errMsg })));
 };
 DragAndDrop.defaultProps = {

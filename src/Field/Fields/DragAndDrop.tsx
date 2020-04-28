@@ -45,7 +45,6 @@ export const DragAndDrop: React.FC<IDragAndDrop> = ({
 
   const onDrop = (e: React.DragEvent<HTMLDivElement>) => {
     handleDefaults(e);
-
     onFileDrop(e, id);
   };
 
@@ -53,8 +52,6 @@ export const DragAndDrop: React.FC<IDragAndDrop> = ({
     if (fileRef.current == null) return;
     fileRef.current.click();
   };
-
-  console.log('VALUE: ', value);
 
   return (
     <>
@@ -96,6 +93,37 @@ export const DragAndDrop: React.FC<IDragAndDrop> = ({
           style={{ display: 'none' }}
         />
       </div>
+      {value.length > 0 && (
+        <ul style={{ listStyle: 'none', padding: 0 }}>
+          {value.map((file: File, index: number) => (
+            <li
+              key={index}
+              style={{
+                display: 'flex',
+                flexDirection: 'row',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+                paddingBottom: '0.3rem',
+              }}
+            >
+              <span>{file.name}</span>{' '}
+              <a
+                style={{
+                  cursor: 'pointer',
+                  width: '20px',
+                  height: '20px',
+                  backgroundColor: `${colors.red}`,
+                  color: `${colors.white}`,
+                  textAlign: 'center',
+                }}
+              >
+                &times;
+              </a>
+            </li>
+          ))}
+        </ul>
+      )}
+
       {showError && <DisplayError id={id} className={className} label={label} errMsg={errMsg} />}
     </>
   );
