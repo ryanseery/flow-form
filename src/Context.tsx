@@ -54,6 +54,11 @@ interface ValueArgs extends Args {
   error: boolean;
 }
 
+interface FileArgs extends Args {
+  value: File[];
+  error: boolean;
+}
+
 interface SetFieldListArgs extends Args {
   value: object[];
   error: object[];
@@ -93,6 +98,7 @@ interface IContext extends IState {
   setField: ({ step, id, value, error }: ValueArgs) => void;
   setFieldList: ({ step, id, value, error }: SetFieldListArgs) => void;
   updateField: ({ step, id, value, error }: ValueArgs) => void;
+  updateFileField: ({ step, id, value, error }: FileArgs) => void;
   setBlur: ({ step, id, showError }: BlurArgs) => void;
   setFocus: ({ step, id }: Args) => void;
   progressForm: () => void;
@@ -111,6 +117,7 @@ enum ACTIONS {
   SET_FIELD = 'SET_FIELD',
   SET_FIELD_LIST = 'SET_FIELD_LIST',
   UPDATE_FIELD = 'UPDATE_FIELD',
+  UPDATE_FILE_FIELD = 'UPDATE_FILE_FIELD',
   SET_BLUR = 'SET_BLUR',
   SET_FOCUS = 'SET_FOCUS',
   PROGRESS_FORM = 'PROGRESS_FORM',
@@ -159,6 +166,17 @@ interface UpdateField extends ValueArgs {
 }
 const updateInput = ({ step, id, value, error }: ValueArgs): UpdateField => ({
   type: ACTIONS.UPDATE_FIELD,
+  step,
+  id,
+  value,
+  error,
+});
+
+interface UpdateFileField extends FileArgs {
+  type: ACTIONS.UPDATE_FILE_FIELD;
+}
+const updateFileField = ({ step, id, value, error }: FileArgs): UpdateFileField => ({
+  type: ACTIONS.UPDATE_FILE_FIELD,
   step,
   id,
   value,
@@ -259,6 +277,7 @@ type Action =
   | SetField
   | SetFieldList
   | UpdateField
+  | UpdateFileField
   | SetBlur
   | SetFocus
   | ProgressForm
@@ -419,6 +438,55 @@ function reducer(state: IState, action: Action): IState {
             [step]: {
               ...state.formData[step],
               [id]: value,
+            },
+          },
+          error: {
+            ...state.error,
+            [step]: {
+              ...state.error[step],
+              [id]: error,
+            },
+          },
+          showError: {
+            ...state.showError,
+            [step]: {
+              ...state.showError[step],
+              [id]: error,
+            },
+          },
+        };
+      } else {
+        return state;
+      }
+    }
+    case ACTIONS.UPDATE_FILE_FIELD: {
+      const { step, id, value, error } = action;
+      if (step == null) {
+        return {
+          ...state,
+          canProceed: deepCheck({ ...state.error, [id]: error }),
+          formData: {
+            ...state.formData,
+            [id]: [...state.formData[id], ...value],
+          },
+          error: {
+            ...state.error,
+            [id]: error,
+          },
+          showError: {
+            ...state.showError,
+            [id]: error,
+          },
+        };
+      } else if (step != null) {
+        return {
+          ...state,
+          canProceed: deepCheck({ ...state.error[step], [id]: error }),
+          formData: {
+            ...state.formData,
+            [step]: {
+              ...state.formData[step],
+              [id]: [...state.formData[step][id], ...value],
             },
           },
           error: {
@@ -738,6 +806,7 @@ export const Wrapper: React.FC<IWrapper> = ({ children }) => {
       setFieldList: ({ step, id, value, error, focus }: SetFieldListArgs) =>
         dispatch(setFieldList({ step, id, value, error, focus })),
       updateField: ({ step, id, value, error }: ValueArgs) => dispatch(updateInput({ step, id, value, error })),
+      updateFileField: ({ step, id, value, error }: FileArgs) => dispatch(updateFileField({ step, id, value, error })),
       setBlur: ({ step, id, showError }: BlurArgs) => dispatch(setBlur({ step, id, showError })),
       setFocus: ({ step, id }: Args) => dispatch(setFocus({ step, id })),
       progressForm: () => dispatch(progressForm()),

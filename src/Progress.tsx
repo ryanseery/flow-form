@@ -35,9 +35,10 @@ export interface IProgress {
   ffComp?: string;
   steps: IStepState[];
   currentStep: IStepState | null;
+  doughNut?: boolean;
 }
 
-export const Progress: React.FC<IProgress> = ({ steps, currentStep }) => (
+export const Progress: React.FC<IProgress> = ({ steps, currentStep, doughNut }) => (
   <div
     className="flow-form-progress"
     style={{
@@ -56,7 +57,7 @@ export const Progress: React.FC<IProgress> = ({ steps, currentStep }) => (
         className="flow-form-label-container"
         style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}
       >
-        <Doughnut isActive={step.index === currentStep?.index} />
+        {doughNut && <Doughnut isActive={step.index === currentStep?.index} />}
         <span
           className="flow-form-label"
           style={{

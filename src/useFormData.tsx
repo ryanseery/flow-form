@@ -7,11 +7,23 @@ interface IUseFormData {
   id: string;
   value: string | boolean | number | object | [];
   required: boolean;
-  validation?: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => boolean;
+  validation?: (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement> | React.DragEvent<HTMLDivElement>,
+  ) => boolean;
 }
 
 export function useFormData({ step, id, value, required, validation }: IUseFormData) {
-  const { setField, formData, error, updateField, setBlur, setFocus, showError, flow } = React.useContext(Context);
+  const {
+    setField,
+    formData,
+    error,
+    updateField,
+    updateFileField,
+    setBlur,
+    setFocus,
+    showError,
+    flow,
+  } = React.useContext(Context);
 
   React.useEffect(() => {
     setField({ step, id, value, error: required || validation ? true : false });
@@ -24,7 +36,15 @@ export function useFormData({ step, id, value, required, validation }: IUseFormD
     return false;
   }
 
+  function validateFile(e: React.DragEvent<HTMLDivElement>): boolean {
+    if (required || validation) {
+      return validation ? validation(e) : !e.dataTransfer.files;
+    }
+    return false;
+  }
+
   const onChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+    e.preventDefault();
     e.persist();
 
     updateField({
@@ -35,12 +55,27 @@ export function useFormData({ step, id, value, required, validation }: IUseFormD
     });
   };
 
-  // TODO make custom dispatch
-  // const onFileChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
-  //   e.preventDefault();
-  //   e.stopPropagation();
+  const onFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { files } = e.target;
 
-  // }
+    const val = files ? Array.from(files) : [];
+
+    updateFileField({
+      step,
+      id,
+      value: val,
+      error: validate(e),
+    });
+  };
+
+  const onFileDrop = (e: React.DragEvent<HTMLDivElement>, id: string) => {
+    updateFileField({
+      step,
+      id,
+      value: Array.from(e.dataTransfer.files),
+      error: validateFile(e),
+    });
+  };
 
   const onBlur = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     e.preventDefault();
@@ -64,6 +99,8 @@ export function useFormData({ step, id, value, required, validation }: IUseFormD
       ? showError?.[step]?.[id] ?? false
       : showError?.[id] ?? false,
     onChange,
+    onFileChange,
+    onFileDrop,
     onBlur,
     onFocus,
   };

@@ -45,7 +45,7 @@ function App() {
             <FieldList.Item type="email" name="email" />
           </FieldList>
 
-          <Field type="fileDrop">Floor Plans</Field>
+          <Field type="dragAndDrop">Floor Plans</Field>
         </Step>
 
         <Step label="Second Step">

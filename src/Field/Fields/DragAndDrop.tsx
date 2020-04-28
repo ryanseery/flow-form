@@ -3,10 +3,11 @@ import { FFComponent } from '../../FFComponent';
 import { IProps } from './@types';
 import { useFormData } from '../../useFormData';
 import { DisplayError } from '../../DisplayError';
+import { colors } from '../../colors';
 
-interface IFileComp extends IProps {}
+interface IDragAndDrop extends IProps {}
 
-export const FileComp: React.FC<IFileComp> = ({
+export const DragAndDrop: React.FC<IDragAndDrop> = ({
   step,
   id,
   // type = 'file',
@@ -19,7 +20,13 @@ export const FileComp: React.FC<IFileComp> = ({
   label,
   errMsg,
 }) => {
-  const { value, onChange, onBlur, onFocus, showError } = useFormData({ step, id, value: '', required, validation });
+  const { value, onFileChange, onFileDrop, onBlur, onFocus, showError } = useFormData({
+    step,
+    id,
+    value: '',
+    required,
+    validation,
+  });
 
   const fileRef = React.useRef<HTMLInputElement>(null);
 
@@ -39,7 +46,7 @@ export const FileComp: React.FC<IFileComp> = ({
   const onDrop = (e: React.DragEvent<HTMLDivElement>) => {
     handleDefaults(e);
 
-    console.log('HERE: ', e.dataTransfer);
+    onFileDrop(e, id);
   };
 
   const handleFileBtn = () => {
@@ -47,12 +54,14 @@ export const FileComp: React.FC<IFileComp> = ({
     fileRef.current.click();
   };
 
+  console.log('VALUE: ', value);
+
   return (
     <>
       <div
         className={`flow-form-file-upload`}
         style={{
-          border: '1px solid black',
+          border: `1px solid ${colors.grey}`,
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
@@ -77,9 +86,9 @@ export const FileComp: React.FC<IFileComp> = ({
           data-input-id={`${id}-field-file`}
           name={id}
           type="file"
-          value={value || ''}
+          // value={value || ''}
           required={required}
-          onChange={onChange}
+          onChange={onFileChange}
           onBlur={onBlur}
           onFocus={onFocus}
           className={`flow-form-field flow-form-file ${className}-field`}
@@ -92,6 +101,6 @@ export const FileComp: React.FC<IFileComp> = ({
   );
 };
 
-FileComp.defaultProps = {
-  ffComp: FFComponent.FILE_COMP,
+DragAndDrop.defaultProps = {
+  ffComp: FFComponent.DRAG_AND_DROP,
 };

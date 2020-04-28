@@ -12,6 +12,7 @@ interface IForm {
   className?: string;
   style?: {};
   showData?: boolean;
+  doughNut?: boolean;
 }
 
 // TODO clean up with toArray(children).reduce
@@ -37,7 +38,7 @@ function handleChildObj(children: React.ReactNode): IStepState[] | [] {
   }
 }
 
-const Form: React.FC<IForm> = ({ children, onSubmit, className, style, showData }) => {
+const Form: React.FC<IForm> = ({ children, onSubmit, className, style, showData, doughNut }) => {
   const {
     isFlowForm,
     canProceed,
@@ -77,7 +78,7 @@ const Form: React.FC<IForm> = ({ children, onSubmit, className, style, showData 
       style={style}
     >
       <fieldset style={{ border: `none` }}>
-        {isFlowForm && <Progress steps={flow.steps} currentStep={flow.currentStep} />}
+        {isFlowForm && <Progress steps={flow.steps} currentStep={flow.currentStep} doughNut={doughNut} />}
 
         <>{isFlowForm ? children?.[flow.key] : children}</>
 
@@ -105,10 +106,10 @@ Form.defaultProps = {
 
 interface IFlowForm extends IForm {}
 
-export const FlowForm: React.FC<IFlowForm> = ({ children, onSubmit, className, style, showData }) => {
+export const FlowForm: React.FC<IFlowForm> = ({ children, onSubmit, className, style, showData, doughNut }) => {
   return (
     <Wrapper>
-      <Form onSubmit={onSubmit} className={className} style={style} showData={showData}>
+      <Form onSubmit={onSubmit} className={className} style={style} showData={showData} doughNut={doughNut}>
         {children}
       </Form>
     </Wrapper>
