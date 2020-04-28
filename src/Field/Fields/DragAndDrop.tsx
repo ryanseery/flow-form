@@ -5,6 +5,11 @@ import { useFormData } from '../../useFormData';
 import { DisplayError } from '../../DisplayError';
 import { colors } from '../../colors';
 
+const handleDefaults = (e: Event | React.DragEvent<HTMLDivElement>) => {
+  e.preventDefault();
+  e.stopPropagation();
+};
+
 interface IDragAndDrop extends IProps {}
 
 export const DragAndDrop: React.FC<IDragAndDrop> = ({
@@ -29,11 +34,6 @@ export const DragAndDrop: React.FC<IDragAndDrop> = ({
   });
 
   const fileRef = React.useRef<HTMLInputElement>(null);
-
-  const handleDefaults = (e: Event | React.DragEvent<HTMLDivElement>) => {
-    e.preventDefault();
-    e.stopPropagation();
-  };
 
   const onDragEnter = (e: React.DragEvent<HTMLDivElement>) => {
     handleDefaults(e);
@@ -88,7 +88,7 @@ export const DragAndDrop: React.FC<IDragAndDrop> = ({
           onChange={onFileChange}
           onBlur={onBlur}
           onFocus={onFocus}
-          className={`flow-form-field flow-form-file ${className}-field`}
+          className={`flow-form-field flow-form-drag-and-drop ${className}-field`}
           autoComplete={autoComplete}
           style={{ display: 'none' }}
         />

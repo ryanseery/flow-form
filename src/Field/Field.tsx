@@ -66,7 +66,7 @@ export const Field: React.FC<IField> = ({
       id={`${id}-label`}
       data-field-id={`${id}-label`}
       htmlFor={id}
-      className={`flow-form-field ${className}-label`}
+      className={`flow-form-label ${className}-label`}
       style={{ display: `block`, minHeight: '4rem', textTransform: 'capitalize', ...style }}
     >
       {children ? children : name ?? ''}
