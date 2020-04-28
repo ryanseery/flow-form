@@ -35,6 +35,13 @@ export function useFormData({ step, id, value, required, validation }: IUseFormD
     });
   };
 
+  // TODO make custom dispatch
+  // const onFileChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+  //   e.preventDefault();
+  //   e.stopPropagation();
+
+  // }
+
   const onBlur = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     e.preventDefault();
 

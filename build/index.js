@@ -61,7 +61,6 @@ function isObjectEmpty(obj) {
     return Object.keys(obj).length === 0 && obj.constructor === Object;
 }
 
-// type KeyValue = { value: [string, unknown]; index: number; array: [string, unknown][] };
 function handleArr(arr) {
     return arr
         .map(function (a) { return Object.entries(a).every(function (_a) {
@@ -453,6 +452,7 @@ var FFComponent;
     FFComponent["TEXTAREA"] = "TEXTAREA";
     FFComponent["URL"] = "URL";
     FFComponent["SELECT"] = "SELECT";
+    FFComponent["FILE_COMP"] = "FILE_COMP";
     FFComponent["LIST_BUTTON"] = "LIST_BUTTON";
     FFComponent["ROW"] = "ROW";
     FFComponent["ITEM_INPUT"] = "ITEM_INPUT";
@@ -770,6 +770,64 @@ Select.defaultProps = {
     ffComp: FFComponent.SELECT,
 };
 
+var FileComp = function (_a) {
+    var step = _a.step, id = _a.id, 
+    // type = 'file',
+    _b = _a.required, 
+    // type = 'file',
+    required = _b === void 0 ? false : _b, validation = _a.validation, placeholder = _a.placeholder, autoComplete = _a.autoComplete, 
+    // style,
+    className = _a.className, label = _a.label, errMsg = _a.errMsg;
+    var _c = useFormData({ step: step, id: id, value: '', required: required, validation: validation }), value = _c.value, onChange = _c.onChange, onBlur = _c.onBlur, onFocus = _c.onFocus, showError = _c.showError;
+    var fileRef = React.useRef(null);
+    var handleDefaults = function (e) {
+        e.preventDefault();
+        e.stopPropagation();
+    };
+    // React.useEffect(() => {
+    //   window.addEventListener('dragover', (event: Event) => {
+    //     handleDefaults(event);
+    //   });
+    //   window.addEventListener('drop', (event: Event) => {
+    //     handleDefaults(event);
+    //   });
+    //   return () => {
+    //     window.removeEventListener('dragover', handleDefaults);
+    //     window.removeEventListener('drop', handleDefaults);
+    //   };
+    // }, []);
+    var onDragEnter = function (e) {
+        handleDefaults(e);
+    };
+    var onDragLeave = function (e) {
+        handleDefaults(e);
+    };
+    var onDrop = function (e) {
+        handleDefaults(e);
+        console.log('HERE: ', e.dataTransfer);
+    };
+    var handleFileBtn = function () {
+        if (fileRef.current == null)
+            return;
+        fileRef.current.click();
+    };
+    return (React.createElement(React.Fragment, null,
+        React.createElement("div", { className: "flow-form-file-upload", style: {
+                border: '1px solid black',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                minHeight: '5rem',
+                width: '100%',
+            }, onDrag: handleDefaults, onDragStart: handleDefaults, onDragEnd: handleDefaults, onDragOver: handleDefaults, onDragEnter: onDragEnter, onDragLeave: onDragLeave, onDrop: onDrop },
+            React.createElement("button", { type: "button", id: id + "-btn", className: id + "-btn", onClick: handleFileBtn }, placeholder ? placeholder : "Drag and Drop or Click to upload"),
+            React.createElement("input", { ref: fileRef, multiple: true, id: id + "-field-file", "data-input-id": id + "-field-file", name: id, type: "file", value: value || '', required: required, onChange: onChange, onBlur: onBlur, onFocus: onFocus, className: "flow-form-field flow-form-file " + className + "-field", autoComplete: autoComplete, style: { display: 'none' } })),
+        showError && React.createElement(DisplayError, { id: id, className: className, label: label, errMsg: errMsg })));
+};
+FileComp.defaultProps = {
+    ffComp: FFComponent.FILE_COMP,
+};
+
 var Field = function (_a) {
     var step = _a.step, index = _a.index, name = _a.name, type = _a.type, children = _a.children, style = _a.style, _b = _a.required, required = _b === void 0 ? false : _b, validation = _a.validation, _c = _a.autoComplete, autoComplete = _c === void 0 ? 'off' : _c, placeholder = _a.placeholder, errMsg = _a.errMsg, options = _a.options, inputs = _a.inputs;
     if (!name && !children) {
@@ -815,6 +873,8 @@ var Field = function (_a) {
                     return React.createElement(TextArea, __assign({}, defaultProps));
                 case 'select':
                     return React.createElement(Select, __assign({}, defaultProps));
+                case 'fileDrop':
+                    return React.createElement(FileComp, __assign({}, defaultProps));
                 default:
                     return React.createElement(Text, __assign({}, defaultProps));
             }
@@ -985,7 +1045,7 @@ var FieldList = function (_a) {
             name: name,
         });
     }; };
-    return (React.createElement("label", { "data-field-list-id": id, className: "flow-form-field-list " + className, style: __assign(__assign({}, style), { display: 'block', textTransform: 'capitalize' }) },
+    return (React.createElement("label", { "data-field-list-id": id, className: "flow-form-field-list " + className, style: __assign(__assign({}, style), { display: 'block', minHeight: '4rem', textTransform: 'capitalize' }) },
         label,
         !isObjectEmpty(formData) && step != null ? (React.createElement(React.Fragment, null, (_b = formData === null || formData === void 0 ? void 0 : formData[step]) === null || _b === void 0 ? void 0 : _b[id].map(function (field, index) { return (React.createElement(Row, { key: index, className: className },
             Object.entries(field).map(function (_a, i) {

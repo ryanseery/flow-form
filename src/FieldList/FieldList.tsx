@@ -144,7 +144,7 @@ export const FieldList: IFieldList<IFieldListProps> = ({ step, label, name, clas
     <label
       data-field-list-id={id}
       className={`flow-form-field-list ${className}`}
-      style={{ ...style, display: 'block', textTransform: 'capitalize' }}
+      style={{ ...style, display: 'block', minHeight: '4rem', textTransform: 'capitalize' }}
     >
       {label}
       {!isObjectEmpty(formData) && step != null ? (

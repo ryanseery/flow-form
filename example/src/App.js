@@ -22,7 +22,7 @@ function App() {
   return (
     <div style={{ height: '100vh', display: 'flex', justifyContent: 'center' }}>
       <FlowForm onSubmit={data => console.log('onSubmit: ', data)} showData>
-        <Field validation={checkString}>Test 1</Field>
+        <Field validation={checkString} name="Test 1" />
 
         <FieldList label="Tools" add>
           <FieldList.Item validation={checkString}>Name</FieldList.Item>
@@ -44,6 +44,8 @@ function App() {
             <FieldList.Item validation={checkString}>Name</FieldList.Item>
             <FieldList.Item type="email" name="email" />
           </FieldList>
+
+          <Field type="fileDrop">Floor Plans</Field>
         </Step>
 
         <Step label="Second Step">

@@ -16,7 +16,7 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "start-local-test": "npm i -S ../flow-form-1.0.3.tgz && npm start"
+    "local": "npm i -S ../flow-form-1.0.3.tgz && npm start"
   },
   "eslintConfig": {
     "extends": "react-app"

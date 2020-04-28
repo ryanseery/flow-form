@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { FFComponent } from '../FFComponent';
 import { toCamelCase, toKebabCase } from '../utils';
-import { Text, Number, Email, Password, Tel, Url, Color, TextArea, Select } from './Fields';
+import { Text, Number, Email, Password, Tel, Url, Color, TextArea, Select, FileComp } from './Fields';
 import { Option, Input } from './Fields/@types';
 
 export interface IField {
@@ -90,6 +90,8 @@ export const Field: React.FC<IField> = ({
             return <TextArea {...defaultProps} />;
           case 'select':
             return <Select {...defaultProps} />;
+          case 'fileDrop':
+            return <FileComp {...defaultProps} />;
           default:
             return <Text {...defaultProps} />;
         }
