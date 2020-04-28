@@ -97,6 +97,8 @@ export const FieldList: IFieldList<IFieldListProps> = ({ step, label, name, clas
   const handleChange = (index: number) => (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>,
   ) => {
+    e.preventDefault();
+
     const { type, name, value } = e.target;
 
     updateFieldListItem({
@@ -144,7 +146,7 @@ export const FieldList: IFieldList<IFieldListProps> = ({ step, label, name, clas
     <label
       data-field-list-id={id}
       className={`flow-form-field-list ${className}`}
-      style={{ ...style, display: 'block', minHeight: '4rem', textTransform: 'capitalize' }}
+      style={{ display: `block`, minHeight: '4rem', ...style }}
     >
       {label}
       {!isObjectEmpty(formData) && step != null ? (

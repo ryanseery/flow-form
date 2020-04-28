@@ -59,6 +59,10 @@ interface FileArgs extends Args {
   error: boolean;
 }
 
+interface RemoveFileArgs extends Args {
+  index: number;
+}
+
 interface SetFieldListArgs extends Args {
   value: object[];
   error: object[];
@@ -98,6 +102,7 @@ interface IContext extends IState {
   setField: ({ step, id, value, error }: ValueArgs) => void;
   setFieldList: ({ step, id, value, error }: SetFieldListArgs) => void;
   updateField: ({ step, id, value, error }: ValueArgs) => void;
+  removeFile: ({ step, id, index }: RemoveFileArgs) => void;
   updateFileField: ({ step, id, value, error }: FileArgs) => void;
   setBlur: ({ step, id, showError }: BlurArgs) => void;
   setFocus: ({ step, id }: Args) => void;
@@ -117,6 +122,7 @@ enum ACTIONS {
   SET_FIELD = 'SET_FIELD',
   SET_FIELD_LIST = 'SET_FIELD_LIST',
   UPDATE_FIELD = 'UPDATE_FIELD',
+  REMOVE_FILE = 'REMOVE_FILE',
   UPDATE_FILE_FIELD = 'UPDATE_FILE_FIELD',
   SET_BLUR = 'SET_BLUR',
   SET_FOCUS = 'SET_FOCUS',
@@ -170,6 +176,16 @@ const updateInput = ({ step, id, value, error }: ValueArgs): UpdateField => ({
   id,
   value,
   error,
+});
+
+interface RemoveFile extends RemoveFileArgs {
+  type: ACTIONS.REMOVE_FILE;
+}
+const removeFile = ({ step, id, index }: RemoveFileArgs): RemoveFile => ({
+  type: ACTIONS.REMOVE_FILE,
+  step,
+  id,
+  index,
 });
 
 interface UpdateFileField extends FileArgs {
@@ -277,6 +293,7 @@ type Action =
   | SetField
   | SetFieldList
   | UpdateField
+  | RemoveFile
   | UpdateFileField
   | SetBlur
   | SetFocus
@@ -452,6 +469,39 @@ function reducer(state: IState, action: Action): IState {
             [step]: {
               ...state.showError[step],
               [id]: error,
+            },
+          },
+        };
+      } else {
+        return state;
+      }
+    }
+    case ACTIONS.REMOVE_FILE: {
+      const { step, id, index } = action;
+      if (step == null) {
+        const mutable = [...state.formData[id]];
+
+        const updatedArr = mutable.filter((_, i: number) => i !== index);
+
+        return {
+          ...state,
+          formData: {
+            ...state.formData,
+            [id]: [...updatedArr],
+          },
+        };
+      } else if (step != null) {
+        const mutable = [...state.formData[step][id]];
+
+        const updatedArr = mutable.filter((_, i: number) => i !== index);
+
+        return {
+          ...state,
+          formData: {
+            ...state.formData,
+            [step]: {
+              ...state.formData[step],
+              [id]: [...updatedArr],
             },
           },
         };
@@ -806,6 +856,7 @@ export const Wrapper: React.FC<IWrapper> = ({ children }) => {
       setFieldList: ({ step, id, value, error, focus }: SetFieldListArgs) =>
         dispatch(setFieldList({ step, id, value, error, focus })),
       updateField: ({ step, id, value, error }: ValueArgs) => dispatch(updateInput({ step, id, value, error })),
+      removeFile: ({ step, id, index }: RemoveFileArgs) => dispatch(removeFile({ step, id, index })),
       updateFileField: ({ step, id, value, error }: FileArgs) => dispatch(updateFileField({ step, id, value, error })),
       setBlur: ({ step, id, showError }: BlurArgs) => dispatch(setBlur({ step, id, showError })),
       setFocus: ({ step, id }: Args) => dispatch(setFocus({ step, id })),

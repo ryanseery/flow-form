@@ -10,9 +10,18 @@ interface IListButton {
 
 export const ListButton: React.FC<IListButton> = ({ children, onClick, color }) => (
   <button
-    style={{ backgroundColor: `${color}`, color: `${colors.white}`, border: 'none', fontSize: '1em', width: '1.5em' }}
     type="button"
     onClick={onClick}
+    style={{
+      backgroundColor: `${color}`,
+      color: `${colors.white}`,
+      border: 'none',
+      fontSize: '1em',
+      cursor: 'pointer',
+      width: '1.5em',
+      height: '1.5em',
+      textAlign: 'center',
+    }}
   >
     {children}
   </button>

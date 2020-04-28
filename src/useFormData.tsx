@@ -18,6 +18,7 @@ export function useFormData({ step, id, value, required, validation }: IUseFormD
     formData,
     error,
     updateField,
+    removeFile,
     updateFileField,
     setBlur,
     setFocus,
@@ -77,6 +78,14 @@ export function useFormData({ step, id, value, required, validation }: IUseFormD
     });
   };
 
+  const onFileRemove = (index: number) => {
+    removeFile({
+      step,
+      id,
+      index,
+    });
+  };
+
   const onBlur = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     e.preventDefault();
 
@@ -101,6 +110,7 @@ export function useFormData({ step, id, value, required, validation }: IUseFormD
     onChange,
     onFileChange,
     onFileDrop,
+    onFileRemove,
     onBlur,
     onFocus,
   };

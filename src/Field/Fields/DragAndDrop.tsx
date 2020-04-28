@@ -20,7 +20,7 @@ export const DragAndDrop: React.FC<IDragAndDrop> = ({
   label,
   errMsg,
 }) => {
-  const { value, onFileChange, onFileDrop, onBlur, onFocus, showError } = useFormData({
+  const { value, onFileChange, onFileDrop, onFileRemove, onBlur, onFocus, showError } = useFormData({
     step,
     id,
     value: '',
@@ -107,18 +107,21 @@ export const DragAndDrop: React.FC<IDragAndDrop> = ({
               }}
             >
               <span>{file.name}</span>{' '}
-              <a
+              <button
+                type="button"
+                onClick={() => onFileRemove(index)}
                 style={{
+                  backgroundColor: `${colors.red}`,
+                  color: `${colors.white}`,
+                  border: 'none',
                   cursor: 'pointer',
                   width: '20px',
                   height: '20px',
-                  backgroundColor: `${colors.red}`,
-                  color: `${colors.white}`,
                   textAlign: 'center',
                 }}
               >
                 &times;
-              </a>
+              </button>
             </li>
           ))}
         </ul>
