@@ -21,6 +21,7 @@ export const ListButton: React.FC<IListButton> = ({ children, onClick, remove })
       width: '1.5em',
       height: '1.5em',
       textAlign: 'center',
+      borderRadius: '0.2em',
     }}
   >
     {children}

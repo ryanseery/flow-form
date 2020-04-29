@@ -499,8 +499,6 @@ var FFComponent;
 (function (FFComponent) {
     FFComponent["FORM"] = "FORM";
     FFComponent["FIELD"] = "FIELD";
-    FFComponent["FIELD_LIST"] = "FIELD_LIST";
-    FFComponent["ITEM"] = "ITEM";
     FFComponent["STEP"] = "STEP";
     FFComponent["SHOW_DATA"] = "SHOW_DATA";
     FFComponent["SUBMIT"] = "SUBMIT";
@@ -514,14 +512,15 @@ var FFComponent;
     FFComponent["URL"] = "URL";
     FFComponent["SELECT"] = "SELECT";
     FFComponent["DRAG_AND_DROP"] = "DRAG_AND_DROP";
-    FFComponent["LIST_BUTTON"] = "LIST_BUTTON";
+    FFComponent["FIELD_LIST"] = "FIELD_LIST";
+    FFComponent["ITEM"] = "ITEM";
     FFComponent["ROW"] = "ROW";
     FFComponent["ITEM_INPUT"] = "ITEM_INPUT";
     FFComponent["PROGRESS"] = "PROGRESS";
     FFComponent["DOUGHNUT"] = "DOUGHNUT";
     FFComponent["DEFAULT_SUBMIT"] = "DEFAULT_SUBMIT";
-    FFComponent["DEFAULT_NEXT"] = "DEFAULT_NEXT";
-    FFComponent["DEFAULT_BACK"] = "DEFAULT_BACK";
+    FFComponent["DEFAULT_BTN"] = "DEFAULT_BTN";
+    FFComponent["LIST_BUTTON"] = "LIST_BUTTON";
 })(FFComponent || (FFComponent = {}));
 
 var DefaultSubmit = function (_a) {
@@ -530,22 +529,6 @@ var DefaultSubmit = function (_a) {
 };
 DefaultSubmit.defaultProps = {
     ffComp: FFComponent.DEFAULT_SUBMIT,
-};
-
-var DefaultNext = function (_a) {
-    var disabled = _a.disabled, onClick = _a.onClick;
-    return (React.createElement("button", { type: "button", className: "flow-form-next-btn", disabled: disabled, onClick: onClick }, "Next"));
-};
-DefaultNext.defaultProps = {
-    ffComp: FFComponent.DEFAULT_NEXT,
-};
-
-var DefaultBack = function (_a) {
-    var onClick = _a.onClick;
-    return (React.createElement("button", { type: "button", className: "flow-form-back-btn", onClick: onClick }, "Back"));
-};
-DefaultBack.defaultProps = {
-    ffComp: FFComponent.DEFAULT_BACK,
 };
 
 var Submit = function (_a) {
@@ -575,10 +558,19 @@ var ListButton = function (_a) {
             width: '1.5em',
             height: '1.5em',
             textAlign: 'center',
+            borderRadius: '0.2em',
         } }, children));
 };
 ListButton.defaultProps = {
     ffComp: FFComponent.LIST_BUTTON,
+};
+
+var DefaultBtn = function (_a) {
+    var className = _a.className, onClick = _a.onClick, disabled = _a.disabled, children = _a.children, style = _a.style;
+    return (React.createElement("button", { type: "button", className: "flow-form-btn " + className, disabled: disabled, onClick: onClick, style: style }, children));
+};
+DefaultBtn.defaultProps = {
+    ffComp: FFComponent.DEFAULT_BTN,
 };
 
 var Doughnut = function (_a) {
@@ -666,8 +658,8 @@ var Form = function (_a) {
             isFlowForm && React.createElement(Progress, { steps: flow.steps, currentStep: flow.currentStep, doughNut: doughNut }),
             React.createElement(React.Fragment, null, isFlowForm ? children === null || children === void 0 ? void 0 : children[flow.key] : children),
             isFlowForm ? (React.createElement(React.Fragment, null,
-                flow.currentStep != null && ((_b = flow.currentStep) === null || _b === void 0 ? void 0 : _b.index) > 0 && React.createElement(DefaultBack, { onClick: function () { return revertForm(); } }),
-                flow.end !== ((_c = flow.currentStep) === null || _c === void 0 ? void 0 : _c.index) ? (React.createElement(DefaultNext, { disabled: !canProceed, onClick: function () { return progressForm(); } })) : (React.createElement(DefaultSubmit, { disabled: !canProceed })))) : (React.createElement(DefaultSubmit, { disabled: !canProceed })))));
+                flow.currentStep != null && ((_b = flow.currentStep) === null || _b === void 0 ? void 0 : _b.index) > 0 && (React.createElement(DefaultBtn, { onClick: function () { return revertForm(); } }, "Back")),
+                flow.end !== ((_c = flow.currentStep) === null || _c === void 0 ? void 0 : _c.index) ? (React.createElement(DefaultBtn, { disabled: !canProceed, onClick: function () { return progressForm(); } }, "Next")) : (React.createElement(DefaultSubmit, { disabled: !canProceed })))) : (React.createElement(DefaultSubmit, { disabled: !canProceed })))));
 };
 Form.defaultProps = {
     ffComp: FFComponent.FORM,
@@ -1119,8 +1111,6 @@ var FieldList = function (_a) {
         });
     }, [step, label, flow.currentStep, flow.key]);
     function validate(e, index) {
-        console.log('INDEX: ', index);
-        console.log('INPUT PROPS: ', inputProps);
         if (inputProps[index].required || inputProps[index].validation) {
             return inputProps[index].validation ? inputProps[index].validation(e) : !e.target.value;
         }

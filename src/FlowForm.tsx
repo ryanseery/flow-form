@@ -3,7 +3,7 @@ import { Context, Wrapper, IStepState } from './Context';
 import { FFComponent } from './FFComponent';
 import { IStep } from './Step';
 import { toCamelCase } from './utils';
-import { DefaultSubmit, DefaultNext, DefaultBack } from './buttons';
+import { DefaultSubmit, DefaultBtn } from './buttons';
 import { Progress } from './Progress';
 
 interface IForm {
@@ -84,10 +84,14 @@ const Form: React.FC<IForm> = ({ children, onSubmit, className, style, showData,
 
         {isFlowForm ? (
           <>
-            {flow.currentStep != null && flow.currentStep?.index > 0 && <DefaultBack onClick={() => revertForm()} />}
+            {flow.currentStep != null && flow.currentStep?.index > 0 && (
+              <DefaultBtn onClick={() => revertForm()}>Back</DefaultBtn>
+            )}
 
             {flow.end !== flow.currentStep?.index ? (
-              <DefaultNext disabled={!canProceed} onClick={() => progressForm()} />
+              <DefaultBtn disabled={!canProceed} onClick={() => progressForm()}>
+                Next
+              </DefaultBtn>
             ) : (
               <DefaultSubmit disabled={!canProceed} />
             )}
