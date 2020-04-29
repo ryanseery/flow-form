@@ -310,6 +310,8 @@ type Action =
   | SetFieldListFocus;
 
 function reducer(state: IState, action: Action): IState {
+  console.log('REDUCER: ', { state, action });
+
   switch (action.type) {
     case ACTIONS.SET_FORM: {
       const { isFlowForm, flow } = action;

@@ -21,7 +21,7 @@ function App() {
   // TODO initial Values
   return (
     <div style={{ height: '100vh', display: 'flex', justifyContent: 'center' }}>
-      <FlowForm onSubmit={data => console.log('onSubmit: ', data)} showData>
+      <FlowForm onSubmit={data => console.log('onSubmit: ', data)}>
         <Field validation={checkString} name="Test 1" />
 
         <FieldList label="Tools" add>
@@ -30,7 +30,7 @@ function App() {
         </FieldList>
       </FlowForm>
 
-      <FlowForm onSubmit={data => console.log('onSubmit: ', data)} showData>
+      <FlowForm onSubmit={data => console.log('onSubmit: ', data)}>
         <Step label="First Step">
           <Field validation={checkString}>Test 3</Field>
 

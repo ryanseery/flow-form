@@ -38,11 +38,7 @@ export function handleErrorArr(children: React.ReactNode[]): {} {
   return React.Children.toArray(children).reduce(
     (acc: {}, child) =>
       React.isValidElement<IItem>(child)
-        ? {
-            ...acc,
-            [toCamelCase(child.props.name ? child.props.name : child.props.children ?? '')]:
-              child.props.required || child.props.validation ? true : false,
-          }
+        ? { ...acc, [toCamelCase(child.props.name ? child.props.name : child.props.children ?? '')]: false }
         : acc,
     {},
   );
@@ -63,10 +59,7 @@ export function handleFocusArr(children: React.ReactNode[]): {} {
   return React.Children.toArray(children).reduce(
     (acc: {}, child) =>
       React.isValidElement<IItem>(child)
-        ? {
-            ...acc,
-            [toCamelCase(child.props.name ? child.props.name : child.props.children ?? '')]: false,
-          }
+        ? { ...acc, [toCamelCase(child.props.name ? child.props.name : child.props.children ?? '')]: false }
         : acc,
     {},
   );

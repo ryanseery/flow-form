@@ -9,7 +9,7 @@ interface IRow {
 export const Row: React.FC<IRow> = ({ className, children }) => (
   <div
     className={`flow-form-field-row ${className}`}
-    style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', marginBottom: `10px` }}
+    style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', marginBottom: '10px' }}
   >
     {children}
   </div>

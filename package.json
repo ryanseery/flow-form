@@ -51,5 +51,8 @@
   "jest": {
     "preset": "ts-jest",
     "testEnvironment": "node"
+  },
+  "dependencies": {
+    "@types/styled-components": "^5.1.0"
   }
 }

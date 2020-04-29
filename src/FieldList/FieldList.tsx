@@ -18,7 +18,6 @@ import {
 } from './fieldListUtils';
 import { DisplayError } from '../DisplayError';
 
-// TODO check add
 type IFieldListProps = {
   ffComp?: string;
   step: string | null;
