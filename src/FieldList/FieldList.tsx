@@ -90,6 +90,7 @@ export const FieldList: IFieldList<IFieldListProps> = ({ step, label, name, clas
     if (inputProps[index].required || inputProps[index].validation) {
       return inputProps[index].validation ? inputProps[index].validation(e) : !e.target.value;
     }
+    return false;
   }
 
   const handleChange = (row: number, input: number) => (

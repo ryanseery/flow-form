@@ -30,7 +30,7 @@ function App() {
         </FieldList>
       </FlowForm>
 
-      <FlowForm onSubmit={data => console.log('onSubmit: ', data)}>
+      <FlowForm onSubmit={data => console.log('onSubmit: ', data)} showData>
         <Step label="First Step">
           <Field validation={checkString}>Test 3</Field>
 

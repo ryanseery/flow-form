@@ -310,8 +310,7 @@ type Action =
   | SetFieldListFocus;
 
 function reducer(state: IState, action: Action): IState {
-  console.log('REDUCER: ', { state, action });
-
+  console.log('ACTION: ', action);
   switch (action.type) {
     case ACTIONS.SET_FORM: {
       const { isFlowForm, flow } = action;
@@ -368,64 +367,6 @@ function reducer(state: IState, action: Action): IState {
             [step]: {
               ...state.focus[step],
               [id]: false,
-            },
-          },
-        };
-      } else {
-        return state;
-      }
-    }
-    case ACTIONS.SET_FIELD_LIST: {
-      const { step, id, value, error, focus } = action;
-      if (step == null && !state.formData[id]) {
-        return {
-          ...state,
-          formData: {
-            ...state.formData,
-            [id]: value,
-          },
-          error: {
-            ...state.error,
-            [id]: error,
-          },
-          showError: {
-            ...state.showError,
-            [id]: focus,
-          },
-          focus: {
-            ...state.focus,
-            [id]: focus,
-          },
-        };
-      } else if (step != null && !state.formData?.[step]?.[id]) {
-        return {
-          ...state,
-          formData: {
-            ...state.formData,
-            [step]: {
-              ...state.formData[step],
-              [id]: value,
-            },
-          },
-          error: {
-            ...state.error,
-            [step]: {
-              ...state.error[step],
-              [id]: error,
-            },
-          },
-          showError: {
-            ...state.showError,
-            [step]: {
-              ...state.showError[step],
-              [id]: focus,
-            },
-          },
-          focus: {
-            ...state.focus,
-            [step]: {
-              ...state.focus[step],
-              [id]: focus,
             },
           },
         };
@@ -660,6 +601,64 @@ function reducer(state: IState, action: Action): IState {
         },
       };
     }
+    case ACTIONS.SET_FIELD_LIST: {
+      const { step, id, value, error, focus } = action;
+      if (step == null && !state.formData[id]) {
+        return {
+          ...state,
+          formData: {
+            ...state.formData,
+            [id]: [...value],
+          },
+          error: {
+            ...state.error,
+            [id]: [...error],
+          },
+          showError: {
+            ...state.showError,
+            [id]: [...focus],
+          },
+          focus: {
+            ...state.focus,
+            [id]: [...focus],
+          },
+        };
+      } else if (step != null && !state.formData?.[step]?.[id]) {
+        return {
+          ...state,
+          formData: {
+            ...state.formData,
+            [step]: {
+              ...state.formData[step],
+              [id]: [...value],
+            },
+          },
+          error: {
+            ...state.error,
+            [step]: {
+              ...state.error[step],
+              [id]: [...error],
+            },
+          },
+          showError: {
+            ...state.showError,
+            [step]: {
+              ...state.showError[step],
+              [id]: [...focus],
+            },
+          },
+          focus: {
+            ...state.focus,
+            [step]: {
+              ...state.focus[step],
+              [id]: [...focus],
+            },
+          },
+        };
+      } else {
+        return state;
+      }
+    }
     case ACTIONS.UPDATE_FIELD_LIST_ITEM: {
       const { step, id, index, name, value, error } = action;
       if (step == null) {
@@ -849,7 +848,6 @@ function reducer(state: IState, action: Action): IState {
     }
     case ACTIONS.SET_FIELD_LIST_FOCUS: {
       const { step, id, index, name } = action;
-
       if (step == null) {
         const mutableFocus = [...state.focus[id]];
 

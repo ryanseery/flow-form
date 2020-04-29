@@ -248,7 +248,7 @@ var setFieldListFocus = function (_a) {
 function reducer(state, action) {
     var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, _m, _o, _p, _q, _r, _s, _t, _u, _v, _w, _x, _y, _z, _0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15, _16, _17, _18, _19, _20, _21, _22, _23, _24, _25, _26, _27, _28, _29, _30, _31, _32, _33, _34, _35, _36, _37, _38, _39, _40, _41, _42, _43, _44, _45, _46, _47, _48, _49, _50, _51, _52, _53, _54, _55, _56, _57, _58, _59, _60, _61, _62, _63, _64, _65, _66, _67, _68, _69, _70;
     var _71, _72, _73, _74, _75, _76, _77, _78;
-    console.log('REDUCER: ', { state: state, action: action });
+    console.log('ACTION: ', action);
     switch (action.type) {
         case ACTIONS.SET_FORM: {
             var isFlowForm = action.isFlowForm, flow = action.flow;
@@ -266,25 +266,13 @@ function reducer(state, action) {
                 return state;
             }
         }
-        case ACTIONS.SET_FIELD_LIST: {
-            var step = action.step, id = action.id, value = action.value, error = action.error, focus_1 = action.focus;
-            if (step == null && !state.formData[id]) {
-                return __assign(__assign({}, state), { formData: __assign(__assign({}, state.formData), (_o = {}, _o[id] = value, _o)), error: __assign(__assign({}, state.error), (_p = {}, _p[id] = error, _p)), showError: __assign(__assign({}, state.showError), (_q = {}, _q[id] = focus_1, _q)), focus: __assign(__assign({}, state.focus), (_r = {}, _r[id] = focus_1, _r)) });
-            }
-            else if (step != null && !((_74 = (_73 = state.formData) === null || _73 === void 0 ? void 0 : _73[step]) === null || _74 === void 0 ? void 0 : _74[id])) {
-                return __assign(__assign({}, state), { formData: __assign(__assign({}, state.formData), (_s = {}, _s[step] = __assign(__assign({}, state.formData[step]), (_t = {}, _t[id] = value, _t)), _s)), error: __assign(__assign({}, state.error), (_u = {}, _u[step] = __assign(__assign({}, state.error[step]), (_v = {}, _v[id] = error, _v)), _u)), showError: __assign(__assign({}, state.showError), (_w = {}, _w[step] = __assign(__assign({}, state.showError[step]), (_x = {}, _x[id] = focus_1, _x)), _w)), focus: __assign(__assign({}, state.focus), (_y = {}, _y[step] = __assign(__assign({}, state.focus[step]), (_z = {}, _z[id] = focus_1, _z)), _y)) });
-            }
-            else {
-                return state;
-            }
-        }
         case ACTIONS.UPDATE_FIELD: {
             var step = action.step, id = action.id, value = action.value, error = action.error;
             if (step == null) {
-                return __assign(__assign({}, state), { canProceed: deepCheck(__assign(__assign({}, state.error), (_0 = {}, _0[id] = error, _0))), formData: __assign(__assign({}, state.formData), (_1 = {}, _1[id] = value, _1)), error: __assign(__assign({}, state.error), (_2 = {}, _2[id] = error, _2)), showError: __assign(__assign({}, state.showError), (_3 = {}, _3[id] = error, _3)) });
+                return __assign(__assign({}, state), { canProceed: deepCheck(__assign(__assign({}, state.error), (_o = {}, _o[id] = error, _o))), formData: __assign(__assign({}, state.formData), (_p = {}, _p[id] = value, _p)), error: __assign(__assign({}, state.error), (_q = {}, _q[id] = error, _q)), showError: __assign(__assign({}, state.showError), (_r = {}, _r[id] = error, _r)) });
             }
             else if (step != null) {
-                return __assign(__assign({}, state), { canProceed: deepCheck(__assign(__assign({}, state.error[step]), (_4 = {}, _4[id] = error, _4))), formData: __assign(__assign({}, state.formData), (_5 = {}, _5[step] = __assign(__assign({}, state.formData[step]), (_6 = {}, _6[id] = value, _6)), _5)), error: __assign(__assign({}, state.error), (_7 = {}, _7[step] = __assign(__assign({}, state.error[step]), (_8 = {}, _8[id] = error, _8)), _7)), showError: __assign(__assign({}, state.showError), (_9 = {}, _9[step] = __assign(__assign({}, state.showError[step]), (_10 = {}, _10[id] = error, _10)), _9)) });
+                return __assign(__assign({}, state), { canProceed: deepCheck(__assign(__assign({}, state.error[step]), (_s = {}, _s[id] = error, _s))), formData: __assign(__assign({}, state.formData), (_t = {}, _t[step] = __assign(__assign({}, state.formData[step]), (_u = {}, _u[id] = value, _u)), _t)), error: __assign(__assign({}, state.error), (_v = {}, _v[step] = __assign(__assign({}, state.error[step]), (_w = {}, _w[id] = error, _w)), _v)), showError: __assign(__assign({}, state.showError), (_x = {}, _x[step] = __assign(__assign({}, state.showError[step]), (_y = {}, _y[id] = error, _y)), _x)) });
             }
             else {
                 return state;
@@ -295,12 +283,12 @@ function reducer(state, action) {
             if (step == null) {
                 var mutable = __spreadArrays(state.formData[id]);
                 var updatedArr = mutable.filter(function (_, i) { return i !== index_1; });
-                return __assign(__assign({}, state), { formData: __assign(__assign({}, state.formData), (_11 = {}, _11[id] = __spreadArrays(updatedArr), _11)) });
+                return __assign(__assign({}, state), { formData: __assign(__assign({}, state.formData), (_z = {}, _z[id] = __spreadArrays(updatedArr), _z)) });
             }
             else if (step != null) {
                 var mutable = __spreadArrays(state.formData[step][id]);
                 var updatedArr = mutable.filter(function (_, i) { return i !== index_1; });
-                return __assign(__assign({}, state), { formData: __assign(__assign({}, state.formData), (_12 = {}, _12[step] = __assign(__assign({}, state.formData[step]), (_13 = {}, _13[id] = __spreadArrays(updatedArr), _13)), _12)) });
+                return __assign(__assign({}, state), { formData: __assign(__assign({}, state.formData), (_0 = {}, _0[step] = __assign(__assign({}, state.formData[step]), (_1 = {}, _1[id] = __spreadArrays(updatedArr), _1)), _0)) });
             }
             else {
                 return state;
@@ -309,10 +297,10 @@ function reducer(state, action) {
         case ACTIONS.UPDATE_FILE_FIELD: {
             var step = action.step, id = action.id, value = action.value, error = action.error;
             if (step == null) {
-                return __assign(__assign({}, state), { canProceed: deepCheck(__assign(__assign({}, state.error), (_14 = {}, _14[id] = error, _14))), formData: __assign(__assign({}, state.formData), (_15 = {}, _15[id] = __spreadArrays(state.formData[id], value), _15)), error: __assign(__assign({}, state.error), (_16 = {}, _16[id] = error, _16)), showError: __assign(__assign({}, state.showError), (_17 = {}, _17[id] = error, _17)) });
+                return __assign(__assign({}, state), { canProceed: deepCheck(__assign(__assign({}, state.error), (_2 = {}, _2[id] = error, _2))), formData: __assign(__assign({}, state.formData), (_3 = {}, _3[id] = __spreadArrays(state.formData[id], value), _3)), error: __assign(__assign({}, state.error), (_4 = {}, _4[id] = error, _4)), showError: __assign(__assign({}, state.showError), (_5 = {}, _5[id] = error, _5)) });
             }
             else if (step != null) {
-                return __assign(__assign({}, state), { canProceed: deepCheck(__assign(__assign({}, state.error[step]), (_18 = {}, _18[id] = error, _18))), formData: __assign(__assign({}, state.formData), (_19 = {}, _19[step] = __assign(__assign({}, state.formData[step]), (_20 = {}, _20[id] = __spreadArrays(state.formData[step][id], value), _20)), _19)), error: __assign(__assign({}, state.error), (_21 = {}, _21[step] = __assign(__assign({}, state.error[step]), (_22 = {}, _22[id] = error, _22)), _21)), showError: __assign(__assign({}, state.showError), (_23 = {}, _23[step] = __assign(__assign({}, state.showError[step]), (_24 = {}, _24[id] = error, _24)), _23)) });
+                return __assign(__assign({}, state), { canProceed: deepCheck(__assign(__assign({}, state.error[step]), (_6 = {}, _6[id] = error, _6))), formData: __assign(__assign({}, state.formData), (_7 = {}, _7[step] = __assign(__assign({}, state.formData[step]), (_8 = {}, _8[id] = __spreadArrays(state.formData[step][id], value), _8)), _7)), error: __assign(__assign({}, state.error), (_9 = {}, _9[step] = __assign(__assign({}, state.error[step]), (_10 = {}, _10[id] = error, _10)), _9)), showError: __assign(__assign({}, state.showError), (_11 = {}, _11[step] = __assign(__assign({}, state.showError[step]), (_12 = {}, _12[id] = error, _12)), _11)) });
             }
             else {
                 return state;
@@ -321,10 +309,10 @@ function reducer(state, action) {
         case ACTIONS.SET_BLUR: {
             var step = action.step, id = action.id, showError = action.showError;
             if (step == null) {
-                return __assign(__assign({}, state), { canProceed: deepCheck(__assign(__assign({}, state.error), (_25 = {}, _25[id] = showError, _25))), error: __assign(__assign({}, state.error), (_26 = {}, _26[id] = showError, _26)), showError: __assign(__assign({}, state.showError), (_27 = {}, _27[id] = showError, _27)), focus: __assign(__assign({}, state.focus), (_28 = {}, _28[id] = false, _28)) });
+                return __assign(__assign({}, state), { canProceed: deepCheck(__assign(__assign({}, state.error), (_13 = {}, _13[id] = showError, _13))), error: __assign(__assign({}, state.error), (_14 = {}, _14[id] = showError, _14)), showError: __assign(__assign({}, state.showError), (_15 = {}, _15[id] = showError, _15)), focus: __assign(__assign({}, state.focus), (_16 = {}, _16[id] = false, _16)) });
             }
             else if (step != null) {
-                return __assign(__assign({}, state), { canProceed: deepCheck(__assign(__assign({}, state.error[step]), (_29 = {}, _29[id] = showError, _29))), error: __assign(__assign({}, state.error), (_30 = {}, _30[step] = __assign(__assign({}, state.error[step]), (_31 = {}, _31[id] = showError, _31)), _30)), showError: __assign(__assign({}, state.showError), (_32 = {}, _32[step] = __assign(__assign({}, state.showError[step]), (_33 = {}, _33[id] = showError, _33)), _32)), focus: __assign(__assign({}, state.focus), (_34 = {}, _34[step] = __assign(__assign({}, state.focus[step]), (_35 = {}, _35[id] = false, _35)), _34)) });
+                return __assign(__assign({}, state), { canProceed: deepCheck(__assign(__assign({}, state.error[step]), (_17 = {}, _17[id] = showError, _17))), error: __assign(__assign({}, state.error), (_18 = {}, _18[step] = __assign(__assign({}, state.error[step]), (_19 = {}, _19[id] = showError, _19)), _18)), showError: __assign(__assign({}, state.showError), (_20 = {}, _20[step] = __assign(__assign({}, state.showError[step]), (_21 = {}, _21[id] = showError, _21)), _20)), focus: __assign(__assign({}, state.focus), (_22 = {}, _22[step] = __assign(__assign({}, state.focus[step]), (_23 = {}, _23[id] = false, _23)), _22)) });
             }
             else {
                 return state;
@@ -333,10 +321,10 @@ function reducer(state, action) {
         case ACTIONS.SET_FOCUS: {
             var step = action.step, id = action.id;
             if (step == null) {
-                return __assign(__assign({}, state), { focus: __assign(__assign({}, state.focus), (_36 = {}, _36[id] = !state.focus[id], _36)) });
+                return __assign(__assign({}, state), { focus: __assign(__assign({}, state.focus), (_24 = {}, _24[id] = !state.focus[id], _24)) });
             }
             else if (step != null) {
-                return __assign(__assign({}, state), { focus: __assign(__assign({}, state.focus), (_37 = {}, _37[step] = __assign(__assign({}, state.focus[step]), (_38 = {}, _38[id] = !state.focus[step][id], _38)), _37)) });
+                return __assign(__assign({}, state), { focus: __assign(__assign({}, state.focus), (_25 = {}, _25[step] = __assign(__assign({}, state.focus[step]), (_26 = {}, _26[id] = !state.focus[step][id], _26)), _25)) });
             }
             else {
                 return state;
@@ -344,11 +332,23 @@ function reducer(state, action) {
         }
         case ACTIONS.PROGRESS_FORM: {
             var key = state.flow.key + 1;
-            return __assign(__assign({}, state), { flow: __assign(__assign({}, state.flow), { key: key, currentStep: (_76 = (_75 = state === null || state === void 0 ? void 0 : state.flow) === null || _75 === void 0 ? void 0 : _75.steps) === null || _76 === void 0 ? void 0 : _76[key] }) });
+            return __assign(__assign({}, state), { flow: __assign(__assign({}, state.flow), { key: key, currentStep: (_74 = (_73 = state === null || state === void 0 ? void 0 : state.flow) === null || _73 === void 0 ? void 0 : _73.steps) === null || _74 === void 0 ? void 0 : _74[key] }) });
         }
         case ACTIONS.REVERT_FORM: {
             var key = state.flow.key - 1;
-            return __assign(__assign({}, state), { flow: __assign(__assign({}, state.flow), { key: key, currentStep: (_78 = (_77 = state === null || state === void 0 ? void 0 : state.flow) === null || _77 === void 0 ? void 0 : _77.steps) === null || _78 === void 0 ? void 0 : _78[key] }) });
+            return __assign(__assign({}, state), { flow: __assign(__assign({}, state.flow), { key: key, currentStep: (_76 = (_75 = state === null || state === void 0 ? void 0 : state.flow) === null || _75 === void 0 ? void 0 : _75.steps) === null || _76 === void 0 ? void 0 : _76[key] }) });
+        }
+        case ACTIONS.SET_FIELD_LIST: {
+            var step = action.step, id = action.id, value = action.value, error = action.error, focus_1 = action.focus;
+            if (step == null && !state.formData[id]) {
+                return __assign(__assign({}, state), { formData: __assign(__assign({}, state.formData), (_27 = {}, _27[id] = __spreadArrays(value), _27)), error: __assign(__assign({}, state.error), (_28 = {}, _28[id] = __spreadArrays(error), _28)), showError: __assign(__assign({}, state.showError), (_29 = {}, _29[id] = __spreadArrays(focus_1), _29)), focus: __assign(__assign({}, state.focus), (_30 = {}, _30[id] = __spreadArrays(focus_1), _30)) });
+            }
+            else if (step != null && !((_78 = (_77 = state.formData) === null || _77 === void 0 ? void 0 : _77[step]) === null || _78 === void 0 ? void 0 : _78[id])) {
+                return __assign(__assign({}, state), { formData: __assign(__assign({}, state.formData), (_31 = {}, _31[step] = __assign(__assign({}, state.formData[step]), (_32 = {}, _32[id] = __spreadArrays(value), _32)), _31)), error: __assign(__assign({}, state.error), (_33 = {}, _33[step] = __assign(__assign({}, state.error[step]), (_34 = {}, _34[id] = __spreadArrays(error), _34)), _33)), showError: __assign(__assign({}, state.showError), (_35 = {}, _35[step] = __assign(__assign({}, state.showError[step]), (_36 = {}, _36[id] = __spreadArrays(focus_1), _36)), _35)), focus: __assign(__assign({}, state.focus), (_37 = {}, _37[step] = __assign(__assign({}, state.focus[step]), (_38 = {}, _38[id] = __spreadArrays(focus_1), _38)), _37)) });
+            }
+            else {
+                return state;
+            }
         }
         case ACTIONS.UPDATE_FIELD_LIST_ITEM: {
             var step = action.step, id = action.id, index = action.index, name_1 = action.name, value = action.value, error = action.error;
@@ -1048,17 +1048,17 @@ function handleInputPropsObj(children) {
 function handleErrorArr(children) {
     return React.Children.toArray(children).reduce(function (acc, child) {
         var _a;
-        var _b;
+        var _b, _c, _d, _e;
         return React.isValidElement(child)
-            ? __assign(__assign({}, acc), (_a = {}, _a[toCamelCase(child.props.name ? child.props.name : (_b = child.props.children) !== null && _b !== void 0 ? _b : '')] = false, _a)) : acc;
+            ? __assign(__assign({}, acc), (_a = {}, _a[toCamelCase(child.props.name ? child.props.name : (_b = child.props.children) !== null && _b !== void 0 ? _b : '')] = ((_c = child.props) === null || _c === void 0 ? void 0 : _c.required) || ((_d = child.props) === null || _d === void 0 ? void 0 : _d.validation) ? true : (_e = false) !== null && _e !== void 0 ? _e : false, _a)) : acc;
     }, {});
 }
 function handleErrorObj(children) {
     var _a;
-    var _b;
+    var _b, _c, _d, _e;
     if (React.isValidElement(children)) {
         return _a = {},
-            _a[toCamelCase(children.props.name ? children.props.name : (_b = children.props.children) !== null && _b !== void 0 ? _b : '')] = children.props.required || children.props.validation ? true : false,
+            _a[toCamelCase(children.props.name ? children.props.name : (_b = children.props.children) !== null && _b !== void 0 ? _b : '')] = ((_c = children.props) === null || _c === void 0 ? void 0 : _c.required) || ((_d = children.props) === null || _d === void 0 ? void 0 : _d.validation) ? true : (_e = false) !== null && _e !== void 0 ? _e : false,
             _a;
     }
     else {
@@ -1115,6 +1115,7 @@ var FieldList = function (_a) {
         if (inputProps[index].required || inputProps[index].validation) {
             return inputProps[index].validation ? inputProps[index].validation(e) : !e.target.value;
         }
+        return false;
     }
     var handleChange = function (row, input) { return function (e) {
         e.preventDefault();
