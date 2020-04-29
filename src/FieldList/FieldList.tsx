@@ -5,8 +5,7 @@ import { toCamelCase, isObjectEmpty } from '../utils';
 import { Item } from './Item';
 import { Row } from './Row';
 import { ItemInput } from './ItemInput';
-import { ListButton } from './ListButton';
-import { colors } from '../colors';
+import { ListButton } from '../buttons';
 import {
   handleBlankArr,
   handleBlankObj,
@@ -94,7 +93,7 @@ export const FieldList: IFieldList<IFieldListProps> = ({ step, label, name, clas
     }
   }
 
-  const handleChange = (index: number) => (
+  const handleChange = (row: number, input: number) => (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>,
   ) => {
     e.preventDefault();
@@ -104,14 +103,14 @@ export const FieldList: IFieldList<IFieldListProps> = ({ step, label, name, clas
     updateFieldListItem({
       step,
       id,
-      index,
+      index: row,
       name,
       value: type === 'number' ? parseFloat(value) : value,
-      error: validate(e, index),
+      error: validate(e, input),
     });
   };
 
-  const handleBlur = (index: number) => (
+  const handleBlur = (row: number, input: number) => (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>,
   ) => {
     e.preventDefault();
@@ -121,9 +120,9 @@ export const FieldList: IFieldList<IFieldListProps> = ({ step, label, name, clas
     setFieldListBlur({
       step,
       id,
-      index,
+      index: row,
       name,
-      error: validate(e, index),
+      error: validate(e, input),
     });
   };
 
@@ -146,7 +145,7 @@ export const FieldList: IFieldList<IFieldListProps> = ({ step, label, name, clas
     <label
       data-field-list-id={id}
       className={`flow-form-field-list ${className}`}
-      style={{ display: `block`, minHeight: '4rem', ...style }}
+      style={{ display: `block`, minHeight: '4.5rem', ...style }}
     >
       {label}
       {!isObjectEmpty(formData) && step != null ? (
@@ -161,12 +160,12 @@ export const FieldList: IFieldList<IFieldListProps> = ({ step, label, name, clas
                     type={inputProps?.[i].type ?? 'text'}
                     value={(v as string | number) || ''}
                     required={inputProps?.[i].required ?? false}
-                    onChange={handleChange(index)}
-                    onBlur={handleBlur(index)}
+                    onChange={handleChange(index, i)}
+                    onBlur={handleBlur(index, i)}
                     onFocus={handleFocus(index)}
                     autoComplete={inputProps?.[i].autoComplete ?? 'off'}
                   />
-                  {showError?.[step]?.[id]?.[i]?.[k] && (
+                  {showError?.[step]?.[id]?.[index]?.[k] && (
                     <>
                       <DisplayError
                         id={k}
@@ -182,14 +181,21 @@ export const FieldList: IFieldList<IFieldListProps> = ({ step, label, name, clas
                 <>
                   {index === 0 ? (
                     <ListButton
-                      color={colors.green}
-                      onClick={() => addFieldList({ step, id, blankInput: blankInput ?? {} })}
+                      onClick={() =>
+                        addFieldList({
+                          step,
+                          id,
+                          blankInput: blankInput ?? {},
+                          blankError: constructErrors ?? {},
+                          blankFocus: constructFocus ?? {},
+                        })
+                      }
                     >
-                      +
+                      &#43;
                     </ListButton>
                   ) : (
-                    <ListButton color={colors.red} onClick={() => removeFieldList({ step, id, index })}>
-                      -
+                    <ListButton remove onClick={() => removeFieldList({ step, id, index })}>
+                      &minus;
                     </ListButton>
                   )}
                 </>
@@ -210,8 +216,8 @@ export const FieldList: IFieldList<IFieldListProps> = ({ step, label, name, clas
                       type={inputProps?.[i].type ?? 'text'}
                       value={(v as string | number) || ''}
                       required={inputProps?.[i].required ?? false}
-                      onChange={handleChange(index)}
-                      onBlur={handleBlur(index)}
+                      onChange={handleChange(index, i)}
+                      onBlur={handleBlur(index, i)}
                       onFocus={handleFocus(index)}
                       autoComplete={inputProps?.[i].autoComplete ?? 'off'}
                     />
@@ -229,14 +235,21 @@ export const FieldList: IFieldList<IFieldListProps> = ({ step, label, name, clas
                   <>
                     {index === 0 ? (
                       <ListButton
-                        color={colors.green}
-                        onClick={() => addFieldList({ step, id, blankInput: blankInput ?? {} })}
+                        onClick={() =>
+                          addFieldList({
+                            step,
+                            id,
+                            blankInput: blankInput ?? {},
+                            blankError: constructErrors ?? {},
+                            blankFocus: constructFocus ?? {},
+                          })
+                        }
                       >
-                        +
+                        &#43;
                       </ListButton>
                     ) : (
-                      <ListButton color={colors.red} onClick={() => removeFieldList({ step, id, index })}>
-                        -
+                      <ListButton remove onClick={() => removeFieldList({ step, id, index })}>
+                        &minus;
                       </ListButton>
                     )}
                   </>

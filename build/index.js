@@ -205,12 +205,14 @@ var updateInputListItem = function (_a) {
     });
 };
 var addFieldList = function (_a) {
-    var step = _a.step, id = _a.id, blankInput = _a.blankInput;
+    var step = _a.step, id = _a.id, blankInput = _a.blankInput, blankError = _a.blankError, blankFocus = _a.blankFocus;
     return ({
         type: ACTIONS.ADD_FIELD_LIST,
         step: step,
         id: id,
         blankInput: blankInput,
+        blankError: blankError,
+        blankFocus: blankFocus,
     });
 };
 var removeFieldList = function (_a) {
@@ -244,8 +246,8 @@ var setFieldListFocus = function (_a) {
     });
 };
 function reducer(state, action) {
-    var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, _m, _o, _p, _q, _r, _s, _t, _u, _v, _w, _x, _y, _z, _0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15, _16, _17, _18, _19, _20, _21, _22, _23, _24, _25, _26, _27, _28, _29, _30, _31, _32, _33, _34, _35, _36, _37, _38, _39, _40, _41, _42, _43, _44, _45, _46, _47, _48, _49, _50, _51, _52, _53, _54, _55, _56, _57, _58, _59, _60, _61;
-    var _62, _63, _64, _65, _66, _67, _68, _69;
+    var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, _m, _o, _p, _q, _r, _s, _t, _u, _v, _w, _x, _y, _z, _0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15, _16, _17, _18, _19, _20, _21, _22, _23, _24, _25, _26, _27, _28, _29, _30, _31, _32, _33, _34, _35, _36, _37, _38, _39, _40, _41, _42, _43, _44, _45, _46, _47, _48, _49, _50, _51, _52, _53, _54, _55, _56, _57, _58, _59, _60, _61, _62, _63, _64, _65, _66, _67, _68, _69, _70;
+    var _71, _72, _73, _74, _75, _76, _77, _78;
     switch (action.type) {
         case ACTIONS.SET_FORM: {
             var isFlowForm = action.isFlowForm, flow = action.flow;
@@ -256,7 +258,7 @@ function reducer(state, action) {
             if (step == null && !state.formData[id]) {
                 return __assign(__assign({}, state), { formData: __assign(__assign({}, state.formData), (_a = {}, _a[id] = value, _a)), error: __assign(__assign({}, state.error), (_b = {}, _b[id] = error, _b)), showError: __assign(__assign({}, state.showError), (_c = {}, _c[id] = false, _c)), focus: __assign(__assign({}, state.focus), (_d = {}, _d[id] = false, _d)) });
             }
-            else if (step != null && !((_63 = (_62 = state.formData) === null || _62 === void 0 ? void 0 : _62[step]) === null || _63 === void 0 ? void 0 : _63[id])) {
+            else if (step != null && !((_72 = (_71 = state.formData) === null || _71 === void 0 ? void 0 : _71[step]) === null || _72 === void 0 ? void 0 : _72[id])) {
                 return __assign(__assign({}, state), { formData: __assign(__assign({}, state.formData), (_e = {}, _e[step] = __assign(__assign({}, state.formData[step]), (_f = {}, _f[id] = value, _f)), _e)), error: __assign(__assign({}, state.error), (_g = {}, _g[step] = __assign(__assign({}, state.error[step]), (_h = {}, _h[id] = error, _h)), _g)), showError: __assign(__assign({}, state.showError), (_j = {}, _j[step] = __assign(__assign({}, state.showError[step]), (_k = {}, _k[id] = false, _k)), _j)), focus: __assign(__assign({}, state.focus), (_l = {}, _l[step] = __assign(__assign({}, state.focus[step]), (_m = {}, _m[id] = false, _m)), _l)) });
             }
             else {
@@ -268,7 +270,7 @@ function reducer(state, action) {
             if (step == null && !state.formData[id]) {
                 return __assign(__assign({}, state), { formData: __assign(__assign({}, state.formData), (_o = {}, _o[id] = value, _o)), error: __assign(__assign({}, state.error), (_p = {}, _p[id] = error, _p)), showError: __assign(__assign({}, state.showError), (_q = {}, _q[id] = focus_1, _q)), focus: __assign(__assign({}, state.focus), (_r = {}, _r[id] = focus_1, _r)) });
             }
-            else if (step != null && !((_65 = (_64 = state.formData) === null || _64 === void 0 ? void 0 : _64[step]) === null || _65 === void 0 ? void 0 : _65[id])) {
+            else if (step != null && !((_74 = (_73 = state.formData) === null || _73 === void 0 ? void 0 : _73[step]) === null || _74 === void 0 ? void 0 : _74[id])) {
                 return __assign(__assign({}, state), { formData: __assign(__assign({}, state.formData), (_s = {}, _s[step] = __assign(__assign({}, state.formData[step]), (_t = {}, _t[id] = value, _t)), _s)), error: __assign(__assign({}, state.error), (_u = {}, _u[step] = __assign(__assign({}, state.error[step]), (_v = {}, _v[id] = error, _v)), _u)), showError: __assign(__assign({}, state.showError), (_w = {}, _w[step] = __assign(__assign({}, state.showError[step]), (_x = {}, _x[id] = focus_1, _x)), _w)), focus: __assign(__assign({}, state.focus), (_y = {}, _y[step] = __assign(__assign({}, state.focus[step]), (_z = {}, _z[id] = focus_1, _z)), _y)) });
             }
             else {
@@ -341,11 +343,11 @@ function reducer(state, action) {
         }
         case ACTIONS.PROGRESS_FORM: {
             var key = state.flow.key + 1;
-            return __assign(__assign({}, state), { flow: __assign(__assign({}, state.flow), { key: key, currentStep: (_67 = (_66 = state === null || state === void 0 ? void 0 : state.flow) === null || _66 === void 0 ? void 0 : _66.steps) === null || _67 === void 0 ? void 0 : _67[key] }) });
+            return __assign(__assign({}, state), { flow: __assign(__assign({}, state.flow), { key: key, currentStep: (_76 = (_75 = state === null || state === void 0 ? void 0 : state.flow) === null || _75 === void 0 ? void 0 : _75.steps) === null || _76 === void 0 ? void 0 : _76[key] }) });
         }
         case ACTIONS.REVERT_FORM: {
             var key = state.flow.key - 1;
-            return __assign(__assign({}, state), { flow: __assign(__assign({}, state.flow), { key: key, currentStep: (_69 = (_68 = state === null || state === void 0 ? void 0 : state.flow) === null || _68 === void 0 ? void 0 : _68.steps) === null || _69 === void 0 ? void 0 : _69[key] }) });
+            return __assign(__assign({}, state), { flow: __assign(__assign({}, state.flow), { key: key, currentStep: (_78 = (_77 = state === null || state === void 0 ? void 0 : state.flow) === null || _77 === void 0 ? void 0 : _77.steps) === null || _78 === void 0 ? void 0 : _78[key] }) });
         }
         case ACTIONS.UPDATE_FIELD_LIST_ITEM: {
             var step = action.step, id = action.id, index = action.index, name_1 = action.name, value = action.value, error = action.error;
@@ -368,12 +370,12 @@ function reducer(state, action) {
             }
         }
         case ACTIONS.ADD_FIELD_LIST: {
-            var step = action.step, id = action.id, blankInput = action.blankInput;
+            var step = action.step, id = action.id, blankInput = action.blankInput, blankError = action.blankError, blankFocus = action.blankFocus;
             if (step == null) {
-                return __assign(__assign({}, state), { formData: __assign(__assign({}, state.formData), (_47 = {}, _47[id] = __spreadArrays(state.formData[id], [__assign({}, blankInput)]), _47)) });
+                return __assign(__assign({}, state), { formData: __assign(__assign({}, state.formData), (_47 = {}, _47[id] = __spreadArrays(state.formData[id], [__assign({}, blankInput)]), _47)), error: __assign(__assign({}, state.error), (_48 = {}, _48[id] = __spreadArrays(state.error[id], [__assign({}, blankError)]), _48)), showError: __assign(__assign({}, state.showError), (_49 = {}, _49[id] = __spreadArrays(state.showError[id], [__assign({}, blankError)]), _49)), focus: __assign(__assign({}, state.focus), (_50 = {}, _50[id] = __spreadArrays(state.focus[id], [__assign({}, blankFocus)]), _50)) });
             }
             else if (step != null) {
-                return __assign(__assign({}, state), { formData: __assign(__assign({}, state.formData), (_48 = {}, _48[step] = __assign(__assign({}, state.formData[step]), (_49 = {}, _49[id] = __spreadArrays(state.formData[step][id], [__assign({}, blankInput)]), _49)), _48)) });
+                return __assign(__assign({}, state), { formData: __assign(__assign({}, state.formData), (_51 = {}, _51[step] = __assign(__assign({}, state.formData[step]), (_52 = {}, _52[id] = __spreadArrays(state.formData[step][id], [__assign({}, blankInput)]), _52)), _51)), error: __assign(__assign({}, state.error), (_53 = {}, _53[step] = __assign(__assign({}, state.error[step]), (_54 = {}, _54[id] = __spreadArrays(state.error[step][id], [__assign({}, blankError)]), _54)), _53)), showError: __assign(__assign({}, state.showError), (_55 = {}, _55[step] = __assign(__assign({}, state.showError[step]), (_56 = {}, _56[id] = __spreadArrays(state.showError[step][id], [__assign({}, blankError)]), _56)), _55)), focus: __assign(__assign({}, state.focus), (_57 = {}, _57[step] = __assign(__assign({}, state.focus[step]), (_58 = {}, _58[id] = __spreadArrays(state.focus[step][id], [__assign({}, blankFocus)]), _58)), _57)) });
             }
             else {
                 return state;
@@ -382,12 +384,14 @@ function reducer(state, action) {
         case ACTIONS.REMOVE_FIELD_LIST: {
             var step = action.step, id = action.id, index_2 = action.index;
             if (step == null) {
-                var updatedArr = state.formData[id].filter(function (_, i) { return i !== index_2; });
-                return __assign(__assign({}, state), { formData: __assign(__assign({}, state.formData), (_50 = {}, _50[id] = __spreadArrays(updatedArr), _50)) });
+                var mutable = __spreadArrays(state.formData[id]);
+                var updatedArr = mutable.filter(function (_, i) { return i !== index_2; });
+                return __assign(__assign({}, state), { formData: __assign(__assign({}, state.formData), (_59 = {}, _59[id] = __spreadArrays(updatedArr), _59)) });
             }
             else if (step != null) {
-                var updatedArr = state.formData[step][id].filter(function (_, i) { return i !== index_2; });
-                return __assign(__assign({}, state), { formData: __assign(__assign({}, state.formData), (_51 = {}, _51[step] = __assign(__assign({}, state.formData[step]), (_52 = {}, _52[id] = __spreadArrays(updatedArr), _52)), _51)) });
+                var mutable = __spreadArrays(state.formData[step][id]);
+                var updatedArr = mutable.filter(function (_, i) { return i !== index_2; });
+                return __assign(__assign({}, state), { formData: __assign(__assign({}, state.formData), (_60 = {}, _60[step] = __assign(__assign({}, state.formData[step]), (_61 = {}, _61[id] = __spreadArrays(updatedArr), _61)), _60)) });
             }
             else {
                 return state;
@@ -398,12 +402,12 @@ function reducer(state, action) {
             if (step == null) {
                 var mutableError = __spreadArrays(state.error[id]);
                 mutableError[index][name_2] = error;
-                return __assign(__assign({}, state), { error: __assign(__assign({}, state.error), (_53 = {}, _53[id] = __spreadArrays(mutableError), _53)), showError: __assign(__assign({}, state.showError), (_54 = {}, _54[id] = __spreadArrays(mutableError), _54)) });
+                return __assign(__assign({}, state), { error: __assign(__assign({}, state.error), (_62 = {}, _62[id] = __spreadArrays(mutableError), _62)), showError: __assign(__assign({}, state.showError), (_63 = {}, _63[id] = __spreadArrays(mutableError), _63)) });
             }
             else if (step != null) {
                 var mutableError = __spreadArrays(state.error[step][id]);
                 mutableError[index][name_2] = error;
-                return __assign(__assign({}, state), { error: __assign(__assign({}, state.error), (_55 = {}, _55[step] = __assign(__assign({}, state.error[step]), (_56 = {}, _56[id] = __spreadArrays(mutableError), _56)), _55)), showError: __assign(__assign({}, state.showError), (_57 = {}, _57[step] = __assign(__assign({}, state.showError[step]), (_58 = {}, _58[id] = __spreadArrays(mutableError), _58)), _57)) });
+                return __assign(__assign({}, state), { error: __assign(__assign({}, state.error), (_64 = {}, _64[step] = __assign(__assign({}, state.error[step]), (_65 = {}, _65[id] = __spreadArrays(mutableError), _65)), _64)), showError: __assign(__assign({}, state.showError), (_66 = {}, _66[step] = __assign(__assign({}, state.showError[step]), (_67 = {}, _67[id] = __spreadArrays(mutableError), _67)), _66)) });
             }
             return state;
         }
@@ -412,12 +416,12 @@ function reducer(state, action) {
             if (step == null) {
                 var mutableFocus = __spreadArrays(state.focus[id]);
                 mutableFocus[index][name_3] = !mutableFocus[index][name_3];
-                return __assign(__assign({}, state), { focus: __assign(__assign({}, state.focus), (_59 = {}, _59[id] = __spreadArrays(mutableFocus), _59)) });
+                return __assign(__assign({}, state), { focus: __assign(__assign({}, state.focus), (_68 = {}, _68[id] = __spreadArrays(mutableFocus), _68)) });
             }
             else if (step != null) {
                 var mutableFocus = __spreadArrays(state.focus[step][id]);
                 mutableFocus[index][name_3] = !mutableFocus[index][name_3];
-                return __assign(__assign({}, state), { focus: __assign(__assign({}, state.focus), (_60 = {}, _60[step] = __assign(__assign({}, state.focus[step]), (_61 = {}, _61[id] = __spreadArrays(mutableFocus), _61)), _60)) });
+                return __assign(__assign({}, state), { focus: __assign(__assign({}, state.focus), (_69 = {}, _69[step] = __assign(__assign({}, state.focus[step]), (_70 = {}, _70[id] = __spreadArrays(mutableFocus), _70)), _69)) });
             }
             else {
                 return state;
@@ -471,8 +475,8 @@ var Wrapper = function (_a) {
                 return dispatch(updateInputListItem({ step: step, id: id, index: index, name: name, value: value, error: error }));
             },
             addFieldList: function (_a) {
-                var step = _a.step, id = _a.id, blankInput = _a.blankInput;
-                return dispatch(addFieldList({ step: step, id: id, blankInput: blankInput }));
+                var step = _a.step, id = _a.id, blankInput = _a.blankInput, blankError = _a.blankError, blankFocus = _a.blankFocus;
+                return dispatch(addFieldList({ step: step, id: id, blankInput: blankInput, blankError: blankError, blankFocus: blankFocus }));
             },
             removeFieldList: function (_a) {
                 var step = _a.step, id = _a.id, index = _a.index;
@@ -558,6 +562,23 @@ var colors = {
     white: '#ffffff',
     green: '#4BBF6B',
     red: '#FF0000',
+};
+
+var ListButton = function (_a) {
+    var children = _a.children, onClick = _a.onClick, remove = _a.remove;
+    return (React.createElement("button", { type: "button", onClick: onClick, style: {
+            backgroundColor: "" + (remove ? colors.red : colors.green),
+            color: "" + colors.white,
+            border: 'none',
+            fontSize: '1em',
+            cursor: 'pointer',
+            width: '1.5em',
+            height: '1.5em',
+            textAlign: 'center',
+        } }, children));
+};
+ListButton.defaultProps = {
+    ffComp: FFComponent.LIST_BUTTON,
 };
 
 var Doughnut = function (_a) {
@@ -862,6 +883,10 @@ Select.defaultProps = {
     ffComp: FFComponent.SELECT,
 };
 
+var handleDefaults = function (e) {
+    e.preventDefault();
+    e.stopPropagation();
+};
 var DragAndDrop = function (_a) {
     var step = _a.step, id = _a.id, 
     // type = 'file',
@@ -878,10 +903,6 @@ var DragAndDrop = function (_a) {
         validation: validation,
     }), value = _c.value, onFileChange = _c.onFileChange, onFileDrop = _c.onFileDrop, onFileRemove = _c.onFileRemove, onBlur = _c.onBlur, onFocus = _c.onFocus, showError = _c.showError;
     var fileRef = React.useRef(null);
-    var handleDefaults = function (e) {
-        e.preventDefault();
-        e.stopPropagation();
-    };
     var onDragEnter = function (e) {
         handleDefaults(e);
     };
@@ -909,7 +930,7 @@ var DragAndDrop = function (_a) {
             React.createElement("button", { type: "button", id: id + "-btn", className: id + "-btn", onClick: handleFileBtn }, placeholder ? placeholder : "Drag and Drop or Click to upload"),
             React.createElement("input", { ref: fileRef, multiple: true, id: id + "-field-file", "data-input-id": id + "-field-file", name: id, type: "file", 
                 // value={value || ''}
-                required: required, onChange: onFileChange, onBlur: onBlur, onFocus: onFocus, className: "flow-form-field flow-form-file " + className + "-field", autoComplete: autoComplete, style: { display: 'none' } })),
+                required: required, onChange: onFileChange, onBlur: onBlur, onFocus: onFocus, className: "flow-form-field flow-form-drag-and-drop " + className + "-field", autoComplete: autoComplete, style: { display: 'none' } })),
         value.length > 0 && (React.createElement("ul", { style: { listStyle: 'none', padding: 0 } }, value.map(function (file, index) { return (React.createElement("li", { key: index, style: {
                 display: 'flex',
                 flexDirection: 'row',
@@ -918,16 +939,7 @@ var DragAndDrop = function (_a) {
                 paddingBottom: '0.3rem',
             } },
             React.createElement("span", null, file.name),
-            ' ',
-            React.createElement("button", { type: "button", onClick: function () { return onFileRemove(index); }, style: {
-                    backgroundColor: "" + colors.red,
-                    color: "" + colors.white,
-                    border: 'none',
-                    cursor: 'pointer',
-                    width: '20px',
-                    height: '20px',
-                    textAlign: 'center',
-                } }, "\u00D7"))); }))),
+            React.createElement(ListButton, { onClick: function () { return onFileRemove(index); }, remove: true }, "\u00D7"))); }))),
         showError && React.createElement(DisplayError, { id: id, className: className, label: label, errMsg: errMsg })));
 };
 DragAndDrop.defaultProps = {
@@ -952,12 +964,12 @@ var Field = function (_a) {
         placeholder: placeholder,
         className: className,
         label: children !== null && children !== void 0 ? children : name,
-        style: { display: "block" },
+        style: __assign({ display: 'block', width: '100%', fontSize: '1.2em' }, style),
         errMsg: errMsg,
         options: options,
         inputs: inputs,
     };
-    return (React.createElement("label", { id: id + "-label", "data-field-id": id + "-label", htmlFor: id, className: "flow-form-field " + className + "-label", style: __assign({ display: "block", minHeight: '4rem', textTransform: 'capitalize' }, style) },
+    return (React.createElement("label", { id: id + "-label", "data-field-id": id + "-label", htmlFor: id, className: "flow-form-label " + className + "-label", style: { display: 'block', minHeight: '4.5rem', textTransform: 'capitalize' } },
         children ? children : name !== null && name !== void 0 ? name : '',
         (function () {
             switch (type) {
@@ -1007,27 +1019,10 @@ Row.defaultProps = {
 
 var ItemInput = function (_a) {
     var objKey = _a.objKey, fieldIndex = _a.fieldIndex, type = _a.type, value = _a.value, required = _a.required, _b = _a.autoComplete, autoComplete = _b === void 0 ? 'off' : _b, onChange = _a.onChange, onBlur = _a.onBlur, onFocus = _a.onFocus;
-    return (React.createElement("input", { "data-field-id": objKey + "-field-field-list-item-" + fieldIndex, id: objKey + "-field-list-field-" + type, name: objKey, type: type, value: value, required: required, onChange: onChange, onBlur: onBlur, onFocus: onFocus, className: "flow-form-field flow-form-field-list-item " + objKey + "-field-list-item", placeholder: objKey, autoComplete: autoComplete, style: { marginRight: '10px', textTransform: 'capitalize' } }));
+    return (React.createElement("input", { "data-field-id": objKey + "-field-field-list-item-" + fieldIndex, id: objKey + "-field-list-field-" + type, name: objKey, type: type, value: value, required: required, onChange: onChange, onBlur: onBlur, onFocus: onFocus, className: "flow-form-field flow-form-field-list-item " + objKey + "-field-list-item", placeholder: objKey, autoComplete: autoComplete, style: { marginRight: '10px', textTransform: 'capitalize', fontSize: '1.2em' } }));
 };
 ItemInput.defaultProps = {
     ffComp: FFComponent.ITEM_INPUT,
-};
-
-var ListButton = function (_a) {
-    var children = _a.children, onClick = _a.onClick, color = _a.color;
-    return (React.createElement("button", { type: "button", onClick: onClick, style: {
-            backgroundColor: "" + color,
-            color: "" + colors.white,
-            border: 'none',
-            fontSize: '1em',
-            cursor: 'pointer',
-            width: '1.5em',
-            height: '1.5em',
-            textAlign: 'center',
-        } }, children));
-};
-ListButton.defaultProps = {
-    ffComp: FFComponent.LIST_BUTTON,
 };
 
 function handleBlankArr(children) {
@@ -1124,31 +1119,33 @@ var FieldList = function (_a) {
         });
     }, [step, label, flow.currentStep, flow.key]);
     function validate(e, index) {
+        console.log('INDEX: ', index);
+        console.log('INPUT PROPS: ', inputProps);
         if (inputProps[index].required || inputProps[index].validation) {
             return inputProps[index].validation ? inputProps[index].validation(e) : !e.target.value;
         }
     }
-    var handleChange = function (index) { return function (e) {
+    var handleChange = function (row, input) { return function (e) {
         e.preventDefault();
         var _a = e.target, type = _a.type, name = _a.name, value = _a.value;
         updateFieldListItem({
             step: step,
             id: id,
-            index: index,
+            index: row,
             name: name,
             value: type === 'number' ? parseFloat(value) : value,
-            error: validate(e, index),
+            error: validate(e, input),
         });
     }; };
-    var handleBlur = function (index) { return function (e) {
+    var handleBlur = function (row, input) { return function (e) {
         e.preventDefault();
         var name = e.target.name;
         setFieldListBlur({
             step: step,
             id: id,
-            index: index,
+            index: row,
             name: name,
-            error: validate(e, index),
+            error: validate(e, input),
         });
     }; };
     var handleFocus = function (index) { return function (e) {
@@ -1161,26 +1158,42 @@ var FieldList = function (_a) {
             name: name,
         });
     }; };
-    return (React.createElement("label", { "data-field-list-id": id, className: "flow-form-field-list " + className, style: __assign({ display: "block", minHeight: '4rem' }, style) },
+    return (React.createElement("label", { "data-field-list-id": id, className: "flow-form-field-list " + className, style: __assign({ display: "block", minHeight: '4.5rem' }, style) },
         label,
         !isObjectEmpty(formData) && step != null ? (React.createElement(React.Fragment, null, (_b = formData === null || formData === void 0 ? void 0 : formData[step]) === null || _b === void 0 ? void 0 : _b[id].map(function (field, index) { return (React.createElement(Row, { key: index, className: className },
             Object.entries(field).map(function (_a, i) {
                 var k = _a[0], v = _a[1];
                 var _b, _c, _d, _e, _f, _g;
                 return (React.createElement("div", { key: i, style: { display: 'flex', flexDirection: 'column' } },
-                    React.createElement(ItemInput, { objKey: k, fieldIndex: i, type: (_b = inputProps === null || inputProps === void 0 ? void 0 : inputProps[i].type) !== null && _b !== void 0 ? _b : 'text', value: v || '', required: (_c = inputProps === null || inputProps === void 0 ? void 0 : inputProps[i].required) !== null && _c !== void 0 ? _c : false, onChange: handleChange(index), onBlur: handleBlur(index), onFocus: handleFocus(index), autoComplete: (_d = inputProps === null || inputProps === void 0 ? void 0 : inputProps[i].autoComplete) !== null && _d !== void 0 ? _d : 'off' }),
-                    ((_g = (_f = (_e = showError === null || showError === void 0 ? void 0 : showError[step]) === null || _e === void 0 ? void 0 : _e[id]) === null || _f === void 0 ? void 0 : _f[i]) === null || _g === void 0 ? void 0 : _g[k]) && (React.createElement(React.Fragment, null,
+                    React.createElement(ItemInput, { objKey: k, fieldIndex: i, type: (_b = inputProps === null || inputProps === void 0 ? void 0 : inputProps[i].type) !== null && _b !== void 0 ? _b : 'text', value: v || '', required: (_c = inputProps === null || inputProps === void 0 ? void 0 : inputProps[i].required) !== null && _c !== void 0 ? _c : false, onChange: handleChange(index, i), onBlur: handleBlur(index, i), onFocus: handleFocus(index), autoComplete: (_d = inputProps === null || inputProps === void 0 ? void 0 : inputProps[i].autoComplete) !== null && _d !== void 0 ? _d : 'off' }),
+                    ((_g = (_f = (_e = showError === null || showError === void 0 ? void 0 : showError[step]) === null || _e === void 0 ? void 0 : _e[id]) === null || _f === void 0 ? void 0 : _f[index]) === null || _g === void 0 ? void 0 : _g[k]) && (React.createElement(React.Fragment, null,
                         React.createElement(DisplayError, { id: k, className: inputProps[i].className, label: k, errMsg: inputProps[i].errMsg })))));
             }),
-            add && (React.createElement(React.Fragment, null, index === 0 ? (React.createElement(ListButton, { color: colors.green, onClick: function () { return addFieldList({ step: step, id: id, blankInput: blankInput !== null && blankInput !== void 0 ? blankInput : {} }); } }, "+")) : (React.createElement(ListButton, { color: colors.red, onClick: function () { return removeFieldList({ step: step, id: id, index: index }); } }, "-")))))); }))) : (React.createElement(React.Fragment, null, !isObjectEmpty(formData) && (formData === null || formData === void 0 ? void 0 : formData[id].map(function (field, index) { return (React.createElement(Row, { key: index, className: className },
+            add && (React.createElement(React.Fragment, null, index === 0 ? (React.createElement(ListButton, { onClick: function () {
+                    return addFieldList({
+                        step: step,
+                        id: id,
+                        blankInput: blankInput !== null && blankInput !== void 0 ? blankInput : {},
+                        blankError: constructErrors !== null && constructErrors !== void 0 ? constructErrors : {},
+                        blankFocus: constructFocus !== null && constructFocus !== void 0 ? constructFocus : {},
+                    });
+                } }, "+")) : (React.createElement(ListButton, { remove: true, onClick: function () { return removeFieldList({ step: step, id: id, index: index }); } }, "\u2212")))))); }))) : (React.createElement(React.Fragment, null, !isObjectEmpty(formData) && (formData === null || formData === void 0 ? void 0 : formData[id].map(function (field, index) { return (React.createElement(Row, { key: index, className: className },
             Object.entries(field).map(function (_a, i) {
                 var k = _a[0], v = _a[1];
                 var _b, _c, _d, _e, _f;
                 return (React.createElement("div", { key: i, style: { display: 'flex', flexDirection: 'column' } },
-                    React.createElement(ItemInput, { objKey: k, fieldIndex: i, type: (_b = inputProps === null || inputProps === void 0 ? void 0 : inputProps[i].type) !== null && _b !== void 0 ? _b : 'text', value: v || '', required: (_c = inputProps === null || inputProps === void 0 ? void 0 : inputProps[i].required) !== null && _c !== void 0 ? _c : false, onChange: handleChange(index), onBlur: handleBlur(index), onFocus: handleFocus(index), autoComplete: (_d = inputProps === null || inputProps === void 0 ? void 0 : inputProps[i].autoComplete) !== null && _d !== void 0 ? _d : 'off' }),
+                    React.createElement(ItemInput, { objKey: k, fieldIndex: i, type: (_b = inputProps === null || inputProps === void 0 ? void 0 : inputProps[i].type) !== null && _b !== void 0 ? _b : 'text', value: v || '', required: (_c = inputProps === null || inputProps === void 0 ? void 0 : inputProps[i].required) !== null && _c !== void 0 ? _c : false, onChange: handleChange(index, i), onBlur: handleBlur(index, i), onFocus: handleFocus(index), autoComplete: (_d = inputProps === null || inputProps === void 0 ? void 0 : inputProps[i].autoComplete) !== null && _d !== void 0 ? _d : 'off' }),
                     ((_f = (_e = showError === null || showError === void 0 ? void 0 : showError[id]) === null || _e === void 0 ? void 0 : _e[index]) === null || _f === void 0 ? void 0 : _f[k]) && (React.createElement(DisplayError, { id: k, className: inputProps[i].className, label: k, errMsg: inputProps[i].errMsg }))));
             }),
-            add && (React.createElement(React.Fragment, null, index === 0 ? (React.createElement(ListButton, { color: colors.green, onClick: function () { return addFieldList({ step: step, id: id, blankInput: blankInput !== null && blankInput !== void 0 ? blankInput : {} }); } }, "+")) : (React.createElement(ListButton, { color: colors.red, onClick: function () { return removeFieldList({ step: step, id: id, index: index }); } }, "-")))))); }))))));
+            add && (React.createElement(React.Fragment, null, index === 0 ? (React.createElement(ListButton, { onClick: function () {
+                    return addFieldList({
+                        step: step,
+                        id: id,
+                        blankInput: blankInput !== null && blankInput !== void 0 ? blankInput : {},
+                        blankError: constructErrors !== null && constructErrors !== void 0 ? constructErrors : {},
+                        blankFocus: constructFocus !== null && constructFocus !== void 0 ? constructFocus : {},
+                    });
+                } }, "+")) : (React.createElement(ListButton, { remove: true, onClick: function () { return removeFieldList({ step: step, id: id, index: index }); } }, "\u2212")))))); }))))));
 };
 FieldList.defaultProps = {
     ffComp: FFComponent.FIELD_LIST,

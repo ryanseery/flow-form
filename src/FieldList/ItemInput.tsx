@@ -39,7 +39,7 @@ export const ItemInput: React.FC<IItemInput> = ({
     className={`flow-form-field flow-form-field-list-item ${objKey}-field-list-item`}
     placeholder={objKey}
     autoComplete={autoComplete}
-    style={{ marginRight: '10px', textTransform: 'capitalize' }}
+    style={{ marginRight: '10px', textTransform: 'capitalize', fontSize: '1.2em' }}
   />
 );
 

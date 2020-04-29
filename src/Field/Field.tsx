@@ -55,7 +55,7 @@ export const Field: React.FC<IField> = ({
     placeholder,
     className,
     label: children ?? name,
-    style: { display: `block` },
+    style: { display: 'block', width: '100%', fontSize: '1.2em', ...style },
     errMsg,
     options,
     inputs,
@@ -67,7 +67,7 @@ export const Field: React.FC<IField> = ({
       data-field-id={`${id}-label`}
       htmlFor={id}
       className={`flow-form-label ${className}-label`}
-      style={{ display: `block`, minHeight: '4rem', textTransform: 'capitalize', ...style }}
+      style={{ display: 'block', minHeight: '4.5rem', textTransform: 'capitalize' }}
     >
       {children ? children : name ?? ''}
       {(() => {

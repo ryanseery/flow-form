@@ -5,15 +5,15 @@ import { colors } from '../colors';
 interface IListButton {
   ffComp?: string;
   onClick: () => void;
-  color: string;
+  remove?: boolean;
 }
 
-export const ListButton: React.FC<IListButton> = ({ children, onClick, color }) => (
+export const ListButton: React.FC<IListButton> = ({ children, onClick, remove }) => (
   <button
     type="button"
     onClick={onClick}
     style={{
-      backgroundColor: `${color}`,
+      backgroundColor: `${remove ? colors.red : colors.green}`,
       color: `${colors.white}`,
       border: 'none',
       fontSize: '1em',

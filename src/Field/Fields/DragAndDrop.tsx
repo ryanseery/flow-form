@@ -4,6 +4,7 @@ import { IProps } from './@types';
 import { useFormData } from '../../useFormData';
 import { DisplayError } from '../../DisplayError';
 import { colors } from '../../colors';
+import { ListButton } from '../../buttons';
 
 const handleDefaults = (e: Event | React.DragEvent<HTMLDivElement>) => {
   e.preventDefault();
@@ -106,22 +107,10 @@ export const DragAndDrop: React.FC<IDragAndDrop> = ({
                 paddingBottom: '0.3rem',
               }}
             >
-              <span>{file.name}</span>{' '}
-              <button
-                type="button"
-                onClick={() => onFileRemove(index)}
-                style={{
-                  backgroundColor: `${colors.red}`,
-                  color: `${colors.white}`,
-                  border: 'none',
-                  cursor: 'pointer',
-                  width: '20px',
-                  height: '20px',
-                  textAlign: 'center',
-                }}
-              >
+              <span>{file.name}</span>
+              <ListButton onClick={() => onFileRemove(index)} remove>
                 &times;
-              </button>
+              </ListButton>
             </li>
           ))}
         </ul>

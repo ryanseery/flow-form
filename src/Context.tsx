@@ -82,6 +82,8 @@ interface FieldListItemArgs extends Args {
 
 interface AddFieldItemArgs extends Args {
   blankInput: {};
+  blankError: {};
+  blankFocus: {};
 }
 
 interface RemoveFieldArgs extends Args {
@@ -248,11 +250,13 @@ const updateInputListItem = ({ step, id, index, name, value, error }: FieldListI
 interface AddFieldList extends AddFieldItemArgs {
   type: ACTIONS.ADD_FIELD_LIST;
 }
-const addFieldList = ({ step, id, blankInput }: AddFieldItemArgs): AddFieldList => ({
+const addFieldList = ({ step, id, blankInput, blankError, blankFocus }: AddFieldItemArgs): AddFieldList => ({
   type: ACTIONS.ADD_FIELD_LIST,
   step,
   id,
   blankInput,
+  blankError,
+  blankFocus,
 });
 
 interface RemoveFieldList extends RemoveFieldArgs {
@@ -709,7 +713,7 @@ function reducer(state: IState, action: Action): IState {
       }
     }
     case ACTIONS.ADD_FIELD_LIST: {
-      const { step, id, blankInput } = action;
+      const { step, id, blankInput, blankError, blankFocus } = action;
 
       if (step == null) {
         return {
@@ -717,6 +721,18 @@ function reducer(state: IState, action: Action): IState {
           formData: {
             ...state.formData,
             [id]: [...state.formData[id], { ...blankInput }],
+          },
+          error: {
+            ...state.error,
+            [id]: [...state.error[id], { ...blankError }],
+          },
+          showError: {
+            ...state.showError,
+            [id]: [...state.showError[id], { ...blankError }],
+          },
+          focus: {
+            ...state.focus,
+            [id]: [...state.focus[id], { ...blankFocus }],
           },
         };
       } else if (step != null) {
@@ -729,6 +745,27 @@ function reducer(state: IState, action: Action): IState {
               [id]: [...state.formData[step][id], { ...blankInput }],
             },
           },
+          error: {
+            ...state.error,
+            [step]: {
+              ...state.error[step],
+              [id]: [...state.error[step][id], { ...blankError }],
+            },
+          },
+          showError: {
+            ...state.showError,
+            [step]: {
+              ...state.showError[step],
+              [id]: [...state.showError[step][id], { ...blankError }],
+            },
+          },
+          focus: {
+            ...state.focus,
+            [step]: {
+              ...state.focus[step],
+              [id]: [...state.focus[step][id], { ...blankFocus }],
+            },
+          },
         };
       } else {
         return state;
@@ -737,7 +774,9 @@ function reducer(state: IState, action: Action): IState {
     case ACTIONS.REMOVE_FIELD_LIST: {
       const { step, id, index } = action;
       if (step == null) {
-        const updatedArr = state.formData[id].filter((_: {}, i: number) => i !== index);
+        const mutable = [...state.formData[id]];
+
+        const updatedArr = mutable.filter((_: {}, i: number) => i !== index);
 
         return {
           ...state,
@@ -747,7 +786,8 @@ function reducer(state: IState, action: Action): IState {
           },
         };
       } else if (step != null) {
-        const updatedArr = state.formData[step][id].filter((_: {}, i: number) => i !== index);
+        const mutable = [...state.formData[step][id]];
+        const updatedArr = mutable.filter((_: {}, i: number) => i !== index);
 
         return {
           ...state,
@@ -864,7 +904,8 @@ export const Wrapper: React.FC<IWrapper> = ({ children }) => {
       revertForm: () => dispatch(revertForm()),
       updateFieldListItem: ({ step, id, index, name, value, error }: FieldListItemArgs) =>
         dispatch(updateInputListItem({ step, id, index, name, value, error })),
-      addFieldList: ({ step, id, blankInput }: AddFieldItemArgs) => dispatch(addFieldList({ step, id, blankInput })),
+      addFieldList: ({ step, id, blankInput, blankError, blankFocus }: AddFieldItemArgs) =>
+        dispatch(addFieldList({ step, id, blankInput, blankError, blankFocus })),
       removeFieldList: ({ step, id, index }: RemoveFieldArgs) => dispatch(removeFieldList({ step, id, index })),
       setFieldListBlur: ({ step, id, index, name, error }: FieldListItemBlurArgs) =>
         dispatch(setFieldListBlur({ step, id, index, name, error })),
