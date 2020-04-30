@@ -66,6 +66,7 @@ interface RemoveFileArgs extends Args {
 interface SetFieldListArgs extends Args {
   value: object[];
   error: object[];
+  showError: object[];
   focus: object[];
 }
 
@@ -102,7 +103,7 @@ interface FieldListItemBlurArgs extends FieldListItemSideEffectsArgs {
 interface IContext extends IState {
   setForm: ({ isFlowForm, flow }: SetFormArgs) => void;
   setField: ({ step, id, value, error }: ValueArgs) => void;
-  setFieldList: ({ step, id, value, error }: SetFieldListArgs) => void;
+  setFieldList: ({ step, id, value, error, showError, focus }: SetFieldListArgs) => void;
   updateField: ({ step, id, value, error }: ValueArgs) => void;
   removeFile: ({ step, id, index }: RemoveFileArgs) => void;
   updateFileField: ({ step, id, value, error }: FileArgs) => void;
@@ -111,7 +112,7 @@ interface IContext extends IState {
   progressForm: () => void;
   revertForm: () => void;
   updateFieldListItem: ({ step, id, index, name, value }: FieldListItemArgs) => void;
-  addFieldList: ({ step, id, blankInput }: AddFieldItemArgs) => void;
+  addFieldList: ({ step, id, blankInput, blankFocus }: AddFieldItemArgs) => void;
   removeFieldList: ({ step, id, index }: RemoveFieldArgs) => void;
   setFieldListBlur: ({ step, id, index, name, error }: FieldListItemBlurArgs) => void;
   setFieldListFocus: ({ step, id, index, name }: FieldListItemSideEffectsArgs) => void;
@@ -160,12 +161,13 @@ const setField = ({ step, id, value, error }: ValueArgs): SetField => ({
 interface SetFieldList extends SetFieldListArgs {
   type: ACTIONS.SET_FIELD_LIST;
 }
-const setFieldList = ({ step, id, value, error, focus }: SetFieldListArgs): SetFieldList => ({
+const setFieldList = ({ step, id, value, error, showError, focus }: SetFieldListArgs): SetFieldList => ({
   type: ACTIONS.SET_FIELD_LIST,
   step,
   id,
   value,
   error,
+  showError,
   focus,
 });
 
@@ -310,7 +312,7 @@ type Action =
   | SetFieldListFocus;
 
 function reducer(state: IState, action: Action): IState {
-  console.log('ACTION: ', action);
+  console.log('BASE REDUCER: ', state, action);
   switch (action.type) {
     case ACTIONS.SET_FORM: {
       const { isFlowForm, flow } = action;
@@ -602,7 +604,7 @@ function reducer(state: IState, action: Action): IState {
       };
     }
     case ACTIONS.SET_FIELD_LIST: {
-      const { step, id, value, error, focus } = action;
+      const { step, id, value, error, showError, focus } = action;
       if (step == null && !state.formData[id]) {
         return {
           ...state,
@@ -616,7 +618,7 @@ function reducer(state: IState, action: Action): IState {
           },
           showError: {
             ...state.showError,
-            [id]: [...focus],
+            [id]: [...showError],
           },
           focus: {
             ...state.focus,
@@ -644,7 +646,7 @@ function reducer(state: IState, action: Action): IState {
             ...state.showError,
             [step]: {
               ...state.showError[step],
-              [id]: [...focus],
+              [id]: [...showError],
             },
           },
           focus: {
@@ -715,7 +717,6 @@ function reducer(state: IState, action: Action): IState {
     }
     case ACTIONS.ADD_FIELD_LIST: {
       const { step, id, blankInput, blankError, blankFocus } = action;
-
       if (step == null) {
         return {
           ...state,
@@ -729,7 +730,7 @@ function reducer(state: IState, action: Action): IState {
           },
           showError: {
             ...state.showError,
-            [id]: [...state.showError[id], { ...blankError }],
+            [id]: [...state.showError[id], { ...blankFocus }],
           },
           focus: {
             ...state.focus,
@@ -757,7 +758,7 @@ function reducer(state: IState, action: Action): IState {
             ...state.showError,
             [step]: {
               ...state.showError[step],
-              [id]: [...state.showError[step][id], { ...blankError }],
+              [id]: [...state.showError[step][id], { ...blankFocus }],
             },
           },
           focus: {
@@ -847,7 +848,9 @@ function reducer(state: IState, action: Action): IState {
       return state;
     }
     case ACTIONS.SET_FIELD_LIST_FOCUS: {
+      console.log('STATE at action: ', state);
       const { step, id, index, name } = action;
+
       if (step == null) {
         const mutableFocus = [...state.focus[id]];
 
@@ -893,8 +896,8 @@ export const Wrapper: React.FC<IWrapper> = ({ children }) => {
     return {
       setForm: ({ isFlowForm, flow }: SetFormArgs) => dispatch(setForm({ isFlowForm, flow })),
       setField: ({ step, id, value, error }: ValueArgs) => dispatch(setField({ step, id, value, error })),
-      setFieldList: ({ step, id, value, error, focus }: SetFieldListArgs) =>
-        dispatch(setFieldList({ step, id, value, error, focus })),
+      setFieldList: ({ step, id, value, error, showError, focus }: SetFieldListArgs) =>
+        dispatch(setFieldList({ step, id, value, error, showError, focus })),
       updateField: ({ step, id, value, error }: ValueArgs) => dispatch(updateInput({ step, id, value, error })),
       removeFile: ({ step, id, index }: RemoveFileArgs) => dispatch(removeFile({ step, id, index })),
       updateFileField: ({ step, id, value, error }: FileArgs) => dispatch(updateFileField({ step, id, value, error })),

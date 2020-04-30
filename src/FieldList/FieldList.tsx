@@ -33,6 +33,7 @@ type IFieldList<P> = React.FunctionComponent<P> & {
 };
 
 // TODO put state function code into own hook?
+// TODO investigate when this is rerendering... constFocus was being changed on state reducer end, but never showed
 export const FieldList: IFieldList<IFieldListProps> = ({ step, label, name, className, style, children, add }) => {
   const {
     flow,
@@ -54,26 +55,26 @@ export const FieldList: IFieldList<IFieldListProps> = ({ step, label, name, clas
     throw new Error(`The label prop is mandatory on FieldList Component.`);
   }
 
-  const id = React.useMemo(() => toCamelCase(name ? name : label), [name, label]);
+  const id = React.useMemo(() => toCamelCase(name ? name : label), [step, label, flow.currentStep, flow.key]);
 
   const blankInput = React.useMemo(
     () => (Array.isArray(children) ? handleBlankArr(children) : handleBlankObj(children)),
-    [],
+    [step, label, flow.currentStep, flow.key],
   );
 
   const inputProps = React.useMemo(
     () => (Array.isArray(children) ? handleInputPropsArr(children) : handleInputPropsObj(children)),
-    [],
+    [step, label, flow.currentStep, flow.key],
   );
 
   const constructErrors = React.useMemo(
     () => (Array.isArray(children) ? handleErrorArr(children) : handleErrorObj(children)),
-    [],
+    [step, label, flow.currentStep, flow.key],
   );
 
   const constructFocus = React.useMemo(
     () => (Array.isArray(children) ? handleFocusArr(children) : handleFocusObj(children)),
-    [],
+    [step, label, flow.currentStep, flow.key],
   );
 
   React.useEffect(() => {
@@ -82,6 +83,7 @@ export const FieldList: IFieldList<IFieldListProps> = ({ step, label, name, clas
       id,
       value: [{ ...blankInput }],
       error: [{ ...constructErrors }],
+      showError: [{ ...constructFocus }],
       focus: [{ ...constructFocus }],
     });
   }, [step, label, flow.currentStep, flow.key]);
@@ -113,8 +115,6 @@ export const FieldList: IFieldList<IFieldListProps> = ({ step, label, name, clas
   const handleBlur = (row: number, input: number) => (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>,
   ) => {
-    e.preventDefault();
-
     const { name } = e.target;
 
     setFieldListBlur({
@@ -129,8 +129,6 @@ export const FieldList: IFieldList<IFieldListProps> = ({ step, label, name, clas
   const handleFocus = (index: number) => (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>,
   ) => {
-    e.preventDefault();
-
     const { name } = e.target;
 
     setFieldListFocus({
@@ -142,12 +140,12 @@ export const FieldList: IFieldList<IFieldListProps> = ({ step, label, name, clas
   };
 
   return (
-    <label
+    <fieldset
       data-field-list-id={id}
       className={`flow-form-field-list ${className}`}
-      style={{ display: `block`, minHeight: '4.5rem', ...style }}
+      style={{ display: `block`, minHeight: '4.5rem', border: 'none', padding: '0', margin: '0', ...style }}
     >
-      {label}
+      <legend>{label}</legend>
       {!isObjectEmpty(formData) && step != null ? (
         <>
           {formData?.[step]?.[id].map((field: {}, index: number) => (
@@ -155,6 +153,7 @@ export const FieldList: IFieldList<IFieldListProps> = ({ step, label, name, clas
               {Object.entries(field).map(([k, v], i: number) => (
                 <div key={i} style={{ display: 'flex', flexDirection: 'column' }}>
                   <ItemInput
+                    key={k}
                     objKey={k}
                     fieldIndex={i}
                     type={inputProps?.[i].type ?? 'text'}
@@ -166,14 +165,7 @@ export const FieldList: IFieldList<IFieldListProps> = ({ step, label, name, clas
                     autoComplete={inputProps?.[i].autoComplete ?? 'off'}
                   />
                   {showError?.[step]?.[id]?.[index]?.[k] && (
-                    <>
-                      <DisplayError
-                        id={k}
-                        className={inputProps[i].className}
-                        label={k}
-                        errMsg={inputProps[i].errMsg}
-                      />
-                    </>
+                    <DisplayError id={k} className={inputProps[i].className} label={k} errMsg={inputProps[i].errMsg} />
                   )}
                 </div>
               ))}
@@ -187,6 +179,7 @@ export const FieldList: IFieldList<IFieldListProps> = ({ step, label, name, clas
                           id,
                           blankInput: blankInput ?? {},
                           blankError: constructErrors ?? {},
+                          blankShowError: constructFocus ?? {},
                           blankFocus: constructFocus ?? {},
                         })
                       }
@@ -241,6 +234,7 @@ export const FieldList: IFieldList<IFieldListProps> = ({ step, label, name, clas
                             id,
                             blankInput: blankInput ?? {},
                             blankError: constructErrors ?? {},
+                            blankShowError: constructFocus ?? {},
                             blankFocus: constructFocus ?? {},
                           })
                         }
@@ -258,7 +252,7 @@ export const FieldList: IFieldList<IFieldListProps> = ({ step, label, name, clas
             ))}
         </>
       )}
-    </label>
+    </fieldset>
   );
 };
 

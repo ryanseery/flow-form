@@ -130,13 +130,14 @@ var setField = function (_a) {
     });
 };
 var setFieldList = function (_a) {
-    var step = _a.step, id = _a.id, value = _a.value, error = _a.error, focus = _a.focus;
+    var step = _a.step, id = _a.id, value = _a.value, error = _a.error, showError = _a.showError, focus = _a.focus;
     return ({
         type: ACTIONS.SET_FIELD_LIST,
         step: step,
         id: id,
         value: value,
         error: error,
+        showError: showError,
         focus: focus,
     });
 };
@@ -205,13 +206,14 @@ var updateInputListItem = function (_a) {
     });
 };
 var addFieldList = function (_a) {
-    var step = _a.step, id = _a.id, blankInput = _a.blankInput, blankError = _a.blankError, blankFocus = _a.blankFocus;
+    var step = _a.step, id = _a.id, blankInput = _a.blankInput, blankError = _a.blankError, blankShowError = _a.blankShowError, blankFocus = _a.blankFocus;
     return ({
         type: ACTIONS.ADD_FIELD_LIST,
         step: step,
         id: id,
         blankInput: blankInput,
         blankError: blankError,
+        blankShowError: blankShowError,
         blankFocus: blankFocus,
     });
 };
@@ -248,7 +250,7 @@ var setFieldListFocus = function (_a) {
 function reducer(state, action) {
     var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, _m, _o, _p, _q, _r, _s, _t, _u, _v, _w, _x, _y, _z, _0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15, _16, _17, _18, _19, _20, _21, _22, _23, _24, _25, _26, _27, _28, _29, _30, _31, _32, _33, _34, _35, _36, _37, _38, _39, _40, _41, _42, _43, _44, _45, _46, _47, _48, _49, _50, _51, _52, _53, _54, _55, _56, _57, _58, _59, _60, _61, _62, _63, _64, _65, _66, _67, _68, _69, _70;
     var _71, _72, _73, _74, _75, _76, _77, _78;
-    console.log('ACTION: ', action);
+    console.log('BASE REDUCER: ', state, action);
     switch (action.type) {
         case ACTIONS.SET_FORM: {
             var isFlowForm = action.isFlowForm, flow = action.flow;
@@ -339,12 +341,12 @@ function reducer(state, action) {
             return __assign(__assign({}, state), { flow: __assign(__assign({}, state.flow), { key: key, currentStep: (_76 = (_75 = state === null || state === void 0 ? void 0 : state.flow) === null || _75 === void 0 ? void 0 : _75.steps) === null || _76 === void 0 ? void 0 : _76[key] }) });
         }
         case ACTIONS.SET_FIELD_LIST: {
-            var step = action.step, id = action.id, value = action.value, error = action.error, focus_1 = action.focus;
+            var step = action.step, id = action.id, value = action.value, error = action.error, showError = action.showError, focus_1 = action.focus;
             if (step == null && !state.formData[id]) {
-                return __assign(__assign({}, state), { formData: __assign(__assign({}, state.formData), (_27 = {}, _27[id] = __spreadArrays(value), _27)), error: __assign(__assign({}, state.error), (_28 = {}, _28[id] = __spreadArrays(error), _28)), showError: __assign(__assign({}, state.showError), (_29 = {}, _29[id] = __spreadArrays(focus_1), _29)), focus: __assign(__assign({}, state.focus), (_30 = {}, _30[id] = __spreadArrays(focus_1), _30)) });
+                return __assign(__assign({}, state), { formData: __assign(__assign({}, state.formData), (_27 = {}, _27[id] = __spreadArrays(value), _27)), error: __assign(__assign({}, state.error), (_28 = {}, _28[id] = __spreadArrays(error), _28)), showError: __assign(__assign({}, state.showError), (_29 = {}, _29[id] = __spreadArrays(showError), _29)), focus: __assign(__assign({}, state.focus), (_30 = {}, _30[id] = __spreadArrays(focus_1), _30)) });
             }
             else if (step != null && !((_78 = (_77 = state.formData) === null || _77 === void 0 ? void 0 : _77[step]) === null || _78 === void 0 ? void 0 : _78[id])) {
-                return __assign(__assign({}, state), { formData: __assign(__assign({}, state.formData), (_31 = {}, _31[step] = __assign(__assign({}, state.formData[step]), (_32 = {}, _32[id] = __spreadArrays(value), _32)), _31)), error: __assign(__assign({}, state.error), (_33 = {}, _33[step] = __assign(__assign({}, state.error[step]), (_34 = {}, _34[id] = __spreadArrays(error), _34)), _33)), showError: __assign(__assign({}, state.showError), (_35 = {}, _35[step] = __assign(__assign({}, state.showError[step]), (_36 = {}, _36[id] = __spreadArrays(focus_1), _36)), _35)), focus: __assign(__assign({}, state.focus), (_37 = {}, _37[step] = __assign(__assign({}, state.focus[step]), (_38 = {}, _38[id] = __spreadArrays(focus_1), _38)), _37)) });
+                return __assign(__assign({}, state), { formData: __assign(__assign({}, state.formData), (_31 = {}, _31[step] = __assign(__assign({}, state.formData[step]), (_32 = {}, _32[id] = __spreadArrays(value), _32)), _31)), error: __assign(__assign({}, state.error), (_33 = {}, _33[step] = __assign(__assign({}, state.error[step]), (_34 = {}, _34[id] = __spreadArrays(error), _34)), _33)), showError: __assign(__assign({}, state.showError), (_35 = {}, _35[step] = __assign(__assign({}, state.showError[step]), (_36 = {}, _36[id] = __spreadArrays(showError), _36)), _35)), focus: __assign(__assign({}, state.focus), (_37 = {}, _37[step] = __assign(__assign({}, state.focus[step]), (_38 = {}, _38[id] = __spreadArrays(focus_1), _38)), _37)) });
             }
             else {
                 return state;
@@ -373,10 +375,10 @@ function reducer(state, action) {
         case ACTIONS.ADD_FIELD_LIST: {
             var step = action.step, id = action.id, blankInput = action.blankInput, blankError = action.blankError, blankFocus = action.blankFocus;
             if (step == null) {
-                return __assign(__assign({}, state), { formData: __assign(__assign({}, state.formData), (_47 = {}, _47[id] = __spreadArrays(state.formData[id], [__assign({}, blankInput)]), _47)), error: __assign(__assign({}, state.error), (_48 = {}, _48[id] = __spreadArrays(state.error[id], [__assign({}, blankError)]), _48)), showError: __assign(__assign({}, state.showError), (_49 = {}, _49[id] = __spreadArrays(state.showError[id], [__assign({}, blankError)]), _49)), focus: __assign(__assign({}, state.focus), (_50 = {}, _50[id] = __spreadArrays(state.focus[id], [__assign({}, blankFocus)]), _50)) });
+                return __assign(__assign({}, state), { formData: __assign(__assign({}, state.formData), (_47 = {}, _47[id] = __spreadArrays(state.formData[id], [__assign({}, blankInput)]), _47)), error: __assign(__assign({}, state.error), (_48 = {}, _48[id] = __spreadArrays(state.error[id], [__assign({}, blankError)]), _48)), showError: __assign(__assign({}, state.showError), (_49 = {}, _49[id] = __spreadArrays(state.showError[id], [__assign({}, blankFocus)]), _49)), focus: __assign(__assign({}, state.focus), (_50 = {}, _50[id] = __spreadArrays(state.focus[id], [__assign({}, blankFocus)]), _50)) });
             }
             else if (step != null) {
-                return __assign(__assign({}, state), { formData: __assign(__assign({}, state.formData), (_51 = {}, _51[step] = __assign(__assign({}, state.formData[step]), (_52 = {}, _52[id] = __spreadArrays(state.formData[step][id], [__assign({}, blankInput)]), _52)), _51)), error: __assign(__assign({}, state.error), (_53 = {}, _53[step] = __assign(__assign({}, state.error[step]), (_54 = {}, _54[id] = __spreadArrays(state.error[step][id], [__assign({}, blankError)]), _54)), _53)), showError: __assign(__assign({}, state.showError), (_55 = {}, _55[step] = __assign(__assign({}, state.showError[step]), (_56 = {}, _56[id] = __spreadArrays(state.showError[step][id], [__assign({}, blankError)]), _56)), _55)), focus: __assign(__assign({}, state.focus), (_57 = {}, _57[step] = __assign(__assign({}, state.focus[step]), (_58 = {}, _58[id] = __spreadArrays(state.focus[step][id], [__assign({}, blankFocus)]), _58)), _57)) });
+                return __assign(__assign({}, state), { formData: __assign(__assign({}, state.formData), (_51 = {}, _51[step] = __assign(__assign({}, state.formData[step]), (_52 = {}, _52[id] = __spreadArrays(state.formData[step][id], [__assign({}, blankInput)]), _52)), _51)), error: __assign(__assign({}, state.error), (_53 = {}, _53[step] = __assign(__assign({}, state.error[step]), (_54 = {}, _54[id] = __spreadArrays(state.error[step][id], [__assign({}, blankError)]), _54)), _53)), showError: __assign(__assign({}, state.showError), (_55 = {}, _55[step] = __assign(__assign({}, state.showError[step]), (_56 = {}, _56[id] = __spreadArrays(state.showError[step][id], [__assign({}, blankFocus)]), _56)), _55)), focus: __assign(__assign({}, state.focus), (_57 = {}, _57[step] = __assign(__assign({}, state.focus[step]), (_58 = {}, _58[id] = __spreadArrays(state.focus[step][id], [__assign({}, blankFocus)]), _58)), _57)) });
             }
             else {
                 return state;
@@ -413,6 +415,7 @@ function reducer(state, action) {
             return state;
         }
         case ACTIONS.SET_FIELD_LIST_FOCUS: {
+            console.log('STATE at action: ', state);
             var step = action.step, id = action.id, index = action.index, name_3 = action.name;
             if (step == null) {
                 var mutableFocus = __spreadArrays(state.focus[id]);
@@ -446,8 +449,8 @@ var Wrapper = function (_a) {
                 return dispatch(setField({ step: step, id: id, value: value, error: error }));
             },
             setFieldList: function (_a) {
-                var step = _a.step, id = _a.id, value = _a.value, error = _a.error, focus = _a.focus;
-                return dispatch(setFieldList({ step: step, id: id, value: value, error: error, focus: focus }));
+                var step = _a.step, id = _a.id, value = _a.value, error = _a.error, showError = _a.showError, focus = _a.focus;
+                return dispatch(setFieldList({ step: step, id: id, value: value, error: error, showError: showError, focus: focus }));
             },
             updateField: function (_a) {
                 var step = _a.step, id = _a.id, value = _a.value, error = _a.error;
@@ -476,8 +479,8 @@ var Wrapper = function (_a) {
                 return dispatch(updateInputListItem({ step: step, id: id, index: index, name: name, value: value, error: error }));
             },
             addFieldList: function (_a) {
-                var step = _a.step, id = _a.id, blankInput = _a.blankInput, blankError = _a.blankError, blankFocus = _a.blankFocus;
-                return dispatch(addFieldList({ step: step, id: id, blankInput: blankInput, blankError: blankError, blankFocus: blankFocus }));
+                var step = _a.step, id = _a.id, blankInput = _a.blankInput, blankError = _a.blankError, blankShowError = _a.blankShowError, blankFocus = _a.blankFocus;
+                return dispatch(addFieldList({ step: step, id: id, blankInput: blankInput, blankError: blankError, blankShowError: blankShowError, blankFocus: blankFocus }));
             },
             removeFieldList: function (_a) {
                 var step = _a.step, id = _a.id, index = _a.index;
@@ -1087,6 +1090,7 @@ function handleFocusObj(children) {
 }
 
 // TODO put state function code into own hook?
+// TODO investigate when this is rerendering... constFocus was being changed on state reducer end, but never showed
 var FieldList = function (_a) {
     var step = _a.step, label = _a.label, name = _a.name, className = _a.className, style = _a.style, children = _a.children, add = _a.add;
     var _b;
@@ -1097,17 +1101,18 @@ var FieldList = function (_a) {
     if (!label) {
         throw new Error("The label prop is mandatory on FieldList Component.");
     }
-    var id = React.useMemo(function () { return toCamelCase(name ? name : label); }, [name, label]);
-    var blankInput = React.useMemo(function () { return (Array.isArray(children) ? handleBlankArr(children) : handleBlankObj(children)); }, []);
-    var inputProps = React.useMemo(function () { return (Array.isArray(children) ? handleInputPropsArr(children) : handleInputPropsObj(children)); }, []);
-    var constructErrors = React.useMemo(function () { return (Array.isArray(children) ? handleErrorArr(children) : handleErrorObj(children)); }, []);
-    var constructFocus = React.useMemo(function () { return (Array.isArray(children) ? handleFocusArr(children) : handleFocusObj(children)); }, []);
+    var id = React.useMemo(function () { return toCamelCase(name ? name : label); }, [step, label, flow.currentStep, flow.key]);
+    var blankInput = React.useMemo(function () { return (Array.isArray(children) ? handleBlankArr(children) : handleBlankObj(children)); }, [step, label, flow.currentStep, flow.key]);
+    var inputProps = React.useMemo(function () { return (Array.isArray(children) ? handleInputPropsArr(children) : handleInputPropsObj(children)); }, [step, label, flow.currentStep, flow.key]);
+    var constructErrors = React.useMemo(function () { return (Array.isArray(children) ? handleErrorArr(children) : handleErrorObj(children)); }, [step, label, flow.currentStep, flow.key]);
+    var constructFocus = React.useMemo(function () { return (Array.isArray(children) ? handleFocusArr(children) : handleFocusObj(children)); }, [step, label, flow.currentStep, flow.key]);
     React.useEffect(function () {
         setFieldList({
             step: step,
             id: id,
             value: [__assign({}, blankInput)],
             error: [__assign({}, constructErrors)],
+            showError: [__assign({}, constructFocus)],
             focus: [__assign({}, constructFocus)],
         });
     }, [step, label, flow.currentStep, flow.key]);
@@ -1130,7 +1135,6 @@ var FieldList = function (_a) {
         });
     }; };
     var handleBlur = function (row, input) { return function (e) {
-        e.preventDefault();
         var name = e.target.name;
         setFieldListBlur({
             step: step,
@@ -1141,7 +1145,6 @@ var FieldList = function (_a) {
         });
     }; };
     var handleFocus = function (index) { return function (e) {
-        e.preventDefault();
         var name = e.target.name;
         setFieldListFocus({
             step: step,
@@ -1150,16 +1153,15 @@ var FieldList = function (_a) {
             name: name,
         });
     }; };
-    return (React.createElement("label", { "data-field-list-id": id, className: "flow-form-field-list " + className, style: __assign({ display: "block", minHeight: '4.5rem' }, style) },
-        label,
+    return (React.createElement("fieldset", { "data-field-list-id": id, className: "flow-form-field-list " + className, style: __assign({ display: "block", minHeight: '4.5rem', border: 'none', padding: '0', margin: '0' }, style) },
+        React.createElement("legend", null, label),
         !isObjectEmpty(formData) && step != null ? (React.createElement(React.Fragment, null, (_b = formData === null || formData === void 0 ? void 0 : formData[step]) === null || _b === void 0 ? void 0 : _b[id].map(function (field, index) { return (React.createElement(Row, { key: index, className: className },
             Object.entries(field).map(function (_a, i) {
                 var k = _a[0], v = _a[1];
                 var _b, _c, _d, _e, _f, _g;
                 return (React.createElement("div", { key: i, style: { display: 'flex', flexDirection: 'column' } },
-                    React.createElement(ItemInput, { objKey: k, fieldIndex: i, type: (_b = inputProps === null || inputProps === void 0 ? void 0 : inputProps[i].type) !== null && _b !== void 0 ? _b : 'text', value: v || '', required: (_c = inputProps === null || inputProps === void 0 ? void 0 : inputProps[i].required) !== null && _c !== void 0 ? _c : false, onChange: handleChange(index, i), onBlur: handleBlur(index, i), onFocus: handleFocus(index), autoComplete: (_d = inputProps === null || inputProps === void 0 ? void 0 : inputProps[i].autoComplete) !== null && _d !== void 0 ? _d : 'off' }),
-                    ((_g = (_f = (_e = showError === null || showError === void 0 ? void 0 : showError[step]) === null || _e === void 0 ? void 0 : _e[id]) === null || _f === void 0 ? void 0 : _f[index]) === null || _g === void 0 ? void 0 : _g[k]) && (React.createElement(React.Fragment, null,
-                        React.createElement(DisplayError, { id: k, className: inputProps[i].className, label: k, errMsg: inputProps[i].errMsg })))));
+                    React.createElement(ItemInput, { key: k, objKey: k, fieldIndex: i, type: (_b = inputProps === null || inputProps === void 0 ? void 0 : inputProps[i].type) !== null && _b !== void 0 ? _b : 'text', value: v || '', required: (_c = inputProps === null || inputProps === void 0 ? void 0 : inputProps[i].required) !== null && _c !== void 0 ? _c : false, onChange: handleChange(index, i), onBlur: handleBlur(index, i), onFocus: handleFocus(index), autoComplete: (_d = inputProps === null || inputProps === void 0 ? void 0 : inputProps[i].autoComplete) !== null && _d !== void 0 ? _d : 'off' }),
+                    ((_g = (_f = (_e = showError === null || showError === void 0 ? void 0 : showError[step]) === null || _e === void 0 ? void 0 : _e[id]) === null || _f === void 0 ? void 0 : _f[index]) === null || _g === void 0 ? void 0 : _g[k]) && (React.createElement(DisplayError, { id: k, className: inputProps[i].className, label: k, errMsg: inputProps[i].errMsg }))));
             }),
             add && (React.createElement(React.Fragment, null, index === 0 ? (React.createElement(ListButton, { onClick: function () {
                     return addFieldList({
@@ -1167,6 +1169,7 @@ var FieldList = function (_a) {
                         id: id,
                         blankInput: blankInput !== null && blankInput !== void 0 ? blankInput : {},
                         blankError: constructErrors !== null && constructErrors !== void 0 ? constructErrors : {},
+                        blankShowError: constructFocus !== null && constructFocus !== void 0 ? constructFocus : {},
                         blankFocus: constructFocus !== null && constructFocus !== void 0 ? constructFocus : {},
                     });
                 } }, "+")) : (React.createElement(ListButton, { remove: true, onClick: function () { return removeFieldList({ step: step, id: id, index: index }); } }, "\u2212")))))); }))) : (React.createElement(React.Fragment, null, !isObjectEmpty(formData) && (formData === null || formData === void 0 ? void 0 : formData[id].map(function (field, index) { return (React.createElement(Row, { key: index, className: className },
@@ -1183,6 +1186,7 @@ var FieldList = function (_a) {
                         id: id,
                         blankInput: blankInput !== null && blankInput !== void 0 ? blankInput : {},
                         blankError: constructErrors !== null && constructErrors !== void 0 ? constructErrors : {},
+                        blankShowError: constructFocus !== null && constructFocus !== void 0 ? constructFocus : {},
                         blankFocus: constructFocus !== null && constructFocus !== void 0 ? constructFocus : {},
                     });
                 } }, "+")) : (React.createElement(ListButton, { remove: true, onClick: function () { return removeFieldList({ step: step, id: id, index: index }); } }, "\u2212")))))); }))))));
