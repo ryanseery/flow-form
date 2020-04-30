@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { Context } from '../Context';
 import { IItem } from './Item';
-import { toCamelCase } from '../utils';
+import { toCamelCase, isObjectEmpty } from '../utils';
 
 export function handleBlankArr(children: React.ReactNode[]): {} {
   return React.Children.toArray(children).reduce(
@@ -91,12 +91,13 @@ export function useFieldListData({ name, label, step, children }: Args) {
   const {
     flow,
     setFieldList,
-    formData,
     updateFieldListItem,
     addFieldList,
     removeFieldList,
     setFieldListBlur,
     setFieldListFocus,
+    formData,
+    error,
     showError,
     focus,
   } = React.useContext(Context);
@@ -199,14 +200,19 @@ export function useFieldListData({ name, label, step, children }: Args) {
 
   return {
     id,
-    blankInput,
     inputProps,
-    constructErrors,
-    constructFocus,
     onChange,
     onBlur,
     onFocus,
     onAddFieldList,
     onRemoveFieldList,
+    value: isObjectEmpty(formData) ? [] : step != null ? formData?.[step]?.[id] ?? [] : formData?.[id] ?? [],
+    error: isObjectEmpty(error) ? false : step != null ? error?.[step]?.[id] ?? false : error?.[id] ?? false,
+    showError: isObjectEmpty(showError)
+      ? false
+      : step != null
+      ? showError?.[step]?.[id] ?? false
+      : showError?.[id] ?? false,
+    focused: isObjectEmpty(focus) ? false : step != null ? focus?.[step]?.[id] ?? false : focus?.[id] ?? false,
   };
 }

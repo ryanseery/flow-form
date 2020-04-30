@@ -775,20 +775,49 @@ function reducer(state: IState, action: Action): IState {
     case ACTIONS.REMOVE_FIELD_LIST: {
       const { step, id, index } = action;
       if (step == null) {
-        const mutable = [...state.formData[id]];
+        const mutableData = [...state.formData[id]];
+        const updatedDataArr = mutableData.filter((_: {}, i: number) => i !== index);
 
-        const updatedArr = mutable.filter((_: {}, i: number) => i !== index);
+        const mutableError = [...state.error[id]];
+        const updatedErrorArr = mutableError.filter((_: {}, i: number) => i !== index);
+
+        const mutableShowError = [...state.showError[id]];
+        const updatedShowErrorArr = mutableShowError.filter((_: {}, i: number) => i !== index);
+
+        const mutableFocus = [...state.focus[id]];
+        const updatedFocusArr = mutableFocus.filter((_: {}, i: number) => i !== index);
 
         return {
           ...state,
           formData: {
             ...state.formData,
-            [id]: [...updatedArr],
+            [id]: [...updatedDataArr],
+          },
+          error: {
+            ...state.error,
+            [id]: [...updatedErrorArr],
+          },
+          showError: {
+            ...state.showError,
+            [id]: [...updatedShowErrorArr],
+          },
+          focus: {
+            ...state.focus,
+            [id]: [...updatedFocusArr],
           },
         };
       } else if (step != null) {
         const mutable = [...state.formData[step][id]];
-        const updatedArr = mutable.filter((_: {}, i: number) => i !== index);
+        const updatedDataArr = mutable.filter((_: {}, i: number) => i !== index);
+
+        const mutableError = [...state.error[step][id]];
+        const updatedErrorArr = mutableError.filter((_: {}, i: number) => i !== index);
+
+        const mutableShowError = [...state.showError[step][id]];
+        const updatedShowErrorArr = mutableShowError.filter((_: {}, i: number) => i !== index);
+
+        const mutableFocus = [...state.focus[step][id]];
+        const updatedFocusArr = mutableFocus.filter((_: {}, i: number) => i !== index);
 
         return {
           ...state,
@@ -796,7 +825,28 @@ function reducer(state: IState, action: Action): IState {
             ...state.formData,
             [step]: {
               ...state.formData[step],
-              [id]: [...updatedArr],
+              [id]: [...updatedDataArr],
+            },
+          },
+          error: {
+            ...state.error,
+            [step]: {
+              ...state.error[step],
+              [id]: [...updatedErrorArr],
+            },
+          },
+          showError: {
+            ...state.showError,
+            [step]: {
+              ...state.showError[step],
+              [id]: [...updatedShowErrorArr],
+            },
+          },
+          focus: {
+            ...state.focus,
+            [step]: {
+              ...state.focus[step],
+              [id]: [...updatedFocusArr],
             },
           },
         };
@@ -813,6 +863,9 @@ function reducer(state: IState, action: Action): IState {
         const mutableShowErr = [...state.showError[id]];
         mutableShowErr[index][name] = error;
 
+        const mutableFocus = [...state.focus[id]];
+        mutableFocus[index][name] = !mutableFocus[index][name];
+
         return {
           ...state,
           error: {
@@ -823,6 +876,10 @@ function reducer(state: IState, action: Action): IState {
             ...state.showError,
             [id]: [...mutableShowErr],
           },
+          focus: {
+            ...state.focus,
+            [id]: [...mutableFocus],
+          },
         };
       } else if (step != null) {
         const mutableErr = [...state.error[step][id]];
@@ -830,6 +887,9 @@ function reducer(state: IState, action: Action): IState {
 
         const mutableShowErr = [...state.showError[step][id]];
         mutableShowErr[index][name] = error;
+
+        const mutableFocus = [...state.focus[step][id]];
+        mutableFocus[index][name] = !mutableFocus[index][name];
 
         return {
           ...state,
@@ -845,6 +905,13 @@ function reducer(state: IState, action: Action): IState {
             [step]: {
               ...state.showError[step],
               [id]: [...mutableShowErr],
+            },
+          },
+          focus: {
+            ...state.focus,
+            [step]: {
+              ...state.focus[step],
+              [id]: [...mutableFocus],
             },
           },
         };
