@@ -55,26 +55,26 @@ export const FieldList: IFieldList<IFieldListProps> = ({ step, label, name, clas
     throw new Error(`The label prop is mandatory on FieldList Component.`);
   }
 
-  const id = React.useMemo(() => toCamelCase(name ? name : label), [step, label, flow.currentStep, flow.key]);
+  const id = React.useMemo(() => toCamelCase(name ? name : label), [name, label]);
 
   const blankInput = React.useMemo(
     () => (Array.isArray(children) ? handleBlankArr(children) : handleBlankObj(children)),
-    [step, label, flow.currentStep, flow.key],
+    [children],
   );
 
   const inputProps = React.useMemo(
     () => (Array.isArray(children) ? handleInputPropsArr(children) : handleInputPropsObj(children)),
-    [step, label, flow.currentStep, flow.key],
+    [children],
   );
 
   const constructErrors = React.useMemo(
     () => (Array.isArray(children) ? handleErrorArr(children) : handleErrorObj(children)),
-    [step, label, flow.currentStep, flow.key],
+    [children],
   );
 
   const constructFocus = React.useMemo(
     () => (Array.isArray(children) ? handleFocusArr(children) : handleFocusObj(children)),
-    [step, label, flow.currentStep, flow.key],
+    [children],
   );
 
   React.useEffect(() => {
@@ -179,7 +179,6 @@ export const FieldList: IFieldList<IFieldListProps> = ({ step, label, name, clas
                           id,
                           blankInput: blankInput ?? {},
                           blankError: constructErrors ?? {},
-                          blankShowError: constructFocus ?? {},
                           blankFocus: constructFocus ?? {},
                         })
                       }
@@ -234,7 +233,6 @@ export const FieldList: IFieldList<IFieldListProps> = ({ step, label, name, clas
                             id,
                             blankInput: blankInput ?? {},
                             blankError: constructErrors ?? {},
-                            blankShowError: constructFocus ?? {},
                             blankFocus: constructFocus ?? {},
                           })
                         }

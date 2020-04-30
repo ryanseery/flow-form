@@ -312,7 +312,6 @@ type Action =
   | SetFieldListFocus;
 
 function reducer(state: IState, action: Action): IState {
-  console.log('BASE REDUCER: ', state, action);
   switch (action.type) {
     case ACTIONS.SET_FORM: {
       const { isFlowForm, flow } = action;
@@ -808,24 +807,29 @@ function reducer(state: IState, action: Action): IState {
     case ACTIONS.SET_FIELD_LIST_BLUR: {
       const { step, id, index, name, error } = action;
       if (step == null) {
-        const mutableError = [...state.error[id]];
+        const mutableErr = [...state.error[id]];
+        mutableErr[index][name] = error;
 
-        mutableError[index][name] = error;
+        const mutableShowErr = [...state.showError[id]];
+        mutableShowErr[index][name] = error;
+
         return {
           ...state,
           error: {
             ...state.error,
-            [id]: [...mutableError],
+            [id]: [...mutableErr],
           },
           showError: {
             ...state.showError,
-            [id]: [...mutableError],
+            [id]: [...mutableShowErr],
           },
         };
       } else if (step != null) {
-        const mutableError = [...state.error[step][id]];
+        const mutableErr = [...state.error[step][id]];
+        mutableErr[index][name] = error;
 
-        mutableError[index][name] = error;
+        const mutableShowErr = [...state.showError[step][id]];
+        mutableShowErr[index][name] = error;
 
         return {
           ...state,
@@ -833,22 +837,22 @@ function reducer(state: IState, action: Action): IState {
             ...state.error,
             [step]: {
               ...state.error[step],
-              [id]: [...mutableError],
+              [id]: [...mutableErr],
             },
           },
           showError: {
             ...state.showError,
             [step]: {
               ...state.showError[step],
-              [id]: [...mutableError],
+              [id]: [...mutableShowErr],
             },
           },
         };
+      } else {
+        return state;
       }
-      return state;
     }
     case ACTIONS.SET_FIELD_LIST_FOCUS: {
-      console.log('STATE at action: ', state);
       const { step, id, index, name } = action;
 
       if (step == null) {

@@ -206,14 +206,13 @@ var updateInputListItem = function (_a) {
     });
 };
 var addFieldList = function (_a) {
-    var step = _a.step, id = _a.id, blankInput = _a.blankInput, blankError = _a.blankError, blankShowError = _a.blankShowError, blankFocus = _a.blankFocus;
+    var step = _a.step, id = _a.id, blankInput = _a.blankInput, blankError = _a.blankError, blankFocus = _a.blankFocus;
     return ({
         type: ACTIONS.ADD_FIELD_LIST,
         step: step,
         id: id,
         blankInput: blankInput,
         blankError: blankError,
-        blankShowError: blankShowError,
         blankFocus: blankFocus,
     });
 };
@@ -250,7 +249,6 @@ var setFieldListFocus = function (_a) {
 function reducer(state, action) {
     var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, _m, _o, _p, _q, _r, _s, _t, _u, _v, _w, _x, _y, _z, _0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15, _16, _17, _18, _19, _20, _21, _22, _23, _24, _25, _26, _27, _28, _29, _30, _31, _32, _33, _34, _35, _36, _37, _38, _39, _40, _41, _42, _43, _44, _45, _46, _47, _48, _49, _50, _51, _52, _53, _54, _55, _56, _57, _58, _59, _60, _61, _62, _63, _64, _65, _66, _67, _68, _69, _70;
     var _71, _72, _73, _74, _75, _76, _77, _78;
-    console.log('BASE REDUCER: ', state, action);
     switch (action.type) {
         case ACTIONS.SET_FORM: {
             var isFlowForm = action.isFlowForm, flow = action.flow;
@@ -403,19 +401,24 @@ function reducer(state, action) {
         case ACTIONS.SET_FIELD_LIST_BLUR: {
             var step = action.step, id = action.id, index = action.index, name_2 = action.name, error = action.error;
             if (step == null) {
-                var mutableError = __spreadArrays(state.error[id]);
-                mutableError[index][name_2] = error;
-                return __assign(__assign({}, state), { error: __assign(__assign({}, state.error), (_62 = {}, _62[id] = __spreadArrays(mutableError), _62)), showError: __assign(__assign({}, state.showError), (_63 = {}, _63[id] = __spreadArrays(mutableError), _63)) });
+                var mutableErr = __spreadArrays(state.error[id]);
+                mutableErr[index][name_2] = error;
+                var mutableShowErr = __spreadArrays(state.showError[id]);
+                mutableShowErr[index][name_2] = error;
+                return __assign(__assign({}, state), { error: __assign(__assign({}, state.error), (_62 = {}, _62[id] = __spreadArrays(mutableErr), _62)), showError: __assign(__assign({}, state.showError), (_63 = {}, _63[id] = __spreadArrays(mutableShowErr), _63)) });
             }
             else if (step != null) {
-                var mutableError = __spreadArrays(state.error[step][id]);
-                mutableError[index][name_2] = error;
-                return __assign(__assign({}, state), { error: __assign(__assign({}, state.error), (_64 = {}, _64[step] = __assign(__assign({}, state.error[step]), (_65 = {}, _65[id] = __spreadArrays(mutableError), _65)), _64)), showError: __assign(__assign({}, state.showError), (_66 = {}, _66[step] = __assign(__assign({}, state.showError[step]), (_67 = {}, _67[id] = __spreadArrays(mutableError), _67)), _66)) });
+                var mutableErr = __spreadArrays(state.error[step][id]);
+                mutableErr[index][name_2] = error;
+                var mutableShowErr = __spreadArrays(state.showError[step][id]);
+                mutableShowErr[index][name_2] = error;
+                return __assign(__assign({}, state), { error: __assign(__assign({}, state.error), (_64 = {}, _64[step] = __assign(__assign({}, state.error[step]), (_65 = {}, _65[id] = __spreadArrays(mutableErr), _65)), _64)), showError: __assign(__assign({}, state.showError), (_66 = {}, _66[step] = __assign(__assign({}, state.showError[step]), (_67 = {}, _67[id] = __spreadArrays(mutableShowErr), _67)), _66)) });
             }
-            return state;
+            else {
+                return state;
+            }
         }
         case ACTIONS.SET_FIELD_LIST_FOCUS: {
-            console.log('STATE at action: ', state);
             var step = action.step, id = action.id, index = action.index, name_3 = action.name;
             if (step == null) {
                 var mutableFocus = __spreadArrays(state.focus[id]);
@@ -479,8 +482,8 @@ var Wrapper = function (_a) {
                 return dispatch(updateInputListItem({ step: step, id: id, index: index, name: name, value: value, error: error }));
             },
             addFieldList: function (_a) {
-                var step = _a.step, id = _a.id, blankInput = _a.blankInput, blankError = _a.blankError, blankShowError = _a.blankShowError, blankFocus = _a.blankFocus;
-                return dispatch(addFieldList({ step: step, id: id, blankInput: blankInput, blankError: blankError, blankShowError: blankShowError, blankFocus: blankFocus }));
+                var step = _a.step, id = _a.id, blankInput = _a.blankInput, blankError = _a.blankError, blankFocus = _a.blankFocus;
+                return dispatch(addFieldList({ step: step, id: id, blankInput: blankInput, blankError: blankError, blankFocus: blankFocus }));
             },
             removeFieldList: function (_a) {
                 var step = _a.step, id = _a.id, index = _a.index;
@@ -1000,7 +1003,7 @@ Field.defaultProps = {
     index: 0,
 };
 
-var Item = function () { return React.createElement(React.Fragment, null); };
+var Item = React.memo(function () { return React.createElement(React.Fragment, null); });
 Item.defaultProps = {
     ffComp: FFComponent.ITEM,
 };
@@ -1013,10 +1016,10 @@ Row.defaultProps = {
     ffComp: FFComponent.ROW,
 };
 
-var ItemInput = function (_a) {
+var ItemInput = React.memo(function (_a) {
     var objKey = _a.objKey, fieldIndex = _a.fieldIndex, type = _a.type, value = _a.value, required = _a.required, _b = _a.autoComplete, autoComplete = _b === void 0 ? 'off' : _b, onChange = _a.onChange, onBlur = _a.onBlur, onFocus = _a.onFocus;
     return (React.createElement("input", { "data-field-id": objKey + "-field-field-list-item-" + fieldIndex, id: objKey + "-field-list-field-" + type, name: objKey, type: type, value: value, required: required, onChange: onChange, onBlur: onBlur, onFocus: onFocus, className: "flow-form-field flow-form-field-list-item " + objKey + "-field-list-item", placeholder: objKey, autoComplete: autoComplete, style: { marginRight: '10px', textTransform: 'capitalize', fontSize: '1.2em' } }));
-};
+});
 ItemInput.defaultProps = {
     ffComp: FFComponent.ITEM_INPUT,
 };
@@ -1101,11 +1104,11 @@ var FieldList = function (_a) {
     if (!label) {
         throw new Error("The label prop is mandatory on FieldList Component.");
     }
-    var id = React.useMemo(function () { return toCamelCase(name ? name : label); }, [step, label, flow.currentStep, flow.key]);
-    var blankInput = React.useMemo(function () { return (Array.isArray(children) ? handleBlankArr(children) : handleBlankObj(children)); }, [step, label, flow.currentStep, flow.key]);
-    var inputProps = React.useMemo(function () { return (Array.isArray(children) ? handleInputPropsArr(children) : handleInputPropsObj(children)); }, [step, label, flow.currentStep, flow.key]);
-    var constructErrors = React.useMemo(function () { return (Array.isArray(children) ? handleErrorArr(children) : handleErrorObj(children)); }, [step, label, flow.currentStep, flow.key]);
-    var constructFocus = React.useMemo(function () { return (Array.isArray(children) ? handleFocusArr(children) : handleFocusObj(children)); }, [step, label, flow.currentStep, flow.key]);
+    var id = React.useMemo(function () { return toCamelCase(name ? name : label); }, [name, label]);
+    var blankInput = React.useMemo(function () { return (Array.isArray(children) ? handleBlankArr(children) : handleBlankObj(children)); }, [children]);
+    var inputProps = React.useMemo(function () { return (Array.isArray(children) ? handleInputPropsArr(children) : handleInputPropsObj(children)); }, [children]);
+    var constructErrors = React.useMemo(function () { return (Array.isArray(children) ? handleErrorArr(children) : handleErrorObj(children)); }, [children]);
+    var constructFocus = React.useMemo(function () { return (Array.isArray(children) ? handleFocusArr(children) : handleFocusObj(children)); }, [children]);
     React.useEffect(function () {
         setFieldList({
             step: step,
@@ -1169,7 +1172,6 @@ var FieldList = function (_a) {
                         id: id,
                         blankInput: blankInput !== null && blankInput !== void 0 ? blankInput : {},
                         blankError: constructErrors !== null && constructErrors !== void 0 ? constructErrors : {},
-                        blankShowError: constructFocus !== null && constructFocus !== void 0 ? constructFocus : {},
                         blankFocus: constructFocus !== null && constructFocus !== void 0 ? constructFocus : {},
                     });
                 } }, "+")) : (React.createElement(ListButton, { remove: true, onClick: function () { return removeFieldList({ step: step, id: id, index: index }); } }, "\u2212")))))); }))) : (React.createElement(React.Fragment, null, !isObjectEmpty(formData) && (formData === null || formData === void 0 ? void 0 : formData[id].map(function (field, index) { return (React.createElement(Row, { key: index, className: className },
@@ -1186,7 +1188,6 @@ var FieldList = function (_a) {
                         id: id,
                         blankInput: blankInput !== null && blankInput !== void 0 ? blankInput : {},
                         blankError: constructErrors !== null && constructErrors !== void 0 ? constructErrors : {},
-                        blankShowError: constructFocus !== null && constructFocus !== void 0 ? constructFocus : {},
                         blankFocus: constructFocus !== null && constructFocus !== void 0 ? constructFocus : {},
                     });
                 } }, "+")) : (React.createElement(ListButton, { remove: true, onClick: function () { return removeFieldList({ step: step, id: id, index: index }); } }, "\u2212")))))); }))))));
