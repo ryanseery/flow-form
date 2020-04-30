@@ -3,8 +3,9 @@ import { FFComponent } from '../../FFComponent';
 import { IProps } from './@types';
 import { useFormData } from '../../useFormData';
 import { DisplayError } from '../../DisplayError';
-import { colors } from '../../colors';
+import { theme } from '../../theme';
 import { ListButton } from '../../buttons';
+import { border } from '../../utils';
 
 const handleDefaults = (e: Event | React.DragEvent<HTMLDivElement>) => {
   e.preventDefault();
@@ -26,7 +27,7 @@ export const DragAndDrop: React.FC<IDragAndDrop> = ({
   label,
   errMsg,
 }) => {
-  const { value, onFileChange, onFileDrop, onFileRemove, onBlur, onFocus, showError } = useFormData({
+  const { value, onFileChange, onFileDrop, onFileRemove, onBlur, onFocus, showError, focused } = useFormData({
     step,
     id,
     value: '',
@@ -59,7 +60,8 @@ export const DragAndDrop: React.FC<IDragAndDrop> = ({
       <div
         className={`flow-form-file-upload`}
         style={{
-          border: `1px solid ${colors.grey}`,
+          border: `${border(focused, showError)}`,
+          borderRadius: `${theme.border.radius}`,
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',

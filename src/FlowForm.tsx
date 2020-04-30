@@ -77,9 +77,8 @@ const Form: React.FC<IForm> = ({ children, onSubmit, className, style, showData,
       className={`flow-form ${className}`}
       style={style}
     >
+      {isFlowForm && <Progress steps={flow.steps} currentStep={flow.currentStep} doughNut={doughNut} />}
       <fieldset style={{ border: `none` }}>
-        {isFlowForm && <Progress steps={flow.steps} currentStep={flow.currentStep} doughNut={doughNut} />}
-
         <>{isFlowForm ? children?.[flow.key] : children}</>
 
         {isFlowForm ? (

@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { colors } from './colors';
+import { theme } from './theme';
 
 interface IDisplayError {
   id: string;
@@ -13,7 +13,7 @@ export const DisplayError: React.FC<IDisplayError> = ({ id, className, label, er
     id={`${id}-error`}
     data-error-id={`${id}-error`}
     className={`flow-form-error ${className}-error`}
-    style={{ color: `${colors.red}` }}
+    style={{ color: `${theme.colors.red}` }}
   >
     {typeof errMsg === 'string' ? errMsg : `Please provide a valid value for ${label}`}
   </small>

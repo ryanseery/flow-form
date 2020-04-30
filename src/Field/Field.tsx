@@ -3,6 +3,7 @@ import { FFComponent } from '../FFComponent';
 import { toCamelCase, toKebabCase } from '../utils';
 import { Text, Number, Email, Password, Tel, Url, Color, TextArea, Select, DragAndDrop } from './Fields';
 import { Option, Input } from './Fields/@types';
+import { theme } from '../theme';
 
 export interface IField {
   ffComp?: string;
@@ -55,7 +56,16 @@ export const Field: React.FC<IField> = ({
     placeholder,
     className,
     label: children ?? name,
-    style: { display: 'block', width: '100%', fontSize: '1.2em', ...style },
+    style: {
+      display: 'block',
+      width: '100%',
+      fontSize: `${theme.fonts.medium}`,
+      textIndent: `${theme.text.indent}`,
+      borderRadius: `${theme.border.radius}`,
+      backgroundColor: `${theme.colors.white}`,
+      outline: 'none',
+      ...style,
+    },
     errMsg,
     options,
     inputs,
@@ -69,7 +79,7 @@ export const Field: React.FC<IField> = ({
       className={`flow-form-label ${className}-label`}
       style={{ display: 'block', minHeight: '4.5rem', textTransform: 'capitalize' }}
     >
-      {children ? children : name ?? ''}
+      <legend style={{ fontSize: `${theme.fonts.medium}` }}>{children ? children : name ?? ''}</legend>
       {(() => {
         switch (type) {
           case 'text':

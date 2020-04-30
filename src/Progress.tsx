@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { IStepState } from './Context';
 import { FFComponent } from './FFComponent';
-import { colors } from './colors';
+import { theme } from './theme';
 
 interface IDoughnut {
   ffComp?: string;
@@ -13,16 +13,16 @@ const Doughnut: React.FC<IDoughnut> = ({ isActive }) => (
     className="flow-form-doughnut"
     style={{
       background: isActive
-        ? `radial-gradient(circle, transparent 30%, ${colors.blue} 40%)`
-        : `radial-gradient(circle, transparent 30%, ${colors.grey} 40%)`,
+        ? `radial-gradient(circle, transparent 30%, ${theme.colors.blue} 40%)`
+        : `radial-gradient(circle, transparent 30%, ${theme.colors.grey} 40%)`,
       borderRadius: '80%',
       height: '15px',
       width: '18px',
       marginRight: '1px',
       paddingTop: '3px',
-      fontSize: '1em',
+      fontSize: `${theme.fonts.large}`,
       textAlign: 'center',
-      color: `${colors.white}`,
+      color: `${theme.colors.white}`,
     }}
   />
 );
@@ -46,7 +46,7 @@ export const Progress: React.FC<IProgress> = ({ steps, currentStep, doughNut }) 
       flexDirection: 'row',
       alignItems: 'center',
       justifyContent: 'space-between',
-      borderBottom: `1px solid ${colors.grey}`,
+      borderBottom: `1px solid ${theme.colors.grey}`,
       paddingBottom: '5px',
       marginBottom: '5px',
     }}
@@ -61,8 +61,8 @@ export const Progress: React.FC<IProgress> = ({ steps, currentStep, doughNut }) 
         <span
           className="flow-form-label"
           style={{
-            color: step.index === currentStep?.index ? `${colors.blue}` : `${colors.grey}`,
-            fontSize: '1em',
+            color: step.index === currentStep?.index ? `${theme.colors.blue}` : `${theme.colors.grey}`,
+            fontSize: `${theme.fonts.large}`,
           }}
         >
           {step.label}

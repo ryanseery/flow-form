@@ -3,6 +3,7 @@ import { FFComponent } from '../../FFComponent';
 import { useFormData } from '../../useFormData';
 import { IProps } from './@types';
 import { DisplayError } from '../../DisplayError';
+import { border } from '../../utils';
 
 interface IUrl extends IProps {
   pattern?: string;
@@ -22,7 +23,13 @@ export const Url: React.FC<IUrl> = ({
   errMsg,
   pattern = 'https://.*',
 }) => {
-  const { value, onChange, onBlur, onFocus, showError } = useFormData({ step, id, value: '', required, validation });
+  const { value, onChange, onBlur, onFocus, showError, focused } = useFormData({
+    step,
+    id,
+    value: '',
+    required,
+    validation,
+  });
 
   return (
     <>
@@ -39,7 +46,7 @@ export const Url: React.FC<IUrl> = ({
         className={`flow-form-field flow-form-url ${className}-field`}
         placeholder={placeholder}
         autoComplete={autoComplete}
-        style={style}
+        style={{ ...style, border: `${border(focused, showError)}` }}
         pattern={pattern}
       />
       {showError && <DisplayError id={id} className={className} label={label} errMsg={errMsg} />}

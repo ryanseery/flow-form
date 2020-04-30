@@ -74,6 +74,40 @@ function deepCheck(obj) {
         .every(function (a) { return a === false; });
 }
 
+var theme = {
+    colors: {
+        blue: '#00A0DF',
+        grey: '#E6E6E6',
+        white: '#ffffff',
+        green: '#4BBF6B',
+        red: '#FF0000',
+    },
+    fonts: {
+        small: '1em',
+        medium: '1.2em',
+        large: '1.5em',
+    },
+    text: {
+        indent: '0.2em',
+    },
+    border: {
+        default: "1px solid #BDBDBD",
+        focus: "1px solid #00A0DF",
+        error: "1px solid #FF0000",
+        radius: '0.2em',
+    },
+};
+
+function border(focused, showError) {
+    if (focused)
+        return theme.border.focus;
+    if (showError)
+        return theme.border.error;
+    if (focused && showError)
+        return theme.border.error;
+    return theme.border.default;
+}
+
 var initialState = {
     isFlowForm: false,
     canProceed: false,
@@ -534,34 +568,18 @@ DefaultSubmit.defaultProps = {
     ffComp: FFComponent.DEFAULT_SUBMIT,
 };
 
-var Submit = function (_a) {
-    var className = _a.className, label = _a.label;
-    return (createElement("button", { type: "submit", className: "flow-form-submit-btn " + (className !== null && className !== void 0 ? className : '') }, label !== null && label !== void 0 ? label : "Submit"));
-};
-Submit.defaultProps = {
-    ffComp: FFComponent.SUBMIT,
-};
-
-var colors = {
-    blue: '#00A0DF',
-    grey: '#E6E6E6',
-    white: '#ffffff',
-    green: '#4BBF6B',
-    red: '#FF0000',
-};
-
 var ListButton = function (_a) {
     var children = _a.children, onClick = _a.onClick, remove = _a.remove;
     return (createElement("button", { type: "button", onClick: onClick, style: {
-            backgroundColor: "" + (remove ? colors.red : colors.green),
-            color: "" + colors.white,
+            backgroundColor: "" + (remove ? theme.colors.red : theme.colors.green),
+            color: "" + theme.colors.white,
             border: 'none',
-            fontSize: '1em',
+            fontSize: "" + theme.fonts.small,
             cursor: 'pointer',
             width: '1.5em',
             height: '1.5em',
             textAlign: 'center',
-            borderRadius: '0.2em',
+            borderRadius: "" + theme.border.radius,
         } }, children));
 };
 ListButton.defaultProps = {
@@ -580,16 +598,16 @@ var Doughnut = function (_a) {
     var isActive = _a.isActive;
     return (createElement("span", { className: "flow-form-doughnut", style: {
             background: isActive
-                ? "radial-gradient(circle, transparent 30%, " + colors.blue + " 40%)"
-                : "radial-gradient(circle, transparent 30%, " + colors.grey + " 40%)",
+                ? "radial-gradient(circle, transparent 30%, " + theme.colors.blue + " 40%)"
+                : "radial-gradient(circle, transparent 30%, " + theme.colors.grey + " 40%)",
             borderRadius: '80%',
             height: '15px',
             width: '18px',
             marginRight: '1px',
             paddingTop: '3px',
-            fontSize: '1em',
+            fontSize: "" + theme.fonts.large,
             textAlign: 'center',
-            color: "" + colors.white,
+            color: "" + theme.colors.white,
         } }));
 };
 Doughnut.defaultProps = {
@@ -602,14 +620,14 @@ var Progress = function (_a) {
             flexDirection: 'row',
             alignItems: 'center',
             justifyContent: 'space-between',
-            borderBottom: "1px solid " + colors.grey,
+            borderBottom: "1px solid " + theme.colors.grey,
             paddingBottom: '5px',
             marginBottom: '5px',
         } }, steps === null || steps === void 0 ? void 0 : steps.map(function (step) { return (createElement("div", { key: step.id, className: "flow-form-label-container", style: { display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'center' } },
         doughNut && createElement(Doughnut, { isActive: step.index === (currentStep === null || currentStep === void 0 ? void 0 : currentStep.index) }),
         createElement("span", { className: "flow-form-label", style: {
-                color: step.index === (currentStep === null || currentStep === void 0 ? void 0 : currentStep.index) ? "" + colors.blue : "" + colors.grey,
-                fontSize: '1em',
+                color: step.index === (currentStep === null || currentStep === void 0 ? void 0 : currentStep.index) ? "" + theme.colors.blue : "" + theme.colors.grey,
+                fontSize: "" + theme.fonts.large,
             } }, step.label))); })));
 };
 Progress.defaultProps = {
@@ -657,8 +675,8 @@ var Form = function (_a) {
             e.preventDefault();
             onSubmit(formData);
         }, className: "flow-form " + className, style: style },
+        isFlowForm && createElement(Progress, { steps: flow.steps, currentStep: flow.currentStep, doughNut: doughNut }),
         createElement("fieldset", { style: { border: "none" } },
-            isFlowForm && createElement(Progress, { steps: flow.steps, currentStep: flow.currentStep, doughNut: doughNut }),
             createElement(Fragment, null, isFlowForm ? children === null || children === void 0 ? void 0 : children[flow.key] : children),
             isFlowForm ? (createElement(Fragment, null,
                 flow.currentStep != null && ((_b = flow.currentStep) === null || _b === void 0 ? void 0 : _b.index) > 0 && (createElement(DefaultBtn, { onClick: function () { return revertForm(); } }, "Back")),
@@ -696,8 +714,8 @@ Step.defaultProps = {
 
 function useFormData(_a) {
     var step = _a.step, id = _a.id, value = _a.value, required = _a.required, validation = _a.validation;
-    var _b, _c, _d, _e, _f, _g, _h, _j, _k;
-    var _l = useContext(Context), setField = _l.setField, formData = _l.formData, error = _l.error, updateField = _l.updateField, removeFile = _l.removeFile, updateFileField = _l.updateFileField, setBlur = _l.setBlur, setFocus = _l.setFocus, showError = _l.showError, flow = _l.flow;
+    var _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, _m, _o;
+    var _p = useContext(Context), setField = _p.setField, formData = _p.formData, error = _p.error, updateField = _p.updateField, removeFile = _p.removeFile, updateFileField = _p.updateFileField, setBlur = _p.setBlur, setFocus = _p.setFocus, showError = _p.showError, focus = _p.focus, flow = _p.flow;
     useEffect(function () {
         setField({ step: step, id: id, value: value, error: required || validation ? true : false });
     }, [step, id, flow.currentStep, flow.key]);
@@ -764,6 +782,7 @@ function useFormData(_a) {
             ? false
             : step != null
                 ? (_j = (_h = showError === null || showError === void 0 ? void 0 : showError[step]) === null || _h === void 0 ? void 0 : _h[id]) !== null && _j !== void 0 ? _j : false : (_k = showError === null || showError === void 0 ? void 0 : showError[id]) !== null && _k !== void 0 ? _k : false,
+        focused: isObjectEmpty(focus) ? false : step != null ? (_m = (_l = focus === null || focus === void 0 ? void 0 : focus[step]) === null || _l === void 0 ? void 0 : _l[id]) !== null && _m !== void 0 ? _m : false : (_o = focus === null || focus === void 0 ? void 0 : focus[id]) !== null && _o !== void 0 ? _o : false,
         onChange: onChange,
         onFileChange: onFileChange,
         onFileDrop: onFileDrop,
@@ -775,14 +794,20 @@ function useFormData(_a) {
 
 var DisplayError = function (_a) {
     var id = _a.id, className = _a.className, label = _a.label, errMsg = _a.errMsg;
-    return (createElement("small", { id: id + "-error", "data-error-id": id + "-error", className: "flow-form-error " + className + "-error", style: { color: "" + colors.red } }, typeof errMsg === 'string' ? errMsg : "Please provide a valid value for " + label));
+    return (createElement("small", { id: id + "-error", "data-error-id": id + "-error", className: "flow-form-error " + className + "-error", style: { color: "" + theme.colors.red } }, typeof errMsg === 'string' ? errMsg : "Please provide a valid value for " + label));
 };
 
 var Text = function (_a) {
     var step = _a.step, id = _a.id, _b = _a.type, type = _b === void 0 ? 'text' : _b, _c = _a.required, required = _c === void 0 ? false : _c, validation = _a.validation, placeholder = _a.placeholder, autoComplete = _a.autoComplete, style = _a.style, className = _a.className, label = _a.label, errMsg = _a.errMsg;
-    var _d = useFormData({ step: step, id: id, value: '', required: required, validation: validation }), value = _d.value, onChange = _d.onChange, onBlur = _d.onBlur, onFocus = _d.onFocus, showError = _d.showError;
+    var _d = useFormData({
+        step: step,
+        id: id,
+        value: '',
+        required: required,
+        validation: validation,
+    }), value = _d.value, onChange = _d.onChange, onBlur = _d.onBlur, onFocus = _d.onFocus, showError = _d.showError, focused = _d.focused;
     return (createElement(Fragment, null,
-        createElement("input", { id: id + "-field-text", "data-input-id": id + "-field-text", name: id, type: type, value: value || '', required: required, onChange: onChange, onBlur: onBlur, onFocus: onFocus, className: "flow-form-field flow-form-text " + className + "-field", placeholder: placeholder, autoComplete: autoComplete, style: style }),
+        createElement("input", { id: id + "-field-text", "data-input-id": id + "-field-text", name: id, type: type, value: value || '', required: required, onChange: onChange, onBlur: onBlur, onFocus: onFocus, className: "flow-form-field flow-form-text " + className + "-field", placeholder: placeholder, autoComplete: autoComplete, style: __assign(__assign({}, style), { border: "" + border(focused, showError) }) }),
         showError && createElement(DisplayError, { id: id, className: className, label: label, errMsg: errMsg })));
 };
 Text.defaultProps = {
@@ -791,9 +816,15 @@ Text.defaultProps = {
 
 var Number = function (_a) {
     var step = _a.step, id = _a.id, type = _a.type, _b = _a.required, required = _b === void 0 ? false : _b, validation = _a.validation, placeholder = _a.placeholder, autoComplete = _a.autoComplete, style = _a.style, className = _a.className, label = _a.label, errMsg = _a.errMsg;
-    var _c = useFormData({ step: step, id: id, value: '', required: required, validation: validation }), value = _c.value, onChange = _c.onChange, onBlur = _c.onBlur, onFocus = _c.onFocus, showError = _c.showError;
+    var _c = useFormData({
+        step: step,
+        id: id,
+        value: '',
+        required: required,
+        validation: validation,
+    }), value = _c.value, onChange = _c.onChange, onBlur = _c.onBlur, onFocus = _c.onFocus, showError = _c.showError, focused = _c.focused;
     return (createElement(Fragment, null,
-        createElement("input", { id: id + "-field-number", "data-input-id": id + "-field-number", name: id, type: type, value: value || '', required: required, onChange: onChange, onBlur: onBlur, onFocus: onFocus, className: "flow-form-field flow-form-number " + className + "-field", placeholder: placeholder, autoComplete: autoComplete, style: style }),
+        createElement("input", { id: id + "-field-number", "data-input-id": id + "-field-number", name: id, type: type, value: value || '', required: required, onChange: onChange, onBlur: onBlur, onFocus: onFocus, className: "flow-form-field flow-form-number " + className + "-field", placeholder: placeholder, autoComplete: autoComplete, style: __assign(__assign({}, style), { border: "" + border(focused, showError) }) }),
         showError && createElement(DisplayError, { id: id, className: className, label: label, errMsg: errMsg })));
 };
 Number.defaultProps = {
@@ -802,9 +833,15 @@ Number.defaultProps = {
 
 var Email = function (_a) {
     var step = _a.step, id = _a.id, _b = _a.type, type = _b === void 0 ? 'email' : _b, _c = _a.required, required = _c === void 0 ? false : _c, validation = _a.validation, placeholder = _a.placeholder, autoComplete = _a.autoComplete, style = _a.style, className = _a.className, label = _a.label, errMsg = _a.errMsg;
-    var _d = useFormData({ step: step, id: id, value: '', required: required, validation: validation }), value = _d.value, onChange = _d.onChange, onBlur = _d.onBlur, onFocus = _d.onFocus, showError = _d.showError;
+    var _d = useFormData({
+        step: step,
+        id: id,
+        value: '',
+        required: required,
+        validation: validation,
+    }), value = _d.value, onChange = _d.onChange, onBlur = _d.onBlur, onFocus = _d.onFocus, showError = _d.showError, focused = _d.focused;
     return (createElement(Fragment, null,
-        createElement("input", { id: id + "-field-email", "data-input-id": id + "-field-email", name: id, type: type, value: value || '', required: required, onChange: onChange, onBlur: onBlur, onFocus: onFocus, className: "flow-form-field flow-form-email " + className + "-field", placeholder: placeholder, autoComplete: autoComplete, style: style }),
+        createElement("input", { id: id + "-field-email", "data-input-id": id + "-field-email", name: id, type: type, value: value || '', required: required, onChange: onChange, onBlur: onBlur, onFocus: onFocus, className: "flow-form-field flow-form-email " + className + "-field", placeholder: placeholder, autoComplete: autoComplete, style: __assign(__assign({}, style), { border: "" + border(focused, showError) }) }),
         showError && createElement(DisplayError, { id: id, className: className, label: label, errMsg: errMsg })));
 };
 Email.defaultProps = {
@@ -813,9 +850,15 @@ Email.defaultProps = {
 
 var Password = function (_a) {
     var step = _a.step, id = _a.id, _b = _a.type, type = _b === void 0 ? 'password' : _b, _c = _a.required, required = _c === void 0 ? false : _c, validation = _a.validation, placeholder = _a.placeholder, autoComplete = _a.autoComplete, style = _a.style, className = _a.className, label = _a.label, errMsg = _a.errMsg;
-    var _d = useFormData({ step: step, id: id, value: '', required: required, validation: validation }), value = _d.value, onChange = _d.onChange, onBlur = _d.onBlur, onFocus = _d.onFocus, showError = _d.showError;
+    var _d = useFormData({
+        step: step,
+        id: id,
+        value: '',
+        required: required,
+        validation: validation,
+    }), value = _d.value, onChange = _d.onChange, onBlur = _d.onBlur, onFocus = _d.onFocus, showError = _d.showError, focused = _d.focused;
     return (createElement(Fragment, null,
-        createElement("input", { id: id + "-field-password", "data-input-id": id + "-field-password", name: id, type: type, value: value || '', required: required, onChange: onChange, onBlur: onBlur, onFocus: onFocus, className: "flow-form-field flow-form-password " + className + "-field", placeholder: placeholder, autoComplete: autoComplete, style: style }),
+        createElement("input", { id: id + "-field-password", "data-input-id": id + "-field-password", name: id, type: type, value: value || '', required: required, onChange: onChange, onBlur: onBlur, onFocus: onFocus, className: "flow-form-field flow-form-password " + className + "-field", placeholder: placeholder, autoComplete: autoComplete, style: __assign(__assign({}, style), { border: "" + border(focused, showError) }) }),
         showError && createElement(DisplayError, { id: id, className: className, label: label, errMsg: errMsg })));
 };
 Password.defaultProps = {
@@ -824,9 +867,15 @@ Password.defaultProps = {
 
 var Tel = function (_a) {
     var step = _a.step, id = _a.id, _b = _a.type, type = _b === void 0 ? 'text' : _b, _c = _a.required, required = _c === void 0 ? false : _c, validation = _a.validation, placeholder = _a.placeholder, autoComplete = _a.autoComplete, style = _a.style, className = _a.className, label = _a.label, errMsg = _a.errMsg, _d = _a.pattern, pattern = _d === void 0 ? '[0-9]{3}-[0-9]{2}-[0-9]{3}' : _d;
-    var _e = useFormData({ step: step, id: id, value: '', required: required, validation: validation }), value = _e.value, onChange = _e.onChange, onBlur = _e.onBlur, onFocus = _e.onFocus, showError = _e.showError;
+    var _e = useFormData({
+        step: step,
+        id: id,
+        value: '',
+        required: required,
+        validation: validation,
+    }), value = _e.value, onChange = _e.onChange, onBlur = _e.onBlur, onFocus = _e.onFocus, showError = _e.showError, focused = _e.focused;
     return (createElement(Fragment, null,
-        createElement("input", { id: id + "-field-tel", "data-input-id": id + "-field-tel", name: id, type: type, value: value || '', required: required, onChange: onChange, onBlur: onBlur, onFocus: onFocus, className: "flow-form-field flow-form-tel " + className + "-field", placeholder: placeholder, autoComplete: autoComplete, style: style, pattern: pattern }),
+        createElement("input", { id: id + "-field-tel", "data-input-id": id + "-field-tel", name: id, type: type, value: value || '', required: required, onChange: onChange, onBlur: onBlur, onFocus: onFocus, className: "flow-form-field flow-form-tel " + className + "-field", placeholder: placeholder, autoComplete: autoComplete, style: __assign(__assign({}, style), { border: "" + border(focused, showError) }), pattern: pattern }),
         showError && createElement(DisplayError, { id: id, className: className, label: label, errMsg: errMsg })));
 };
 Tel.defaultProps = {
@@ -835,9 +884,15 @@ Tel.defaultProps = {
 
 var Url = function (_a) {
     var step = _a.step, id = _a.id, _b = _a.type, type = _b === void 0 ? 'text' : _b, _c = _a.required, required = _c === void 0 ? false : _c, validation = _a.validation, placeholder = _a.placeholder, autoComplete = _a.autoComplete, style = _a.style, className = _a.className, label = _a.label, errMsg = _a.errMsg, _d = _a.pattern, pattern = _d === void 0 ? 'https://.*' : _d;
-    var _e = useFormData({ step: step, id: id, value: '', required: required, validation: validation }), value = _e.value, onChange = _e.onChange, onBlur = _e.onBlur, onFocus = _e.onFocus, showError = _e.showError;
+    var _e = useFormData({
+        step: step,
+        id: id,
+        value: '',
+        required: required,
+        validation: validation,
+    }), value = _e.value, onChange = _e.onChange, onBlur = _e.onBlur, onFocus = _e.onFocus, showError = _e.showError, focused = _e.focused;
     return (createElement(Fragment, null,
-        createElement("input", { id: id + "-filed-url", "data-input-id": id + "-field-url", name: id, type: type, value: value || '', required: required, onChange: onChange, onBlur: onBlur, onFocus: onFocus, className: "flow-form-field flow-form-url " + className + "-field", placeholder: placeholder, autoComplete: autoComplete, style: style, pattern: pattern }),
+        createElement("input", { id: id + "-filed-url", "data-input-id": id + "-field-url", name: id, type: type, value: value || '', required: required, onChange: onChange, onBlur: onBlur, onFocus: onFocus, className: "flow-form-field flow-form-url " + className + "-field", placeholder: placeholder, autoComplete: autoComplete, style: __assign(__assign({}, style), { border: "" + border(focused, showError) }), pattern: pattern }),
         showError && createElement(DisplayError, { id: id, className: className, label: label, errMsg: errMsg })));
 };
 Url.defaultProps = {
@@ -846,9 +901,15 @@ Url.defaultProps = {
 
 var Color = function (_a) {
     var step = _a.step, id = _a.id, _b = _a.type, type = _b === void 0 ? 'color' : _b, _c = _a.required, required = _c === void 0 ? false : _c, validation = _a.validation, placeholder = _a.placeholder, autoComplete = _a.autoComplete, style = _a.style, className = _a.className, label = _a.label, errMsg = _a.errMsg;
-    var _d = useFormData({ step: step, id: id, value: '', required: required, validation: validation }), value = _d.value, onChange = _d.onChange, onBlur = _d.onBlur, onFocus = _d.onFocus, showError = _d.showError;
+    var _d = useFormData({
+        step: step,
+        id: id,
+        value: '',
+        required: required,
+        validation: validation,
+    }), value = _d.value, onChange = _d.onChange, onBlur = _d.onBlur, onFocus = _d.onFocus, showError = _d.showError, focused = _d.focused;
     return (createElement(Fragment, null,
-        createElement("input", { id: id + "-field-color", "data-input-id": id + "-field-color", name: id, type: type, value: value || '#519839', required: required, onChange: onChange, onBlur: onBlur, onFocus: onFocus, className: "flow-form-field flow-form-color " + className + "-field", placeholder: placeholder, autoComplete: autoComplete, style: style }),
+        createElement("input", { id: id + "-field-color", "data-input-id": id + "-field-color", name: id, type: type, value: value || '#519839', required: required, onChange: onChange, onBlur: onBlur, onFocus: onFocus, className: "flow-form-field flow-form-color " + className + "-field", placeholder: placeholder, autoComplete: autoComplete, style: __assign(__assign({}, style), { border: "" + border(focused, showError) }) }),
         showError && createElement(DisplayError, { id: id, className: className, label: label, errMsg: errMsg })));
 };
 Color.defaultProps = {
@@ -857,9 +918,15 @@ Color.defaultProps = {
 
 var TextArea = function (_a) {
     var step = _a.step, id = _a.id, _b = _a.required, required = _b === void 0 ? false : _b, validation = _a.validation, placeholder = _a.placeholder, autoComplete = _a.autoComplete, style = _a.style, className = _a.className, label = _a.label, errMsg = _a.errMsg, _c = _a.rows, rows = _c === void 0 ? 4 : _c, _d = _a.cols, cols = _d === void 0 ? 20 : _d;
-    var _e = useFormData({ step: step, id: id, value: '', required: required, validation: validation }), value = _e.value, onChange = _e.onChange, onBlur = _e.onBlur, onFocus = _e.onFocus, showError = _e.showError;
+    var _e = useFormData({
+        step: step,
+        id: id,
+        value: '',
+        required: required,
+        validation: validation,
+    }), value = _e.value, onChange = _e.onChange, onBlur = _e.onBlur, onFocus = _e.onFocus, showError = _e.showError, focused = _e.focused;
     return (createElement(Fragment, null,
-        createElement("textarea", { id: id + "-field-textarea", "data-input-id": id + "-field-textarea", name: id, value: value || '', required: required, onChange: onChange, onBlur: onBlur, onFocus: onFocus, className: "flow-form-field flow-form-textarea " + className + "-field", placeholder: placeholder, autoComplete: autoComplete, style: style, rows: rows, cols: cols }),
+        createElement("textarea", { id: id + "-field-textarea", "data-input-id": id + "-field-textarea", name: id, value: value || '', required: required, onChange: onChange, onBlur: onBlur, onFocus: onFocus, className: "flow-form-field flow-form-textarea " + className + "-field", placeholder: placeholder, autoComplete: autoComplete, style: __assign(__assign({}, style), { border: "" + border(focused, showError) }), rows: rows, cols: cols }),
         showError && createElement(DisplayError, { id: id, className: className, label: label, errMsg: errMsg })));
 };
 TextArea.defaultProps = {
@@ -868,9 +935,15 @@ TextArea.defaultProps = {
 
 var Select = function (_a) {
     var step = _a.step, id = _a.id, _b = _a.required, required = _b === void 0 ? false : _b, validation = _a.validation, placeholder = _a.placeholder, autoComplete = _a.autoComplete, style = _a.style, className = _a.className, label = _a.label, errMsg = _a.errMsg, options = _a.options;
-    var _c = useFormData({ step: step, id: id, value: '', required: required, validation: validation }), value = _c.value, onChange = _c.onChange, onBlur = _c.onBlur, onFocus = _c.onFocus, showError = _c.showError;
+    var _c = useFormData({
+        step: step,
+        id: id,
+        value: '',
+        required: required,
+        validation: validation,
+    }), value = _c.value, onChange = _c.onChange, onBlur = _c.onBlur, onFocus = _c.onFocus, showError = _c.showError, focused = _c.focused;
     return (createElement(Fragment, null,
-        createElement("select", { id: id + "-field-text", "data-input-id": id + "-field-text", name: id, value: value || '', required: required, onChange: onChange, onBlur: onBlur, onFocus: onFocus, className: "flow-form-field flow-form-text " + className + "-field", placeholder: placeholder, autoComplete: autoComplete, style: style }, options &&
+        createElement("select", { id: id + "-field-text", "data-input-id": id + "-field-text", name: id, value: value || '', required: required, onChange: onChange, onBlur: onBlur, onFocus: onFocus, className: "flow-form-field flow-form-text " + className + "-field", placeholder: placeholder, autoComplete: autoComplete, style: __assign(__assign({}, style), { border: "" + border(focused, showError) }) }, options &&
             options.map(function (option) { return (createElement("option", { key: option.name, value: option.value }, option.name)); })),
         showError && createElement(DisplayError, { id: id, className: className, label: label, errMsg: errMsg })));
 };
@@ -896,7 +969,7 @@ var DragAndDrop = function (_a) {
         value: '',
         required: required,
         validation: validation,
-    }), value = _c.value, onFileChange = _c.onFileChange, onFileDrop = _c.onFileDrop, onFileRemove = _c.onFileRemove, onBlur = _c.onBlur, onFocus = _c.onFocus, showError = _c.showError;
+    }), value = _c.value, onFileChange = _c.onFileChange, onFileDrop = _c.onFileDrop, onFileRemove = _c.onFileRemove, onBlur = _c.onBlur, onFocus = _c.onFocus, showError = _c.showError, focused = _c.focused;
     var fileRef = useRef(null);
     var onDragEnter = function (e) {
         handleDefaults(e);
@@ -915,7 +988,8 @@ var DragAndDrop = function (_a) {
     };
     return (createElement(Fragment, null,
         createElement("div", { className: "flow-form-file-upload", style: {
-                border: "1px solid " + colors.grey,
+                border: "" + border(focused, showError),
+                borderRadius: "" + theme.border.radius,
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
@@ -959,13 +1033,13 @@ var Field = function (_a) {
         placeholder: placeholder,
         className: className,
         label: children !== null && children !== void 0 ? children : name,
-        style: __assign({ display: 'block', width: '100%', fontSize: '1.2em' }, style),
+        style: __assign({ display: 'block', width: '100%', fontSize: "" + theme.fonts.medium, textIndent: "" + theme.text.indent, borderRadius: "" + theme.border.radius, backgroundColor: "" + theme.colors.white, outline: 'none' }, style),
         errMsg: errMsg,
         options: options,
         inputs: inputs,
     };
     return (createElement("label", { id: id + "-label", "data-field-id": id + "-label", htmlFor: id, className: "flow-form-label " + className + "-label", style: { display: 'block', minHeight: '4.5rem', textTransform: 'capitalize' } },
-        children ? children : name !== null && name !== void 0 ? name : '',
+        createElement("legend", { style: { fontSize: "" + theme.fonts.medium } }, children ? children : name !== null && name !== void 0 ? name : ''),
         (function () {
             switch (type) {
                 case 'text':
@@ -1014,7 +1088,16 @@ Row.defaultProps = {
 
 var ItemInput = memo(function (_a) {
     var objKey = _a.objKey, fieldIndex = _a.fieldIndex, type = _a.type, value = _a.value, required = _a.required, _b = _a.autoComplete, autoComplete = _b === void 0 ? 'off' : _b, onChange = _a.onChange, onBlur = _a.onBlur, onFocus = _a.onFocus;
-    return (createElement("input", { "data-field-id": objKey + "-field-field-list-item-" + fieldIndex, id: objKey + "-field-list-field-" + type, name: objKey, type: type, value: value, required: required, onChange: onChange, onBlur: onBlur, onFocus: onFocus, className: "flow-form-field flow-form-field-list-item " + objKey + "-field-list-item", placeholder: objKey, autoComplete: autoComplete, style: { marginRight: '10px', textTransform: 'capitalize', fontSize: '1.2em' } }));
+    return (createElement("input", { "data-field-id": objKey + "-field-field-list-item-" + fieldIndex, id: objKey + "-field-list-field-" + type, name: objKey, type: type, value: value, required: required, onChange: onChange, onBlur: onBlur, onFocus: onFocus, className: "flow-form-field flow-form-field-list-item " + objKey + "-field-list-item", placeholder: objKey, autoComplete: autoComplete, style: {
+            marginRight: '10px',
+            textTransform: 'capitalize',
+            fontSize: "" + theme.fonts.medium,
+            textIndent: "" + theme.text.indent,
+            border: "" + theme.border.default,
+            borderRadius: "" + theme.border.radius,
+            backgroundColor: "" + theme.colors.white,
+            outline: 'none',
+        } }));
 });
 ItemInput.defaultProps = {
     ffComp: FFComponent.ITEM_INPUT,
@@ -1153,7 +1236,7 @@ var FieldList = function (_a) {
         });
     }; };
     return (createElement("fieldset", { "data-field-list-id": id, className: "flow-form-field-list " + className, style: __assign({ display: "block", minHeight: '4.5rem', border: 'none', padding: '0', margin: '0' }, style) },
-        createElement("legend", null, label),
+        createElement("legend", { style: { fontSize: "" + theme.fonts.medium } }, label),
         !isObjectEmpty(formData) && step != null ? (createElement(Fragment, null, (_b = formData === null || formData === void 0 ? void 0 : formData[step]) === null || _b === void 0 ? void 0 : _b[id].map(function (field, index) { return (createElement(Row, { key: index, className: className },
             Object.entries(field).map(function (_a, i) {
                 var k = _a[0], v = _a[1];

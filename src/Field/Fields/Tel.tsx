@@ -3,6 +3,7 @@ import { FFComponent } from '../../FFComponent';
 import { useFormData } from '../../useFormData';
 import { IProps } from './@types';
 import { DisplayError } from '../../DisplayError';
+import { border } from '../../utils';
 
 interface ITel extends IProps {
   pattern?: string;
@@ -22,7 +23,13 @@ export const Tel: React.FC<ITel> = ({
   errMsg,
   pattern = '[0-9]{3}-[0-9]{2}-[0-9]{3}',
 }) => {
-  const { value, onChange, onBlur, onFocus, showError } = useFormData({ step, id, value: '', required, validation });
+  const { value, onChange, onBlur, onFocus, showError, focused } = useFormData({
+    step,
+    id,
+    value: '',
+    required,
+    validation,
+  });
 
   return (
     <>
@@ -39,7 +46,7 @@ export const Tel: React.FC<ITel> = ({
         className={`flow-form-field flow-form-tel ${className}-field`}
         placeholder={placeholder}
         autoComplete={autoComplete}
-        style={style}
+        style={{ ...style, border: `${border(focused, showError)}` }}
         pattern={pattern}
       />
       {showError && <DisplayError id={id} className={className} label={label} errMsg={errMsg} />}

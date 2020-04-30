@@ -3,6 +3,7 @@ import { FFComponent } from '../../FFComponent';
 import { useFormData } from '../../useFormData';
 import { IProps, Option } from './@types';
 import { DisplayError } from '../../DisplayError';
+import { border } from '../../utils';
 
 interface ISelect extends IProps {}
 
@@ -19,7 +20,13 @@ export const Select: React.FC<ISelect> = ({
   errMsg,
   options,
 }) => {
-  const { value, onChange, onBlur, onFocus, showError } = useFormData({ step, id, value: '', required, validation });
+  const { value, onChange, onBlur, onFocus, showError, focused } = useFormData({
+    step,
+    id,
+    value: '',
+    required,
+    validation,
+  });
 
   return (
     <>
@@ -35,7 +42,7 @@ export const Select: React.FC<ISelect> = ({
         className={`flow-form-field flow-form-text ${className}-field`}
         placeholder={placeholder}
         autoComplete={autoComplete}
-        style={style}
+        style={{ ...style, border: `${border(focused, showError)}` }}
       >
         {options &&
           options.map((option: Option) => (

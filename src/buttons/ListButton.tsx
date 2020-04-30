@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { FFComponent } from '../FFComponent';
-import { colors } from '../colors';
+import { theme } from '../theme';
 
 interface IListButton {
   ffComp?: string;
@@ -13,15 +13,15 @@ export const ListButton: React.FC<IListButton> = ({ children, onClick, remove })
     type="button"
     onClick={onClick}
     style={{
-      backgroundColor: `${remove ? colors.red : colors.green}`,
-      color: `${colors.white}`,
+      backgroundColor: `${remove ? theme.colors.red : theme.colors.green}`,
+      color: `${theme.colors.white}`,
       border: 'none',
-      fontSize: '1em',
+      fontSize: `${theme.fonts.small}`,
       cursor: 'pointer',
       width: '1.5em',
       height: '1.5em',
       textAlign: 'center',
-      borderRadius: '0.2em',
+      borderRadius: `${theme.border.radius}`,
     }}
   >
     {children}

@@ -3,6 +3,7 @@ import { FFComponent } from '../../FFComponent';
 import { useFormData } from '../../useFormData';
 import { IProps } from './@types';
 import { DisplayError } from '../../DisplayError';
+import { border } from '../../utils';
 
 interface ITextArea extends IProps {
   rows?: number;
@@ -23,7 +24,13 @@ export const TextArea: React.FC<ITextArea> = ({
   rows = 4,
   cols = 20,
 }) => {
-  const { value, onChange, onBlur, onFocus, showError } = useFormData({ step, id, value: '', required, validation });
+  const { value, onChange, onBlur, onFocus, showError, focused } = useFormData({
+    step,
+    id,
+    value: '',
+    required,
+    validation,
+  });
 
   return (
     <>
@@ -39,7 +46,7 @@ export const TextArea: React.FC<ITextArea> = ({
         className={`flow-form-field flow-form-textarea ${className}-field`}
         placeholder={placeholder}
         autoComplete={autoComplete}
-        style={style}
+        style={{ ...style, border: `${border(focused, showError)}` }}
         rows={rows}
         cols={cols}
       />

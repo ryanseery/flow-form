@@ -17,6 +17,7 @@ import {
   handleFocusObj,
 } from './fieldListUtils';
 import { DisplayError } from '../DisplayError';
+import { theme } from '../theme';
 
 type IFieldListProps = {
   ffComp?: string;
@@ -145,7 +146,7 @@ export const FieldList: IFieldList<IFieldListProps> = ({ step, label, name, clas
       className={`flow-form-field-list ${className}`}
       style={{ display: `block`, minHeight: '4.5rem', border: 'none', padding: '0', margin: '0', ...style }}
     >
-      <legend>{label}</legend>
+      <legend style={{ fontSize: `${theme.fonts.medium}` }}>{label}</legend>
       {!isObjectEmpty(formData) && step != null ? (
         <>
           {formData?.[step]?.[id].map((field: {}, index: number) => (

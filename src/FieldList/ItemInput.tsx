@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { FFComponent } from '../FFComponent';
+import { theme } from '../theme';
 
 interface IItemInput {
   ffComp?: string;
@@ -30,7 +31,16 @@ export const ItemInput: React.FC<IItemInput> = React.memo(
       className={`flow-form-field flow-form-field-list-item ${objKey}-field-list-item`}
       placeholder={objKey}
       autoComplete={autoComplete}
-      style={{ marginRight: '10px', textTransform: 'capitalize', fontSize: '1.2em' }}
+      style={{
+        marginRight: '10px',
+        textTransform: 'capitalize',
+        fontSize: `${theme.fonts.medium}`,
+        textIndent: `${theme.text.indent}`,
+        border: `${theme.border.default}`,
+        borderRadius: `${theme.border.radius}`,
+        backgroundColor: `${theme.colors.white}`,
+        outline: 'none',
+      }}
     />
   ),
 );

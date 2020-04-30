@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { Context } from '../Context';
 import { IItem } from './Item';
 import { toCamelCase } from '../utils';
 
@@ -77,4 +78,135 @@ export function handleFocusObj(children: React.ReactNode): {} {
   } else {
     return {};
   }
+}
+
+type Args = {
+  name?: string;
+  label: string;
+  step: string | null;
+  children: React.ReactNode | React.ReactNode[];
+};
+
+export function useFieldListData({ name, label, step, children }: Args) {
+  const {
+    flow,
+    setFieldList,
+    formData,
+    updateFieldListItem,
+    addFieldList,
+    removeFieldList,
+    setFieldListBlur,
+    setFieldListFocus,
+    showError,
+    focus,
+  } = React.useContext(Context);
+
+  const id = React.useMemo(() => toCamelCase(name ? name : label), [name, label]);
+
+  const blankInput = React.useMemo(
+    () => (Array.isArray(children) ? handleBlankArr(children) : handleBlankObj(children)),
+    [children],
+  );
+
+  const inputProps = React.useMemo(
+    () => (Array.isArray(children) ? handleInputPropsArr(children) : handleInputPropsObj(children)),
+    [children],
+  );
+
+  const constructErrors = React.useMemo(
+    () => (Array.isArray(children) ? handleErrorArr(children) : handleErrorObj(children)),
+    [children],
+  );
+
+  const constructFocus = React.useMemo(
+    () => (Array.isArray(children) ? handleFocusArr(children) : handleFocusObj(children)),
+    [children],
+  );
+
+  function validate(e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>, index: number) {
+    if (inputProps[index].required || inputProps[index].validation) {
+      return inputProps[index].validation ? inputProps[index].validation(e) : !e.target.value;
+    }
+    return false;
+  }
+
+  React.useEffect(() => {
+    setFieldList({
+      step,
+      id,
+      value: [{ ...blankInput }],
+      error: [{ ...constructErrors }],
+      showError: [{ ...constructFocus }],
+      focus: [{ ...constructFocus }],
+    });
+  }, [step, label, flow.currentStep, flow.key]);
+
+  const onChange = (row: number, input: number) => (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>,
+  ) => {
+    e.preventDefault();
+
+    const { type, name, value } = e.target;
+
+    updateFieldListItem({
+      step,
+      id,
+      index: row,
+      name,
+      value: type === 'number' ? parseFloat(value) : value,
+      error: validate(e, input),
+    });
+  };
+
+  const onBlur = (row: number, input: number) => (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>,
+  ) => {
+    const { name } = e.target;
+
+    setFieldListBlur({
+      step,
+      id,
+      index: row,
+      name,
+      error: validate(e, input),
+    });
+  };
+
+  const onFocus = (index: number) => (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>,
+  ) => {
+    const { name } = e.target;
+
+    setFieldListFocus({
+      step,
+      id,
+      index,
+      name,
+    });
+  };
+
+  const onAddFieldList = () => {
+    addFieldList({
+      step,
+      id,
+      blankInput: blankInput ?? {},
+      blankError: constructErrors ?? {},
+      blankFocus: constructFocus ?? {},
+    });
+  };
+
+  const onRemoveFieldList = (index: number) => removeFieldList({ step, id, index });
+
+  return {
+    id,
+    blankInput,
+    inputProps,
+    constructErrors,
+    constructFocus,
+    onChange,
+    onBlur,
+    onFocus,
+    onAddFieldList,
+    onRemoveFieldList,
+  };
 }

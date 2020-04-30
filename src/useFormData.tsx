@@ -23,6 +23,7 @@ export function useFormData({ step, id, value, required, validation }: IUseFormD
     setBlur,
     setFocus,
     showError,
+    focus,
     flow,
   } = React.useContext(Context);
 
@@ -107,6 +108,7 @@ export function useFormData({ step, id, value, required, validation }: IUseFormD
       : step != null
       ? showError?.[step]?.[id] ?? false
       : showError?.[id] ?? false,
+    focused: isObjectEmpty(focus) ? false : step != null ? focus?.[step]?.[id] ?? false : focus?.[id] ?? false,
     onChange,
     onFileChange,
     onFileDrop,
