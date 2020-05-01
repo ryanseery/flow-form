@@ -3,10 +3,10 @@ import { IStepState } from './Context';
 import { FFComponent } from './FFComponent';
 import { theme } from './theme';
 
-interface IDoughnut {
+type IDoughnut = {
   ffComp?: string;
   isActive: boolean;
-}
+};
 
 const Doughnut: React.FC<IDoughnut> = ({ isActive }) => (
   <span
@@ -16,10 +16,10 @@ const Doughnut: React.FC<IDoughnut> = ({ isActive }) => (
         ? `radial-gradient(circle, transparent 30%, ${theme.colors.blue} 40%)`
         : `radial-gradient(circle, transparent 30%, ${theme.colors.grey} 40%)`,
       borderRadius: '80%',
-      height: '15px',
-      width: '18px',
-      marginRight: '1px',
-      paddingTop: '3px',
+      height: '0.9375em',
+      width: '1.125em',
+      marginRight: '0.0625em',
+      paddingTop: '0.1875em',
       fontSize: `${theme.fonts.large}`,
       textAlign: 'center',
       color: `${theme.colors.white}`,
@@ -38,39 +38,48 @@ export interface IProgress {
   doughNut?: boolean;
 }
 
-export const Progress: React.FC<IProgress> = ({ steps, currentStep, doughNut }) => (
-  <div
-    className="flow-form-progress"
-    style={{
-      display: 'flex',
-      flexDirection: 'row',
-      alignItems: 'center',
-      justifyContent: 'space-between',
-      borderBottom: `1px solid ${theme.colors.grey}`,
-      paddingBottom: '5px',
-      marginBottom: '5px',
-    }}
-  >
-    {steps?.map((step: IStepState) => (
-      <div
-        key={step.id}
-        className="flow-form-label-container"
-        style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}
-      >
-        {doughNut && <Doughnut isActive={step.index === currentStep?.index} />}
-        <span
-          className="flow-form-label"
+export const Progress: React.FC<IProgress> = ({ steps, currentStep, doughNut }) => {
+  const isActive = (step: IStepState) => step.index === currentStep?.index;
+
+  return (
+    <div
+      className="flow-form-progress"
+      style={{
+        display: 'flex',
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        borderBottom: `${theme.border.default}`,
+        marginBottom: '0.3em',
+      }}
+    >
+      {steps?.map((step: IStepState) => (
+        <div
+          key={step.id}
+          className="flow-form-label-container"
           style={{
-            color: step.index === currentStep?.index ? `${theme.colors.blue}` : `${theme.colors.grey}`,
-            fontSize: `${theme.fonts.large}`,
+            display: 'flex',
+            flexDirection: 'row',
+            alignItems: 'center',
+            justifyContent: 'center',
+            padding: '0 0.3em 0.3em 0.3em',
           }}
         >
-          {step.label}
-        </span>
-      </div>
-    ))}
-  </div>
-);
+          {doughNut && <Doughnut isActive={isActive(step)} />}
+          <span
+            className="flow-form-label"
+            style={{
+              color: isActive(step) ? `${theme.colors.blue}` : `${theme.colors.grey}`,
+              fontSize: `${theme.fonts.large}`,
+            }}
+          >
+            {step.label}
+          </span>
+        </div>
+      ))}
+    </div>
+  );
+};
 
 Progress.defaultProps = {
   ffComp: FFComponent.PROGRESS,

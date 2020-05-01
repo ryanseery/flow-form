@@ -5,6 +5,7 @@ import { IStep } from './Step';
 import { toCamelCase } from './utils';
 import { DefaultSubmit, DefaultBtn } from './buttons';
 import { Progress } from './Progress';
+import { theme } from './theme';
 
 interface IForm {
   ffComp?: string;
@@ -82,19 +83,44 @@ const Form: React.FC<IForm> = ({ children, onSubmit, className, style, showData,
         <>{isFlowForm ? children?.[flow.key] : children}</>
 
         {isFlowForm ? (
-          <>
+          <div
+            className="flow-form-button-container"
+            style={{
+              display: 'flex',
+              flexDirection: 'row',
+              justifyContent: 'center',
+              alignItems: 'center',
+              padding: '2rem',
+            }}
+          >
             {flow.currentStep != null && flow.currentStep?.index > 0 && (
-              <DefaultBtn onClick={() => revertForm()}>Back</DefaultBtn>
+              <DefaultBtn
+                onClick={() => revertForm()}
+                style={{
+                  backgroundColor: `${theme.colors.white}`,
+                  color: `${theme.colors.blue}`,
+                  marginRight: '2em',
+                }}
+              >
+                Back
+              </DefaultBtn>
             )}
 
             {flow.end !== flow.currentStep?.index ? (
-              <DefaultBtn disabled={!canProceed} onClick={() => progressForm()}>
+              <DefaultBtn
+                disabled={!canProceed}
+                onClick={() => progressForm()}
+                style={{
+                  backgroundColor: `${!canProceed ? theme.colors.grey : theme.colors.blue}`,
+                  color: `${theme.colors.white}`,
+                }}
+              >
                 Next
               </DefaultBtn>
             ) : (
               <DefaultSubmit disabled={!canProceed} />
             )}
-          </>
+          </div>
         ) : (
           <DefaultSubmit disabled={!canProceed} />
         )}

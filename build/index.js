@@ -95,9 +95,9 @@ var theme = {
         indent: '0.2em',
     },
     border: {
-        default: "1px solid #BDBDBD",
-        focus: "1px solid #00A0DF",
-        error: "1px solid #FF0000",
+        default: '0.0625em solid #BDBDBD',
+        focus: '0.0625em solid #00A0DF',
+        error: '0.0625em solid #FF0000',
         radius: '0.2em',
     },
 };
@@ -582,7 +582,16 @@ var FFComponent;
 
 var DefaultSubmit = function (_a) {
     var disabled = _a.disabled;
-    return (React.createElement("button", { type: "submit", className: "flow-form-submit-btm", disabled: disabled }, "Submit"));
+    return (React.createElement("button", { type: "submit", className: "flow-form-submit-btm", disabled: disabled, style: {
+            outline: 'none',
+            fontSize: "" + theme.fonts.small,
+            borderRadius: "" + theme.border.radius,
+            padding: '0.5em 1em',
+            border: "" + (disabled ? "none" : theme.border.focus),
+            color: "" + theme.colors.white,
+            backgroundColor: "" + (disabled ? theme.colors.grey : theme.colors.blue),
+            cursor: 'pointer',
+        } }, "Submit"));
 };
 DefaultSubmit.defaultProps = {
     ffComp: FFComponent.DEFAULT_SUBMIT,
@@ -600,6 +609,7 @@ var ListButton = function (_a) {
             height: '1.5em',
             textAlign: 'center',
             borderRadius: "" + theme.border.radius,
+            outline: 'none',
         } }, children));
 };
 ListButton.defaultProps = {
@@ -608,7 +618,7 @@ ListButton.defaultProps = {
 
 var DefaultBtn = function (_a) {
     var className = _a.className, onClick = _a.onClick, disabled = _a.disabled, children = _a.children, style = _a.style;
-    return (React.createElement("button", { type: "button", className: "flow-form-btn " + className, disabled: disabled, onClick: onClick, style: style }, children));
+    return (React.createElement("button", { type: "button", className: "flow-form-btn " + className, disabled: disabled, onClick: onClick, style: __assign(__assign({}, style), { outline: 'none', fontSize: "" + theme.fonts.small, borderRadius: "" + theme.border.radius, padding: '0.5em 1em', border: "" + (disabled ? "none" : theme.border.focus), cursor: 'pointer' }) }, children));
 };
 DefaultBtn.defaultProps = {
     ffComp: FFComponent.DEFAULT_BTN,
@@ -621,10 +631,10 @@ var Doughnut = function (_a) {
                 ? "radial-gradient(circle, transparent 30%, " + theme.colors.blue + " 40%)"
                 : "radial-gradient(circle, transparent 30%, " + theme.colors.grey + " 40%)",
             borderRadius: '80%',
-            height: '15px',
-            width: '18px',
-            marginRight: '1px',
-            paddingTop: '3px',
+            height: '0.9375em',
+            width: '1.125em',
+            marginRight: '0.0625em',
+            paddingTop: '0.1875em',
             fontSize: "" + theme.fonts.large,
             textAlign: 'center',
             color: "" + theme.colors.white,
@@ -635,18 +645,24 @@ Doughnut.defaultProps = {
 };
 var Progress = function (_a) {
     var steps = _a.steps, currentStep = _a.currentStep, doughNut = _a.doughNut;
+    var isActive = function (step) { return step.index === (currentStep === null || currentStep === void 0 ? void 0 : currentStep.index); };
     return (React.createElement("div", { className: "flow-form-progress", style: {
             display: 'flex',
             flexDirection: 'row',
             alignItems: 'center',
             justifyContent: 'space-between',
-            borderBottom: "1px solid " + theme.colors.grey,
-            paddingBottom: '5px',
-            marginBottom: '5px',
-        } }, steps === null || steps === void 0 ? void 0 : steps.map(function (step) { return (React.createElement("div", { key: step.id, className: "flow-form-label-container", style: { display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'center' } },
-        doughNut && React.createElement(Doughnut, { isActive: step.index === (currentStep === null || currentStep === void 0 ? void 0 : currentStep.index) }),
+            borderBottom: "" + theme.border.default,
+            marginBottom: '0.3em',
+        } }, steps === null || steps === void 0 ? void 0 : steps.map(function (step) { return (React.createElement("div", { key: step.id, className: "flow-form-label-container", style: {
+            display: 'flex',
+            flexDirection: 'row',
+            alignItems: 'center',
+            justifyContent: 'center',
+            padding: '0 0.3em 0.3em 0.3em',
+        } },
+        doughNut && React.createElement(Doughnut, { isActive: isActive(step) }),
         React.createElement("span", { className: "flow-form-label", style: {
-                color: step.index === (currentStep === null || currentStep === void 0 ? void 0 : currentStep.index) ? "" + theme.colors.blue : "" + theme.colors.grey,
+                color: isActive(step) ? "" + theme.colors.blue : "" + theme.colors.grey,
                 fontSize: "" + theme.fonts.large,
             } }, step.label))); })));
 };
@@ -698,9 +714,22 @@ var Form = function (_a) {
         isFlowForm && React.createElement(Progress, { steps: flow.steps, currentStep: flow.currentStep, doughNut: doughNut }),
         React.createElement("fieldset", { style: { border: "none" } },
             React.createElement(React.Fragment, null, isFlowForm ? children === null || children === void 0 ? void 0 : children[flow.key] : children),
-            isFlowForm ? (React.createElement(React.Fragment, null,
-                flow.currentStep != null && ((_b = flow.currentStep) === null || _b === void 0 ? void 0 : _b.index) > 0 && (React.createElement(DefaultBtn, { onClick: function () { return revertForm(); } }, "Back")),
-                flow.end !== ((_c = flow.currentStep) === null || _c === void 0 ? void 0 : _c.index) ? (React.createElement(DefaultBtn, { disabled: !canProceed, onClick: function () { return progressForm(); } }, "Next")) : (React.createElement(DefaultSubmit, { disabled: !canProceed })))) : (React.createElement(DefaultSubmit, { disabled: !canProceed })))));
+            isFlowForm ? (React.createElement("div", { className: "flow-form-button-container", style: {
+                    display: 'flex',
+                    flexDirection: 'row',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    padding: '2rem',
+                } },
+                flow.currentStep != null && ((_b = flow.currentStep) === null || _b === void 0 ? void 0 : _b.index) > 0 && (React.createElement(DefaultBtn, { onClick: function () { return revertForm(); }, style: {
+                        backgroundColor: "" + theme.colors.white,
+                        color: "" + theme.colors.blue,
+                        marginRight: '2em',
+                    } }, "Back")),
+                flow.end !== ((_c = flow.currentStep) === null || _c === void 0 ? void 0 : _c.index) ? (React.createElement(DefaultBtn, { disabled: !canProceed, onClick: function () { return progressForm(); }, style: {
+                        backgroundColor: "" + (!canProceed ? theme.colors.grey : theme.colors.blue),
+                        color: "" + theme.colors.white,
+                    } }, "Next")) : (React.createElement(DefaultSubmit, { disabled: !canProceed })))) : (React.createElement(DefaultSubmit, { disabled: !canProceed })))));
 };
 Form.defaultProps = {
     ffComp: FFComponent.FORM,
@@ -963,8 +992,10 @@ var Select = function (_a) {
         validation: validation,
     }), value = _c.value, onChange = _c.onChange, onBlur = _c.onBlur, onFocus = _c.onFocus, showError = _c.showError, focused = _c.focused;
     return (React.createElement(React.Fragment, null,
-        React.createElement("select", { id: id + "-field-text", "data-input-id": id + "-field-text", name: id, value: value || '', required: required, onChange: onChange, onBlur: onBlur, onFocus: onFocus, className: "flow-form-field flow-form-text " + className + "-field", placeholder: placeholder, autoComplete: autoComplete, style: __assign(__assign({}, style), { border: "" + border(focused, showError) }) }, options &&
-            options.map(function (option) { return (React.createElement("option", { key: option.name, value: option.value }, option.name)); })),
+        React.createElement("select", { id: id + "-field-text", "data-input-id": id + "-field-text", name: id, value: value || '', required: required, onChange: onChange, onBlur: onBlur, onFocus: onFocus, className: "flow-form-field flow-form-text " + className + "-field", placeholder: placeholder, autoComplete: autoComplete, style: __assign(__assign({}, style), { border: "" + border(focused, showError) }) },
+            React.createElement("option", { disabled: true, defaultValue: "" }),
+            options &&
+                options.map(function (option) { return (React.createElement("option", { key: option.name, value: option.value }, option.name)); })),
         showError && React.createElement(DisplayError, { id: id, className: className, label: label, errMsg: errMsg })));
 };
 Select.defaultProps = {
@@ -1015,8 +1046,9 @@ var DragAndDrop = function (_a) {
                 justifyContent: 'center',
                 minHeight: '5rem',
                 width: '100%',
-            }, onDrag: handleDefaults, onDragStart: handleDefaults, onDragEnd: handleDefaults, onDragOver: handleDefaults, onDragEnter: onDragEnter, onDragLeave: onDragLeave, onDrop: onDrop },
-            React.createElement("button", { type: "button", id: id + "-btn", className: id + "-btn", onClick: handleFileBtn }, placeholder ? placeholder : "Drag and Drop or Click to upload"),
+                cursor: 'pointer',
+            }, onDrag: handleDefaults, onDragStart: handleDefaults, onDragEnd: handleDefaults, onDragOver: handleDefaults, onDragEnter: onDragEnter, onDragLeave: onDragLeave, onDrop: onDrop, onClick: handleFileBtn },
+            React.createElement("span", { className: "flow-form-file-call-to-action", style: { fontSize: "" + theme.fonts.small } }, placeholder ? placeholder : "Drag and Drop or Click to upload"),
             React.createElement("input", { ref: fileRef, multiple: true, id: id + "-field-file", "data-input-id": id + "-field-file", name: id, type: "file", 
                 // value={value || ''}
                 required: required, onChange: onFileChange, onBlur: onBlur, onFocus: onFocus, className: "flow-form-field flow-form-drag-and-drop " + className + "-field", autoComplete: autoComplete, style: { display: 'none' } })),
@@ -1026,6 +1058,7 @@ var DragAndDrop = function (_a) {
                 justifyContent: 'space-between',
                 alignItems: 'center',
                 paddingBottom: '0.3rem',
+                fontSize: "" + theme.fonts.small,
             } },
             React.createElement("span", null, file.name),
             React.createElement(ListButton, { onClick: function () { return onFileRemove(index); }, remove: true }, "\u00D7"))); }))),
@@ -1237,24 +1270,22 @@ function useFieldListData(_a) {
             name: name,
         });
     }; };
-    var onAddFieldList = function () {
-        addFieldList({
-            step: step,
-            id: id,
-            blankInput: blankInput !== null && blankInput !== void 0 ? blankInput : {},
-            blankError: constructErrors !== null && constructErrors !== void 0 ? constructErrors : {},
-            blankFocus: constructFocus !== null && constructFocus !== void 0 ? constructFocus : {},
-        });
-    };
-    var onRemoveFieldList = function (index) { return removeFieldList({ step: step, id: id, index: index }); };
     return {
         id: id,
         inputProps: inputProps,
         onChange: onChange,
         onBlur: onBlur,
         onFocus: onFocus,
-        onAddFieldList: onAddFieldList,
-        onRemoveFieldList: onRemoveFieldList,
+        onAddFieldList: function () {
+            return addFieldList({
+                step: step,
+                id: id,
+                blankInput: blankInput !== null && blankInput !== void 0 ? blankInput : {},
+                blankError: constructErrors !== null && constructErrors !== void 0 ? constructErrors : {},
+                blankFocus: constructFocus !== null && constructFocus !== void 0 ? constructFocus : {},
+            });
+        },
+        onRemoveFieldList: function (index) { return removeFieldList({ step: step, id: id, index: index }); },
         value: isObjectEmpty(formData) ? [] : step != null ? (_c = (_b = formData === null || formData === void 0 ? void 0 : formData[step]) === null || _b === void 0 ? void 0 : _b[id]) !== null && _c !== void 0 ? _c : [] : (_d = formData === null || formData === void 0 ? void 0 : formData[id]) !== null && _d !== void 0 ? _d : [],
         error: isObjectEmpty(error) ? false : step != null ? (_f = (_e = error === null || error === void 0 ? void 0 : error[step]) === null || _e === void 0 ? void 0 : _e[id]) !== null && _f !== void 0 ? _f : false : (_g = error === null || error === void 0 ? void 0 : error[id]) !== null && _g !== void 0 ? _g : false,
         showError: isObjectEmpty(showError)
@@ -1265,8 +1296,6 @@ function useFieldListData(_a) {
     };
 }
 
-// TODO put state function code into own hook?
-// TODO investigate when this is rerendering... constFocus was being changed on state reducer end, but never showed
 var FieldList = function (_a) {
     var step = _a.step, label = _a.label, name = _a.name, className = _a.className, style = _a.style, children = _a.children, add = _a.add;
     if (!children) {
@@ -1289,7 +1318,7 @@ var FieldList = function (_a) {
                 var _b, _c, _d;
                 return (React.createElement("div", { key: i, style: { display: 'flex', flexDirection: 'column' } },
                     React.createElement(ItemInput, { key: k, objKey: k, fieldIndex: i, type: (_b = inputProps === null || inputProps === void 0 ? void 0 : inputProps[i].type) !== null && _b !== void 0 ? _b : 'text', value: v || '', required: (_c = inputProps === null || inputProps === void 0 ? void 0 : inputProps[i].required) !== null && _c !== void 0 ? _c : false, onChange: onChange(index, i), onBlur: onBlur(index, i), onFocus: onFocus(index), autoComplete: (_d = inputProps === null || inputProps === void 0 ? void 0 : inputProps[i].autoComplete) !== null && _d !== void 0 ? _d : 'off', style: {
-                            marginRight: '10px',
+                            marginRight: '0.625em',
                             textTransform: 'capitalize',
                             fontSize: "" + theme.fonts.medium,
                             textIndent: "" + theme.text.indent,

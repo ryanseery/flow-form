@@ -17,12 +17,10 @@ interface IDragAndDrop extends IProps {}
 export const DragAndDrop: React.FC<IDragAndDrop> = ({
   step,
   id,
-  // type = 'file',
   required = false,
   validation,
   placeholder,
   autoComplete,
-  // style,
   className,
   label,
   errMsg,
@@ -67,6 +65,7 @@ export const DragAndDrop: React.FC<IDragAndDrop> = ({
           justifyContent: 'center',
           minHeight: '5rem',
           width: '100%',
+          cursor: 'pointer',
         }}
         onDrag={handleDefaults}
         onDragStart={handleDefaults}
@@ -75,10 +74,12 @@ export const DragAndDrop: React.FC<IDragAndDrop> = ({
         onDragEnter={onDragEnter}
         onDragLeave={onDragLeave}
         onDrop={onDrop}
+        onClick={handleFileBtn}
       >
-        <button type="button" id={`${id}-btn`} className={`${id}-btn`} onClick={handleFileBtn}>
+        <span className="flow-form-file-call-to-action" style={{ fontSize: `${theme.fonts.small}` }}>
           {placeholder ? placeholder : `Drag and Drop or Click to upload`}
-        </button>
+        </span>
+
         <input
           ref={fileRef}
           multiple
@@ -86,7 +87,6 @@ export const DragAndDrop: React.FC<IDragAndDrop> = ({
           data-input-id={`${id}-field-file`}
           name={id}
           type="file"
-          // value={value || ''}
           required={required}
           onChange={onFileChange}
           onBlur={onBlur}
@@ -96,6 +96,9 @@ export const DragAndDrop: React.FC<IDragAndDrop> = ({
           style={{ display: 'none' }}
         />
       </div>
+
+      {showError && <DisplayError id={id} className={className} label={label} errMsg={errMsg} />}
+
       {value.length > 0 && (
         <ul style={{ listStyle: 'none', padding: 0 }}>
           {value.map((file: File, index: number) => (
@@ -107,6 +110,7 @@ export const DragAndDrop: React.FC<IDragAndDrop> = ({
                 justifyContent: 'space-between',
                 alignItems: 'center',
                 paddingBottom: '0.3rem',
+                fontSize: `${theme.fonts.small}`,
               }}
             >
               <span>{file.name}</span>
@@ -117,8 +121,6 @@ export const DragAndDrop: React.FC<IDragAndDrop> = ({
           ))}
         </ul>
       )}
-
-      {showError && <DisplayError id={id} className={className} label={label} errMsg={errMsg} />}
     </>
   );
 };

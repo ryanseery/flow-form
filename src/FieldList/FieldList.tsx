@@ -23,8 +23,6 @@ type IFieldList<P> = React.FunctionComponent<P> & {
   Item: typeof Item;
 };
 
-// TODO put state function code into own hook?
-// TODO investigate when this is rerendering... constFocus was being changed on state reducer end, but never showed
 export const FieldList: IFieldList<IFieldListProps> = ({ step, label, name, className, style, children, add }) => {
   if (!children) {
     throw new Error(`<FieldList> expects to have <FieldList.Item> for child components.`);
@@ -75,7 +73,7 @@ export const FieldList: IFieldList<IFieldListProps> = ({ step, label, name, clas
                 onFocus={onFocus(index)}
                 autoComplete={inputProps?.[i].autoComplete ?? 'off'}
                 style={{
-                  marginRight: '10px',
+                  marginRight: '0.625em',
                   textTransform: 'capitalize',
                   fontSize: `${theme.fonts.medium}`,
                   textIndent: `${theme.text.indent}`,

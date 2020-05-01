@@ -44,6 +44,7 @@ export const Select: React.FC<ISelect> = ({
         autoComplete={autoComplete}
         style={{ ...style, border: `${border(focused, showError)}` }}
       >
+        <option disabled defaultValue=""></option>
         {options &&
           options.map((option: Option) => (
             <option key={option.name} value={option.value}>

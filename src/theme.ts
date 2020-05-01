@@ -39,9 +39,9 @@ export const theme: Theme = {
     indent: '0.2em',
   },
   border: {
-    default: `1px solid #BDBDBD`,
-    focus: `1px solid #00A0DF`,
-    error: `1px solid #FF0000`,
+    default: '0.0625em solid #BDBDBD',
+    focus: '0.0625em solid #00A0DF',
+    error: '0.0625em solid #FF0000',
     radius: '0.2em',
   },
 };

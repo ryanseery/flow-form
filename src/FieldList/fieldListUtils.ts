@@ -186,26 +186,21 @@ export function useFieldListData({ name, label, step, children }: Args) {
     });
   };
 
-  const onAddFieldList = () => {
-    addFieldList({
-      step,
-      id,
-      blankInput: blankInput ?? {},
-      blankError: constructErrors ?? {},
-      blankFocus: constructFocus ?? {},
-    });
-  };
-
-  const onRemoveFieldList = (index: number) => removeFieldList({ step, id, index });
-
   return {
     id,
     inputProps,
     onChange,
     onBlur,
     onFocus,
-    onAddFieldList,
-    onRemoveFieldList,
+    onAddFieldList: () =>
+      addFieldList({
+        step,
+        id,
+        blankInput: blankInput ?? {},
+        blankError: constructErrors ?? {},
+        blankFocus: constructFocus ?? {},
+      }),
+    onRemoveFieldList: (index: number) => removeFieldList({ step, id, index }),
     value: isObjectEmpty(formData) ? [] : step != null ? formData?.[step]?.[id] ?? [] : formData?.[id] ?? [],
     error: isObjectEmpty(error) ? false : step != null ? error?.[step]?.[id] ?? false : error?.[id] ?? false,
     showError: isObjectEmpty(showError)

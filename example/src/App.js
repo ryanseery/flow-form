@@ -18,9 +18,8 @@ function App() {
     return !Number.isInteger(parseFloat(e.target.value));
   };
 
-  // TODO initial Values
   return (
-    <div style={{ height: '100vh', display: 'flex', justifyContent: 'center' }}>
+    <div style={{ height: '100vh', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
       {/* <FlowForm onSubmit={data => console.log('onSubmit: ', data)}>
         <Field validation={checkString} name="Test 1" />
 
@@ -37,7 +36,7 @@ function App() {
           <Field name="color" type="color" />
 
           <Field type="select" options={testSelect}>
-            Cars
+            Car
           </Field>
 
           <FieldList label="Field List" add>
