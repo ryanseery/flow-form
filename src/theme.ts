@@ -20,6 +20,10 @@ type Theme = {
     error: string;
     radius: string;
   };
+  inputs: {
+    radio: string;
+    checkbox: string;
+  };
 };
 
 export const theme: Theme = {
@@ -43,5 +47,9 @@ export const theme: Theme = {
     focus: '0.0625em solid #00A0DF',
     error: '0.0625em solid #FF0000',
     radius: '0.2em',
+  },
+  inputs: {
+    radio: '0.75em',
+    checkbox: '1em',
   },
 };

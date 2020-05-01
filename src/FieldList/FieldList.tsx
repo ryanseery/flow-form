@@ -17,13 +17,23 @@ type IFieldListProps = {
   className?: string;
   style?: {};
   add?: boolean;
+  required?: boolean;
 };
 
 type IFieldList<P> = React.FunctionComponent<P> & {
   Item: typeof Item;
 };
 
-export const FieldList: IFieldList<IFieldListProps> = ({ step, label, name, className, style, children, add }) => {
+export const FieldList: IFieldList<IFieldListProps> = ({
+  step,
+  label,
+  name,
+  className,
+  style,
+  children,
+  add,
+  required,
+}) => {
   if (!children) {
     throw new Error(`<FieldList> expects to have <FieldList.Item> for child components.`);
   }
@@ -56,7 +66,9 @@ export const FieldList: IFieldList<IFieldListProps> = ({ step, label, name, clas
       className={`flow-form-field-list ${className}`}
       style={{ display: `block`, minHeight: '4.5rem', border: 'none', padding: '0', margin: '0', ...style }}
     >
-      <legend style={{ fontSize: `${theme.fonts.medium}`, paddingBottom: '0.2em' }}>{label}</legend>
+      <legend style={{ fontSize: `${theme.fonts.medium}`, paddingBottom: '0.2em' }}>
+        {label} {required && <span style={{ color: `${theme.colors.red}` }}>*</span>}
+      </legend>
       {value.map((field: {}, index: number) => (
         <Row key={index} className={className}>
           {Object.entries(field).map(([k, v], i: number) => (

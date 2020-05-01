@@ -101,6 +101,7 @@ export const Field: React.FC<IField> = ({
         style={{ fontSize: `${theme.fonts.medium}`, paddingBottom: '0.2em' }}
       >
         {children ? children : name ?? ''}
+        {required && <span style={{ color: `${theme.colors.red}` }}>*</span>}
       </legend>
       {(() => {
         switch (type) {

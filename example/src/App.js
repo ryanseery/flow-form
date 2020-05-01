@@ -19,7 +19,7 @@ function App() {
   };
 
   return (
-    <div style={{ height: '100vh', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+    <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
       {/* <FlowForm onSubmit={data => console.log('onSubmit: ', data)}>
         <Field validation={checkString} name="Test 1" />
 
@@ -34,6 +34,10 @@ function App() {
           <Field validation={checkString}>Test 3</Field>
 
           <Field type="color" name="color" />
+
+          <Field type="number" required>
+            Number
+          </Field>
 
           <Field type="checkbox" options={['bike', 'car', 'plane']}>
             Checkbox

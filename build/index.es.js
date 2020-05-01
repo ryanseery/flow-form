@@ -96,6 +96,10 @@ var theme = {
         error: '0.0625em solid #FF0000',
         radius: '0.2em',
     },
+    inputs: {
+        radio: '0.75em',
+        checkbox: '1em',
+    },
 };
 
 function border(focused, showError) {
@@ -1151,7 +1155,7 @@ var Checkbox = function (_a) {
         value: '',
         required: required,
         validation: validation,
-    }), value = _c.value, onChange = _c.onChange, onBlur = _c.onBlur, onFocus = _c.onFocus, showError = _c.showError, focused = _c.focused;
+    }), value = _c.value, onChange = _c.onChange, showError = _c.showError, focused = _c.focused;
     return (createElement("div", { style: { display: 'flex', flexDirection: 'row', alignItems: 'center', width: '58%' } },
         options &&
             options.map(function (option, index) { return (createElement("label", { key: index, htmlFor: option, className: "flow-form-legend " + className + "-legend", style: {
@@ -1161,7 +1165,10 @@ var Checkbox = function (_a) {
                     fontSize: "" + theme.fonts.small,
                     textTransform: 'capitalize',
                 } },
-                createElement("input", { id: option, "data-input-id": option + "-field-checkbox", name: id, type: type, value: option, required: required, onChange: onChange, onBlur: onBlur, onFocus: onFocus, className: "flow-form-field flow-form-text " + className + "-field", placeholder: placeholder, autoComplete: autoComplete, style: __assign(__assign({}, style), { width: '1rem', border: "" + border(focused, showError) }), checked: value === option }),
+                createElement("input", { id: option, "data-input-id": option + "-field-checkbox", name: id, type: type, value: option, required: required, onChange: onChange, 
+                    // onBlur={onBlur}
+                    // onFocus={onFocus}
+                    className: "flow-form-field flow-form-text " + className + "-field", placeholder: placeholder, autoComplete: autoComplete, style: __assign(__assign({}, style), { width: '1rem', fontSize: "" + (type === 'radio' ? theme.inputs.radio : theme.inputs.checkbox), border: "" + border(focused, showError) }), checked: value === option }),
                 option)); }),
         showError && createElement(DisplayError, { id: id, className: className, label: label, errMsg: errMsg })));
 };
@@ -1197,7 +1204,9 @@ var Field = function (_a) {
             minHeight: "" + (type === 'checkbox' || type === 'radio' ? '4rem' : '4.5rem'),
             textTransform: 'capitalize',
         } },
-        createElement("legend", { className: "flow-form-legend " + className + "-legend", style: { fontSize: "" + theme.fonts.medium, paddingBottom: '0.2em' } }, children ? children : name !== null && name !== void 0 ? name : ''),
+        createElement("legend", { className: "flow-form-legend " + className + "-legend", style: { fontSize: "" + theme.fonts.medium, paddingBottom: '0.2em' } },
+            children ? children : name !== null && name !== void 0 ? name : '',
+            required && createElement("span", { style: { color: "" + theme.colors.red } }, "*")),
         (function () {
             switch (type) {
                 case 'text':
@@ -1408,7 +1417,7 @@ function useFieldListData(_a) {
 }
 
 var FieldList = function (_a) {
-    var step = _a.step, label = _a.label, name = _a.name, className = _a.className, style = _a.style, children = _a.children, add = _a.add;
+    var step = _a.step, label = _a.label, name = _a.name, className = _a.className, style = _a.style, children = _a.children, add = _a.add, required = _a.required;
     if (!children) {
         throw new Error("<FieldList> expects to have <FieldList.Item> for child components.");
     }
@@ -1422,7 +1431,10 @@ var FieldList = function (_a) {
         children: children,
     }), id = _b.id, inputProps = _b.inputProps, onChange = _b.onChange, onBlur = _b.onBlur, onFocus = _b.onFocus, value = _b.value, showError = _b.showError, focused = _b.focused, onAddFieldList = _b.onAddFieldList, onRemoveFieldList = _b.onRemoveFieldList;
     return (createElement("fieldset", { "data-field-list-id": id, className: "flow-form-field-list " + className, style: __assign({ display: "block", minHeight: '4.5rem', border: 'none', padding: '0', margin: '0' }, style) },
-        createElement("legend", { style: { fontSize: "" + theme.fonts.medium, paddingBottom: '0.2em' } }, label),
+        createElement("legend", { style: { fontSize: "" + theme.fonts.medium, paddingBottom: '0.2em' } },
+            label,
+            " ",
+            required && createElement("span", { style: { color: "" + theme.colors.red } }, "*")),
         value.map(function (field, index) { return (createElement(Row, { key: index, className: className },
             Object.entries(field).map(function (_a, i) {
                 var k = _a[0], v = _a[1];

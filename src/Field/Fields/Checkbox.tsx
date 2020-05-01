@@ -22,7 +22,7 @@ export const Checkbox: React.FC<ICheckbox> = ({
   options,
   type,
 }) => {
-  const { value, onChange, onBlur, onFocus, showError, focused } = useFormData({
+  const { value, onChange, showError, focused } = useFormData({
     step,
     id,
     value: '',
@@ -54,14 +54,15 @@ export const Checkbox: React.FC<ICheckbox> = ({
               value={option}
               required={required}
               onChange={onChange}
-              onBlur={onBlur}
-              onFocus={onFocus}
+              // onBlur={onBlur}
+              // onFocus={onFocus}
               className={`flow-form-field flow-form-text ${className}-field`}
               placeholder={placeholder}
               autoComplete={autoComplete}
               style={{
                 ...style,
                 width: '1rem',
+                fontSize: `${type === 'radio' ? theme.inputs.radio : theme.inputs.checkbox}`,
                 border: `${border(focused, showError)}`,
               }}
               checked={value === option}
