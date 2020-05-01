@@ -15,6 +15,7 @@ export enum FFComponent {
   SELECT = 'SELECT',
   DRAG_AND_DROP = 'DRAG_AND_DROP',
   IMG_PREVIEW = 'IMG_PREVIEW',
+  CHECKBOX = 'CHECKBOX',
   FIELD_LIST = 'FIELD_LIST',
   ITEM = 'ITEM',
   ROW = 'ROW',

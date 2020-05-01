@@ -33,7 +33,15 @@ function App() {
         <Step label="First Step">
           <Field validation={checkString}>Test 3</Field>
 
-          <Field name="color" type="color" />
+          <Field type="color" name="color" />
+
+          <Field type="checkbox" options={['bike', 'car', 'plane']}>
+            Checkbox
+          </Field>
+
+          <Field type="radio" options={['plus', 'minus', 'multiply']}>
+            Maths
+          </Field>
 
           <Field type="select" options={testSelect}>
             Car
@@ -51,6 +59,7 @@ function App() {
 
         <Step label="Second Step">
           <Field>Test 4</Field>
+
           <Field type="number" validation={checkNumber}>
             Number
           </Field>

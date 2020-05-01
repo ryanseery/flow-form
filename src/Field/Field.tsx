@@ -1,7 +1,20 @@
 import * as React from 'react';
 import { FFComponent } from '../FFComponent';
 import { toCamelCase, toKebabCase } from '../utils';
-import { Text, Number, Email, Password, Tel, Url, Color, TextArea, Select, DragAndDrop, ImgPreview } from './Fields';
+import {
+  Text,
+  Number,
+  Email,
+  Password,
+  Tel,
+  Url,
+  Color,
+  TextArea,
+  Select,
+  DragAndDrop,
+  ImgPreview,
+  Checkbox,
+} from './Fields';
 import { Option, Input } from './Fields/@types';
 import { theme } from '../theme';
 
@@ -19,7 +32,7 @@ export interface IField {
   placeholder?: string;
   errMsg?: string;
   validation?: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => boolean;
-  options?: Option[];
+  options?: Option[] | string[];
   inputs?: Input[];
 }
 
@@ -77,7 +90,11 @@ export const Field: React.FC<IField> = ({
       data-field-id={`${id}-label`}
       htmlFor={id}
       className={`flow-form-label ${className}-label`}
-      style={{ display: 'block', minHeight: '4.5rem', textTransform: 'capitalize' }}
+      style={{
+        display: 'block',
+        minHeight: `${type === 'checkbox' || type === 'radio' ? '4rem' : '4.5rem'}`,
+        textTransform: 'capitalize',
+      }}
     >
       <legend
         className={`flow-form-legend ${className}-legend`}
@@ -109,6 +126,10 @@ export const Field: React.FC<IField> = ({
             return <DragAndDrop {...defaultProps} />;
           case 'imgPreview':
             return <ImgPreview {...defaultProps} />;
+          case 'checkbox':
+            return <Checkbox {...defaultProps} />;
+          case 'radio':
+            return <Checkbox {...defaultProps} />;
           default:
             return <Text {...defaultProps} />;
         }

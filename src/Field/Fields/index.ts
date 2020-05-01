@@ -9,3 +9,4 @@ export { TextArea } from './TextArea';
 export { Select } from './Select';
 export { DragAndDrop } from './DragAndDrop';
 export { ImgPreview } from './ImgPreview';
+export { Checkbox } from './Checkbox';

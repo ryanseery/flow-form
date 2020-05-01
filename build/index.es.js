@@ -571,6 +571,7 @@ var FFComponent;
     FFComponent["SELECT"] = "SELECT";
     FFComponent["DRAG_AND_DROP"] = "DRAG_AND_DROP";
     FFComponent["IMG_PREVIEW"] = "IMG_PREVIEW";
+    FFComponent["CHECKBOX"] = "CHECKBOX";
     FFComponent["FIELD_LIST"] = "FIELD_LIST";
     FFComponent["ITEM"] = "ITEM";
     FFComponent["ROW"] = "ROW";
@@ -1142,6 +1143,32 @@ ImgPreview.defaultProps = {
     ffComp: FFComponent.IMG_PREVIEW,
 };
 
+var Checkbox = function (_a) {
+    var step = _a.step, id = _a.id, _b = _a.required, required = _b === void 0 ? false : _b, validation = _a.validation, placeholder = _a.placeholder, autoComplete = _a.autoComplete, style = _a.style, className = _a.className, label = _a.label, errMsg = _a.errMsg, options = _a.options, type = _a.type;
+    var _c = useFormData({
+        step: step,
+        id: id,
+        value: '',
+        required: required,
+        validation: validation,
+    }), value = _c.value, onChange = _c.onChange, onBlur = _c.onBlur, onFocus = _c.onFocus, showError = _c.showError, focused = _c.focused;
+    return (createElement("div", { style: { display: 'flex', flexDirection: 'row', alignItems: 'center', width: '58%' } },
+        options &&
+            options.map(function (option, index) { return (createElement("label", { key: index, htmlFor: option, className: "flow-form-legend " + className + "-legend", style: {
+                    display: 'flex',
+                    flexDirection: 'row',
+                    alignItems: 'center',
+                    fontSize: "" + theme.fonts.small,
+                    textTransform: 'capitalize',
+                } },
+                createElement("input", { id: option, "data-input-id": option + "-field-checkbox", name: id, type: type, value: option, required: required, onChange: onChange, onBlur: onBlur, onFocus: onFocus, className: "flow-form-field flow-form-text " + className + "-field", placeholder: placeholder, autoComplete: autoComplete, style: __assign(__assign({}, style), { width: '1rem', border: "" + border(focused, showError) }), checked: value === option }),
+                option)); }),
+        showError && createElement(DisplayError, { id: id, className: className, label: label, errMsg: errMsg })));
+};
+Checkbox.defaultProps = {
+    ffComp: FFComponent.CHECKBOX,
+};
+
 var Field = function (_a) {
     var step = _a.step, index = _a.index, name = _a.name, type = _a.type, children = _a.children, style = _a.style, _b = _a.required, required = _b === void 0 ? false : _b, validation = _a.validation, _c = _a.autoComplete, autoComplete = _c === void 0 ? 'off' : _c, placeholder = _a.placeholder, errMsg = _a.errMsg, options = _a.options, inputs = _a.inputs;
     if (!name && !children) {
@@ -1165,7 +1192,11 @@ var Field = function (_a) {
         options: options,
         inputs: inputs,
     };
-    return (createElement("label", { id: id + "-label", "data-field-id": id + "-label", htmlFor: id, className: "flow-form-label " + className + "-label", style: { display: 'block', minHeight: '4.5rem', textTransform: 'capitalize' } },
+    return (createElement("label", { id: id + "-label", "data-field-id": id + "-label", htmlFor: id, className: "flow-form-label " + className + "-label", style: {
+            display: 'block',
+            minHeight: "" + (type === 'checkbox' || type === 'radio' ? '4rem' : '4.5rem'),
+            textTransform: 'capitalize',
+        } },
         createElement("legend", { className: "flow-form-legend " + className + "-legend", style: { fontSize: "" + theme.fonts.medium, paddingBottom: '0.2em' } }, children ? children : name !== null && name !== void 0 ? name : ''),
         (function () {
             switch (type) {
@@ -1191,6 +1222,10 @@ var Field = function (_a) {
                     return createElement(DragAndDrop, __assign({}, defaultProps));
                 case 'imgPreview':
                     return createElement(ImgPreview, __assign({}, defaultProps));
+                case 'checkbox':
+                    return createElement(Checkbox, __assign({}, defaultProps));
+                case 'radio':
+                    return createElement(Checkbox, __assign({}, defaultProps));
                 default:
                     return createElement(Text, __assign({}, defaultProps));
             }

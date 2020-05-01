@@ -46,7 +46,7 @@ export const Select: React.FC<ISelect> = ({
       >
         <option disabled defaultValue=""></option>
         {options &&
-          options.map((option: Option) => (
+          (options as Option[]).map((option: Option) => (
             <option key={option.name} value={option.value}>
               {option.name}
             </option>
