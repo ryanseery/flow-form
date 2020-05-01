@@ -56,7 +56,7 @@ export const FieldList: IFieldList<IFieldListProps> = ({ step, label, name, clas
       className={`flow-form-field-list ${className}`}
       style={{ display: `block`, minHeight: '4.5rem', border: 'none', padding: '0', margin: '0', ...style }}
     >
-      <legend style={{ fontSize: `${theme.fonts.medium}` }}>{label}</legend>
+      <legend style={{ fontSize: `${theme.fonts.medium}`, paddingBottom: '0.2em' }}>{label}</legend>
       {value.map((field: {}, index: number) => (
         <Row key={index} className={className}>
           {Object.entries(field).map(([k, v], i: number) => (

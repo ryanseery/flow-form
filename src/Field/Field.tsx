@@ -79,7 +79,9 @@ export const Field: React.FC<IField> = ({
       className={`flow-form-label ${className}-label`}
       style={{ display: 'block', minHeight: '4.5rem', textTransform: 'capitalize' }}
     >
-      <legend style={{ fontSize: `${theme.fonts.medium}` }}>{children ? children : name ?? ''}</legend>
+      <legend style={{ fontSize: `${theme.fonts.medium}`, paddingBottom: '0.2em' }}>
+        {children ? children : name ?? ''}
+      </legend>
       {(() => {
         switch (type) {
           case 'text':

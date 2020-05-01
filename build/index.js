@@ -1007,13 +1007,7 @@ var handleDefaults = function (e) {
     e.stopPropagation();
 };
 var DragAndDrop = function (_a) {
-    var step = _a.step, id = _a.id, 
-    // type = 'file',
-    _b = _a.required, 
-    // type = 'file',
-    required = _b === void 0 ? false : _b, validation = _a.validation, placeholder = _a.placeholder, autoComplete = _a.autoComplete, 
-    // style,
-    className = _a.className, label = _a.label, errMsg = _a.errMsg;
+    var step = _a.step, id = _a.id, _b = _a.required, required = _b === void 0 ? false : _b, validation = _a.validation, placeholder = _a.placeholder, autoComplete = _a.autoComplete, className = _a.className, label = _a.label, errMsg = _a.errMsg;
     var _c = useFormData({
         step: step,
         id: id,
@@ -1049,9 +1043,8 @@ var DragAndDrop = function (_a) {
                 cursor: 'pointer',
             }, onDrag: handleDefaults, onDragStart: handleDefaults, onDragEnd: handleDefaults, onDragOver: handleDefaults, onDragEnter: onDragEnter, onDragLeave: onDragLeave, onDrop: onDrop, onClick: handleFileBtn },
             React.createElement("span", { className: "flow-form-file-call-to-action", style: { fontSize: "" + theme.fonts.small } }, placeholder ? placeholder : "Drag and Drop or Click to upload"),
-            React.createElement("input", { ref: fileRef, multiple: true, id: id + "-field-file", "data-input-id": id + "-field-file", name: id, type: "file", 
-                // value={value || ''}
-                required: required, onChange: onFileChange, onBlur: onBlur, onFocus: onFocus, className: "flow-form-field flow-form-drag-and-drop " + className + "-field", autoComplete: autoComplete, style: { display: 'none' } })),
+            React.createElement("input", { ref: fileRef, multiple: true, id: id + "-field-file", "data-input-id": id + "-field-file", name: id, type: "file", required: required, onChange: onFileChange, onBlur: onBlur, onFocus: onFocus, className: "flow-form-field flow-form-drag-and-drop " + className + "-field", autoComplete: autoComplete, style: { display: 'none' } })),
+        showError && React.createElement(DisplayError, { id: id, className: className, label: label, errMsg: errMsg }),
         value.length > 0 && (React.createElement("ul", { style: { listStyle: 'none', padding: 0 } }, value.map(function (file, index) { return (React.createElement("li", { key: index, style: {
                 display: 'flex',
                 flexDirection: 'row',
@@ -1061,8 +1054,7 @@ var DragAndDrop = function (_a) {
                 fontSize: "" + theme.fonts.small,
             } },
             React.createElement("span", null, file.name),
-            React.createElement(ListButton, { onClick: function () { return onFileRemove(index); }, remove: true }, "\u00D7"))); }))),
-        showError && React.createElement(DisplayError, { id: id, className: className, label: label, errMsg: errMsg })));
+            React.createElement(ListButton, { onClick: function () { return onFileRemove(index); }, remove: true }, "\u00D7"))); })))));
 };
 DragAndDrop.defaultProps = {
     ffComp: FFComponent.DRAG_AND_DROP,
@@ -1092,7 +1084,7 @@ var Field = function (_a) {
         inputs: inputs,
     };
     return (React.createElement("label", { id: id + "-label", "data-field-id": id + "-label", htmlFor: id, className: "flow-form-label " + className + "-label", style: { display: 'block', minHeight: '4.5rem', textTransform: 'capitalize' } },
-        React.createElement("legend", { style: { fontSize: "" + theme.fonts.medium } }, children ? children : name !== null && name !== void 0 ? name : ''),
+        React.createElement("legend", { style: { fontSize: "" + theme.fonts.medium, paddingBottom: '0.2em' } }, children ? children : name !== null && name !== void 0 ? name : ''),
         (function () {
             switch (type) {
                 case 'text':
@@ -1311,7 +1303,7 @@ var FieldList = function (_a) {
         children: children,
     }), id = _b.id, inputProps = _b.inputProps, onChange = _b.onChange, onBlur = _b.onBlur, onFocus = _b.onFocus, value = _b.value, showError = _b.showError, focused = _b.focused, onAddFieldList = _b.onAddFieldList, onRemoveFieldList = _b.onRemoveFieldList;
     return (React.createElement("fieldset", { "data-field-list-id": id, className: "flow-form-field-list " + className, style: __assign({ display: "block", minHeight: '4.5rem', border: 'none', padding: '0', margin: '0' }, style) },
-        React.createElement("legend", { style: { fontSize: "" + theme.fonts.medium } }, label),
+        React.createElement("legend", { style: { fontSize: "" + theme.fonts.medium, paddingBottom: '0.2em' } }, label),
         value.map(function (field, index) { return (React.createElement(Row, { key: index, className: className },
             Object.entries(field).map(function (_a, i) {
                 var k = _a[0], v = _a[1];
