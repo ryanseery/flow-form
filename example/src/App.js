@@ -39,9 +39,11 @@ function App() {
             Car
           </Field>
 
+          <Field type="imgPreview">Image</Field>
+
           <FieldList label="Field List" add>
             <FieldList.Item validation={checkString}>Name</FieldList.Item>
-            <FieldList.Item type="email" name="email" />
+            <FieldList.Item type="email" name="email" required />
           </FieldList>
 
           <Field type="dragAndDrop">Floor Plans</Field>

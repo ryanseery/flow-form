@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { FFComponent } from '../FFComponent';
 import { toCamelCase, toKebabCase } from '../utils';
-import { Text, Number, Email, Password, Tel, Url, Color, TextArea, Select, DragAndDrop } from './Fields';
+import { Text, Number, Email, Password, Tel, Url, Color, TextArea, Select, DragAndDrop, ImgPreview } from './Fields';
 import { Option, Input } from './Fields/@types';
 import { theme } from '../theme';
 
@@ -79,7 +79,10 @@ export const Field: React.FC<IField> = ({
       className={`flow-form-label ${className}-label`}
       style={{ display: 'block', minHeight: '4.5rem', textTransform: 'capitalize' }}
     >
-      <legend style={{ fontSize: `${theme.fonts.medium}`, paddingBottom: '0.2em' }}>
+      <legend
+        className={`flow-form-legend ${className}-legend`}
+        style={{ fontSize: `${theme.fonts.medium}`, paddingBottom: '0.2em' }}
+      >
         {children ? children : name ?? ''}
       </legend>
       {(() => {
@@ -104,6 +107,8 @@ export const Field: React.FC<IField> = ({
             return <Select {...defaultProps} />;
           case 'dragAndDrop':
             return <DragAndDrop {...defaultProps} />;
+          case 'imgPreview':
+            return <ImgPreview {...defaultProps} />;
           default:
             return <Text {...defaultProps} />;
         }

@@ -4,12 +4,11 @@ import { IProps } from './@types';
 import { useFormData } from '../../useFormData';
 import { DisplayError } from '../../DisplayError';
 import { theme } from '../../theme';
-import { ListButton } from '../../buttons';
 import { border, handleDefaults } from '../../utils';
 
-interface IDragAndDrop extends IProps {}
+interface IImgPreview extends IProps {}
 
-export const DragAndDrop: React.FC<IDragAndDrop> = ({
+export const ImgPreview: React.FC<IImgPreview> = ({
   step,
   id,
   required = false,
@@ -20,7 +19,7 @@ export const DragAndDrop: React.FC<IDragAndDrop> = ({
   label,
   errMsg,
 }) => {
-  const { value, onFileChange, onFileDrop, onFileRemove, onBlur, onFocus, showError, focused } = useFormData({
+  const { value, onImgChange, onImgDrop, onBlur, onFocus, showError, focused } = useFormData({
     step,
     id,
     value: '',
@@ -46,7 +45,7 @@ export const DragAndDrop: React.FC<IDragAndDrop> = ({
 
   const onDrop = (e: React.DragEvent<HTMLDivElement>) => {
     handleDefaults(e);
-    onFileDrop(e, id);
+    onImgDrop(e);
   };
 
   const handleFileBtn = () => {
@@ -57,16 +56,17 @@ export const DragAndDrop: React.FC<IDragAndDrop> = ({
   return (
     <>
       <div
-        className={`flow-form-file-upload`}
+        className={`flow-form-img-preview`}
         style={{
           border: `${border(focused, showError)}`,
           borderRadius: `${theme.border.radius}`,
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
-          minHeight: '5rem',
-          width: '100%',
+          height: '12rem',
+          width: '45%',
           cursor: 'pointer',
+          marginBottom: '0.9375em',
         }}
         onDrag={handleDefaults}
         onDragStart={handleDefaults}
@@ -77,9 +77,21 @@ export const DragAndDrop: React.FC<IDragAndDrop> = ({
         onDrop={onDrop}
         onClick={handleFileBtn}
       >
-        <span className="flow-form-file-call-to-action" style={{ fontSize: `${theme.fonts.small}` }}>
-          {placeholder ? placeholder : `Drag and Drop or Click to upload`}
-        </span>
+        {typeof value === 'string' ? (
+          <span
+            className="flow-form-file-call-to-action"
+            style={{ fontSize: `${theme.fonts.small}`, textAlign: 'center' }}
+          >
+            {placeholder ? placeholder : `Drag and Drop or Click to upload`}
+          </span>
+        ) : (
+          <img
+            className={`flow-form-img`}
+            src={URL.createObjectURL(value)}
+            alt={value.name}
+            style={{ height: '100%', width: '100%' }}
+          />
+        )}
 
         <input
           ref={fileRef}
@@ -89,7 +101,7 @@ export const DragAndDrop: React.FC<IDragAndDrop> = ({
           name={id}
           type="file"
           required={required}
-          onChange={onFileChange}
+          onChange={onImgChange}
           onBlur={onBlur}
           onFocus={onFocus}
           className={`flow-form-field flow-form-drag-and-drop ${className}-field`}
@@ -99,33 +111,10 @@ export const DragAndDrop: React.FC<IDragAndDrop> = ({
       </div>
 
       {showError && <DisplayError id={id} className={className} label={label} errMsg={errMsg} />}
-
-      {value.length > 0 && (
-        <ul style={{ listStyle: 'none', padding: 0 }}>
-          {value.map((file: File, index: number) => (
-            <li
-              key={index}
-              style={{
-                display: 'flex',
-                flexDirection: 'row',
-                justifyContent: 'space-between',
-                alignItems: 'center',
-                paddingBottom: '0.3rem',
-                fontSize: `${theme.fonts.small}`,
-              }}
-            >
-              <span>{file.name}</span>
-              <ListButton onClick={() => onFileRemove(index)} remove>
-                &times;
-              </ListButton>
-            </li>
-          ))}
-        </ul>
-      )}
     </>
   );
 };
 
-DragAndDrop.defaultProps = {
-  ffComp: FFComponent.DRAG_AND_DROP,
+ImgPreview.defaultProps = {
+  ffComp: FFComponent.IMG_PREVIEW,
 };

@@ -2,6 +2,8 @@ import * as React from 'react';
 import { Context } from './Context';
 import { isObjectEmpty } from './utils';
 
+const imageTypes = ['image/jpeg', 'image/png', 'image/gif'];
+
 interface IUseFormData {
   step: string | null;
   id: string;
@@ -12,6 +14,7 @@ interface IUseFormData {
   ) => boolean;
 }
 
+// TODO remove id from any function args
 export function useFormData({ step, id, value, required, validation }: IUseFormData) {
   const {
     setField,
@@ -87,6 +90,32 @@ export function useFormData({ step, id, value, required, validation }: IUseFormD
     });
   };
 
+  const onImgChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const val = Array.from(e.target.files ?? []);
+
+    if (imageTypes.includes(val[0].type)) {
+      updateField({
+        step,
+        id: e.target.name,
+        value: val[0],
+        error: validate(e),
+      });
+    }
+  };
+
+  const onImgDrop = (e: React.DragEvent<HTMLDivElement>) => {
+    const files = Array.from(e.dataTransfer.files);
+
+    if (imageTypes.includes(files[0].type)) {
+      updateField({
+        step,
+        id,
+        value: files[0],
+        error: validateFile(e),
+      });
+    }
+  };
+
   const onBlur = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     e.preventDefault();
 
@@ -115,5 +144,7 @@ export function useFormData({ step, id, value, required, validation }: IUseFormD
     onFileRemove,
     onBlur,
     onFocus,
+    onImgDrop,
+    onImgChange,
   };
 }

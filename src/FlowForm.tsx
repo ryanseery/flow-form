@@ -75,11 +75,11 @@ const Form: React.FC<IForm> = ({ children, onSubmit, className, style, showData,
         e.preventDefault();
         onSubmit(formData);
       }}
-      className={`flow-form ${className}`}
+      className={`flow-form ${className ?? ''}`}
       style={style}
     >
       {isFlowForm && <Progress steps={flow.steps} currentStep={flow.currentStep} doughNut={doughNut} />}
-      <fieldset style={{ border: `none` }}>
+      <fieldset className="flow-form-fieldset" style={{ border: `none` }}>
         <>{isFlowForm ? children?.[flow.key] : children}</>
 
         {isFlowForm ? (

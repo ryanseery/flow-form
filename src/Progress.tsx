@@ -13,8 +13,8 @@ const Doughnut: React.FC<IDoughnut> = ({ isActive }) => (
     className="flow-form-doughnut"
     style={{
       background: isActive
-        ? `radial-gradient(circle, transparent 30%, ${theme.colors.blue} 40%)`
-        : `radial-gradient(circle, transparent 30%, ${theme.colors.grey} 40%)`,
+        ? 'radial-gradient(circle, transparent 30%, ${theme.colors.blue} 40%)'
+        : 'radial-gradient(circle, transparent 30%, ${theme.colors.grey} 40%)',
       borderRadius: '80%',
       height: '0.9375em',
       width: '1.125em',
@@ -50,31 +50,31 @@ export const Progress: React.FC<IProgress> = ({ steps, currentStep, doughNut }) 
         alignItems: 'center',
         justifyContent: 'space-between',
         borderBottom: `${theme.border.default}`,
-        marginBottom: '0.3em',
       }}
     >
       {steps?.map((step: IStepState) => (
-        <div
-          key={step.id}
-          className="flow-form-label-container"
-          style={{
-            display: 'flex',
-            flexDirection: 'row',
-            alignItems: 'center',
-            justifyContent: 'center',
-            padding: '0 0.3em 0.3em 0.3em',
-          }}
-        >
-          {doughNut && <Doughnut isActive={isActive(step)} />}
-          <span
-            className="flow-form-label"
+        <div key={step.id} style={{ display: 'flex', flexDirection: 'column' }}>
+          <div
+            className="flow-form-label-container"
             style={{
-              color: isActive(step) ? `${theme.colors.blue}` : `${theme.colors.grey}`,
-              fontSize: `${theme.fonts.large}`,
+              display: 'flex',
+              flexDirection: 'row',
+              alignItems: 'center',
+              justifyContent: 'center',
+              padding: '0 0.3em 0.3em 0.3em',
             }}
           >
-            {step.label}
-          </span>
+            {doughNut && <Doughnut isActive={isActive(step)} />}
+            <span
+              className="flow-form-label"
+              style={{
+                color: isActive(step) ? `${theme.colors.blue}` : `${theme.colors.grey}`,
+                fontSize: `${theme.fonts.large}`,
+              }}
+            >
+              {step.label}
+            </span>
+          </div>
         </div>
       ))}
     </div>

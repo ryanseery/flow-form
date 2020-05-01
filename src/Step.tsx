@@ -17,7 +17,7 @@ export const Step: React.FC<IStep> = ({ children, name, label, className, style 
   }
 
   return (
-    <div data-step-id={toCamelCase(name ? name : label)} className={`flow-form-step ${className}`} style={style}>
+    <div data-step-id={toCamelCase(name ? name : label)} className={`flow-form-step ${className ?? ''}`} style={style}>
       {React.Children.map(children, (child, index) => {
         if (React.isValidElement<IField>(child)) {
           return React.cloneElement(child as React.ReactElement<IField>, {

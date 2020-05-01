@@ -43,7 +43,7 @@ export const Color: React.FC<IColor> = ({
         className={`flow-form-field flow-form-color ${className}-field`}
         placeholder={placeholder}
         autoComplete={autoComplete}
-        style={{ ...style, border: `${border(focused, showError)}` }}
+        style={{ ...style, border: `${border(focused, showError)}`, cursor: 'pointer' }}
       />
       {showError && <DisplayError id={id} className={className} label={label} errMsg={errMsg} />}
     </>

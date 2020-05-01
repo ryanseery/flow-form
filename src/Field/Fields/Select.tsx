@@ -42,7 +42,7 @@ export const Select: React.FC<ISelect> = ({
         className={`flow-form-field flow-form-text ${className}-field`}
         placeholder={placeholder}
         autoComplete={autoComplete}
-        style={{ ...style, border: `${border(focused, showError)}` }}
+        style={{ ...style, border: `${border(focused, showError)}`, cursor: 'pointer' }}
       >
         <option disabled defaultValue=""></option>
         {options &&

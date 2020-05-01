@@ -14,6 +14,7 @@ export enum FFComponent {
   URL = 'URL',
   SELECT = 'SELECT',
   DRAG_AND_DROP = 'DRAG_AND_DROP',
+  IMG_PREVIEW = 'IMG_PREVIEW',
   FIELD_LIST = 'FIELD_LIST',
   ITEM = 'ITEM',
   ROW = 'ROW',

@@ -99,14 +99,19 @@ var theme = {
 };
 
 function border(focused, showError) {
+    if (focused && showError)
+        return theme.border.error;
     if (focused)
         return theme.border.focus;
     if (showError)
         return theme.border.error;
-    if (focused && showError)
-        return theme.border.error;
     return theme.border.default;
 }
+
+var handleDefaults = function (e) {
+    e.preventDefault();
+    e.stopPropagation();
+};
 
 var initialState = {
     isFlowForm: false,
@@ -565,6 +570,7 @@ var FFComponent;
     FFComponent["URL"] = "URL";
     FFComponent["SELECT"] = "SELECT";
     FFComponent["DRAG_AND_DROP"] = "DRAG_AND_DROP";
+    FFComponent["IMG_PREVIEW"] = "IMG_PREVIEW";
     FFComponent["FIELD_LIST"] = "FIELD_LIST";
     FFComponent["ITEM"] = "ITEM";
     FFComponent["ROW"] = "ROW";
@@ -624,8 +630,8 @@ var Doughnut = function (_a) {
     var isActive = _a.isActive;
     return (createElement("span", { className: "flow-form-doughnut", style: {
             background: isActive
-                ? "radial-gradient(circle, transparent 30%, " + theme.colors.blue + " 40%)"
-                : "radial-gradient(circle, transparent 30%, " + theme.colors.grey + " 40%)",
+                ? 'radial-gradient(circle, transparent 30%, ${theme.colors.blue} 40%)'
+                : 'radial-gradient(circle, transparent 30%, ${theme.colors.grey} 40%)',
             borderRadius: '80%',
             height: '0.9375em',
             width: '1.125em',
@@ -648,19 +654,19 @@ var Progress = function (_a) {
             alignItems: 'center',
             justifyContent: 'space-between',
             borderBottom: "" + theme.border.default,
-            marginBottom: '0.3em',
-        } }, steps === null || steps === void 0 ? void 0 : steps.map(function (step) { return (createElement("div", { key: step.id, className: "flow-form-label-container", style: {
-            display: 'flex',
-            flexDirection: 'row',
-            alignItems: 'center',
-            justifyContent: 'center',
-            padding: '0 0.3em 0.3em 0.3em',
-        } },
-        doughNut && createElement(Doughnut, { isActive: isActive(step) }),
-        createElement("span", { className: "flow-form-label", style: {
-                color: isActive(step) ? "" + theme.colors.blue : "" + theme.colors.grey,
-                fontSize: "" + theme.fonts.large,
-            } }, step.label))); })));
+        } }, steps === null || steps === void 0 ? void 0 : steps.map(function (step) { return (createElement("div", { key: step.id, style: { display: 'flex', flexDirection: 'column' } },
+        createElement("div", { className: "flow-form-label-container", style: {
+                display: 'flex',
+                flexDirection: 'row',
+                alignItems: 'center',
+                justifyContent: 'center',
+                padding: '0 0.3em 0.3em 0.3em',
+            } },
+            doughNut && createElement(Doughnut, { isActive: isActive(step) }),
+            createElement("span", { className: "flow-form-label", style: {
+                    color: isActive(step) ? "" + theme.colors.blue : "" + theme.colors.grey,
+                    fontSize: "" + theme.fonts.large,
+                } }, step.label)))); })));
 };
 Progress.defaultProps = {
     ffComp: FFComponent.PROGRESS,
@@ -706,9 +712,9 @@ var Form = function (_a) {
     return (createElement("form", { onSubmit: function (e) {
             e.preventDefault();
             onSubmit(formData);
-        }, className: "flow-form " + className, style: style },
+        }, className: "flow-form " + (className !== null && className !== void 0 ? className : ''), style: style },
         isFlowForm && createElement(Progress, { steps: flow.steps, currentStep: flow.currentStep, doughNut: doughNut }),
-        createElement("fieldset", { style: { border: "none" } },
+        createElement("fieldset", { className: "flow-form-fieldset", style: { border: "none" } },
             createElement(Fragment, null, isFlowForm ? children === null || children === void 0 ? void 0 : children[flow.key] : children),
             isFlowForm ? (createElement("div", { className: "flow-form-button-container", style: {
                     display: 'flex',
@@ -741,7 +747,7 @@ var Step = function (_a) {
     if (!label) {
         throw new Error("The label prop is mandatory on Step Component.");
     }
-    return (createElement("div", { "data-step-id": toCamelCase(name ? name : label), className: "flow-form-step " + className, style: style }, Children.map(children, function (child, index) {
+    return (createElement("div", { "data-step-id": toCamelCase(name ? name : label), className: "flow-form-step " + (className !== null && className !== void 0 ? className : ''), style: style }, Children.map(children, function (child, index) {
         if (isValidElement(child)) {
             return cloneElement(child, {
                 index: index,
@@ -757,6 +763,8 @@ Step.defaultProps = {
     ffComp: FFComponent.STEP,
 };
 
+var imageTypes = ['image/jpeg', 'image/png', 'image/gif'];
+// TODO remove id from any function args
 function useFormData(_a) {
     var step = _a.step, id = _a.id, value = _a.value, required = _a.required, validation = _a.validation;
     var _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, _m, _o;
@@ -811,6 +819,29 @@ function useFormData(_a) {
             index: index,
         });
     };
+    var onImgChange = function (e) {
+        var _a;
+        var val = Array.from((_a = e.target.files) !== null && _a !== void 0 ? _a : []);
+        if (imageTypes.includes(val[0].type)) {
+            updateField({
+                step: step,
+                id: e.target.name,
+                value: val[0],
+                error: validate(e),
+            });
+        }
+    };
+    var onImgDrop = function (e) {
+        var files = Array.from(e.dataTransfer.files);
+        if (imageTypes.includes(files[0].type)) {
+            updateField({
+                step: step,
+                id: id,
+                value: files[0],
+                error: validateFile(e),
+            });
+        }
+    };
     var onBlur = function (e) {
         e.preventDefault();
         setBlur({ step: step, id: id, showError: validate(e) });
@@ -834,6 +865,8 @@ function useFormData(_a) {
         onFileRemove: onFileRemove,
         onBlur: onBlur,
         onFocus: onFocus,
+        onImgDrop: onImgDrop,
+        onImgChange: onImgChange,
     };
 }
 
@@ -954,7 +987,7 @@ var Color = function (_a) {
         validation: validation,
     }), value = _d.value, onChange = _d.onChange, onBlur = _d.onBlur, onFocus = _d.onFocus, showError = _d.showError, focused = _d.focused;
     return (createElement(Fragment, null,
-        createElement("input", { id: id + "-field-color", "data-input-id": id + "-field-color", name: id, type: type, value: value || '#519839', required: required, onChange: onChange, onBlur: onBlur, onFocus: onFocus, className: "flow-form-field flow-form-color " + className + "-field", placeholder: placeholder, autoComplete: autoComplete, style: __assign(__assign({}, style), { border: "" + border(focused, showError) }) }),
+        createElement("input", { id: id + "-field-color", "data-input-id": id + "-field-color", name: id, type: type, value: value || '#519839', required: required, onChange: onChange, onBlur: onBlur, onFocus: onFocus, className: "flow-form-field flow-form-color " + className + "-field", placeholder: placeholder, autoComplete: autoComplete, style: __assign(__assign({}, style), { border: "" + border(focused, showError), cursor: 'pointer' }) }),
         showError && createElement(DisplayError, { id: id, className: className, label: label, errMsg: errMsg })));
 };
 Color.defaultProps = {
@@ -988,7 +1021,7 @@ var Select = function (_a) {
         validation: validation,
     }), value = _c.value, onChange = _c.onChange, onBlur = _c.onBlur, onFocus = _c.onFocus, showError = _c.showError, focused = _c.focused;
     return (createElement(Fragment, null,
-        createElement("select", { id: id + "-field-text", "data-input-id": id + "-field-text", name: id, value: value || '', required: required, onChange: onChange, onBlur: onBlur, onFocus: onFocus, className: "flow-form-field flow-form-text " + className + "-field", placeholder: placeholder, autoComplete: autoComplete, style: __assign(__assign({}, style), { border: "" + border(focused, showError) }) },
+        createElement("select", { id: id + "-field-text", "data-input-id": id + "-field-text", name: id, value: value || '', required: required, onChange: onChange, onBlur: onBlur, onFocus: onFocus, className: "flow-form-field flow-form-text " + className + "-field", placeholder: placeholder, autoComplete: autoComplete, style: __assign(__assign({}, style), { border: "" + border(focused, showError), cursor: 'pointer' }) },
             createElement("option", { disabled: true, defaultValue: "" }),
             options &&
                 options.map(function (option) { return (createElement("option", { key: option.name, value: option.value }, option.name)); })),
@@ -998,10 +1031,6 @@ Select.defaultProps = {
     ffComp: FFComponent.SELECT,
 };
 
-var handleDefaults = function (e) {
-    e.preventDefault();
-    e.stopPropagation();
-};
 var DragAndDrop = function (_a) {
     var step = _a.step, id = _a.id, _b = _a.required, required = _b === void 0 ? false : _b, validation = _a.validation, placeholder = _a.placeholder, autoComplete = _a.autoComplete, className = _a.className, label = _a.label, errMsg = _a.errMsg;
     var _c = useFormData({
@@ -1011,13 +1040,19 @@ var DragAndDrop = function (_a) {
         required: required,
         validation: validation,
     }), value = _c.value, onFileChange = _c.onFileChange, onFileDrop = _c.onFileDrop, onFileRemove = _c.onFileRemove, onBlur = _c.onBlur, onFocus = _c.onFocus, showError = _c.showError, focused = _c.focused;
+    useEffect(function () {
+        window.addEventListener('dragover', function (event) {
+            handleDefaults(event);
+        });
+        window.addEventListener('drop', function (event) {
+            handleDefaults(event);
+        });
+        return function () {
+            window.removeEventListener('dragover', handleDefaults);
+            window.removeEventListener('drop', handleDefaults);
+        };
+    }, []);
     var fileRef = useRef(null);
-    var onDragEnter = function (e) {
-        handleDefaults(e);
-    };
-    var onDragLeave = function (e) {
-        handleDefaults(e);
-    };
     var onDrop = function (e) {
         handleDefaults(e);
         onFileDrop(e, id);
@@ -1037,7 +1072,7 @@ var DragAndDrop = function (_a) {
                 minHeight: '5rem',
                 width: '100%',
                 cursor: 'pointer',
-            }, onDrag: handleDefaults, onDragStart: handleDefaults, onDragEnd: handleDefaults, onDragOver: handleDefaults, onDragEnter: onDragEnter, onDragLeave: onDragLeave, onDrop: onDrop, onClick: handleFileBtn },
+            }, onDrag: handleDefaults, onDragStart: handleDefaults, onDragEnd: handleDefaults, onDragOver: handleDefaults, onDragEnter: handleDefaults, onDragLeave: handleDefaults, onDrop: onDrop, onClick: handleFileBtn },
             createElement("span", { className: "flow-form-file-call-to-action", style: { fontSize: "" + theme.fonts.small } }, placeholder ? placeholder : "Drag and Drop or Click to upload"),
             createElement("input", { ref: fileRef, multiple: true, id: id + "-field-file", "data-input-id": id + "-field-file", name: id, type: "file", required: required, onChange: onFileChange, onBlur: onBlur, onFocus: onFocus, className: "flow-form-field flow-form-drag-and-drop " + className + "-field", autoComplete: autoComplete, style: { display: 'none' } })),
         showError && createElement(DisplayError, { id: id, className: className, label: label, errMsg: errMsg }),
@@ -1054,6 +1089,57 @@ var DragAndDrop = function (_a) {
 };
 DragAndDrop.defaultProps = {
     ffComp: FFComponent.DRAG_AND_DROP,
+};
+
+var ImgPreview = function (_a) {
+    var step = _a.step, id = _a.id, _b = _a.required, required = _b === void 0 ? false : _b, validation = _a.validation, placeholder = _a.placeholder, autoComplete = _a.autoComplete, className = _a.className, label = _a.label, errMsg = _a.errMsg;
+    var _c = useFormData({
+        step: step,
+        id: id,
+        value: '',
+        required: required,
+        validation: validation,
+    }), value = _c.value, onImgChange = _c.onImgChange, onImgDrop = _c.onImgDrop, onBlur = _c.onBlur, onFocus = _c.onFocus, showError = _c.showError, focused = _c.focused;
+    useEffect(function () {
+        window.addEventListener('dragover', function (event) {
+            handleDefaults(event);
+        });
+        window.addEventListener('drop', function (event) {
+            handleDefaults(event);
+        });
+        return function () {
+            window.removeEventListener('dragover', handleDefaults);
+            window.removeEventListener('drop', handleDefaults);
+        };
+    }, []);
+    var fileRef = useRef(null);
+    var onDrop = function (e) {
+        handleDefaults(e);
+        onImgDrop(e);
+    };
+    var handleFileBtn = function () {
+        if (fileRef.current == null)
+            return;
+        fileRef.current.click();
+    };
+    return (createElement(Fragment, null,
+        createElement("div", { className: "flow-form-img-preview", style: {
+                border: "" + border(focused, showError),
+                borderRadius: "" + theme.border.radius,
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                height: '12rem',
+                width: '45%',
+                cursor: 'pointer',
+                marginBottom: '0.9375em',
+            }, onDrag: handleDefaults, onDragStart: handleDefaults, onDragEnd: handleDefaults, onDragOver: handleDefaults, onDragEnter: handleDefaults, onDragLeave: handleDefaults, onDrop: onDrop, onClick: handleFileBtn },
+            typeof value === 'string' ? (createElement("span", { className: "flow-form-file-call-to-action", style: { fontSize: "" + theme.fonts.small, textAlign: 'center' } }, placeholder ? placeholder : "Drag and Drop or Click to upload")) : (createElement("img", { className: "flow-form-img", src: URL.createObjectURL(value), alt: value.name, style: { height: '100%', width: '100%' } })),
+            createElement("input", { ref: fileRef, multiple: true, id: id + "-field-file", "data-input-id": id + "-field-file", name: id, type: "file", required: required, onChange: onImgChange, onBlur: onBlur, onFocus: onFocus, className: "flow-form-field flow-form-drag-and-drop " + className + "-field", autoComplete: autoComplete, style: { display: 'none' } })),
+        showError && createElement(DisplayError, { id: id, className: className, label: label, errMsg: errMsg })));
+};
+ImgPreview.defaultProps = {
+    ffComp: FFComponent.IMG_PREVIEW,
 };
 
 var Field = function (_a) {
@@ -1080,7 +1166,7 @@ var Field = function (_a) {
         inputs: inputs,
     };
     return (createElement("label", { id: id + "-label", "data-field-id": id + "-label", htmlFor: id, className: "flow-form-label " + className + "-label", style: { display: 'block', minHeight: '4.5rem', textTransform: 'capitalize' } },
-        createElement("legend", { style: { fontSize: "" + theme.fonts.medium, paddingBottom: '0.2em' } }, children ? children : name !== null && name !== void 0 ? name : ''),
+        createElement("legend", { className: "flow-form-legend " + className + "-legend", style: { fontSize: "" + theme.fonts.medium, paddingBottom: '0.2em' } }, children ? children : name !== null && name !== void 0 ? name : ''),
         (function () {
             switch (type) {
                 case 'text':
@@ -1103,6 +1189,8 @@ var Field = function (_a) {
                     return createElement(Select, __assign({}, defaultProps));
                 case 'dragAndDrop':
                     return createElement(DragAndDrop, __assign({}, defaultProps));
+                case 'imgPreview':
+                    return createElement(ImgPreview, __assign({}, defaultProps));
                 default:
                     return createElement(Text, __assign({}, defaultProps));
             }

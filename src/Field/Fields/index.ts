@@ -8,3 +8,4 @@ export { Color } from './Color';
 export { TextArea } from './TextArea';
 export { Select } from './Select';
 export { DragAndDrop } from './DragAndDrop';
+export { ImgPreview } from './ImgPreview';
