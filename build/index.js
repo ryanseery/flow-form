@@ -794,7 +794,7 @@ function useFormData(_a) {
         return false;
     }
     var onChange = function (e) {
-        e.preventDefault();
+        // e.preventDefault();
         e.persist();
         updateField({
             step: step,
