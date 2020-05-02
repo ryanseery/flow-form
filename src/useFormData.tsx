@@ -49,7 +49,6 @@ export function useFormData({ step, id, value, required, validation }: IUseFormD
   }
 
   const onChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
-    // e.preventDefault();
     e.persist();
 
     updateField({
