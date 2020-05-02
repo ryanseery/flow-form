@@ -1152,28 +1152,26 @@ ImgPreview.defaultProps = {
 };
 
 var Checkbox = function (_a) {
-    var step = _a.step, id = _a.id, _b = _a.required, required = _b === void 0 ? false : _b, validation = _a.validation, placeholder = _a.placeholder, autoComplete = _a.autoComplete, style = _a.style, className = _a.className, label = _a.label, errMsg = _a.errMsg, options = _a.options, type = _a.type;
-    var _c = useFormData({
+    var step = _a.step, id = _a.id, _b = _a.required, required = _b === void 0 ? false : _b, validation = _a.validation, placeholder = _a.placeholder, autoComplete = _a.autoComplete, style = _a.style, className = _a.className, label = _a.label, errMsg = _a.errMsg, _c = _a.options, options = _c === void 0 ? [] : _c, type = _a.type;
+    var _d = useFormData({
         step: step,
         id: id,
         value: '',
         required: required,
         validation: validation,
-    }), value = _c.value, onChange = _c.onChange, showError = _c.showError, focused = _c.focused;
-    return (React.createElement("div", { style: { display: 'flex', flexDirection: 'row', alignItems: 'center', width: '58%' } },
-        options &&
-            options.map(function (option, index) { return (React.createElement("label", { key: index, htmlFor: option, className: "flow-form-legend " + className + "-legend", style: {
-                    display: 'flex',
-                    flexDirection: 'row',
-                    alignItems: 'center',
-                    fontSize: "" + theme.fonts.small,
-                    textTransform: 'capitalize',
-                } },
-                React.createElement("input", { id: option, "data-input-id": option + "-field-checkbox", name: id, type: type, value: option, required: required, onChange: onChange, 
-                    // onBlur={onBlur}
-                    // onFocus={onFocus}
-                    className: "flow-form-field flow-form-text " + className + "-field", placeholder: placeholder, autoComplete: autoComplete, style: __assign(__assign({}, style), { width: '1rem', fontSize: "" + (type === 'radio' ? theme.inputs.radio : theme.inputs.checkbox), border: "" + border(focused, showError) }), checked: value === option }),
-                option)); }),
+    }), value = _d.value, onChange = _d.onChange, showError = _d.showError;
+    console.log(id + ":", value);
+    return (React.createElement("div", { style: { display: 'flex', flexDirection: 'row', alignItems: 'center', width: '100%' } },
+        options.map(function (option, index) { return (React.createElement("label", { key: index, htmlFor: option, className: "flow-form-legend " + className + "-legend", style: {
+                display: 'flex',
+                flexDirection: 'row',
+                alignItems: 'center',
+                fontSize: "" + theme.fonts.small,
+                textTransform: 'capitalize',
+                marginRight: "" + (index === options.length - 1 ? '0' : '0.9375em'),
+            } },
+            React.createElement("input", { id: option, "data-input-id": option + "-field-checkbox", name: id, type: type, value: option, required: required, onChange: onChange, className: "flow-form-field flow-form-text " + className + "-field", placeholder: placeholder, autoComplete: autoComplete, style: __assign(__assign({}, style), { width: '1rem', fontSize: "" + (type === 'radio' ? theme.inputs.radio : theme.inputs.checkbox) }), checked: value === option }),
+            option)); }),
         showError && React.createElement(DisplayError, { id: id, className: className, label: label, errMsg: errMsg })));
 };
 Checkbox.defaultProps = {
