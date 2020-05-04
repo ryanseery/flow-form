@@ -1159,7 +1159,6 @@ var Checkbox = function (_a) {
         required: required,
         validation: validation,
     }), value = _d.value, onChange = _d.onChange, showError = _d.showError;
-    console.log(id + ":", value);
     return (React.createElement("div", { style: { display: 'flex', flexDirection: 'row', alignItems: 'center', width: '100%' } },
         options.map(function (option, index) { return (React.createElement("label", { key: index, htmlFor: option, className: "flow-form-legend " + className + "-legend", style: {
                 display: 'flex',

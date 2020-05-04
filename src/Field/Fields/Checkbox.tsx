@@ -29,8 +29,6 @@ export const Checkbox: React.FC<ICheckbox> = ({
     validation,
   });
 
-  console.log(`${id}:`, value);
-
   return (
     <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', width: '100%' }}>
       {(options as string[]).map((option: string, index: number) => (

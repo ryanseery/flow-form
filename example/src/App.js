@@ -20,15 +20,6 @@ function App() {
 
   return (
     <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-      {/* <FlowForm onSubmit={data => console.log('onSubmit: ', data)}>
-        <Field validation={checkString} name="Test 1" />
-
-        <FieldList label="Tools" add>
-          <FieldList.Item validation={checkString}>Name</FieldList.Item>
-          <FieldList.Item type="email" name="email" />
-        </FieldList>
-      </FlowForm> */}
-
       <FlowForm onSubmit={data => console.log('onSubmit: ', data)} showData>
         <Step label="First Step">
           <Field validation={checkString}>Test 3</Field>
