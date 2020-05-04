@@ -758,10 +758,16 @@ var Step = function (_a) {
     }
     return (React.createElement("div", { "data-step-id": toCamelCase(name ? name : label), className: "flow-form-step " + (className !== null && className !== void 0 ? className : ''), style: style }, React.Children.map(children, function (child, index) {
         if (React.isValidElement(child)) {
-            return React.cloneElement(child, {
-                index: index,
-                step: toCamelCase(name ? name : label),
-            });
+            if (child.props.ffComp === FFComponent.FIELD) {
+                return React.cloneElement(child, {
+                    index: index,
+                    step: toCamelCase(name ? name : label),
+                });
+            }
+            else {
+                console.log('CHILD: ', child);
+                return child;
+            }
         }
         else {
             return child;

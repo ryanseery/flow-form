@@ -22,9 +22,11 @@ function App() {
     <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
       <FlowForm onSubmit={data => console.log('onSubmit: ', data)} showData>
         <Step label="First Step">
-          <Field validation={checkString}>Test 3</Field>
+          <div style={{ display: 'flex', flexDirection: 'row' }}>
+            <Field validation={checkString}>Test 3</Field>
 
-          <Field type="color" name="color" />
+            <Field type="color" name="color" />
+          </div>
 
           <Field type="number" required>
             Number

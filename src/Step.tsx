@@ -9,6 +9,7 @@ export interface IStep {
   name?: string;
   className?: string;
   style?: {};
+  children: React.ReactElement | React.ReactElement[];
 }
 
 export const Step: React.FC<IStep> = ({ children, name, label, className, style }) => {
@@ -20,10 +21,15 @@ export const Step: React.FC<IStep> = ({ children, name, label, className, style 
     <div data-step-id={toCamelCase(name ? name : label)} className={`flow-form-step ${className ?? ''}`} style={style}>
       {React.Children.map(children, (child, index) => {
         if (React.isValidElement<IField>(child)) {
-          return React.cloneElement(child as React.ReactElement<IField>, {
-            index,
-            step: toCamelCase(name ? name : label),
-          });
+          if (child.props.ffComp === FFComponent.FIELD) {
+            return React.cloneElement(child as React.ReactElement<IField>, {
+              index,
+              step: toCamelCase(name ? name : label),
+            });
+          } else if (child.type === 'div') {
+            console.log('CHILD: ', child);
+            return child;
+          }
         } else {
           return child;
         }
