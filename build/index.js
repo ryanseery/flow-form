@@ -758,24 +758,29 @@ var Step = function (_a) {
     }
     return (React.createElement("div", { "data-step-id": toCamelCase(name ? name : label), className: "flow-form-step " + (className !== null && className !== void 0 ? className : ''), style: style }, React.Children.map(children, function (child, index) {
         if (React.isValidElement(child)) {
-            if (child.props.ffComp === FFComponent.FIELD) {
+            if (child.props.ffComp === FFComponent.FIELD || child.props.ffComp === FFComponent.FIELD_LIST) {
                 return React.cloneElement(child, {
                     index: index,
                     step: toCamelCase(name ? name : label),
                 });
             }
             else if (child.type === 'div') {
-                return React.Children.map(child.props.children, function (grandChild, i) {
+                return (React.createElement("div", { style: child.props.style }, React.Children.map(child.props.children, function (grandChild, i) {
                     if (React.isValidElement(grandChild)) {
-                        return React.cloneElement(grandChild, {
-                            index: i,
-                            step: toCamelCase(name ? name : label),
-                        });
+                        if (grandChild.props.ffComp === FFComponent.FIELD) {
+                            return React.cloneElement(grandChild, {
+                                index: i,
+                                step: toCamelCase(name ? name : label),
+                            });
+                        }
+                        else {
+                            return grandChild;
+                        }
                     }
                     else {
                         return grandChild;
                     }
-                });
+                })));
             }
             else {
                 return child;

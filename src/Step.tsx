@@ -21,22 +21,30 @@ export const Step: React.FC<IStep> = ({ children, name, label, className, style 
     <div data-step-id={toCamelCase(name ? name : label)} className={`flow-form-step ${className ?? ''}`} style={style}>
       {React.Children.map(children, (child, index) => {
         if (React.isValidElement<IField>(child)) {
-          if (child.props.ffComp === FFComponent.FIELD) {
+          if (child.props.ffComp === FFComponent.FIELD || child.props.ffComp === FFComponent.FIELD_LIST) {
             return React.cloneElement(child as React.ReactElement<IField>, {
               index,
               step: toCamelCase(name ? name : label),
             });
           } else if (child.type === 'div') {
-            return React.Children.map(child.props.children, (grandChild, i) => {
-              if (React.isValidElement<IField>(grandChild)) {
-                return React.cloneElement(grandChild as React.ReactElement<IField>, {
-                  index: i,
-                  step: toCamelCase(name ? name : label),
-                });
-              } else {
-                return grandChild;
-              }
-            });
+            return (
+              <div style={child.props.style}>
+                {React.Children.map(child.props.children, (grandChild, i) => {
+                  if (React.isValidElement<IField>(grandChild)) {
+                    if (grandChild.props.ffComp === FFComponent.FIELD) {
+                      return React.cloneElement(grandChild as React.ReactElement<IField>, {
+                        index: i,
+                        step: toCamelCase(name ? name : label),
+                      });
+                    } else {
+                      return grandChild;
+                    }
+                  } else {
+                    return grandChild;
+                  }
+                })}
+              </div>
+            );
           } else {
             return child;
           }

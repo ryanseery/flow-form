@@ -754,24 +754,29 @@ var Step = function (_a) {
     }
     return (createElement("div", { "data-step-id": toCamelCase(name ? name : label), className: "flow-form-step " + (className !== null && className !== void 0 ? className : ''), style: style }, Children.map(children, function (child, index) {
         if (isValidElement(child)) {
-            if (child.props.ffComp === FFComponent.FIELD) {
+            if (child.props.ffComp === FFComponent.FIELD || child.props.ffComp === FFComponent.FIELD_LIST) {
                 return cloneElement(child, {
                     index: index,
                     step: toCamelCase(name ? name : label),
                 });
             }
             else if (child.type === 'div') {
-                return Children.map(child.props.children, function (grandChild, i) {
+                return (createElement("div", { style: child.props.style }, Children.map(child.props.children, function (grandChild, i) {
                     if (isValidElement(grandChild)) {
-                        return cloneElement(grandChild, {
-                            index: i,
-                            step: toCamelCase(name ? name : label),
-                        });
+                        if (grandChild.props.ffComp === FFComponent.FIELD) {
+                            return cloneElement(grandChild, {
+                                index: i,
+                                step: toCamelCase(name ? name : label),
+                            });
+                        }
+                        else {
+                            return grandChild;
+                        }
                     }
                     else {
                         return grandChild;
                     }
-                });
+                })));
             }
             else {
                 return child;
