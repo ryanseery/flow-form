@@ -760,8 +760,21 @@ var Step = function (_a) {
                     step: toCamelCase(name ? name : label),
                 });
             }
-            else {
+            else if (child.type === 'div') {
                 console.log('CHILD: ', child);
+                return Children.map(child.props.children, function (grandChild, i) {
+                    if (isValidElement(grandChild)) {
+                        return cloneElement(grandChild, {
+                            index: i,
+                            step: toCamelCase(name ? name : label),
+                        });
+                    }
+                    else {
+                        return grandChild;
+                    }
+                });
+            }
+            else {
                 return child;
             }
         }

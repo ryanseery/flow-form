@@ -4,7 +4,7 @@ import { toCamelCase } from './utils';
 import { IField } from './Field/Field';
 
 export interface IStep {
-  ffComp: string;
+  ffComp?: string;
   label: string;
   name?: string;
   className?: string;
@@ -27,7 +27,17 @@ export const Step: React.FC<IStep> = ({ children, name, label, className, style 
               step: toCamelCase(name ? name : label),
             });
           } else if (child.type === 'div') {
-            console.log('CHILD: ', child);
+            return React.Children.map(child.props.children, (grandChild, i) => {
+              if (React.isValidElement<IField>(grandChild)) {
+                return React.cloneElement(grandChild as React.ReactElement<IField>, {
+                  index: i,
+                  step: toCamelCase(name ? name : label),
+                });
+              } else {
+                return grandChild;
+              }
+            });
+          } else {
             return child;
           }
         } else {
