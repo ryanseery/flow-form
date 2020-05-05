@@ -761,7 +761,6 @@ var Step = function (_a) {
                 });
             }
             else if (child.type === 'div') {
-                console.log('CHILD: ', child);
                 return Children.map(child.props.children, function (grandChild, i) {
                     if (isValidElement(grandChild)) {
                         return cloneElement(grandChild, {

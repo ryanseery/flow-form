@@ -765,7 +765,6 @@ var Step = function (_a) {
                 });
             }
             else if (child.type === 'div') {
-                console.log('CHILD: ', child);
                 return React.Children.map(child.props.children, function (grandChild, i) {
                     if (React.isValidElement(grandChild)) {
                         return React.cloneElement(grandChild, {
