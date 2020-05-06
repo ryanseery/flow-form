@@ -37,13 +37,17 @@ function handleChildArr(children: React.ReactNode[]): IStepState[] | [] {
 
 function handleChildObj(children: React.ReactNode): IStepState[] | [] {
   if (React.isValidElement<IStep>(children)) {
-    return [
-      {
-        id: toCamelCase(children.props.name ? children.props.name : children.props.label),
-        label: children.props.label,
-        index: 0,
-      },
-    ];
+    if (children.props.ffComp === FFComponent.STEP) {
+      return [
+        {
+          id: toCamelCase(children.props.name ? children.props.name : children.props.label),
+          label: children.props.label,
+          index: 0,
+        },
+      ];
+    } else {
+      return [];
+    }
   } else {
     return [];
   }
