@@ -23,7 +23,11 @@ function handleChildArr(children: React.ReactNode[]): IStepState[] | [] {
   React.Children.map(children, (child, index) => {
     if (React.isValidElement<IStep>(child)) {
       if (child.props.ffComp === FFComponent.STEP) {
-        arr.push({ id: toCamelCase(child.props.label), label: child.props.label, index });
+        arr.push({
+          id: toCamelCase(child.props.name ? child.props.name : child.props.label),
+          label: child.props.label,
+          index,
+        });
       }
     }
   });
@@ -33,7 +37,13 @@ function handleChildArr(children: React.ReactNode[]): IStepState[] | [] {
 
 function handleChildObj(children: React.ReactNode): IStepState[] | [] {
   if (React.isValidElement<IStep>(children)) {
-    return [{ id: toCamelCase(children.props.label), label: children.props.label, index: 0 }];
+    return [
+      {
+        id: toCamelCase(children.props.name ? children.props.name : children.props.label),
+        label: children.props.label,
+        index: 0,
+      },
+    ];
   } else {
     return [];
   }

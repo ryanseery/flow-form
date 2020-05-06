@@ -322,6 +322,7 @@ function reducer(state: IState, action: Action): IState {
       if (step == null && !state.formData[id]) {
         return {
           ...state,
+          canProceed: deepCheck({ ...state.error, [id]: error }),
           formData: {
             ...state.formData,
             [id]: value,
@@ -342,6 +343,7 @@ function reducer(state: IState, action: Action): IState {
       } else if (step != null && !state.formData?.[step]?.[id]) {
         return {
           ...state,
+          canProceed: deepCheck({ ...state.error[step], [id]: error }),
           formData: {
             ...state.formData,
             [step]: {
