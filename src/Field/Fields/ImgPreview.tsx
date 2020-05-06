@@ -80,17 +80,31 @@ export const ImgPreview: React.FC<IImgPreview> = ({
         {typeof value === 'string' ? (
           <span
             className="flow-form-file-call-to-action"
-            style={{ fontSize: `${theme.fonts.small}`, textAlign: 'center' }}
+            style={{ fontSize: `${theme.fonts.small}`, textAlign: 'center', width: '61%' }}
           >
             {placeholder ? placeholder : `Drag and Drop or Click to upload`}
           </span>
         ) : (
-          <img
-            className={`flow-form-img`}
-            src={URL.createObjectURL(value)}
-            alt={value.name}
-            style={{ height: '100%', width: '100%' }}
-          />
+          <>
+            <span
+              className="flow-form-file-call-to-action"
+              style={{
+                fontSize: `${theme.fonts.small}`,
+                textAlign: 'center',
+                position: 'absolute',
+                color: `${theme.colors.white}`,
+                width: '20%',
+              }}
+            >
+              {placeholder ? placeholder : `Drag and Drop or Click to upload`}
+            </span>
+            <img
+              className={`flow-form-img`}
+              src={URL.createObjectURL(value)}
+              alt={value.name}
+              style={{ height: '100%', width: '100%' }}
+            />
+          </>
         )}
 
         <input

@@ -1161,7 +1161,15 @@ var ImgPreview = function (_a) {
                 cursor: 'pointer',
                 marginBottom: '0.9375em',
             }, onDrag: handleDefaults, onDragStart: handleDefaults, onDragEnd: handleDefaults, onDragOver: handleDefaults, onDragEnter: handleDefaults, onDragLeave: handleDefaults, onDrop: onDrop, onClick: handleFileBtn },
-            typeof value === 'string' ? (createElement("span", { className: "flow-form-file-call-to-action", style: { fontSize: "" + theme.fonts.small, textAlign: 'center' } }, placeholder ? placeholder : "Drag and Drop or Click to upload")) : (createElement("img", { className: "flow-form-img", src: URL.createObjectURL(value), alt: value.name, style: { height: '100%', width: '100%' } })),
+            typeof value === 'string' ? (createElement("span", { className: "flow-form-file-call-to-action", style: { fontSize: "" + theme.fonts.small, textAlign: 'center' } }, placeholder ? placeholder : "Drag and Drop or Click to upload")) : (createElement(Fragment, null,
+                createElement("span", { className: "flow-form-file-call-to-action", style: {
+                        fontSize: "" + theme.fonts.small,
+                        textAlign: 'center',
+                        position: 'absolute',
+                        color: "" + theme.colors.white,
+                        width: '20%',
+                    } }, placeholder ? placeholder : "Drag and Drop or Click to upload"),
+                createElement("img", { className: "flow-form-img", src: URL.createObjectURL(value), alt: value.name, style: { height: '100%', width: '100%' } }))),
             createElement("input", { ref: fileRef, multiple: true, id: id + "-field-file", "data-input-id": id + "-field-file", name: id, type: "file", required: required, onChange: onImgChange, onBlur: onBlur, onFocus: onFocus, className: "flow-form-field flow-form-drag-and-drop " + className + "-field", autoComplete: autoComplete, style: { display: 'none' } })),
         showError && createElement(DisplayError, { id: id, className: className, label: label, errMsg: errMsg })));
 };
