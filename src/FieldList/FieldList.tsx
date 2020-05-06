@@ -72,7 +72,7 @@ export const FieldList: IFieldList<IFieldListProps> = ({
       {value.map((field: {}, index: number) => (
         <Row key={index} className={className}>
           {Object.entries(field).map(([k, v], i: number) => (
-            <div key={i} style={{ display: 'flex', flexDirection: 'column' }}>
+            <div key={i} style={{ display: 'flex', flexDirection: 'column', width: '100%' }}>
               <ItemInput
                 key={k}
                 objKey={k}
