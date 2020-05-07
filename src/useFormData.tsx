@@ -112,6 +112,13 @@ export function useFormData({ step, id, value, required, validation }: IUseFormD
         value: files[0],
         error: validateFile(e),
       });
+    } else {
+      updateField({
+        step,
+        id,
+        value: '',
+        error: validateFile(e),
+      });
     }
   };
 
