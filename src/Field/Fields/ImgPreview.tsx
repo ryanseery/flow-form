@@ -3,8 +3,8 @@ import { FFComponent } from '../../FFComponent';
 import { IProps } from './@types';
 import { useFormData } from '../../useFormData';
 import { DisplayError } from '../../DisplayError';
-import { theme } from '../../theme';
-import { border, handleDefaults } from '../../utils';
+import { handleDefaults } from '../../utils';
+import { DragAndDropWrapper } from './@styles';
 
 interface IImgPreview extends IProps {}
 
@@ -18,6 +18,7 @@ export const ImgPreview: React.FC<IImgPreview> = ({
   className,
   label,
   errMsg,
+  style,
 }) => {
   const { value, onImgChange, onImgDrop, onBlur, onFocus, showError, focused } = useFormData({
     step,
@@ -55,19 +56,11 @@ export const ImgPreview: React.FC<IImgPreview> = ({
 
   return (
     <>
-      <div
-        className={`flow-form-img-preview`}
-        style={{
-          border: `${border(focused, showError)}`,
-          borderRadius: `${theme.border.radius}`,
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          height: '12rem',
-          width: '45%',
-          cursor: 'pointer',
-          marginBottom: '0.9375em',
-        }}
+      <DragAndDropWrapper
+        className={`flow-form-img-preview ${className}`}
+        style={style}
+        focused={focused}
+        showError={showError}
         onDrag={handleDefaults}
         onDragStart={handleDefaults}
         onDragEnd={handleDefaults}
@@ -78,32 +71,15 @@ export const ImgPreview: React.FC<IImgPreview> = ({
         onClick={handleFileBtn}
       >
         {typeof value === 'string' ? (
-          <span
-            className="flow-form-file-call-to-action"
-            style={{ fontSize: `${theme.fonts.small}`, textAlign: 'center', width: '61%' }}
-          >
+          <span className="flow-form-img-call-to-action">
             {placeholder ? placeholder : `Drag and Drop or Click to upload`}
           </span>
         ) : (
           <>
-            <span
-              className="flow-form-file-call-to-action"
-              style={{
-                fontSize: `${theme.fonts.small}`,
-                textAlign: 'center',
-                position: 'absolute',
-                color: `${theme.colors.white}`,
-                width: '20%',
-              }}
-            >
+            <span className="flow-form-img-preview-call-to-action">
               {placeholder ? placeholder : `Drag and Drop or Click to upload`}
             </span>
-            <img
-              className={`flow-form-img`}
-              src={URL.createObjectURL(value)}
-              alt={value.name}
-              style={{ height: '100%', width: '100%' }}
-            />
+            <img className="flow-form-img-preview" src={URL.createObjectURL(value)} alt={value.name} />
           </>
         )}
 
@@ -118,11 +94,10 @@ export const ImgPreview: React.FC<IImgPreview> = ({
           onChange={onImgChange}
           onBlur={onBlur}
           onFocus={onFocus}
-          className={`flow-form-field flow-form-drag-and-drop ${className}-field`}
+          className="flow-form-field flow-form-drag-and-drop "
           autoComplete={autoComplete}
-          style={{ display: 'none' }}
         />
-      </div>
+      </DragAndDropWrapper>
 
       {showError && <DisplayError id={id} className={className} label={label} errMsg={errMsg} />}
     </>

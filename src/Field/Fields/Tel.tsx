@@ -3,7 +3,7 @@ import { FFComponent } from '../../FFComponent';
 import { useFormData } from '../../useFormData';
 import { IProps } from './@types';
 import { DisplayError } from '../../DisplayError';
-import { border } from '../../utils';
+import { InputWrapper } from './@styles';
 
 interface ITel extends IProps {
   pattern?: string;
@@ -33,7 +33,7 @@ export const Tel: React.FC<ITel> = ({
 
   return (
     <>
-      <input
+      <InputWrapper
         id={`${id}-field-tel`}
         data-input-id={`${id}-field-tel`}
         name={id}
@@ -43,11 +43,13 @@ export const Tel: React.FC<ITel> = ({
         onChange={onChange}
         onBlur={onBlur}
         onFocus={onFocus}
-        className={`flow-form-field flow-form-tel ${className}-field`}
+        className={`flow-form-field flow-form-tel ${className}`}
         placeholder={placeholder}
         autoComplete={autoComplete}
-        style={{ ...style, border: `${border(focused, showError)}` }}
+        style={style}
         pattern={pattern}
+        focused={focused}
+        showError={showError}
       />
       {showError && <DisplayError id={id} className={className} label={label} errMsg={errMsg} />}
     </>

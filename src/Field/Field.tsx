@@ -16,7 +16,7 @@ import {
   Checkbox,
 } from './Fields';
 import { Option, Input } from './Fields/@types';
-import { theme } from '../theme';
+import { FieldWrapper } from './@styles';
 
 export interface IField {
   ffComp?: string;
@@ -69,39 +69,23 @@ export const Field: React.FC<IField> = ({
     placeholder,
     className,
     label: children ?? name,
-    style: {
-      display: 'block',
-      width: '100%',
-      fontSize: `${theme.fonts.medium}`,
-      textIndent: `${theme.text.indent}`,
-      borderRadius: `${theme.border.radius}`,
-      backgroundColor: `${theme.colors.white}`,
-      outline: 'none',
-      ...style,
-    },
+    style,
     errMsg,
     options,
     inputs,
   };
 
   return (
-    <label
+    <FieldWrapper
       id={`${id}-label`}
       data-field-id={`${id}-label`}
       htmlFor={id}
       className={`flow-form-label ${className}`}
-      style={{
-        display: 'block',
-        minHeight: `${type === 'checkbox' || type === 'radio' ? '4rem' : '4.5rem'}`,
-        textTransform: 'capitalize',
-      }}
+      type={type}
     >
-      <legend
-        className={`flow-form-legend ${className}-legend`}
-        style={{ fontSize: `${theme.fonts.medium}`, paddingBottom: '0.2em' }}
-      >
+      <legend className={`flow-form-legend ${className}`} data-legend-id={`${id}-legend`}>
         {children ? children : name ?? ''}
-        {required || validation ? <span style={{ color: `${theme.colors.red}` }}>*</span> : null}
+        {required || validation ? <span className="required">*</span> : null}
       </legend>
       {(() => {
         switch (type) {
@@ -135,7 +119,7 @@ export const Field: React.FC<IField> = ({
             return <Text {...defaultProps} />;
         }
       })()}
-    </label>
+    </FieldWrapper>
   );
 };
 

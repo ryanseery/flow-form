@@ -3,7 +3,7 @@ import { FFComponent } from '../../FFComponent';
 import { useFormData } from '../../useFormData';
 import { IProps } from './@types';
 import { DisplayError } from '../../DisplayError';
-import { border } from '../../utils';
+import { ColorInputWrapper } from './@styles';
 
 interface IColor extends IProps {}
 
@@ -30,7 +30,7 @@ export const Color: React.FC<IColor> = ({
 
   return (
     <>
-      <input
+      <ColorInputWrapper
         id={`${id}-field-color`}
         data-input-id={`${id}-field-color`}
         name={id}
@@ -40,10 +40,12 @@ export const Color: React.FC<IColor> = ({
         onChange={onChange}
         onBlur={onBlur}
         onFocus={onFocus}
-        className={`flow-form-field flow-form-color ${className}-field`}
+        className={`flow-form-field flow-form-color ${className}`}
         placeholder={placeholder}
         autoComplete={autoComplete}
-        style={{ ...style, border: `${border(focused, showError)}`, cursor: 'pointer' }}
+        style={style}
+        focused={focused}
+        showError={showError}
       />
       {showError && <DisplayError id={id} className={className} label={label} errMsg={errMsg} />}
     </>

@@ -3454,24 +3454,15 @@ DefaultNext.defaultProps = {
 };
 var templateObject_1$2;
 
+var ListButtonWrapper = styled(ButtonStyles)(templateObject_1$3 || (templateObject_1$3 = __makeTemplateObject(["\n  background-color: ", ";\n  color: ", ";\n  border: none;\n  padding: 0;\n  width: 1.5em;\n  height: 1.5em;\n  text-align: center;\n"], ["\n  background-color: ", ";\n  color: ", ";\n  border: none;\n  padding: 0;\n  width: 1.5em;\n  height: 1.5em;\n  text-align: center;\n"])), function (props) { return (props.remove ? props.theme.colors.red : props.theme.colors.green); }, function (props) { return props.theme.colors.white; });
 var ListButton = function (_a) {
     var children = _a.children, onClick = _a.onClick, remove = _a.remove;
-    return (createElement("button", { type: "button", onClick: onClick, style: {
-            backgroundColor: "" + (remove ? theme.colors.red : theme.colors.green),
-            color: "" + theme.colors.white,
-            border: 'none',
-            fontSize: "" + theme.fonts.small,
-            cursor: 'pointer',
-            width: '1.5em',
-            height: '1.5em',
-            textAlign: 'center',
-            borderRadius: "" + theme.border.radius,
-            outline: 'none',
-        } }, children));
+    return (createElement(ListButtonWrapper, { type: "button", className: "flow-form-list-btn", onClick: onClick, remove: remove }, children));
 };
 ListButton.defaultProps = {
     ffComp: FFComponent.LIST_BUTTON,
 };
+var templateObject_1$3;
 
 var Doughnut = function (_a) {
     var isActive = _a.isActive;
@@ -3519,8 +3510,8 @@ Progress.defaultProps = {
     ffComp: FFComponent.PROGRESS,
 };
 
-var Global = createGlobalStyle(templateObject_1$3 || (templateObject_1$3 = __makeTemplateObject(["\n  .flow-form-fieldset {\n    border: none;\n  }\n  .flow-form-button-container {\n    display: flex;\n    flex-direction: row;\n    justify-content: center;\n    align-items: center;\n    padding: 2rem;\n  }\n"], ["\n  .flow-form-fieldset {\n    border: none;\n  }\n  .flow-form-button-container {\n    display: flex;\n    flex-direction: row;\n    justify-content: center;\n    align-items: center;\n    padding: 2rem;\n  }\n"])));
-var templateObject_1$3;
+var Global = createGlobalStyle(templateObject_1$4 || (templateObject_1$4 = __makeTemplateObject(["\n  .flow-form-fieldset {\n    border: none;\n  }\n  .flow-form-button-container {\n    display: flex;\n    flex-direction: row;\n    justify-content: center;\n    align-items: center;\n    padding: 2rem;\n  }\n"], ["\n  .flow-form-fieldset {\n    border: none;\n  }\n  .flow-form-button-container {\n    display: flex;\n    flex-direction: row;\n    justify-content: center;\n    align-items: center;\n    padding: 2rem;\n  }\n"])));
+var templateObject_1$4;
 
 var theme2 = {
     colors: {
@@ -3782,10 +3773,31 @@ function useFormData(_a) {
     };
 }
 
+var DisplayErrorWrapper = styled.small(templateObject_1$5 || (templateObject_1$5 = __makeTemplateObject(["\n  color: ", ";\n"], ["\n  color: ", ";\n"])), function (props) { return props.theme.colors.red; });
 var DisplayError = function (_a) {
     var id = _a.id, className = _a.className, errMsg = _a.errMsg;
-    return (createElement("small", { id: id + "-error", "data-error-id": id + "-error", className: "flow-form-error " + className + "-error", style: { color: "" + theme.colors.red } }, typeof errMsg === 'string' ? errMsg : "Please provide a valid value!"));
+    return (createElement(DisplayErrorWrapper, { id: id + "-error", "data-error-id": id + "-error", className: "flow-form-error " + className }, typeof errMsg === 'string' ? errMsg : "Please provide a valid value!"));
 };
+var templateObject_1$5;
+
+function border$1(props) {
+    if (props.focused && props.showError)
+        return props.theme.border.error;
+    if (props.focused)
+        return props.theme.border.focus;
+    if (props.showError)
+        return props.theme.border.error;
+    return props.theme.border.default;
+}
+var InputWrapper = styled.input(templateObject_1$6 || (templateObject_1$6 = __makeTemplateObject(["\n  display: block;\n  width: 100%;\n  font-size: ", ";\n  text-indent: ", ";\n  border-radius: ", ";\n  background-color: ", ";\n  outline: none;\n  border: ", ";\n"], ["\n  display: block;\n  width: 100%;\n  font-size: ", ";\n  text-indent: ", ";\n  border-radius: ", ";\n  background-color: ", ";\n  outline: none;\n  border: ", ";\n"])), function (props) { return props.theme.font.medium; }, function (props) { return props.theme.text.indent; }, function (props) { return props.theme.border.radius; }, function (props) { return props.theme.colors.white; }, function (props) { return border$1(props); });
+var ColorInputWrapper = styled(InputWrapper)(templateObject_2 || (templateObject_2 = __makeTemplateObject(["\n  cursor: pointer;\n"], ["\n  cursor: pointer;\n"])));
+var TextareaWrapper = styled.textarea(templateObject_3 || (templateObject_3 = __makeTemplateObject(["\n  display: block;\n  width: 100%;\n  font-size: ", ";\n  text-indent: ", ";\n  border-radius: ", ";\n  background-color: ", ";\n  outline: none;\n  border: ", ";\n"], ["\n  display: block;\n  width: 100%;\n  font-size: ", ";\n  text-indent: ", ";\n  border-radius: ", ";\n  background-color: ", ";\n  outline: none;\n  border: ", ";\n"])), function (props) { return props.theme.font.medium; }, function (props) { return props.theme.text.indent; }, function (props) { return props.theme.border.radius; }, function (props) { return props.theme.colors.white; }, function (props) { return border$1(props); });
+var SelectWrapper = styled.select(templateObject_4 || (templateObject_4 = __makeTemplateObject(["\n  display: block;\n  width: 100%;\n  font-size: ", ";\n  text-indent: ", ";\n  border-radius: ", ";\n  background-color: ", ";\n  outline: none;\n  border: ", ";\n  cursor: pointer;\n"], ["\n  display: block;\n  width: 100%;\n  font-size: ", ";\n  text-indent: ", ";\n  border-radius: ", ";\n  background-color: ", ";\n  outline: none;\n  border: ", ";\n  cursor: pointer;\n"])), function (props) { return props.theme.font.medium; }, function (props) { return props.theme.text.indent; }, function (props) { return props.theme.border.radius; }, function (props) { return props.theme.colors.white; }, function (props) { return border$1(props); });
+var ButtonInputWrapper = styled.div(templateObject_5 || (templateObject_5 = __makeTemplateObject(["\n  display: flex;\n  flex-direction: row;\n  align-items: center;\n  width: 100%;\n"], ["\n  display: flex;\n  flex-direction: row;\n  align-items: center;\n  width: 100%;\n"])));
+var ButtonInputLabel = styled.label(templateObject_6 || (templateObject_6 = __makeTemplateObject(["\n  display: flex;\n  flex-direction: row;\n  align-items: center;\n  font-size: ", ";\n  text-transform: capitalize;\n  margin-right: ", ";\n  input {\n    width: 1rem;\n    font-size: ", ";\n  }\n"], ["\n  display: flex;\n  flex-direction: row;\n  align-items: center;\n  font-size: ", ";\n  text-transform: capitalize;\n  margin-right: ", ";\n  input {\n    width: 1rem;\n    font-size: ", ";\n  }\n"])), function (props) { return props.theme.font.medium; }, function (props) { return (props.index === props.optionsLength ? "0" : "0.9375em"); }, function (props) { return (props.type === "radio" ? props.theme.inputs.radio : props.theme.inputs.checkbox); });
+var DragAndDropWrapper = styled.div(templateObject_7 || (templateObject_7 = __makeTemplateObject(["\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  min-height: 5rem;\n  width: 100%;\n  border: ", ";\n  border-radius: ", ";\n  cursor: pointer;\n  .flow-form-file-call-to-action {\n    font-size: ", ";\n  }\n  .flow-form-img-call-to-action {\n    font-size: ", ";\n    text-align: center;\n    width: 61%;\n  }\n  .flow-form-img-preview-call-to-action {\n    font-size: ", ";\n    text-align: center;\n    width: 20%;\n    position: absolute;\n    color: ", ";\n  }\n  img {\n    height: 100%;\n    width: 100%;\n  }\n  input {\n    display: none;\n  }\n"], ["\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  min-height: 5rem;\n  width: 100%;\n  border: ", ";\n  border-radius: ", ";\n  cursor: pointer;\n  .flow-form-file-call-to-action {\n    font-size: ", ";\n  }\n  .flow-form-img-call-to-action {\n    font-size: ", ";\n    text-align: center;\n    width: 61%;\n  }\n  .flow-form-img-preview-call-to-action {\n    font-size: ", ";\n    text-align: center;\n    width: 20%;\n    position: absolute;\n    color: ", ";\n  }\n  img {\n    height: 100%;\n    width: 100%;\n  }\n  input {\n    display: none;\n  }\n"])), function (props) { return border$1(props); }, function (props) { return props.theme.border.radius; }, function (props) { return props.theme.font.small; }, function (props) { return props.theme.font.small; }, function (props) { return props.theme.font.small; }, function (props) { return props.theme.colors.white; });
+var ListWrapper = styled.ul(templateObject_8 || (templateObject_8 = __makeTemplateObject(["\n  list-style: none;\n  padding: 0;\n  .list-item {\n    display: flex;\n    flex-direction: row;\n    justify-content: space-between;\n    align-items: center;\n    padding-bottom: 0.3rem;\n    font-size: ", ";\n  }\n"], ["\n  list-style: none;\n  padding: 0;\n  .list-item {\n    display: flex;\n    flex-direction: row;\n    justify-content: space-between;\n    align-items: center;\n    padding-bottom: 0.3rem;\n    font-size: ", ";\n  }\n"])), function (props) { return props.theme.font.small; });
+var templateObject_1$6, templateObject_2, templateObject_3, templateObject_4, templateObject_5, templateObject_6, templateObject_7, templateObject_8;
 
 var Text = function (_a) {
     var step = _a.step, id = _a.id, _b = _a.type, type = _b === void 0 ? 'text' : _b, _c = _a.required, required = _c === void 0 ? false : _c, validation = _a.validation, placeholder = _a.placeholder, autoComplete = _a.autoComplete, style = _a.style, className = _a.className, label = _a.label, errMsg = _a.errMsg;
@@ -3797,7 +3809,7 @@ var Text = function (_a) {
         validation: validation,
     }), value = _d.value, onChange = _d.onChange, onBlur = _d.onBlur, onFocus = _d.onFocus, showError = _d.showError, focused = _d.focused;
     return (createElement(Fragment, null,
-        createElement("input", { id: id + "-field-text", "data-input-id": id + "-field-text", name: id, type: type, value: value || '', required: required, onChange: onChange, onBlur: onBlur, onFocus: onFocus, className: "flow-form-field flow-form-text " + className + "-field", placeholder: placeholder, autoComplete: autoComplete, style: __assign(__assign({}, style), { border: "" + border(focused, showError) }) }),
+        createElement(InputWrapper, { id: id + "-field-text", "data-input-id": id + "-field-text", name: id, type: type, value: value || '', required: required, onChange: onChange, onBlur: onBlur, onFocus: onFocus, className: "flow-form-field flow-form-text " + className, placeholder: placeholder, autoComplete: autoComplete, focused: focused, showError: showError, style: style }),
         showError && createElement(DisplayError, { id: id, className: className, label: label, errMsg: errMsg })));
 };
 Text.defaultProps = {
@@ -3814,7 +3826,7 @@ var Number = function (_a) {
         validation: validation,
     }), value = _c.value, onChange = _c.onChange, onBlur = _c.onBlur, onFocus = _c.onFocus, showError = _c.showError, focused = _c.focused;
     return (createElement(Fragment, null,
-        createElement("input", { id: id + "-field-number", "data-input-id": id + "-field-number", name: id, type: type, value: value || '', required: required, onChange: onChange, onBlur: onBlur, onFocus: onFocus, className: "flow-form-field flow-form-number " + className + "-field", placeholder: placeholder, autoComplete: autoComplete, style: __assign(__assign({}, style), { border: "" + border(focused, showError) }) }),
+        createElement(InputWrapper, { id: id + "-field-number", "data-input-id": id + "-field-number", name: id, type: type, value: value || '', required: required, onChange: onChange, onBlur: onBlur, onFocus: onFocus, className: "flow-form-field flow-form-number " + className, placeholder: placeholder, autoComplete: autoComplete, style: style, focused: focused, showError: showError }),
         showError && createElement(DisplayError, { id: id, className: className, label: label, errMsg: errMsg })));
 };
 Number.defaultProps = {
@@ -3831,7 +3843,7 @@ var Email = function (_a) {
         validation: validation,
     }), value = _d.value, onChange = _d.onChange, onBlur = _d.onBlur, onFocus = _d.onFocus, showError = _d.showError, focused = _d.focused;
     return (createElement(Fragment, null,
-        createElement("input", { id: id + "-field-email", "data-input-id": id + "-field-email", name: id, type: type, value: value || '', required: required, onChange: onChange, onBlur: onBlur, onFocus: onFocus, className: "flow-form-field flow-form-email " + className + "-field", placeholder: placeholder, autoComplete: autoComplete, style: __assign(__assign({}, style), { border: "" + border(focused, showError) }) }),
+        createElement(InputWrapper, { id: id + "-field-email", "data-input-id": id + "-field-email", name: id, type: type, value: value || '', required: required, onChange: onChange, onBlur: onBlur, onFocus: onFocus, className: "flow-form-field flow-form-email " + className, placeholder: placeholder, autoComplete: autoComplete, style: style, focused: focused, showError: showError }),
         showError && createElement(DisplayError, { id: id, className: className, label: label, errMsg: errMsg })));
 };
 Email.defaultProps = {
@@ -3848,7 +3860,7 @@ var Password = function (_a) {
         validation: validation,
     }), value = _d.value, onChange = _d.onChange, onBlur = _d.onBlur, onFocus = _d.onFocus, showError = _d.showError, focused = _d.focused;
     return (createElement(Fragment, null,
-        createElement("input", { id: id + "-field-password", "data-input-id": id + "-field-password", name: id, type: type, value: value || '', required: required, onChange: onChange, onBlur: onBlur, onFocus: onFocus, className: "flow-form-field flow-form-password " + className + "-field", placeholder: placeholder, autoComplete: autoComplete, style: __assign(__assign({}, style), { border: "" + border(focused, showError) }) }),
+        createElement(InputWrapper, { id: id + "-field-password", "data-input-id": id + "-field-password", name: id, type: type, value: value || '', required: required, onChange: onChange, onBlur: onBlur, onFocus: onFocus, className: "flow-form-field flow-form-password " + className, placeholder: placeholder, autoComplete: autoComplete, style: style, focused: focused, showError: showError }),
         showError && createElement(DisplayError, { id: id, className: className, label: label, errMsg: errMsg })));
 };
 Password.defaultProps = {
@@ -3865,7 +3877,7 @@ var Tel = function (_a) {
         validation: validation,
     }), value = _e.value, onChange = _e.onChange, onBlur = _e.onBlur, onFocus = _e.onFocus, showError = _e.showError, focused = _e.focused;
     return (createElement(Fragment, null,
-        createElement("input", { id: id + "-field-tel", "data-input-id": id + "-field-tel", name: id, type: type, value: value || '', required: required, onChange: onChange, onBlur: onBlur, onFocus: onFocus, className: "flow-form-field flow-form-tel " + className + "-field", placeholder: placeholder, autoComplete: autoComplete, style: __assign(__assign({}, style), { border: "" + border(focused, showError) }), pattern: pattern }),
+        createElement(InputWrapper, { id: id + "-field-tel", "data-input-id": id + "-field-tel", name: id, type: type, value: value || '', required: required, onChange: onChange, onBlur: onBlur, onFocus: onFocus, className: "flow-form-field flow-form-tel " + className, placeholder: placeholder, autoComplete: autoComplete, style: style, pattern: pattern, focused: focused, showError: showError }),
         showError && createElement(DisplayError, { id: id, className: className, label: label, errMsg: errMsg })));
 };
 Tel.defaultProps = {
@@ -3882,7 +3894,7 @@ var Url = function (_a) {
         validation: validation,
     }), value = _e.value, onChange = _e.onChange, onBlur = _e.onBlur, onFocus = _e.onFocus, showError = _e.showError, focused = _e.focused;
     return (createElement(Fragment, null,
-        createElement("input", { id: id + "-filed-url", "data-input-id": id + "-field-url", name: id, type: type, value: value || '', required: required, onChange: onChange, onBlur: onBlur, onFocus: onFocus, className: "flow-form-field flow-form-url " + className + "-field", placeholder: placeholder, autoComplete: autoComplete, style: __assign(__assign({}, style), { border: "" + border(focused, showError) }), pattern: pattern }),
+        createElement(InputWrapper, { id: id + "-filed-url", "data-input-id": id + "-field-url", name: id, type: type, value: value || '', required: required, onChange: onChange, onBlur: onBlur, onFocus: onFocus, className: "flow-form-field flow-form-url " + className + "-field", placeholder: placeholder, autoComplete: autoComplete, style: style, pattern: pattern, focused: focused, showError: showError }),
         showError && createElement(DisplayError, { id: id, className: className, label: label, errMsg: errMsg })));
 };
 Url.defaultProps = {
@@ -3899,7 +3911,7 @@ var Color = function (_a) {
         validation: validation,
     }), value = _d.value, onChange = _d.onChange, onBlur = _d.onBlur, onFocus = _d.onFocus, showError = _d.showError, focused = _d.focused;
     return (createElement(Fragment, null,
-        createElement("input", { id: id + "-field-color", "data-input-id": id + "-field-color", name: id, type: type, value: value || '#519839', required: required, onChange: onChange, onBlur: onBlur, onFocus: onFocus, className: "flow-form-field flow-form-color " + className + "-field", placeholder: placeholder, autoComplete: autoComplete, style: __assign(__assign({}, style), { border: "" + border(focused, showError), cursor: 'pointer' }) }),
+        createElement(ColorInputWrapper, { id: id + "-field-color", "data-input-id": id + "-field-color", name: id, type: type, value: value || '#519839', required: required, onChange: onChange, onBlur: onBlur, onFocus: onFocus, className: "flow-form-field flow-form-color " + className, placeholder: placeholder, autoComplete: autoComplete, style: style, focused: focused, showError: showError }),
         showError && createElement(DisplayError, { id: id, className: className, label: label, errMsg: errMsg })));
 };
 Color.defaultProps = {
@@ -3916,7 +3928,7 @@ var TextArea = function (_a) {
         validation: validation,
     }), value = _e.value, onChange = _e.onChange, onBlur = _e.onBlur, onFocus = _e.onFocus, showError = _e.showError, focused = _e.focused;
     return (createElement(Fragment, null,
-        createElement("textarea", { id: id + "-field-textarea", "data-input-id": id + "-field-textarea", name: id, value: value || '', required: required, onChange: onChange, onBlur: onBlur, onFocus: onFocus, className: "flow-form-field flow-form-textarea " + className + "-field", placeholder: placeholder, autoComplete: autoComplete, style: __assign(__assign({}, style), { border: "" + border(focused, showError) }), rows: rows, cols: cols }),
+        createElement(TextareaWrapper, { id: id + "-field-textarea", "data-input-id": id + "-field-textarea", name: id, value: value || '', required: required, onChange: onChange, onBlur: onBlur, onFocus: onFocus, className: "flow-form-field flow-form-textarea " + className + "-field", placeholder: placeholder, autoComplete: autoComplete, style: style, rows: rows, cols: cols, focused: focused, showError: showError }),
         showError && createElement(DisplayError, { id: id, className: className, label: label, errMsg: errMsg })));
 };
 TextArea.defaultProps = {
@@ -3933,7 +3945,7 @@ var Select = function (_a) {
         validation: validation,
     }), value = _c.value, onChange = _c.onChange, onBlur = _c.onBlur, onFocus = _c.onFocus, showError = _c.showError, focused = _c.focused;
     return (createElement(Fragment, null,
-        createElement("select", { id: id + "-field-text", "data-input-id": id + "-field-text", name: id, value: value || '', required: required, onChange: onChange, onBlur: onBlur, onFocus: onFocus, className: "flow-form-field flow-form-text " + className + "-field", placeholder: placeholder, autoComplete: autoComplete, style: __assign(__assign({}, style), { border: "" + border(focused, showError), cursor: 'pointer' }) },
+        createElement(SelectWrapper, { id: id + "-field-text", "data-input-id": id + "-field-text", name: id, value: value || '', required: required, onChange: onChange, onBlur: onBlur, onFocus: onFocus, className: "flow-form-field flow-form-text " + className, placeholder: placeholder, autoComplete: autoComplete, style: style, focused: focused, showError: showError },
             createElement("option", { disabled: true, defaultValue: "" }),
             options &&
                 options.map(function (option) { return (createElement("option", { key: option.name, value: option.value }, option.name)); })),
@@ -3944,7 +3956,7 @@ Select.defaultProps = {
 };
 
 var DragAndDrop = function (_a) {
-    var step = _a.step, id = _a.id, _b = _a.required, required = _b === void 0 ? false : _b, validation = _a.validation, placeholder = _a.placeholder, autoComplete = _a.autoComplete, className = _a.className, label = _a.label, errMsg = _a.errMsg;
+    var step = _a.step, id = _a.id, _b = _a.required, required = _b === void 0 ? false : _b, validation = _a.validation, placeholder = _a.placeholder, autoComplete = _a.autoComplete, className = _a.className, label = _a.label, errMsg = _a.errMsg, style = _a.style;
     var _c = useFormData({
         step: step,
         id: id,
@@ -3975,27 +3987,11 @@ var DragAndDrop = function (_a) {
         fileRef.current.click();
     };
     return (createElement(Fragment, null,
-        createElement("div", { className: "flow-form-file-upload", style: {
-                border: "" + border(focused, showError),
-                borderRadius: "" + theme.border.radius,
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                minHeight: '5rem',
-                width: '100%',
-                cursor: 'pointer',
-            }, onDrag: handleDefaults, onDragStart: handleDefaults, onDragEnd: handleDefaults, onDragOver: handleDefaults, onDragEnter: handleDefaults, onDragLeave: handleDefaults, onDrop: onDrop, onClick: handleFileBtn },
-            createElement("span", { className: "flow-form-file-call-to-action", style: { fontSize: "" + theme.fonts.small } }, placeholder ? placeholder : "Drag and Drop or Click to upload"),
-            createElement("input", { ref: fileRef, multiple: true, id: id + "-field-file", "data-input-id": id + "-field-file", name: id, type: "file", required: required, onChange: onFileChange, onBlur: onBlur, onFocus: onFocus, className: "flow-form-field flow-form-drag-and-drop " + className + "-field", autoComplete: autoComplete, style: { display: 'none' } })),
+        createElement(DragAndDropWrapper, { className: "flow-form-file-upload " + className, style: style, focused: focused, showError: showError, onDrag: handleDefaults, onDragStart: handleDefaults, onDragEnd: handleDefaults, onDragOver: handleDefaults, onDragEnter: handleDefaults, onDragLeave: handleDefaults, onDrop: onDrop, onClick: handleFileBtn },
+            createElement("span", { className: "flow-form-file-call-to-action" }, placeholder ? placeholder : "Drag and Drop or Click to upload"),
+            createElement("input", { ref: fileRef, multiple: true, id: id + "-field-file", "data-input-id": id + "-field-file", name: id, type: "file", required: required, onChange: onFileChange, onBlur: onBlur, onFocus: onFocus, className: "flow-form-field flow-form-drag-and-drop", autoComplete: autoComplete })),
         showError && createElement(DisplayError, { id: id, className: className, label: label, errMsg: errMsg }),
-        value.length > 0 && (createElement("ul", { style: { listStyle: 'none', padding: 0 } }, value.map(function (file, index) { return (createElement("li", { key: index, style: {
-                display: 'flex',
-                flexDirection: 'row',
-                justifyContent: 'space-between',
-                alignItems: 'center',
-                paddingBottom: '0.3rem',
-                fontSize: "" + theme.fonts.small,
-            } },
+        value.length > 0 && (createElement(ListWrapper, null, value.map(function (file, index) { return (createElement("li", { key: index },
             createElement("span", null, file.name),
             createElement(ListButton, { onClick: function () { return onFileRemove(index); }, remove: true }, "\u00D7"))); })))));
 };
@@ -4004,7 +4000,7 @@ DragAndDrop.defaultProps = {
 };
 
 var ImgPreview = function (_a) {
-    var step = _a.step, id = _a.id, _b = _a.required, required = _b === void 0 ? false : _b, validation = _a.validation, placeholder = _a.placeholder, autoComplete = _a.autoComplete, className = _a.className, label = _a.label, errMsg = _a.errMsg;
+    var step = _a.step, id = _a.id, _b = _a.required, required = _b === void 0 ? false : _b, validation = _a.validation, placeholder = _a.placeholder, autoComplete = _a.autoComplete, className = _a.className, label = _a.label, errMsg = _a.errMsg, style = _a.style;
     var _c = useFormData({
         step: step,
         id: id,
@@ -4035,27 +4031,11 @@ var ImgPreview = function (_a) {
         fileRef.current.click();
     };
     return (createElement(Fragment, null,
-        createElement("div", { className: "flow-form-img-preview", style: {
-                border: "" + border(focused, showError),
-                borderRadius: "" + theme.border.radius,
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                height: '12rem',
-                width: '45%',
-                cursor: 'pointer',
-                marginBottom: '0.9375em',
-            }, onDrag: handleDefaults, onDragStart: handleDefaults, onDragEnd: handleDefaults, onDragOver: handleDefaults, onDragEnter: handleDefaults, onDragLeave: handleDefaults, onDrop: onDrop, onClick: handleFileBtn },
-            typeof value === 'string' ? (createElement("span", { className: "flow-form-file-call-to-action", style: { fontSize: "" + theme.fonts.small, textAlign: 'center', width: '61%' } }, placeholder ? placeholder : "Drag and Drop or Click to upload")) : (createElement(Fragment, null,
-                createElement("span", { className: "flow-form-file-call-to-action", style: {
-                        fontSize: "" + theme.fonts.small,
-                        textAlign: 'center',
-                        position: 'absolute',
-                        color: "" + theme.colors.white,
-                        width: '20%',
-                    } }, placeholder ? placeholder : "Drag and Drop or Click to upload"),
-                createElement("img", { className: "flow-form-img", src: URL.createObjectURL(value), alt: value.name, style: { height: '100%', width: '100%' } }))),
-            createElement("input", { ref: fileRef, multiple: true, id: id + "-field-file", "data-input-id": id + "-field-file", name: id, type: "file", required: required, onChange: onImgChange, onBlur: onBlur, onFocus: onFocus, className: "flow-form-field flow-form-drag-and-drop " + className + "-field", autoComplete: autoComplete, style: { display: 'none' } })),
+        createElement(DragAndDropWrapper, { className: "flow-form-img-preview " + className, style: style, focused: focused, showError: showError, onDrag: handleDefaults, onDragStart: handleDefaults, onDragEnd: handleDefaults, onDragOver: handleDefaults, onDragEnter: handleDefaults, onDragLeave: handleDefaults, onDrop: onDrop, onClick: handleFileBtn },
+            typeof value === 'string' ? (createElement("span", { className: "flow-form-img-call-to-action" }, placeholder ? placeholder : "Drag and Drop or Click to upload")) : (createElement(Fragment, null,
+                createElement("span", { className: "flow-form-img-preview-call-to-action" }, placeholder ? placeholder : "Drag and Drop or Click to upload"),
+                createElement("img", { className: "flow-form-img-preview", src: URL.createObjectURL(value), alt: value.name }))),
+            createElement("input", { ref: fileRef, multiple: true, id: id + "-field-file", "data-input-id": id + "-field-file", name: id, type: "file", required: required, onChange: onImgChange, onBlur: onBlur, onFocus: onFocus, className: "flow-form-field flow-form-drag-and-drop ", autoComplete: autoComplete })),
         showError && createElement(DisplayError, { id: id, className: className, label: label, errMsg: errMsg })));
 };
 ImgPreview.defaultProps = {
@@ -4070,23 +4050,19 @@ var Checkbox = function (_a) {
         value: '',
         required: required,
         validation: validation,
-    }), value = _d.value, onChange = _d.onChange, showError = _d.showError;
-    return (createElement("div", { style: { display: 'flex', flexDirection: 'row', alignItems: 'center', width: '100%' } },
-        options.map(function (option, index) { return (createElement("label", { key: index, htmlFor: option, className: "flow-form-legend " + className + "-legend", style: {
-                display: 'flex',
-                flexDirection: 'row',
-                alignItems: 'center',
-                fontSize: "" + theme.fonts.small,
-                textTransform: 'capitalize',
-                marginRight: "" + (index === options.length - 1 ? '0' : '0.9375em'),
-            } },
-            createElement("input", { id: option, "data-input-id": option + "-field-checkbox", name: id, type: type, value: option, required: required, onChange: onChange, className: "flow-form-field flow-form-text " + className + "-field", placeholder: placeholder, autoComplete: autoComplete, style: __assign(__assign({}, style), { width: '1rem', fontSize: "" + (type === 'radio' ? theme.inputs.radio : theme.inputs.checkbox) }), checked: value === option }),
+    }), value = _d.value, onChange = _d.onChange, focused = _d.focused, showError = _d.showError;
+    return (createElement(ButtonInputWrapper, { style: style },
+        options.map(function (option, index) { return (createElement(ButtonInputLabel, { key: index, htmlFor: option, className: "flow-form-legend " + id + "-legend " + className, index: index, optionsLength: options.length - 1, type: type, focused: focused, showError: showError },
+            createElement("input", { id: option, "data-input-id": option + "-field-checkbox", name: id, type: type, value: option, required: required, onChange: onChange, className: "flow-form-field flow-form-" + type + "-" + id + " " + className, placeholder: placeholder, autoComplete: autoComplete, checked: value === option }),
             option)); }),
         showError && createElement(DisplayError, { id: id, className: className, label: label, errMsg: errMsg })));
 };
 Checkbox.defaultProps = {
     ffComp: FFComponent.CHECKBOX,
 };
+
+var FieldWrapper = styled.label(templateObject_1$7 || (templateObject_1$7 = __makeTemplateObject(["\n  display: block;\n  text-transform: capitalize;\n  min-height: ", ";\n  legend {\n    font-size: ", ";\n    padding-bottom: 0.2rem;\n  }\n  .required {\n    color: ", ";\n  }\n"], ["\n  display: block;\n  text-transform: capitalize;\n  min-height: ", ";\n  legend {\n    font-size: ", ";\n    padding-bottom: 0.2rem;\n  }\n  .required {\n    color: ", ";\n  }\n"])), function (props) { return (props.type === 'checkbox' || props.type === 'radio' ? "4rem" : "4.5rem"); }, function (props) { return props.theme.font.medium; }, function (props) { return props.theme.colors.red; });
+var templateObject_1$7;
 
 var Field = function (_a) {
     var step = _a.step, index = _a.index, name = _a.name, type = _a.type, children = _a.children, style = _a.style, _b = _a.required, required = _b === void 0 ? false : _b, validation = _a.validation, _c = _a.autoComplete, autoComplete = _c === void 0 ? 'off' : _c, placeholder = _a.placeholder, errMsg = _a.errMsg, options = _a.options, inputs = _a.inputs;
@@ -4106,19 +4082,15 @@ var Field = function (_a) {
         placeholder: placeholder,
         className: className,
         label: children !== null && children !== void 0 ? children : name,
-        style: __assign({ display: 'block', width: '100%', fontSize: "" + theme.fonts.medium, textIndent: "" + theme.text.indent, borderRadius: "" + theme.border.radius, backgroundColor: "" + theme.colors.white, outline: 'none' }, style),
+        style: style,
         errMsg: errMsg,
         options: options,
         inputs: inputs,
     };
-    return (createElement("label", { id: id + "-label", "data-field-id": id + "-label", htmlFor: id, className: "flow-form-label " + className + "-label", style: {
-            display: 'block',
-            minHeight: "" + (type === 'checkbox' || type === 'radio' ? '4rem' : '4.5rem'),
-            textTransform: 'capitalize',
-        } },
-        createElement("legend", { className: "flow-form-legend " + className + "-legend", style: { fontSize: "" + theme.fonts.medium, paddingBottom: '0.2em' } },
+    return (createElement(FieldWrapper, { id: id + "-label", "data-field-id": id + "-label", htmlFor: id, className: "flow-form-label " + className, type: type },
+        createElement("legend", { className: "flow-form-legend " + className, "data-legend-id": id + "-legend" },
             children ? children : name !== null && name !== void 0 ? name : '',
-            required || validation ? createElement("span", { style: { color: "" + theme.colors.red } }, "*") : null),
+            required || validation ? createElement("span", { className: "required" }, "*") : null),
         (function () {
             switch (type) {
                 case 'text':

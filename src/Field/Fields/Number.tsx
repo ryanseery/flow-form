@@ -3,7 +3,7 @@ import { FFComponent } from '../../FFComponent';
 import { useFormData } from '../../useFormData';
 import { IProps } from './@types';
 import { DisplayError } from '../../DisplayError';
-import { border } from '../../utils';
+import { InputWrapper } from './@styles';
 
 interface INumber extends IProps {}
 
@@ -30,7 +30,7 @@ export const Number: React.FC<INumber> = ({
 
   return (
     <>
-      <input
+      <InputWrapper
         id={`${id}-field-number`}
         data-input-id={`${id}-field-number`}
         name={id}
@@ -40,10 +40,12 @@ export const Number: React.FC<INumber> = ({
         onChange={onChange}
         onBlur={onBlur}
         onFocus={onFocus}
-        className={`flow-form-field flow-form-number ${className}-field`}
+        className={`flow-form-field flow-form-number ${className}`}
         placeholder={placeholder}
         autoComplete={autoComplete}
-        style={{ ...style, border: `${border(focused, showError)}` }}
+        style={style}
+        focused={focused}
+        showError={showError}
       />
       {showError && <DisplayError id={id} className={className} label={label} errMsg={errMsg} />}
     </>

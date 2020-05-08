@@ -3,9 +3,9 @@ import { FFComponent } from '../../FFComponent';
 import { IProps } from './@types';
 import { useFormData } from '../../useFormData';
 import { DisplayError } from '../../DisplayError';
-import { theme } from '../../theme';
 import { ListButton } from '../../buttons';
-import { border, handleDefaults } from '../../utils';
+import { handleDefaults } from '../../utils';
+import { DragAndDropWrapper, ListWrapper } from './@styles';
 
 interface IDragAndDrop extends IProps {}
 
@@ -19,6 +19,7 @@ export const DragAndDrop: React.FC<IDragAndDrop> = ({
   className,
   label,
   errMsg,
+  style,
 }) => {
   const { value, onFileChange, onFileDrop, onFileRemove, onBlur, onFocus, showError, focused } = useFormData({
     step,
@@ -56,18 +57,11 @@ export const DragAndDrop: React.FC<IDragAndDrop> = ({
 
   return (
     <>
-      <div
-        className={`flow-form-file-upload`}
-        style={{
-          border: `${border(focused, showError)}`,
-          borderRadius: `${theme.border.radius}`,
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          minHeight: '5rem',
-          width: '100%',
-          cursor: 'pointer',
-        }}
+      <DragAndDropWrapper
+        className={`flow-form-file-upload ${className}`}
+        style={style}
+        focused={focused}
+        showError={showError}
         onDrag={handleDefaults}
         onDragStart={handleDefaults}
         onDragEnd={handleDefaults}
@@ -77,7 +71,7 @@ export const DragAndDrop: React.FC<IDragAndDrop> = ({
         onDrop={onDrop}
         onClick={handleFileBtn}
       >
-        <span className="flow-form-file-call-to-action" style={{ fontSize: `${theme.fonts.small}` }}>
+        <span className="flow-form-file-call-to-action">
           {placeholder ? placeholder : `Drag and Drop or Click to upload`}
         </span>
 
@@ -92,35 +86,24 @@ export const DragAndDrop: React.FC<IDragAndDrop> = ({
           onChange={onFileChange}
           onBlur={onBlur}
           onFocus={onFocus}
-          className={`flow-form-field flow-form-drag-and-drop ${className}-field`}
+          className="flow-form-field flow-form-drag-and-drop"
           autoComplete={autoComplete}
-          style={{ display: 'none' }}
         />
-      </div>
+      </DragAndDropWrapper>
 
       {showError && <DisplayError id={id} className={className} label={label} errMsg={errMsg} />}
 
       {value.length > 0 && (
-        <ul style={{ listStyle: 'none', padding: 0 }}>
+        <ListWrapper>
           {value.map((file: File, index: number) => (
-            <li
-              key={index}
-              style={{
-                display: 'flex',
-                flexDirection: 'row',
-                justifyContent: 'space-between',
-                alignItems: 'center',
-                paddingBottom: '0.3rem',
-                fontSize: `${theme.fonts.small}`,
-              }}
-            >
+            <li key={index}>
               <span>{file.name}</span>
               <ListButton onClick={() => onFileRemove(index)} remove>
                 &times;
               </ListButton>
             </li>
           ))}
-        </ul>
+        </ListWrapper>
       )}
     </>
   );

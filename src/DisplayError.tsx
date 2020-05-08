@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { theme } from './theme';
+import styled from 'styled-components';
 
 interface IDisplayError {
   id: string;
@@ -8,13 +8,12 @@ interface IDisplayError {
   errMsg?: string;
 }
 
+const DisplayErrorWrapper = styled.small`
+  color: ${props => props.theme.colors.red};
+`;
+
 export const DisplayError: React.FC<IDisplayError> = ({ id, className, errMsg }) => (
-  <small
-    id={`${id}-error`}
-    data-error-id={`${id}-error`}
-    className={`flow-form-error ${className}-error`}
-    style={{ color: `${theme.colors.red}` }}
-  >
+  <DisplayErrorWrapper id={`${id}-error`} data-error-id={`${id}-error`} className={`flow-form-error ${className}`}>
     {typeof errMsg === 'string' ? errMsg : `Please provide a valid value!`}
-  </small>
+  </DisplayErrorWrapper>
 );

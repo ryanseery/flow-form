@@ -3,7 +3,7 @@ import { FFComponent } from '../../FFComponent';
 import { useFormData } from '../../useFormData';
 import { IProps } from './@types';
 import { DisplayError } from '../../DisplayError';
-import { theme } from '../../theme';
+import { ButtonInputWrapper, ButtonInputLabel } from './@styles';
 
 interface ICheckbox extends IProps {}
 
@@ -21,7 +21,7 @@ export const Checkbox: React.FC<ICheckbox> = ({
   options = [],
   type,
 }) => {
-  const { value, onChange, showError } = useFormData({
+  const { value, onChange, focused, showError } = useFormData({
     step,
     id,
     value: '',
@@ -30,20 +30,17 @@ export const Checkbox: React.FC<ICheckbox> = ({
   });
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', width: '100%' }}>
+    <ButtonInputWrapper style={style}>
       {(options as string[]).map((option: string, index: number) => (
-        <label
+        <ButtonInputLabel
           key={index}
           htmlFor={option}
-          className={`flow-form-legend ${className}-legend`}
-          style={{
-            display: 'flex',
-            flexDirection: 'row',
-            alignItems: 'center',
-            fontSize: `${theme.fonts.small}`,
-            textTransform: 'capitalize',
-            marginRight: `${index === options.length - 1 ? '0' : '0.9375em'}`,
-          }}
+          className={`flow-form-legend ${id}-legend ${className}`}
+          index={index}
+          optionsLength={options.length - 1}
+          type={type}
+          focused={focused}
+          showError={showError}
         >
           <input
             id={option}
@@ -53,21 +50,16 @@ export const Checkbox: React.FC<ICheckbox> = ({
             value={option}
             required={required}
             onChange={onChange}
-            className={`flow-form-field flow-form-text ${className}-field`}
+            className={`flow-form-field flow-form-${type}-${id} ${className}`}
             placeholder={placeholder}
             autoComplete={autoComplete}
-            style={{
-              ...style,
-              width: '1rem',
-              fontSize: `${type === 'radio' ? theme.inputs.radio : theme.inputs.checkbox}`,
-            }}
             checked={value === option}
           />
           {option}
-        </label>
+        </ButtonInputLabel>
       ))}
       {showError && <DisplayError id={id} className={className} label={label} errMsg={errMsg} />}
-    </div>
+    </ButtonInputWrapper>
   );
 };
 

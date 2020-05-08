@@ -3,7 +3,7 @@ import { FFComponent } from '../../FFComponent';
 import { useFormData } from '../../useFormData';
 import { IProps } from './@types';
 import { DisplayError } from '../../DisplayError';
-import { border } from '../../utils';
+import { InputWrapper } from './@styles';
 
 interface IUrl extends IProps {
   pattern?: string;
@@ -33,7 +33,7 @@ export const Url: React.FC<IUrl> = ({
 
   return (
     <>
-      <input
+      <InputWrapper
         id={`${id}-filed-url`}
         data-input-id={`${id}-field-url`}
         name={id}
@@ -46,8 +46,10 @@ export const Url: React.FC<IUrl> = ({
         className={`flow-form-field flow-form-url ${className}-field`}
         placeholder={placeholder}
         autoComplete={autoComplete}
-        style={{ ...style, border: `${border(focused, showError)}` }}
+        style={style}
         pattern={pattern}
+        focused={focused}
+        showError={showError}
       />
       {showError && <DisplayError id={id} className={className} label={label} errMsg={errMsg} />}
     </>

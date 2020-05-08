@@ -3,7 +3,7 @@ import { FFComponent } from '../../FFComponent';
 import { useFormData } from '../../useFormData';
 import { IProps } from './@types';
 import { DisplayError } from '../../DisplayError';
-import { border } from '../../utils';
+import { TextareaWrapper } from './@styles';
 
 interface ITextArea extends IProps {
   rows?: number;
@@ -34,7 +34,7 @@ export const TextArea: React.FC<ITextArea> = ({
 
   return (
     <>
-      <textarea
+      <TextareaWrapper
         id={`${id}-field-textarea`}
         data-input-id={`${id}-field-textarea`}
         name={id}
@@ -46,9 +46,11 @@ export const TextArea: React.FC<ITextArea> = ({
         className={`flow-form-field flow-form-textarea ${className}-field`}
         placeholder={placeholder}
         autoComplete={autoComplete}
-        style={{ ...style, border: `${border(focused, showError)}` }}
+        style={style}
         rows={rows}
         cols={cols}
+        focused={focused}
+        showError={showError}
       />
       {showError && <DisplayError id={id} className={className} label={label} errMsg={errMsg} />}
     </>

@@ -3,7 +3,7 @@ import { FFComponent } from '../../FFComponent';
 import { useFormData } from '../../useFormData';
 import { IProps } from './@types';
 import { DisplayError } from '../../DisplayError';
-import { border } from '../../utils';
+import { InputWrapper } from './@styles';
 
 interface IEmail extends IProps {}
 
@@ -30,7 +30,7 @@ export const Email: React.FC<IEmail> = ({
 
   return (
     <>
-      <input
+      <InputWrapper
         id={`${id}-field-email`}
         data-input-id={`${id}-field-email`}
         name={id}
@@ -40,10 +40,12 @@ export const Email: React.FC<IEmail> = ({
         onChange={onChange}
         onBlur={onBlur}
         onFocus={onFocus}
-        className={`flow-form-field flow-form-email ${className}-field`}
+        className={`flow-form-field flow-form-email ${className}`}
         placeholder={placeholder}
         autoComplete={autoComplete}
-        style={{ ...style, border: `${border(focused, showError)}` }}
+        style={style}
+        focused={focused}
+        showError={showError}
       />
       {showError && <DisplayError id={id} className={className} label={label} errMsg={errMsg} />}
     </>

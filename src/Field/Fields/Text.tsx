@@ -3,7 +3,7 @@ import { FFComponent } from '../../FFComponent';
 import { useFormData } from '../../useFormData';
 import { IProps } from './@types';
 import { DisplayError } from '../../DisplayError';
-import { border } from '../../utils';
+import { InputWrapper } from './@styles';
 
 interface IText extends IProps {}
 
@@ -30,7 +30,7 @@ export const Text: React.FC<IText> = ({
 
   return (
     <>
-      <input
+      <InputWrapper
         id={`${id}-field-text`}
         data-input-id={`${id}-field-text`}
         name={id}
@@ -40,10 +40,12 @@ export const Text: React.FC<IText> = ({
         onChange={onChange}
         onBlur={onBlur}
         onFocus={onFocus}
-        className={`flow-form-field flow-form-text ${className}-field`}
+        className={`flow-form-field flow-form-text ${className}`}
         placeholder={placeholder}
         autoComplete={autoComplete}
-        style={{ ...style, border: `${border(focused, showError)}` }}
+        focused={focused}
+        showError={showError}
+        style={style}
       />
       {showError && <DisplayError id={id} className={className} label={label} errMsg={errMsg} />}
     </>

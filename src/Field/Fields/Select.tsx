@@ -3,7 +3,7 @@ import { FFComponent } from '../../FFComponent';
 import { useFormData } from '../../useFormData';
 import { IProps, Option } from './@types';
 import { DisplayError } from '../../DisplayError';
-import { border } from '../../utils';
+import { SelectWrapper } from './@styles';
 
 interface ISelect extends IProps {}
 
@@ -30,7 +30,7 @@ export const Select: React.FC<ISelect> = ({
 
   return (
     <>
-      <select
+      <SelectWrapper
         id={`${id}-field-text`}
         data-input-id={`${id}-field-text`}
         name={id}
@@ -39,10 +39,12 @@ export const Select: React.FC<ISelect> = ({
         onChange={onChange}
         onBlur={onBlur}
         onFocus={onFocus}
-        className={`flow-form-field flow-form-text ${className}-field`}
+        className={`flow-form-field flow-form-text ${className}`}
         placeholder={placeholder}
         autoComplete={autoComplete}
-        style={{ ...style, border: `${border(focused, showError)}`, cursor: 'pointer' }}
+        style={style}
+        focused={focused}
+        showError={showError}
       >
         <option disabled defaultValue=""></option>
         {options &&
@@ -51,7 +53,7 @@ export const Select: React.FC<ISelect> = ({
               {option.name}
             </option>
           ))}
-      </select>
+      </SelectWrapper>
       {showError && <DisplayError id={id} className={className} label={label} errMsg={errMsg} />}
     </>
   );
