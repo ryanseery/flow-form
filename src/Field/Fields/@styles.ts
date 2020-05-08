@@ -70,7 +70,7 @@ export const ButtonInputLabel = styled.label<IButtonInput>`
   display: flex;
   flex-direction: row;
   align-items: center;
-  font-size: ${props => props.theme.font.medium};
+  font-size: ${props => props.theme.font.small};
   text-transform: capitalize;
   margin-right: ${props => (props.index === props.optionsLength ? `0` : `0.9375em`)};
   input {

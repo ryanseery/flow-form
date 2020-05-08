@@ -3471,54 +3471,30 @@ ListButton.defaultProps = {
 };
 var templateObject_1$3;
 
-var Doughnut = function (_a) {
-    var isActive = _a.isActive;
-    return (React.createElement("span", { className: "flow-form-doughnut", style: {
-            background: isActive
-                ? 'radial-gradient(circle, transparent 30%, ${theme.colors.blue} 40%)'
-                : 'radial-gradient(circle, transparent 30%, ${theme.colors.grey} 40%)',
-            borderRadius: '80%',
-            height: '0.9375em',
-            width: '1.125em',
-            marginRight: '0.0625em',
-            paddingTop: '0.1875em',
-            fontSize: "" + theme.fonts.large,
-            textAlign: 'center',
-            color: "" + theme.colors.white,
-        } }));
-};
-Doughnut.defaultProps = {
-    ffComp: FFComponent.DOUGHNUT,
-};
+var ProgressWrapper = styled.div(templateObject_1$4 || (templateObject_1$4 = __makeTemplateObject(["\n  display: flex;\n  flex-direction: row;\n  align-items: center;\n  justify-content: space-between;\n  border-bottom: ", ";\n"], ["\n  display: flex;\n  flex-direction: row;\n  align-items: center;\n  justify-content: space-between;\n  border-bottom: ", ";\n"])), function (props) { return props.theme.border.default; });
+var StepWrapper = styled.div(templateObject_2 || (templateObject_2 = __makeTemplateObject(["\n  display: flex;\n  flex-direction: column;\n  .flow-form-label-container {\n    display: flex;\n    flex-direction: row;\n    align-items: center;\n    justify-content: center;\n    padding: 0 0.3em 0.3em 0.3em;\n  }\n  .flow-form-label {\n    color: ", ";\n    font-size: ", ";\n  }\n"], ["\n  display: flex;\n  flex-direction: column;\n  .flow-form-label-container {\n    display: flex;\n    flex-direction: row;\n    align-items: center;\n    justify-content: center;\n    padding: 0 0.3em 0.3em 0.3em;\n  }\n  .flow-form-label {\n    color: ", ";\n    font-size: ", ";\n  }\n"])), function (props) { return (props.isActive ? props.theme.colors.blue : props.theme.colors.grey); }, function (props) { return props.theme.font.large; });
+var Doughnut = styled.span(templateObject_3 || (templateObject_3 = __makeTemplateObject(["\n  background: ", ";\n  border-radius: 80%;\n  height: 0.9375rem;\n  width: 1.125rem;\n  margin-right: 0.0625rem;\n  padding-top: 0.1875rem;\n  font-size: ", ";\n  text-align: center;\n  color: ", ";\n"], ["\n  background: ",
+    ";\n  border-radius: 80%;\n  height: 0.9375rem;\n  width: 1.125rem;\n  margin-right: 0.0625rem;\n  padding-top: 0.1875rem;\n  font-size: ", ";\n  text-align: center;\n  color: ", ";\n"])), function (props) {
+    return props.isActive
+        ? "radial-gradient(circle, transparent 30%, " + props.theme.colors.blue + " 40%)"
+        : "radial-gradient(circle, transparent 30%, " + props.theme.colors.grey + " 40%)";
+}, function (props) { return props.theme.font.large; }, function (props) { return props.theme.colors.white; });
+var templateObject_1$4, templateObject_2, templateObject_3;
+
 var Progress = function (_a) {
     var steps = _a.steps, currentStep = _a.currentStep, doughNut = _a.doughNut;
     var isActive = function (step) { return step.index === (currentStep === null || currentStep === void 0 ? void 0 : currentStep.index); };
-    return (React.createElement("div", { className: "flow-form-progress", style: {
-            display: 'flex',
-            flexDirection: 'row',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-            borderBottom: "" + theme.border.default,
-        } }, steps === null || steps === void 0 ? void 0 : steps.map(function (step) { return (React.createElement("div", { key: step.id, style: { display: 'flex', flexDirection: 'column' } },
-        React.createElement("div", { className: "flow-form-label-container", style: {
-                display: 'flex',
-                flexDirection: 'row',
-                alignItems: 'center',
-                justifyContent: 'center',
-                padding: '0 0.3em 0.3em 0.3em',
-            } },
+    return (React.createElement(ProgressWrapper, { className: "flow-form-progress" }, steps === null || steps === void 0 ? void 0 : steps.map(function (step) { return (React.createElement(StepWrapper, { key: step.id, isActive: isActive(step) },
+        React.createElement("div", { className: "flow-form-label-container" },
             doughNut && React.createElement(Doughnut, { isActive: isActive(step) }),
-            React.createElement("span", { className: "flow-form-label", style: {
-                    color: isActive(step) ? "" + theme.colors.blue : "" + theme.colors.grey,
-                    fontSize: "" + theme.fonts.large,
-                } }, step.label)))); })));
+            React.createElement("span", { className: "flow-form-label" }, step.label)))); })));
 };
 Progress.defaultProps = {
     ffComp: FFComponent.PROGRESS,
 };
 
-var Global = createGlobalStyle(templateObject_1$4 || (templateObject_1$4 = __makeTemplateObject(["\n  .flow-form-fieldset {\n    border: none;\n  }\n  .flow-form-button-container {\n    display: flex;\n    flex-direction: row;\n    justify-content: center;\n    align-items: center;\n    padding: 2rem;\n  }\n"], ["\n  .flow-form-fieldset {\n    border: none;\n  }\n  .flow-form-button-container {\n    display: flex;\n    flex-direction: row;\n    justify-content: center;\n    align-items: center;\n    padding: 2rem;\n  }\n"])));
-var templateObject_1$4;
+var Global = createGlobalStyle(templateObject_1$5 || (templateObject_1$5 = __makeTemplateObject(["\n  .flow-form-fieldset {\n    border: none;\n  }\n  .flow-form-button-container {\n    display: flex;\n    flex-direction: row;\n    justify-content: center;\n    align-items: center;\n    padding: 2rem;\n  }\n"], ["\n  .flow-form-fieldset {\n    border: none;\n  }\n  .flow-form-button-container {\n    display: flex;\n    flex-direction: row;\n    justify-content: center;\n    align-items: center;\n    padding: 2rem;\n  }\n"])));
+var templateObject_1$5;
 
 var theme2 = {
     colors: {
@@ -3780,12 +3756,12 @@ function useFormData(_a) {
     };
 }
 
-var DisplayErrorWrapper = styled.small(templateObject_1$5 || (templateObject_1$5 = __makeTemplateObject(["\n  color: ", ";\n"], ["\n  color: ", ";\n"])), function (props) { return props.theme.colors.red; });
+var DisplayErrorWrapper = styled.small(templateObject_1$6 || (templateObject_1$6 = __makeTemplateObject(["\n  color: ", ";\n"], ["\n  color: ", ";\n"])), function (props) { return props.theme.colors.red; });
 var DisplayError = function (_a) {
     var id = _a.id, className = _a.className, errMsg = _a.errMsg;
     return (React.createElement(DisplayErrorWrapper, { id: id + "-error", "data-error-id": id + "-error", className: "flow-form-error " + className }, typeof errMsg === 'string' ? errMsg : "Please provide a valid value!"));
 };
-var templateObject_1$5;
+var templateObject_1$6;
 
 function border$1(props) {
     if (props.focused && props.showError)
@@ -3796,15 +3772,15 @@ function border$1(props) {
         return props.theme.border.error;
     return props.theme.border.default;
 }
-var InputWrapper = styled.input(templateObject_1$6 || (templateObject_1$6 = __makeTemplateObject(["\n  display: block;\n  width: 100%;\n  font-size: ", ";\n  text-indent: ", ";\n  border-radius: ", ";\n  background-color: ", ";\n  outline: none;\n  border: ", ";\n"], ["\n  display: block;\n  width: 100%;\n  font-size: ", ";\n  text-indent: ", ";\n  border-radius: ", ";\n  background-color: ", ";\n  outline: none;\n  border: ", ";\n"])), function (props) { return props.theme.font.medium; }, function (props) { return props.theme.text.indent; }, function (props) { return props.theme.border.radius; }, function (props) { return props.theme.colors.white; }, function (props) { return border$1(props); });
-var ColorInputWrapper = styled(InputWrapper)(templateObject_2 || (templateObject_2 = __makeTemplateObject(["\n  cursor: pointer;\n"], ["\n  cursor: pointer;\n"])));
-var TextareaWrapper = styled.textarea(templateObject_3 || (templateObject_3 = __makeTemplateObject(["\n  display: block;\n  width: 100%;\n  font-size: ", ";\n  text-indent: ", ";\n  border-radius: ", ";\n  background-color: ", ";\n  outline: none;\n  border: ", ";\n"], ["\n  display: block;\n  width: 100%;\n  font-size: ", ";\n  text-indent: ", ";\n  border-radius: ", ";\n  background-color: ", ";\n  outline: none;\n  border: ", ";\n"])), function (props) { return props.theme.font.medium; }, function (props) { return props.theme.text.indent; }, function (props) { return props.theme.border.radius; }, function (props) { return props.theme.colors.white; }, function (props) { return border$1(props); });
+var InputWrapper = styled.input(templateObject_1$7 || (templateObject_1$7 = __makeTemplateObject(["\n  display: block;\n  width: 100%;\n  font-size: ", ";\n  text-indent: ", ";\n  border-radius: ", ";\n  background-color: ", ";\n  outline: none;\n  border: ", ";\n"], ["\n  display: block;\n  width: 100%;\n  font-size: ", ";\n  text-indent: ", ";\n  border-radius: ", ";\n  background-color: ", ";\n  outline: none;\n  border: ", ";\n"])), function (props) { return props.theme.font.medium; }, function (props) { return props.theme.text.indent; }, function (props) { return props.theme.border.radius; }, function (props) { return props.theme.colors.white; }, function (props) { return border$1(props); });
+var ColorInputWrapper = styled(InputWrapper)(templateObject_2$1 || (templateObject_2$1 = __makeTemplateObject(["\n  cursor: pointer;\n"], ["\n  cursor: pointer;\n"])));
+var TextareaWrapper = styled.textarea(templateObject_3$1 || (templateObject_3$1 = __makeTemplateObject(["\n  display: block;\n  width: 100%;\n  font-size: ", ";\n  text-indent: ", ";\n  border-radius: ", ";\n  background-color: ", ";\n  outline: none;\n  border: ", ";\n"], ["\n  display: block;\n  width: 100%;\n  font-size: ", ";\n  text-indent: ", ";\n  border-radius: ", ";\n  background-color: ", ";\n  outline: none;\n  border: ", ";\n"])), function (props) { return props.theme.font.medium; }, function (props) { return props.theme.text.indent; }, function (props) { return props.theme.border.radius; }, function (props) { return props.theme.colors.white; }, function (props) { return border$1(props); });
 var SelectWrapper = styled.select(templateObject_4 || (templateObject_4 = __makeTemplateObject(["\n  display: block;\n  width: 100%;\n  font-size: ", ";\n  text-indent: ", ";\n  border-radius: ", ";\n  background-color: ", ";\n  outline: none;\n  border: ", ";\n  cursor: pointer;\n"], ["\n  display: block;\n  width: 100%;\n  font-size: ", ";\n  text-indent: ", ";\n  border-radius: ", ";\n  background-color: ", ";\n  outline: none;\n  border: ", ";\n  cursor: pointer;\n"])), function (props) { return props.theme.font.medium; }, function (props) { return props.theme.text.indent; }, function (props) { return props.theme.border.radius; }, function (props) { return props.theme.colors.white; }, function (props) { return border$1(props); });
 var ButtonInputWrapper = styled.div(templateObject_5 || (templateObject_5 = __makeTemplateObject(["\n  display: flex;\n  flex-direction: row;\n  align-items: center;\n  width: 100%;\n"], ["\n  display: flex;\n  flex-direction: row;\n  align-items: center;\n  width: 100%;\n"])));
-var ButtonInputLabel = styled.label(templateObject_6 || (templateObject_6 = __makeTemplateObject(["\n  display: flex;\n  flex-direction: row;\n  align-items: center;\n  font-size: ", ";\n  text-transform: capitalize;\n  margin-right: ", ";\n  input {\n    width: 1rem;\n    font-size: ", ";\n  }\n"], ["\n  display: flex;\n  flex-direction: row;\n  align-items: center;\n  font-size: ", ";\n  text-transform: capitalize;\n  margin-right: ", ";\n  input {\n    width: 1rem;\n    font-size: ", ";\n  }\n"])), function (props) { return props.theme.font.medium; }, function (props) { return (props.index === props.optionsLength ? "0" : "0.9375em"); }, function (props) { return (props.type === "radio" ? props.theme.inputs.radio : props.theme.inputs.checkbox); });
+var ButtonInputLabel = styled.label(templateObject_6 || (templateObject_6 = __makeTemplateObject(["\n  display: flex;\n  flex-direction: row;\n  align-items: center;\n  font-size: ", ";\n  text-transform: capitalize;\n  margin-right: ", ";\n  input {\n    width: 1rem;\n    font-size: ", ";\n  }\n"], ["\n  display: flex;\n  flex-direction: row;\n  align-items: center;\n  font-size: ", ";\n  text-transform: capitalize;\n  margin-right: ", ";\n  input {\n    width: 1rem;\n    font-size: ", ";\n  }\n"])), function (props) { return props.theme.font.small; }, function (props) { return (props.index === props.optionsLength ? "0" : "0.9375em"); }, function (props) { return (props.type === "radio" ? props.theme.inputs.radio : props.theme.inputs.checkbox); });
 var DragAndDropWrapper = styled.div(templateObject_7 || (templateObject_7 = __makeTemplateObject(["\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  min-height: 5rem;\n  width: 100%;\n  border: ", ";\n  border-radius: ", ";\n  cursor: pointer;\n  .flow-form-file-call-to-action {\n    font-size: ", ";\n  }\n  .flow-form-img-call-to-action {\n    font-size: ", ";\n    text-align: center;\n    width: 61%;\n  }\n  .flow-form-img-preview-call-to-action {\n    font-size: ", ";\n    text-align: center;\n    width: 20%;\n    position: absolute;\n    color: ", ";\n  }\n  img {\n    height: 100%;\n    width: 100%;\n  }\n  input {\n    display: none;\n  }\n"], ["\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  min-height: 5rem;\n  width: 100%;\n  border: ", ";\n  border-radius: ", ";\n  cursor: pointer;\n  .flow-form-file-call-to-action {\n    font-size: ", ";\n  }\n  .flow-form-img-call-to-action {\n    font-size: ", ";\n    text-align: center;\n    width: 61%;\n  }\n  .flow-form-img-preview-call-to-action {\n    font-size: ", ";\n    text-align: center;\n    width: 20%;\n    position: absolute;\n    color: ", ";\n  }\n  img {\n    height: 100%;\n    width: 100%;\n  }\n  input {\n    display: none;\n  }\n"])), function (props) { return border$1(props); }, function (props) { return props.theme.border.radius; }, function (props) { return props.theme.font.small; }, function (props) { return props.theme.font.small; }, function (props) { return props.theme.font.small; }, function (props) { return props.theme.colors.white; });
 var ListWrapper = styled.ul(templateObject_8 || (templateObject_8 = __makeTemplateObject(["\n  list-style: none;\n  padding: 0;\n  .list-item {\n    display: flex;\n    flex-direction: row;\n    justify-content: space-between;\n    align-items: center;\n    padding-bottom: 0.3rem;\n    font-size: ", ";\n  }\n"], ["\n  list-style: none;\n  padding: 0;\n  .list-item {\n    display: flex;\n    flex-direction: row;\n    justify-content: space-between;\n    align-items: center;\n    padding-bottom: 0.3rem;\n    font-size: ", ";\n  }\n"])), function (props) { return props.theme.font.small; });
-var templateObject_1$6, templateObject_2, templateObject_3, templateObject_4, templateObject_5, templateObject_6, templateObject_7, templateObject_8;
+var templateObject_1$7, templateObject_2$1, templateObject_3$1, templateObject_4, templateObject_5, templateObject_6, templateObject_7, templateObject_8;
 
 var Text = function (_a) {
     var step = _a.step, id = _a.id, _b = _a.type, type = _b === void 0 ? 'text' : _b, _c = _a.required, required = _c === void 0 ? false : _c, validation = _a.validation, placeholder = _a.placeholder, autoComplete = _a.autoComplete, style = _a.style, className = _a.className, label = _a.label, errMsg = _a.errMsg;
@@ -4068,8 +4044,8 @@ Checkbox.defaultProps = {
     ffComp: FFComponent.CHECKBOX,
 };
 
-var FieldWrapper = styled.label(templateObject_1$7 || (templateObject_1$7 = __makeTemplateObject(["\n  display: block;\n  text-transform: capitalize;\n  min-height: ", ";\n  legend {\n    font-size: ", ";\n    padding-bottom: 0.2rem;\n  }\n  .required {\n    color: ", ";\n  }\n"], ["\n  display: block;\n  text-transform: capitalize;\n  min-height: ", ";\n  legend {\n    font-size: ", ";\n    padding-bottom: 0.2rem;\n  }\n  .required {\n    color: ", ";\n  }\n"])), function (props) { return (props.type === 'checkbox' || props.type === 'radio' ? "4rem" : "4.5rem"); }, function (props) { return props.theme.font.medium; }, function (props) { return props.theme.colors.red; });
-var templateObject_1$7;
+var FieldWrapper = styled.label(templateObject_1$8 || (templateObject_1$8 = __makeTemplateObject(["\n  display: block;\n  text-transform: capitalize;\n  min-height: ", ";\n  legend {\n    font-size: ", ";\n    padding-bottom: 0.2rem;\n  }\n  .required {\n    color: ", ";\n  }\n"], ["\n  display: block;\n  text-transform: capitalize;\n  min-height: ", ";\n  legend {\n    font-size: ", ";\n    padding-bottom: 0.2rem;\n  }\n  .required {\n    color: ", ";\n  }\n"])), function (props) { return (props.type === 'checkbox' || props.type === 'radio' ? "4rem" : "4.5rem"); }, function (props) { return props.theme.font.medium; }, function (props) { return props.theme.colors.red; });
+var templateObject_1$8;
 
 var Field = function (_a) {
     var step = _a.step, index = _a.index, name = _a.name, type = _a.type, children = _a.children, style = _a.style, _b = _a.required, required = _b === void 0 ? false : _b, validation = _a.validation, _c = _a.autoComplete, autoComplete = _c === void 0 ? 'off' : _c, placeholder = _a.placeholder, errMsg = _a.errMsg, options = _a.options, inputs = _a.inputs;
