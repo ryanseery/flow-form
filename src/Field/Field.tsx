@@ -89,7 +89,7 @@ export const Field: React.FC<IField> = ({
       id={`${id}-label`}
       data-field-id={`${id}-label`}
       htmlFor={id}
-      className={`flow-form-label ${className}-label`}
+      className={`flow-form-label ${className}`}
       style={{
         display: 'block',
         minHeight: `${type === 'checkbox' || type === 'radio' ? '4rem' : '4.5rem'}`,
