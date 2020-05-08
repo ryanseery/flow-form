@@ -1,11 +1,13 @@
 import * as React from 'react';
+import { ThemeProvider } from 'styled-components';
 import { Context, Wrapper, IStepState } from './Context';
 import { FFComponent } from './FFComponent';
 import { IStep } from './Step';
 import { toCamelCase } from './utils';
-import { DefaultSubmit, DefaultBtn } from './buttons';
+import { DefaultSubmit, DefaultBack, DefaultNext } from './buttons';
 import { Progress } from './Progress';
-import { theme } from './theme';
+import { Global } from './@style';
+import { theme2 } from './theme2';
 
 interface IForm {
   ffComp?: string;
@@ -93,44 +95,15 @@ const Form: React.FC<IForm> = ({ children, onSubmit, className, style, showData,
       style={style}
     >
       {isFlowForm && <Progress steps={flow.steps} currentStep={flow.currentStep} doughNut={doughNut} />}
-      <fieldset className="flow-form-fieldset" style={{ border: `none` }}>
+      <fieldset className="flow-form-fieldset">
         <>{isFlowForm ? children?.[flow.key] : children}</>
 
         {isFlowForm ? (
-          <div
-            className="flow-form-button-container"
-            style={{
-              display: 'flex',
-              flexDirection: 'row',
-              justifyContent: 'center',
-              alignItems: 'center',
-              padding: '2rem',
-            }}
-          >
-            {flow.currentStep != null && flow.currentStep?.index > 0 && (
-              <DefaultBtn
-                onClick={() => revertForm()}
-                style={{
-                  backgroundColor: `${theme.colors.white}`,
-                  color: `${theme.colors.blue}`,
-                  marginRight: '2em',
-                }}
-              >
-                Back
-              </DefaultBtn>
-            )}
+          <div className="flow-form-button-container">
+            {flow.currentStep != null && flow.currentStep?.index > 0 && <DefaultBack onClick={() => revertForm()} />}
 
             {flow.end !== flow.currentStep?.index ? (
-              <DefaultBtn
-                disabled={!canProceed}
-                onClick={() => progressForm()}
-                style={{
-                  backgroundColor: `${!canProceed ? theme.colors.grey : theme.colors.blue}`,
-                  color: `${theme.colors.white}`,
-                }}
-              >
-                Next
-              </DefaultBtn>
+              <DefaultNext disabled={!canProceed} onClick={() => progressForm()} />
             ) : (
               <DefaultSubmit disabled={!canProceed} />
             )}
@@ -151,10 +124,13 @@ interface IFlowForm extends IForm {}
 
 export const FlowForm: React.FC<IFlowForm> = ({ children, onSubmit, className, style, showData, doughNut }) => {
   return (
-    <Wrapper>
-      <Form onSubmit={onSubmit} className={className} style={style} showData={showData} doughNut={doughNut}>
-        {children}
-      </Form>
-    </Wrapper>
+    <ThemeProvider theme={theme2}>
+      <Wrapper>
+        <Global />
+        <Form onSubmit={onSubmit} className={className} style={style} showData={showData} doughNut={doughNut}>
+          {children}
+        </Form>
+      </Wrapper>
+    </ThemeProvider>
   );
 };

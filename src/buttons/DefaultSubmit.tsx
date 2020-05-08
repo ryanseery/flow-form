@@ -1,30 +1,23 @@
 import * as React from 'react';
+import styled from 'styled-components';
 import { FFComponent } from '../FFComponent';
-import { theme } from '../theme';
+import { ButtonProps } from './@types';
+import { ButtonStyles } from './@styles';
 
-interface IDefaultSubmit {
-  ffComp?: string;
+interface IDefaultSubmit extends ButtonProps {
   disabled: boolean;
 }
 
+const DefaultSubmitWrapper = styled(ButtonStyles)<IDefaultSubmit>`
+  border: ${props => (props.disabled ? `none` : props.theme.border.focus)};
+  color: ${props => props.theme.colors.white};
+  background-color: ${props => (props.disabled ? props.theme.colors.grey : props.theme.colors.blue)};
+`;
+
 export const DefaultSubmit: React.FC<IDefaultSubmit> = ({ disabled }) => (
-  <button
-    type="submit"
-    className="flow-form-submit-btm"
-    disabled={disabled}
-    style={{
-      outline: 'none',
-      fontSize: `${theme.fonts.small}`,
-      borderRadius: `${theme.border.radius}`,
-      padding: '0.5em 1em',
-      border: `${disabled ? `none` : theme.border.focus}`,
-      color: `${theme.colors.white}`,
-      backgroundColor: `${disabled ? theme.colors.grey : theme.colors.blue}`,
-      cursor: 'pointer',
-    }}
-  >
+  <DefaultSubmitWrapper type="submit" className="flow-form-submit-btn" disabled={disabled}>
     Submit
-  </button>
+  </DefaultSubmitWrapper>
 );
 
 DefaultSubmit.defaultProps = {

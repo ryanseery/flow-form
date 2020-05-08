@@ -33,6 +33,7 @@
     "@types/jest": "^25.1.2",
     "@types/react": "^16.9.19",
     "@types/react-dom": "^16.9.5",
+    "@types/styled-components": "^5.1.0",
     "@typescript-eslint/eslint-plugin": "^2.20.0",
     "@typescript-eslint/parser": "^2.20.0",
     "eslint": "^6.8.0",
@@ -45,7 +46,7 @@
     "rollup-plugin-node-resolve": "^5.2.0",
     "rollup-plugin-peer-deps-external": "^2.2.2",
     "rollup-plugin-typescript2": "^0.26.0",
-    "ts-jest": "^25.2.0",
+    "ts-jest": "^25.5.0",
     "typescript": "^3.7.5"
   },
   "jest": {
@@ -53,6 +54,6 @@
     "testEnvironment": "node"
   },
   "dependencies": {
-    "@types/styled-components": "^5.1.0"
+    "styled-components": "^5.1.0"
   }
 }
