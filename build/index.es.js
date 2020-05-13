@@ -3454,7 +3454,7 @@ DefaultNext.defaultProps = {
 };
 var templateObject_1$2;
 
-var ListButtonWrapper = styled(ButtonStyles)(templateObject_1$3 || (templateObject_1$3 = __makeTemplateObject(["\n  background-color: ", ";\n  color: ", ";\n  border: none;\n  padding: 0;\n  width: 1.5em;\n  height: 1.5em;\n  text-align: center;\n"], ["\n  background-color: ", ";\n  color: ", ";\n  border: none;\n  padding: 0;\n  width: 1.5em;\n  height: 1.5em;\n  text-align: center;\n"])), function (props) { return (props.remove ? props.theme.colors.red : props.theme.colors.green); }, function (props) { return props.theme.colors.white; });
+var ListButtonWrapper = styled(ButtonStyles)(templateObject_1$3 || (templateObject_1$3 = __makeTemplateObject(["\n  background-color: ", ";\n  color: ", ";\n  border: none;\n  padding: 0;\n  width: 3.5em;\n  height: 1.8rem;\n  text-align: center;\n"], ["\n  background-color: ", ";\n  color: ", ";\n  border: none;\n  padding: 0;\n  width: 3.5em;\n  height: 1.8rem;\n  text-align: center;\n"])), function (props) { return (props.remove ? props.theme.colors.red : props.theme.colors.green); }, function (props) { return props.theme.colors.white; });
 var ListButton = function (_a) {
     var children = _a.children, onClick = _a.onClick, remove = _a.remove;
     return (createElement(ListButtonWrapper, { type: "button", className: "flow-form-list-btn", onClick: onClick, remove: remove }, children));

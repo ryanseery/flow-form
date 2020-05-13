@@ -13,8 +13,8 @@ const ListButtonWrapper = styled(ButtonStyles)<IListButton>`
   color: ${props => props.theme.colors.white};
   border: none;
   padding: 0;
-  width: 1.5em;
-  height: 1.5em;
+  width: 3.5em;
+  height: 1.8rem;
   text-align: center;
 `;
 
