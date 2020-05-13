@@ -11,7 +11,7 @@ import { theme2 } from './theme2';
 
 interface IForm {
   ffComp?: string;
-  onSubmit: (formData: {}) => void;
+  onSubmit: (formData: {}) => void | Promise<void>;
   className?: string;
   style?: {};
   showData?: boolean;

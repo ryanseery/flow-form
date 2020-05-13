@@ -21,7 +21,7 @@ import { FieldWrapper } from './@styles';
 export interface IField {
   ffComp?: string;
   step: string | null;
-  index: number | null;
+  index: number;
   type?: string;
   name?: string;
   children?: string;
