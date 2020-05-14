@@ -8,7 +8,7 @@ export interface IStep {
   label: string;
   name?: string;
   className?: string;
-  style?: {};
+  style?: React.CSSProperties;
   children: React.ReactElement | React.ReactElement[];
 }
 

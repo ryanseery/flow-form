@@ -26,7 +26,7 @@ export interface IField {
   name?: string;
   children?: string;
   className?: string;
-  style?: {};
+  style?: React.CSSProperties;
   required?: boolean;
   autoComplete?: string;
   placeholder?: string;
@@ -37,8 +37,8 @@ export interface IField {
 }
 
 export const Field: React.FC<IField> = ({
-  step,
-  index,
+  step = null,
+  index = 0,
   name,
   type,
   children,

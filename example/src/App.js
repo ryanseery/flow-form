@@ -21,7 +21,10 @@ function App() {
   return (
     <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
       <FlowForm onSubmit={data => console.log('onSubmit: ', data)} showData>
-        <Step label="First Step">
+        <Field type="text">TEST 1</Field>
+
+        <Field type="number">Numbers</Field>
+        {/* <Step label="First Step">
           <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
             <Field validation={checkString}>Test 3</Field>
 
@@ -65,7 +68,7 @@ function App() {
             <FieldList.Item validation={checkString}>Name</FieldList.Item>
             <FieldList.Item type="email" name="email" />
           </FieldList>
-        </Step>
+        </Step> */}
       </FlowForm>
     </div>
   );

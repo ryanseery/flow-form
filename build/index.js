@@ -4048,7 +4048,7 @@ var FieldWrapper = styled.label(templateObject_1$8 || (templateObject_1$8 = __ma
 var templateObject_1$8;
 
 var Field = function (_a) {
-    var step = _a.step, index = _a.index, name = _a.name, type = _a.type, children = _a.children, style = _a.style, _b = _a.required, required = _b === void 0 ? false : _b, validation = _a.validation, _c = _a.autoComplete, autoComplete = _c === void 0 ? 'off' : _c, placeholder = _a.placeholder, errMsg = _a.errMsg, options = _a.options, inputs = _a.inputs;
+    var _b = _a.step, step = _b === void 0 ? null : _b, _c = _a.index, index = _c === void 0 ? 0 : _c, name = _a.name, type = _a.type, children = _a.children, style = _a.style, _d = _a.required, required = _d === void 0 ? false : _d, validation = _a.validation, _e = _a.autoComplete, autoComplete = _e === void 0 ? 'off' : _e, placeholder = _a.placeholder, errMsg = _a.errMsg, options = _a.options, inputs = _a.inputs;
     if (!name && !children) {
         throw new Error("Please provide a label(<Field>Label</Field>) or name prop(<Field name=\"label\" />).");
     }

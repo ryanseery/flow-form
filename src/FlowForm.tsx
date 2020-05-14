@@ -9,11 +9,15 @@ import { Progress } from './Progress';
 import { Global } from './@style';
 import { theme2 } from './theme2';
 
+// interface LooseObject {
+//   [key: string]: any;
+// }
+
 interface IForm {
   ffComp?: string;
   onSubmit: (formData: {}) => void | Promise<void>;
   className?: string;
-  style?: {};
+  style?: React.CSSProperties;
   showData?: boolean;
   doughNut?: boolean;
 }

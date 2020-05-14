@@ -15,7 +15,7 @@ type IFieldListProps = {
   label: string;
   name?: string;
   className?: string;
-  style?: {};
+  style?: React.CSSProperties;
   add?: boolean;
   required?: boolean;
 };
