@@ -1,13 +1,11 @@
 import * as React from 'react';
 import { FFComponent } from '../FFComponent';
 import { Item } from './Item';
-import { Row } from './Row';
 import { ItemInput } from './ItemInput';
 import { ListButton } from '../buttons';
 import { useFieldListData } from './fieldListUtils';
 import { DisplayError } from '../DisplayError';
-import { theme } from '../theme';
-import { border } from '../utils';
+import { FieldListWrapper } from './@styles';
 
 type IFieldListProps = {
   ffComp?: string;
@@ -61,18 +59,18 @@ export const FieldList: IFieldList<IFieldListProps> = ({
   });
 
   return (
-    <fieldset
+    <FieldListWrapper
       data-field-list-id={id}
-      className={`flow-form-field-list ${className}`}
-      style={{ display: `block`, minHeight: '4.5rem', border: 'none', padding: '0', margin: '0', ...style }}
+      className={`flow-form-field-list field-list-container-${className}`}
+      style={style}
     >
-      <legend style={{ fontSize: `${theme.fonts.medium}`, paddingBottom: '0.2em' }}>
-        {label} {required && <span style={{ color: `${theme.colors.red}` }}>*</span>}
+      <legend className="flow-form-field-list-label">
+        {label} {required && <span className="required">*</span>}
       </legend>
       {value.map((field: {}, index: number) => (
-        <Row key={index} className={className}>
+        <div key={index} className={`flow-form-field-list-row  field-list-row-${className}`}>
           {Object.entries(field).map(([k, v], i: number) => (
-            <div key={i} style={{ display: 'flex', flexDirection: 'column', width: '100%' }}>
+            <div key={i} className="flow-form-field-list-row-input-container">
               <ItemInput
                 key={k}
                 objKey={k}
@@ -84,16 +82,8 @@ export const FieldList: IFieldList<IFieldListProps> = ({
                 onBlur={onBlur(index, i)}
                 onFocus={onFocus(index)}
                 autoComplete={inputProps?.[i].autoComplete ?? 'off'}
-                style={{
-                  marginRight: '0.625em',
-                  textTransform: 'capitalize',
-                  fontSize: `${theme.fonts.medium}`,
-                  textIndent: `${theme.text.indent}`,
-                  border: `${border(focused[index][k], showError[index][k])}`,
-                  borderRadius: `${theme.border.radius}`,
-                  backgroundColor: `${theme.colors.white}`,
-                  outline: 'none',
-                }}
+                focused={focused[index][k]}
+                showError={showError[index][k]}
               />
               {showError[index][k] && (
                 <DisplayError id={k} className={inputProps[i].className} label={k} errMsg={inputProps[i].errMsg} />
@@ -111,9 +101,9 @@ export const FieldList: IFieldList<IFieldListProps> = ({
               )}
             </>
           )}
-        </Row>
+        </div>
       ))}
-    </fieldset>
+    </FieldListWrapper>
   );
 };
 

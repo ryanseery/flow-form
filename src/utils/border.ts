@@ -1,11 +1,15 @@
-import { theme } from '../theme';
+export type Props = {
+  focused: boolean;
+  showError: boolean;
+  theme: { border: { error: string; focus: string; default: string } };
+};
 
-export function border(focused: boolean, showError: boolean): string {
-  if (focused && showError) return theme.border.error;
+export function border(props: Props) {
+  if (props.focused && props.showError) return props.theme.border.error;
 
-  if (focused) return theme.border.focus;
+  if (props.focused) return props.theme.border.focus;
 
-  if (showError) return theme.border.error;
+  if (props.showError) return props.theme.border.error;
 
-  return theme.border.default;
+  return props.theme.border.default;
 }

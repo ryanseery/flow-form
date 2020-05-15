@@ -18,7 +18,6 @@ export enum FFComponent {
   CHECKBOX = 'CHECKBOX',
   FIELD_LIST = 'FIELD_LIST',
   ITEM = 'ITEM',
-  ROW = 'ROW',
   ITEM_INPUT = 'ITEM_INPUT',
   PROGRESS = 'PROGRESS',
   DOUGHNUT = 'DOUGHNUT',

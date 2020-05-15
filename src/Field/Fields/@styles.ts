@@ -1,20 +1,5 @@
 import styled from 'styled-components';
-
-type Props = {
-  focused: boolean;
-  showError: boolean;
-  theme: { border: { error: string; focus: string; default: string } };
-};
-
-export function border(props: Props) {
-  if (props.focused && props.showError) return props.theme.border.error;
-
-  if (props.focused) return props.theme.border.focus;
-
-  if (props.showError) return props.theme.border.error;
-
-  return props.theme.border.default;
-}
+import { Props, border } from '../../utils';
 
 export const InputWrapper = styled.input<Props>`
   display: block;

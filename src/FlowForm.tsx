@@ -7,15 +7,15 @@ import { toCamelCase } from './utils';
 import { DefaultSubmit, DefaultBack, DefaultNext } from './buttons';
 import { Progress } from './Progress';
 import { Global } from './@style';
-import { theme2 } from './theme2';
+import { theme } from './theme';
 
-// interface LooseObject {
-//   [key: string]: any;
-// }
+interface FormData {
+  [key: string]: any;
+}
 
 interface IForm {
   ffComp?: string;
-  onSubmit: (formData: {}) => void | Promise<void>;
+  onSubmit: (formData: FormData) => void | Promise<void>;
   className?: string;
   style?: React.CSSProperties;
   showData?: boolean;
@@ -128,7 +128,7 @@ interface IFlowForm extends IForm {}
 
 export const FlowForm: React.FC<IFlowForm> = ({ children, onSubmit, className, style, showData, doughNut }) => {
   return (
-    <ThemeProvider theme={theme2}>
+    <ThemeProvider theme={theme}>
       <Wrapper>
         <Global />
         <Form onSubmit={onSubmit} className={className} style={style} showData={showData} doughNut={doughNut}>

@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { FFComponent } from '../FFComponent';
+import { ItemInputWrapper } from './@styles';
 
 interface IItemInput {
   ffComp?: string;
@@ -9,7 +10,8 @@ interface IItemInput {
   value: string | number;
   required?: boolean;
   autoComplete?: string;
-  style: {};
+  focused: boolean;
+  showError: boolean;
   onChange: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => void;
   onBlur: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => void;
   onFocus: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => void;
@@ -25,9 +27,8 @@ export const ItemInput: React.FC<IItemInput> = ({
   onChange,
   onBlur,
   onFocus,
-  style,
 }) => (
-  <input
+  <ItemInputWrapper
     data-field-id={`${objKey}-field-field-list-item-${fieldIndex}`}
     id={`${objKey}-field-list-field-${type}`}
     name={objKey}
@@ -40,7 +41,6 @@ export const ItemInput: React.FC<IItemInput> = ({
     className={`flow-form-field flow-form-field-list-item ${objKey}-field-list-item`}
     placeholder={objKey}
     autoComplete={autoComplete}
-    style={style}
   />
 );
 
