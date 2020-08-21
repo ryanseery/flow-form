@@ -1,4 +1,4 @@
-import { createContext, useReducer, useMemo, createElement, useContext, useCallback } from 'react';
+import { createContext, useReducer, useMemo, createElement, useContext, useCallback, forwardRef } from 'react';
 
 /*! *****************************************************************************
 Copyright (c) Microsoft Corporation. All rights reserved.
@@ -129,19 +129,22 @@ var Wrapper = function (_a) {
     return (createElement(Context.Provider, { value: __assign(__assign({}, state), actions) }, children));
 };
 
+// TODO test to see information that can be gathered from form's ref
+// TODO create submit button
 var Form = function (_a) {
-    var children = _a.children, showData = _a.showData;
-    var _b = useContext(Context), meta = _b.meta, data = _b.data, error = _b.error, focus = _b.focus;
-    showData && console.log({ meta: meta, data: data, error: error, focus: focus });
-    return (createElement("form", { onSubmit: function (e) {
+    var children = _a.children, showData = _a.showData, rest = __rest(_a, ["children", "showData"]);
+    var _b = useContext(Context), meta = _b.meta, data = _b.data, error = _b.error, showError = _b.showError, focus = _b.focus;
+    showData && console.log({ meta: meta, data: data, error: error, showError: showError, focus: focus });
+    return (createElement("form", __assign({ onSubmit: function (e) {
             e.preventDefault();
-        }, className: "flow-form" },
-        createElement("fieldset", { className: "flow-form-fieldset", style: { border: 'none', padding: 'none', margin: 'none' } }, children)));
+        }, className: "flow-form" }, rest),
+        createElement("fieldset", { className: "flow-form-fieldset", style: { border: 'none', padding: '0', margin: '0 0 1em 0' } }, children),
+        createElement("button", { type: "submit" }, "Submit")));
 };
 var FlowForm = function (_a) {
-    var children = _a.children, showData = _a.showData;
+    var children = _a.children, showData = _a.showData, rest = __rest(_a, ["children", "showData"]);
     return (createElement(Wrapper, null,
-        createElement(Form, { showData: showData }, children)));
+        createElement(Form, __assign({ showData: showData }, rest), children)));
 };
 
 function validate(e, validation, required) {
@@ -205,6 +208,8 @@ function toCamelCase(str) {
         .replace(/\s+/g, '');
 }
 
+var Input = forwardRef(function (props, forwardRef) { return createElement("input", __assign({}, props, { ref: forwardRef })); });
+
 var Field = function (_a) {
     var _b;
     var _c = _a.type, type = _c === void 0 ? 'text' : _c, name = _a.name, children = _a.children, required = _a.required, validation = _a.validation, rest = __rest(_a, ["type", "name", "children", "required", "validation"]);
@@ -214,7 +219,7 @@ var Field = function (_a) {
     var id = useMemo(function () { return (name ? toCamelCase(name) : toCamelCase(children !== null && children !== void 0 ? children : '')); }, [name, children]);
     return (createElement("label", { htmlFor: id, className: "flow-form-label" },
         children ? children : name !== null && name !== void 0 ? name : '',
-        createElement("input", __assign({ className: "flow-form-input", style: { display: 'block' }, ref: onRegister, id: id, "data-input-id": id, name: id, type: type, required: required, value: (_b = data[id]) !== null && _b !== void 0 ? _b : '', onChange: onChange, onFocus: onFocus, onBlur: onBlur }, rest))));
+        createElement(Input, __assign({ className: "flow-form-input", style: { display: 'block' }, ref: onRegister, id: id, "data-input-id": id, name: name, type: type, value: (_b = data[id]) !== null && _b !== void 0 ? _b : '', onChange: onChange, onFocus: onFocus, onBlur: onBlur }, rest))));
 };
 
 export { Field, FlowForm };

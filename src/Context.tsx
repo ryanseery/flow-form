@@ -58,12 +58,12 @@ type FormArgs = {
   flow: Flow;
 };
 
-type IDVal = {
+type ID = {
   id: string;
-  value: any;
 };
 
-interface Args extends IDVal {
+interface Args extends ID {
+  value: any;
   error: boolean;
 }
 

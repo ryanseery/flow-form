@@ -2,7 +2,7 @@ import * as React from 'react';
 import { Context } from './Context';
 import { KeyValue } from './@types/keyValue';
 
-type RefType = HTMLInputElement;
+type RefType = HTMLInputElement | HTMLSelectElement;
 
 type EventType = React.ChangeEvent<
   HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
