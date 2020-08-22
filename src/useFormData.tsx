@@ -10,7 +10,7 @@ type EventType = React.ChangeEvent<
 
 function validate(
   e: EventType,
-  validation: Props['validation'] | undefined,
+  validation: UseFormProps['validation'] | undefined,
   required: boolean,
 ): boolean {
   if (required) {
@@ -23,17 +23,17 @@ function validate(
   return false;
 }
 
-type Props = {
+type UseFormProps = {
   validation?: (e: EventType) => boolean;
 };
-type UseFormData = {
+type UseFormReturn = {
   data: KeyValue;
   onRegister: (ref: RefType) => void;
   onChange: (e: EventType) => void;
   onFocus: (e: EventType) => void;
   onBlur: (e: EventType) => void;
 };
-export function useFormData({ validation }: Props): UseFormData {
+export function useFormData({ validation }: UseFormProps): UseFormReturn {
   const {
     data,
     registerField,
