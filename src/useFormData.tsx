@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { Context } from './Context';
 import { KeyValue } from './@types/keyValue';
+import { KeyValBool } from './@types/keyValBool';
 
 type RefType = HTMLInputElement | HTMLSelectElement;
 
@@ -28,6 +29,7 @@ type UseFormProps = {
 };
 type UseFormReturn = {
   data: KeyValue;
+  showError: KeyValBool;
   onRegister: (ref: RefType) => void;
   onChange: (e: EventType) => void;
   onFocus: (e: EventType) => void;
@@ -36,6 +38,7 @@ type UseFormReturn = {
 export function useFormData({ validation }: UseFormProps): UseFormReturn {
   const {
     data,
+    showError,
     registerField,
     updateField,
     handleFocus,
@@ -86,6 +89,7 @@ export function useFormData({ validation }: UseFormProps): UseFormReturn {
 
   return {
     data,
+    showError,
     onRegister: React.useCallback(onRegister, []),
     onChange: React.useCallback(onChange, []),
     onFocus: React.useCallback(onFocus, []),

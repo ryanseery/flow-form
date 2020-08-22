@@ -1,12 +1,9 @@
 import * as React from 'react';
 import { KeyValue } from './@types/keyValue';
-
-export type KeyValueBool = {
-  [key: string]: boolean;
-};
+import { KeyValBool } from './@types/keyValBool';
 
 type Meta = {
-  touched: KeyValueBool;
+  touched: KeyValBool;
   completedSteps: StepState[] | null;
 };
 
@@ -29,9 +26,9 @@ type State = {
   meta: Meta;
   flow: Flow;
   data: KeyValue;
-  error: KeyValueBool;
-  showError: KeyValueBool;
-  focus: KeyValueBool;
+  error: KeyValBool;
+  showError: KeyValBool;
+  focus: KeyValBool;
 };
 
 const initialState: State = {
