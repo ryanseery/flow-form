@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { useFormData } from '../useFormData';
 import { toCamelCase } from '../utils';
-import { Input, Select } from './Fields';
+import { Input, Select, TextArea } from './Fields';
 
 export interface IField
   extends React.InputHTMLAttributes<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement> {
@@ -48,7 +48,7 @@ export const Field: React.FC<IField> = ({ type = 'text', name, children, validat
             return (
               <Select
                 {...rest}
-                className="flow-form-input"
+                className="flow-form-select"
                 ref={onRegister}
                 id={id}
                 data-input-id={id}
@@ -58,6 +58,23 @@ export const Field: React.FC<IField> = ({ type = 'text', name, children, validat
                 onFocus={onFocus}
                 onBlur={onBlur}
                 children={children}
+              />
+            );
+          }
+          case 'textarea': {
+            return (
+              <TextArea
+                {...rest}
+                className="flow-form-textarea"
+                ref={onRegister}
+                id={id}
+                data-input-id={id}
+                name={id}
+                type={type}
+                value={data[id] ?? ''}
+                onChange={onChange}
+                onFocus={onFocus}
+                onBlur={onBlur}
               />
             );
           }

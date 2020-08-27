@@ -130,7 +130,7 @@ var Wrapper = function (_a) {
             handleBlur: function (payload) { return dispatch(handleBlur(payload)); },
         };
     }, []);
-    return (React.createElement(Context.Provider, { value: __assign(__assign({}, state), actions) }, children));
+    return React.createElement(Context.Provider, { value: __assign(__assign({}, state), actions) }, children);
 };
 
 function styleInject(css, ref) {
@@ -160,7 +160,7 @@ function styleInject(css, ref) {
   }
 }
 
-var css_248z = "fieldset {\n  border: none;\n  padding: 0;\n  margin: 0 0 1rem 0;\n}\n\ninput {\n  display: block;\n}\n\nselect {\n  display: block;\n}\n";
+var css_248z = "fieldset {\n  border: none;\n  padding: 0;\n  margin: 0 0 1rem 0;\n}\n\ninput {\n  display: block;\n}\n\nselect {\n  display: block;\n}\n\ntextarea {\n  display: block;\n}\n";
 styleInject(css_248z);
 
 // TODO test to see information that can be gathered from form's ref
@@ -242,9 +242,11 @@ function toCamelCase(str) {
         .replace(/\s+/g, '');
 }
 
-var Input = React.forwardRef(function (props, ref) { return React.createElement("input", __assign({}, props, { ref: ref })); });
+var Input = React.forwardRef(function (props, ref) { return (React.createElement("input", __assign({}, props, { ref: ref }))); });
 
 var Select = React.forwardRef(function (props, ref) { return (React.createElement("select", __assign({}, props, { ref: ref }), props.children)); });
+
+var TextArea = React.forwardRef(function (props, ref) { return (React.createElement("textarea", __assign({}, props, { ref: ref }))); });
 
 // TODO allow css files to get rid of style in deconstruct
 var Field = function (_a) {
@@ -269,22 +271,23 @@ var Field = function (_a) {
             };
         }
         return {
-            id: isString
-                ? toCamelCase(children)
-                : toCamelCase(name),
+            id: isString ? toCamelCase(children) : toCamelCase(name),
             inputLabel: !isOptions && !children ? name : children !== null && children !== void 0 ? children : '',
         };
     }, []), id = _d.id, inputLabel = _d.inputLabel;
     return (React.createElement("label", { htmlFor: id, className: "flow-form-label" },
         inputLabel,
         (function () {
-            var _a, _b;
+            var _a, _b, _c;
             switch (type) {
                 case 'select': {
-                    return (React.createElement(Select, __assign({}, rest, { className: "flow-form-input", ref: onRegister, id: id, "data-input-id": id, name: id, value: (_a = data[id]) !== null && _a !== void 0 ? _a : '', onChange: onChange, onFocus: onFocus, onBlur: onBlur, children: children })));
+                    return (React.createElement(Select, __assign({}, rest, { className: "flow-form-select", ref: onRegister, id: id, "data-input-id": id, name: id, value: (_a = data[id]) !== null && _a !== void 0 ? _a : '', onChange: onChange, onFocus: onFocus, onBlur: onBlur, children: children })));
+                }
+                case 'textarea': {
+                    return (React.createElement(TextArea, __assign({}, rest, { className: "flow-form-textarea", ref: onRegister, id: id, "data-input-id": id, name: id, type: type, value: (_b = data[id]) !== null && _b !== void 0 ? _b : '', onChange: onChange, onFocus: onFocus, onBlur: onBlur })));
                 }
                 default: {
-                    return (React.createElement(Input, __assign({}, rest, { className: "flow-form-input", ref: onRegister, id: id, "data-input-id": id, name: id, type: type, value: (_b = data[id]) !== null && _b !== void 0 ? _b : '', onChange: onChange, onFocus: onFocus, onBlur: onBlur })));
+                    return (React.createElement(Input, __assign({}, rest, { className: "flow-form-input", ref: onRegister, id: id, "data-input-id": id, name: id, type: type, value: (_c = data[id]) !== null && _c !== void 0 ? _c : '', onChange: onChange, onFocus: onFocus, onBlur: onBlur })));
                 }
             }
         })()));

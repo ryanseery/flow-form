@@ -11,3 +11,7 @@ input {
 select {
   display: block;
 }
+
+textarea {
+  display: block;
+}

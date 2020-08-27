@@ -30,6 +30,8 @@ function App() {
           <option value="mercedes">Mercedes</option>
           <option value="audi">Audi</option>
         </Field>
+
+        <Field type="textarea">Text Area</Field>
       </FlowForm>
     </div>
   );
