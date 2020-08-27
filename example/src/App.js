@@ -7,10 +7,6 @@ function App() {
     return !e.target.value || !e.target.value.length;
   };
 
-  // const checkNumber = e => {
-  //   return !Number.isInteger(parseFloat(e.target.value));
-  // };
-
   return (
     <div
       style={{
@@ -26,6 +22,13 @@ function App() {
 
         <Field type="number" required>
           Numbers
+        </Field>
+
+        <Field type="select" name="cars" id="cars">
+          <option value="volvo">Volvo</option>
+          <option value="saab">Saab</option>
+          <option value="mercedes">Mercedes</option>
+          <option value="audi">Audi</option>
         </Field>
       </FlowForm>
     </div>

@@ -1,7 +1,8 @@
 import * as React from 'react';
+import { IField } from '../Field';
 
-type Props = React.SelectHTMLAttributes<HTMLSelectElement>;
-
-export const Select = React.forwardRef<HTMLSelectElement, Props>(
-  (props, forwardRef) => <select {...props} ref={forwardRef}></select>,
-);
+export const Select = React.forwardRef<HTMLSelectElement, IField>((props, ref) => (
+  <select {...props} ref={ref}>
+    {props.children}
+  </select>
+));

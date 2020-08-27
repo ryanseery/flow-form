@@ -1,6 +1,5 @@
 import * as React from 'react';
-import { KeyValue } from './@types/keyValue';
-import { KeyValBool } from './@types/keyValBool';
+import { KeyValue, KeyValBool } from './@types/keyTypes';
 
 type Meta = {
   touched: KeyValBool;
@@ -131,12 +130,7 @@ const handleBlur = (payload: { id: string }): HandleBlur => ({
   payload,
 });
 
-type Actions =
-  | RegisterForm
-  | RegisterField
-  | UpdateField
-  | HandleFocus
-  | HandleBlur;
+type Actions = RegisterForm | RegisterField | UpdateField | HandleFocus | HandleBlur;
 
 function reducer(state: State, action: Actions): State {
   switch (action.type) {
@@ -251,9 +245,5 @@ export const Wrapper: React.FC<Props> = ({ children }) => {
     };
   }, []);
 
-  return (
-    <Context.Provider value={{ ...state, ...actions }}>
-      {children}
-    </Context.Provider>
-  );
+  return <Context.Provider value={{ ...state, ...actions }}>{children}</Context.Provider>;
 };

@@ -1,9 +1,9 @@
 import * as React from 'react';
 import { Context } from './Context';
-import { KeyValue } from './@types/keyValue';
-import { KeyValBool } from './@types/keyValBool';
+import { KeyValue, KeyValBool } from './@types/keyTypes';
+import { IField } from './Field/Field';
 
-type RefType = HTMLInputElement | HTMLSelectElement;
+type RefType = HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement;
 
 type EventType = React.ChangeEvent<
   HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
@@ -30,7 +30,7 @@ type UseFormProps = {
 type UseFormReturn = {
   data: KeyValue;
   showError: KeyValBool;
-  onRegister: (ref: RefType) => void;
+  onRegister: (ref: RefType & IField) => void;
   onChange: (e: EventType) => void;
   onFocus: (e: EventType) => void;
   onBlur: (e: EventType) => void;

@@ -133,8 +133,37 @@ var Wrapper = function (_a) {
     return (React.createElement(Context.Provider, { value: __assign(__assign({}, state), actions) }, children));
 };
 
+function styleInject(css, ref) {
+  if ( ref === void 0 ) ref = {};
+  var insertAt = ref.insertAt;
+
+  if (!css || typeof document === 'undefined') { return; }
+
+  var head = document.head || document.getElementsByTagName('head')[0];
+  var style = document.createElement('style');
+  style.type = 'text/css';
+
+  if (insertAt === 'top') {
+    if (head.firstChild) {
+      head.insertBefore(style, head.firstChild);
+    } else {
+      head.appendChild(style);
+    }
+  } else {
+    head.appendChild(style);
+  }
+
+  if (style.styleSheet) {
+    style.styleSheet.cssText = css;
+  } else {
+    style.appendChild(document.createTextNode(css));
+  }
+}
+
+var css_248z = "fieldset {\n  border: none;\n  padding: 0;\n  margin: 0 0 1rem 0;\n}\n\ninput {\n  display: block;\n}\n\nselect {\n  display: block;\n}\n";
+styleInject(css_248z);
+
 // TODO test to see information that can be gathered from form's ref
-// TODO create submit button
 var Form = function (_a) {
     var children = _a.children, showData = _a.showData, rest = __rest(_a, ["children", "showData"]);
     var _b = React.useContext(Context), meta = _b.meta, data = _b.data, error = _b.error, showError = _b.showError, focus = _b.focus;
@@ -142,7 +171,7 @@ var Form = function (_a) {
     return (React.createElement("form", __assign({ onSubmit: function (e) {
             e.preventDefault();
         }, className: "flow-form" }, rest),
-        React.createElement("fieldset", { className: "flow-form-fieldset", style: { border: 'none', padding: '0', margin: '0 0 1em 0' } }, children),
+        React.createElement("fieldset", { className: "flow-form-fieldset" }, children),
         React.createElement("button", { type: "submit" }, "Submit")));
 };
 var FlowForm = function (_a) {
@@ -162,7 +191,7 @@ function validate(e, validation, required) {
 }
 function useFormData(_a) {
     var validation = _a.validation;
-    var _b = React.useContext(Context), data = _b.data, registerField = _b.registerField, updateField = _b.updateField, handleFocus = _b.handleFocus, handleBlur = _b.handleBlur;
+    var _b = React.useContext(Context), data = _b.data, showError = _b.showError, registerField = _b.registerField, updateField = _b.updateField, handleFocus = _b.handleFocus, handleBlur = _b.handleBlur;
     var onRegister = function (ref) {
         var id = ref.id, value = ref.value, required = ref.required;
         registerField({ id: id, value: value, error: required });
@@ -196,6 +225,7 @@ function useFormData(_a) {
     };
     return {
         data: data,
+        showError: showError,
         onRegister: React.useCallback(onRegister, []),
         onChange: React.useCallback(onChange, []),
         onFocus: React.useCallback(onFocus, []),
@@ -212,18 +242,52 @@ function toCamelCase(str) {
         .replace(/\s+/g, '');
 }
 
-var Input = React.forwardRef(function (props, forwardRef) { return React.createElement("input", __assign({}, props, { ref: forwardRef })); });
+var Input = React.forwardRef(function (props, ref) { return React.createElement("input", __assign({}, props, { ref: ref })); });
 
+var Select = React.forwardRef(function (props, ref) { return (React.createElement("select", __assign({}, props, { ref: ref }), props.children)); });
+
+// TODO allow css files to get rid of style in deconstruct
 var Field = function (_a) {
-    var _b;
-    var _c = _a.type, type = _c === void 0 ? 'text' : _c, name = _a.name, children = _a.children, required = _a.required, validation = _a.validation, rest = __rest(_a, ["type", "name", "children", "required", "validation"]);
-    var _d = useFormData({
+    var _b = _a.type, type = _b === void 0 ? 'text' : _b, name = _a.name, children = _a.children, validation = _a.validation, rest = __rest(_a, ["type", "name", "children", "validation"]);
+    var _c = useFormData({
         validation: validation,
-    }), data = _d.data, onRegister = _d.onRegister, onChange = _d.onChange, onFocus = _d.onFocus, onBlur = _d.onBlur;
-    var id = React.useMemo(function () { return (name ? toCamelCase(name) : toCamelCase(children !== null && children !== void 0 ? children : '')); }, [name, children]);
+    }), data = _c.data, onRegister = _c.onRegister, onChange = _c.onChange, onFocus = _c.onFocus, onBlur = _c.onBlur;
+    // TODO clean this up!
+    var _d = React.useMemo(function () {
+        var isString = typeof children === 'string';
+        var isOptions = Array.isArray(children);
+        if (isString) {
+            return {
+                id: toCamelCase(children),
+                inputLabel: children,
+            };
+        }
+        else if (isOptions) {
+            return {
+                id: toCamelCase(name !== null && name !== void 0 ? name : ''),
+                inputLabel: name,
+            };
+        }
+        return {
+            id: isString
+                ? toCamelCase(children)
+                : toCamelCase(name),
+            inputLabel: !isOptions && !children ? name : children !== null && children !== void 0 ? children : '',
+        };
+    }, []), id = _d.id, inputLabel = _d.inputLabel;
     return (React.createElement("label", { htmlFor: id, className: "flow-form-label" },
-        children ? children : name !== null && name !== void 0 ? name : '',
-        React.createElement(Input, __assign({ className: "flow-form-input", style: { display: 'block' }, ref: onRegister, id: id, "data-input-id": id, name: name, type: type, value: (_b = data[id]) !== null && _b !== void 0 ? _b : '', onChange: onChange, onFocus: onFocus, onBlur: onBlur }, rest))));
+        inputLabel,
+        (function () {
+            var _a, _b;
+            switch (type) {
+                case 'select': {
+                    return (React.createElement(Select, __assign({}, rest, { className: "flow-form-input", ref: onRegister, id: id, "data-input-id": id, name: id, value: (_a = data[id]) !== null && _a !== void 0 ? _a : '', onChange: onChange, onFocus: onFocus, onBlur: onBlur, children: children })));
+                }
+                default: {
+                    return (React.createElement(Input, __assign({}, rest, { className: "flow-form-input", ref: onRegister, id: id, "data-input-id": id, name: id, type: type, value: (_b = data[id]) !== null && _b !== void 0 ? _b : '', onChange: onChange, onFocus: onFocus, onBlur: onBlur })));
+                }
+            }
+        })()));
 };
 
 exports.Field = Field;

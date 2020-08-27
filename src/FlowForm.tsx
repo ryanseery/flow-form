@@ -1,13 +1,12 @@
 import * as React from 'react';
 import { Context, Wrapper } from './Context';
-import { KeyValue } from './@types/keyValue';
+import './FlowForm.css';
 
 interface Form extends React.FormHTMLAttributes<HTMLFormElement> {
   showData: boolean;
 }
 
 // TODO test to see information that can be gathered from form's ref
-// TODO create submit button
 const Form: React.FC<Form> = ({ children, showData, ...rest }) => {
   const { meta, data, error, showError, focus } = React.useContext(Context);
 
@@ -21,12 +20,7 @@ const Form: React.FC<Form> = ({ children, showData, ...rest }) => {
       className="flow-form"
       {...rest}
     >
-      <fieldset
-        className="flow-form-fieldset"
-        style={{ border: 'none', padding: '0', margin: '0 0 1em 0' }}
-      >
-        {children}
-      </fieldset>
+      <fieldset className="flow-form-fieldset">{children}</fieldset>
 
       <button type="submit">Submit</button>
     </form>
@@ -34,11 +28,7 @@ const Form: React.FC<Form> = ({ children, showData, ...rest }) => {
 };
 
 interface FlowForm extends Form {}
-export const FlowForm: React.FC<FlowForm> = ({
-  children,
-  showData,
-  ...rest
-}) => {
+export const FlowForm: React.FC<FlowForm> = ({ children, showData, ...rest }) => {
   return (
     <Wrapper>
       <Form showData={showData} {...rest}>
