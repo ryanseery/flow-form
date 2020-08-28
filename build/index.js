@@ -166,11 +166,9 @@ styleInject(css_248z);
 // TODO test to see information that can be gathered from form's ref
 var Form = function (_a) {
     var children = _a.children, showData = _a.showData, rest = __rest(_a, ["children", "showData"]);
-    var formRef = React.createRef();
     var _b = React.useContext(Context), meta = _b.meta, data = _b.data, error = _b.error, showError = _b.showError, focus = _b.focus;
     showData && console.log({ meta: meta, data: data, error: error, showError: showError, focus: focus });
-    console.log('formRef: ', formRef);
-    return (React.createElement("form", __assign({ ref: formRef, onSubmit: function (e) {
+    return (React.createElement("form", __assign({ onSubmit: function (e) {
             e.preventDefault();
         }, className: "flow-form" }, rest),
         React.createElement("fieldset", { className: "flow-form-fieldset" }, children),
@@ -253,7 +251,7 @@ var TextArea = React.forwardRef(function (props, ref) { return (React.createElem
 // TODO first radio is being auto selected. register issue?
 var Radio = React.forwardRef(function (props, ref) {
     return (React.createElement("div", { className: "flow-form-radio-group" }, (props === null || props === void 0 ? void 0 : props.children).map(function (child) { return (React.createElement("label", { htmlFor: child.props.id, key: child.props.name, className: props.className },
-        React.createElement("input", { id: props.id, type: "radio", ref: ref, value: child.props.name, checked: props.value === child.props.name, onChange: props.onChange }),
+        React.createElement("input", { id: props.id, name: child.props.name, type: "radio", ref: ref, value: child.props.name, checked: props.value === child.props.name, onChange: props.onChange }),
         child.props.name)); })));
 });
 
@@ -288,9 +286,10 @@ var Field = function (_a) {
         return {
             id: isString ? toCamelCase(children) : toCamelCase(name),
             inputLabel: !isOptions && !children ? name : children !== null && children !== void 0 ? children : '',
+            isOptions: isOptions,
         };
-    }, []), id = _d.id, inputLabel = _d.inputLabel;
-    return (React.createElement("label", { htmlFor: id, className: "flow-form-label" },
+    }, []), id = _d.id, inputLabel = _d.inputLabel, isOptions = _d.isOptions;
+    return (React.createElement("label", { htmlFor: isOptions ? '' : id, className: "flow-form-label" },
         inputLabel,
         (function () {
             var _a, _b, _c, _d, _e;

@@ -9,6 +9,7 @@ export const Radio = React.forwardRef<HTMLInputElement, IField>((props, ref) => 
         <label htmlFor={child.props.id} key={child.props.name} className={props.className}>
           <input
             id={props.id}
+            name={child.props.name}
             type="radio"
             ref={ref}
             value={child.props.name}

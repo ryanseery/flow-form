@@ -8,16 +8,12 @@ interface Form extends React.FormHTMLAttributes<HTMLFormElement> {
 
 // TODO test to see information that can be gathered from form's ref
 const Form: React.FC<Form> = ({ children, showData, ...rest }) => {
-  const formRef = React.createRef<HTMLFormElement>();
   const { meta, data, error, showError, focus } = React.useContext(Context);
 
   showData && console.log({ meta, data, error, showError, focus });
 
-  console.log('formRef: ', formRef);
-
   return (
     <form
-      ref={formRef}
       onSubmit={e => {
         e.preventDefault();
       }}

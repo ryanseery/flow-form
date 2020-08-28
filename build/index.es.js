@@ -1,4 +1,4 @@
-import { createContext, useReducer, useMemo, createElement, createRef, useContext, useCallback, forwardRef } from 'react';
+import { createContext, useReducer, useMemo, createElement, useContext, useCallback, forwardRef } from 'react';
 
 /*! *****************************************************************************
 Copyright (c) Microsoft Corporation. All rights reserved.
@@ -162,11 +162,9 @@ styleInject(css_248z);
 // TODO test to see information that can be gathered from form's ref
 var Form = function (_a) {
     var children = _a.children, showData = _a.showData, rest = __rest(_a, ["children", "showData"]);
-    var formRef = createRef();
     var _b = useContext(Context), meta = _b.meta, data = _b.data, error = _b.error, showError = _b.showError, focus = _b.focus;
     showData && console.log({ meta: meta, data: data, error: error, showError: showError, focus: focus });
-    console.log('formRef: ', formRef);
-    return (createElement("form", __assign({ ref: formRef, onSubmit: function (e) {
+    return (createElement("form", __assign({ onSubmit: function (e) {
             e.preventDefault();
         }, className: "flow-form" }, rest),
         createElement("fieldset", { className: "flow-form-fieldset" }, children),
@@ -249,7 +247,7 @@ var TextArea = forwardRef(function (props, ref) { return (createElement("textare
 // TODO first radio is being auto selected. register issue?
 var Radio = forwardRef(function (props, ref) {
     return (createElement("div", { className: "flow-form-radio-group" }, (props === null || props === void 0 ? void 0 : props.children).map(function (child) { return (createElement("label", { htmlFor: child.props.id, key: child.props.name, className: props.className },
-        createElement("input", { id: props.id, type: "radio", ref: ref, value: child.props.name, checked: props.value === child.props.name, onChange: props.onChange }),
+        createElement("input", { id: props.id, name: child.props.name, type: "radio", ref: ref, value: child.props.name, checked: props.value === child.props.name, onChange: props.onChange }),
         child.props.name)); })));
 });
 
@@ -284,9 +282,10 @@ var Field = function (_a) {
         return {
             id: isString ? toCamelCase(children) : toCamelCase(name),
             inputLabel: !isOptions && !children ? name : children !== null && children !== void 0 ? children : '',
+            isOptions: isOptions,
         };
-    }, []), id = _d.id, inputLabel = _d.inputLabel;
-    return (createElement("label", { htmlFor: id, className: "flow-form-label" },
+    }, []), id = _d.id, inputLabel = _d.inputLabel, isOptions = _d.isOptions;
+    return (createElement("label", { htmlFor: isOptions ? '' : id, className: "flow-form-label" },
         inputLabel,
         (function () {
             var _a, _b, _c, _d, _e;

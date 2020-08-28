@@ -15,6 +15,7 @@ export const Field: React.FC<IField> = ({ type = 'text', name, children, validat
   });
 
   // TODO clean this up!
+  // TODO htmlFor lable is interfering with radio/checkbox
   const { id, inputLabel } = React.useMemo(() => {
     const isString = typeof children === 'string';
 
