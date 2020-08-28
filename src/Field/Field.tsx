@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { useFormData } from '../useFormData';
 import { toCamelCase } from '../utils';
-import { Input, Select, TextArea } from './Fields';
+import { Input, Select, TextArea, Radio, Checkbox } from './Fields';
 
 export interface IField
   extends React.InputHTMLAttributes<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement> {
@@ -9,7 +9,6 @@ export interface IField
   validation?: (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => boolean;
 }
 
-// TODO allow css files to get rid of style in deconstruct
 export const Field: React.FC<IField> = ({ type = 'text', name, children, validation, ...rest }) => {
   const { data, onRegister, onChange, onFocus, onBlur } = useFormData({
     validation,
@@ -75,6 +74,42 @@ export const Field: React.FC<IField> = ({ type = 'text', name, children, validat
                 onChange={onChange}
                 onFocus={onFocus}
                 onBlur={onBlur}
+              />
+            );
+          }
+          case 'radio': {
+            return (
+              <Radio
+                {...rest}
+                className="flow-form-radio"
+                ref={onRegister}
+                id={id}
+                data-input-id={id}
+                name={id}
+                type={type}
+                value={data[id] ?? ''}
+                onChange={onChange}
+                onFocus={onFocus}
+                onBlur={onBlur}
+                children={children}
+              />
+            );
+          }
+          case 'checkbox': {
+            return (
+              <Checkbox
+                {...rest}
+                className="flow-form-radio"
+                ref={onRegister}
+                id={id}
+                data-input-id={id}
+                name={id}
+                type={type}
+                value={data[id] ?? ''}
+                onChange={onChange}
+                onFocus={onFocus}
+                onBlur={onBlur}
+                children={children}
               />
             );
           }

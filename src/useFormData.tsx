@@ -5,9 +5,7 @@ import { IField } from './Field/Field';
 
 type RefType = HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement;
 
-type EventType = React.ChangeEvent<
-  HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
->;
+type EventType = React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>;
 
 function validate(
   e: EventType,
@@ -36,14 +34,9 @@ type UseFormReturn = {
   onBlur: (e: EventType) => void;
 };
 export function useFormData({ validation }: UseFormProps): UseFormReturn {
-  const {
-    data,
-    showError,
-    registerField,
-    updateField,
-    handleFocus,
-    handleBlur,
-  } = React.useContext(Context);
+  const { data, showError, registerField, updateField, handleFocus, handleBlur } = React.useContext(
+    Context,
+  );
 
   const onRegister = (ref: RefType) => {
     const { id, value, required } = ref;

@@ -7,6 +7,13 @@ function App() {
     return !e.target.value || !e.target.value.length;
   };
 
+  const options = [
+    { value: 'volvo', name: 'Volvo' },
+    { value: 'saab', name: 'Saab' },
+    { value: 'mercedes', name: 'Mercedes' },
+    { value: 'audi', name: 'Audi' },
+  ];
+
   return (
     <div
       style={{
@@ -25,13 +32,28 @@ function App() {
         </Field>
 
         <Field type="select" name="cars" id="cars">
-          <option value="volvo">Volvo</option>
-          <option value="saab">Saab</option>
-          <option value="mercedes">Mercedes</option>
-          <option value="audi">Audi</option>
+          {options.map(option => (
+            <option key={option.name} value={option.value}>
+              {option.name}
+            </option>
+          ))}
         </Field>
 
         <Field type="textarea">Text Area</Field>
+
+        <Field type="radio" name="Radio">
+          <input name="True" value="true" />
+          <input name="False" value="false" />
+        </Field>
+
+        <Field type="checkbox" name="Checkbox">
+          <input name="True" value="true" />
+          <input name="False" value="false" />
+        </Field>
+
+        <div>
+          <Field type="text">In Side Div</Field>
+        </div>
       </FlowForm>
     </div>
   );
