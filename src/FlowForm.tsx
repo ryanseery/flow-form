@@ -8,12 +8,26 @@ interface Form extends React.FormHTMLAttributes<HTMLFormElement> {
 
 // TODO test to see information that can be gathered from form's ref
 const Form: React.FC<Form> = ({ children, showData, ...rest }) => {
+  const ref = React.useRef<HTMLFormElement | null>(null);
   const { meta, data, error, showError, focus } = React.useContext(Context);
 
   showData && console.log({ meta, data, error, showError, focus });
 
+  React.useEffect(() => {
+    console.log('ref: ', ref);
+    const test =
+      ref.current &&
+      Object.entries(ref.current as HTMLFormElement).reduce((acc, [k, v]) => {
+        console.log(!isNaN(parseInt(k)) && v);
+        return acc;
+      }, {});
+
+    console.log('test: ', test);
+  }, [ref.current]);
+
   return (
     <form
+      ref={ref}
       onSubmit={e => {
         e.preventDefault();
       }}
@@ -28,12 +42,10 @@ const Form: React.FC<Form> = ({ children, showData, ...rest }) => {
 };
 
 interface FlowForm extends Form {}
-export const FlowForm: React.FC<FlowForm> = ({ children, showData, ...rest }) => {
+export const FlowForm: React.FC<FlowForm> = props => {
   return (
     <Wrapper>
-      <Form showData={showData} {...rest}>
-        {children}
-      </Form>
+      <Form {...props} />
     </Wrapper>
   );
 };

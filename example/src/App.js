@@ -23,7 +23,10 @@ function App() {
       }}
     >
       <FlowForm onSubmit={data => console.log('onSubmit: ', data)} showData>
-        <Field type="text" validation={checkString}>
+        <input name="True" type="text" />
+        <input name="False" type="number" />
+
+        {/* <Field type="text" validation={checkString}>
           Test 1
         </Field>
 
@@ -42,14 +45,13 @@ function App() {
         <Field type="textarea">Text Area</Field>
 
         <Field type="radio" name="Radio">
-          <input name="True" value="true" />
-          <input name="False" value="false" />
+         
         </Field>
 
         <Field type="checkbox" name="Checkbox">
           <input name="True" value="true" />
           <input name="False" value="false" />
-        </Field>
+        </Field> */}
       </FlowForm>
     </div>
   );

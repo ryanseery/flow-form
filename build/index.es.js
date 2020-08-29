@@ -1,4 +1,4 @@
-import { createContext, useReducer, useMemo, createElement, useContext, useCallback, forwardRef } from 'react';
+import { createContext, useReducer, useMemo, createElement, useRef, useContext, useEffect, useCallback, forwardRef } from 'react';
 
 /*! *****************************************************************************
 Copyright (c) Microsoft Corporation. All rights reserved.
@@ -162,18 +162,28 @@ styleInject(css_248z);
 // TODO test to see information that can be gathered from form's ref
 var Form = function (_a) {
     var children = _a.children, showData = _a.showData, rest = __rest(_a, ["children", "showData"]);
+    var ref = useRef(null);
     var _b = useContext(Context), meta = _b.meta, data = _b.data, error = _b.error, showError = _b.showError, focus = _b.focus;
     showData && console.log({ meta: meta, data: data, error: error, showError: showError, focus: focus });
-    return (createElement("form", __assign({ onSubmit: function (e) {
+    useEffect(function () {
+        console.log('ref: ', ref);
+        var test = ref.current &&
+            Object.entries(ref.current).reduce(function (acc, _a) {
+                var k = _a[0], v = _a[1];
+                console.log(!isNaN(parseInt(k)) && v);
+                return acc;
+            }, {});
+        console.log('test: ', test);
+    }, [ref.current]);
+    return (createElement("form", __assign({ ref: ref, onSubmit: function (e) {
             e.preventDefault();
         }, className: "flow-form" }, rest),
         createElement("fieldset", { className: "flow-form-fieldset" }, children),
         createElement("button", { type: "submit" }, "Submit")));
 };
-var FlowForm = function (_a) {
-    var children = _a.children, showData = _a.showData, rest = __rest(_a, ["children", "showData"]);
+var FlowForm = function (props) {
     return (createElement(Wrapper, null,
-        createElement(Form, __assign({ showData: showData }, rest), children)));
+        createElement(Form, __assign({}, props))));
 };
 
 function validate(e, validation, required) {
@@ -282,10 +292,9 @@ var Field = function (_a) {
         return {
             id: isString ? toCamelCase(children) : toCamelCase(name),
             inputLabel: !isOptions && !children ? name : children !== null && children !== void 0 ? children : '',
-            isOptions: isOptions,
         };
-    }, []), id = _d.id, inputLabel = _d.inputLabel, isOptions = _d.isOptions;
-    return (createElement("label", { htmlFor: isOptions ? '' : id, className: "flow-form-label" },
+    }, []), id = _d.id, inputLabel = _d.inputLabel;
+    return (createElement("label", { htmlFor: id, className: "flow-form-label" },
         inputLabel,
         (function () {
             var _a, _b, _c, _d, _e;
