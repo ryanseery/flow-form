@@ -50,10 +50,6 @@ function App() {
           <input name="True" value="true" />
           <input name="False" value="false" />
         </Field>
-
-        <div>
-          <Field type="text">In Side Div</Field>
-        </div>
       </FlowForm>
     </div>
   );
