@@ -32,6 +32,7 @@ function App() {
         </Field>
 
         <Field type="select" name="cars" id="cars">
+          <option disabled defaultValue=""></option>
           {options.map(option => (
             <option key={option.name} value={option.value}>
               {option.name}

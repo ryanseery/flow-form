@@ -87,14 +87,15 @@ var handleBlur = function (payload) { return ({
 }); };
 function reducer(state, action) {
     var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l;
+    console.log('REDUCER: ', action);
     switch (action.type) {
         case ACTION.REGISTER_FORM: {
             return state;
         }
         case ACTION.REGISTER_FIELD: {
-            var _m = action.payload, id = _m.id, value = _m.value, error = _m.error;
+            var _m = action.payload, id = _m.id, error = _m.error;
             if (!state.data[id]) {
-                return __assign(__assign({}, state), { meta: __assign(__assign({}, state.meta), { touched: __assign(__assign({}, state.meta.touched), (_a = {}, _a[id] = false, _a)) }), data: __assign(__assign({}, state.data), (_b = {}, _b[id] = value, _b)), error: __assign(__assign({}, state.error), (_c = {}, _c[id] = error, _c)), showError: __assign(__assign({}, state.showError), (_d = {}, _d[id] = false, _d)), focus: __assign(__assign({}, state.focus), (_e = {}, _e[id] = false, _e)) });
+                return __assign(__assign({}, state), { meta: __assign(__assign({}, state.meta), { touched: __assign(__assign({}, state.meta.touched), (_a = {}, _a[id] = false, _a)) }), data: __assign(__assign({}, state.data), (_b = {}, _b[id] = '', _b)), error: __assign(__assign({}, state.error), (_c = {}, _c[id] = error, _c)), showError: __assign(__assign({}, state.showError), (_d = {}, _d[id] = false, _d)), focus: __assign(__assign({}, state.focus), (_e = {}, _e[id] = false, _e)) });
             }
             return state;
         }
@@ -159,7 +160,6 @@ function styleInject(css, ref) {
 var css_248z = ".flow-form-fieldset {\n  border: none;\n  padding: 0;\n  margin: 0 0 1rem 0;\n}\n\n.flow-form-radio-group {\n  display: flex;\n  flex-direction: row;\n}\n\n.flow-form-radio {\n  display: flex;\n}\n\n.flow-form-input {\n  display: block;\n}\n\n.flow-form-select {\n  display: block;\n}\n\n.flow-form-textarea {\n  display: block;\n}\n";
 styleInject(css_248z);
 
-// TODO test to see information that can be gathered from form's ref
 var Form = function (_a) {
     var children = _a.children, showData = _a.showData, rest = __rest(_a, ["children", "showData"]);
     var _b = useContext(Context), meta = _b.meta, data = _b.data, error = _b.error, showError = _b.showError, focus = _b.focus;
@@ -170,10 +170,9 @@ var Form = function (_a) {
         createElement("fieldset", { className: "flow-form-fieldset" }, children),
         createElement("button", { type: "submit" }, "Submit")));
 };
-var FlowForm = function (_a) {
-    var children = _a.children, showData = _a.showData, rest = __rest(_a, ["children", "showData"]);
+var FlowForm = function (props) {
     return (createElement(Wrapper, null,
-        createElement(Form, __assign({ showData: showData }, rest), children)));
+        createElement(Form, __assign({}, props))));
 };
 
 function validate(e, validation, required) {
@@ -282,10 +281,9 @@ var Field = function (_a) {
         return {
             id: isString ? toCamelCase(children) : toCamelCase(name),
             inputLabel: !isOptions && !children ? name : children !== null && children !== void 0 ? children : '',
-            isOptions: isOptions,
         };
-    }, []), id = _d.id, inputLabel = _d.inputLabel, isOptions = _d.isOptions;
-    return (createElement("label", { htmlFor: isOptions ? '' : id, className: "flow-form-label" },
+    }, []), id = _d.id, inputLabel = _d.inputLabel;
+    return (createElement("label", { htmlFor: id, className: "flow-form-label" },
         inputLabel,
         (function () {
             var _a, _b, _c, _d, _e;

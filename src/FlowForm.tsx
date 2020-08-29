@@ -6,7 +6,6 @@ interface Form extends React.FormHTMLAttributes<HTMLFormElement> {
   showData: boolean;
 }
 
-// TODO test to see information that can be gathered from form's ref
 const Form: React.FC<Form> = ({ children, showData, ...rest }) => {
   const { meta, data, error, showError, focus } = React.useContext(Context);
 
@@ -28,12 +27,10 @@ const Form: React.FC<Form> = ({ children, showData, ...rest }) => {
 };
 
 interface FlowForm extends Form {}
-export const FlowForm: React.FC<FlowForm> = ({ children, showData, ...rest }) => {
+export const FlowForm: React.FC<FlowForm> = props => {
   return (
     <Wrapper>
-      <Form showData={showData} {...rest}>
-        {children}
-      </Form>
+      <Form {...props} />
     </Wrapper>
   );
 };

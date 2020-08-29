@@ -133,13 +133,14 @@ const handleBlur = (payload: { id: string }): HandleBlur => ({
 type Actions = RegisterForm | RegisterField | UpdateField | HandleFocus | HandleBlur;
 
 function reducer(state: State, action: Actions): State {
+  console.log('REDUCER: ', action);
   switch (action.type) {
     case ACTION.REGISTER_FORM: {
       return state;
     }
     case ACTION.REGISTER_FIELD: {
       const {
-        payload: { id, value, error },
+        payload: { id, error },
       } = action;
 
       if (!state.data[id]) {
@@ -154,7 +155,7 @@ function reducer(state: State, action: Actions): State {
           },
           data: {
             ...state.data,
-            [id]: value,
+            [id]: '',
           },
           error: {
             ...state.error,
