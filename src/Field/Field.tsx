@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { useFormData } from '../useFormData';
 import { toCamelCase } from '../utils';
-import { Input, Select, TextArea, Radio, Checkbox } from './Fields';
+import { Input, Select, TextArea, CheckboxRadio } from './Fields';
 
 export interface IField
   extends React.InputHTMLAttributes<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement> {
@@ -79,7 +79,7 @@ export const Field: React.FC<IField> = ({ type = 'text', name, children, validat
           }
           case 'radio': {
             return (
-              <Radio
+              <CheckboxRadio
                 {...rest}
                 className="flow-form-radio"
                 ref={onRegister}
@@ -97,9 +97,9 @@ export const Field: React.FC<IField> = ({ type = 'text', name, children, validat
           }
           case 'checkbox': {
             return (
-              <Checkbox
+              <CheckboxRadio
                 {...rest}
-                className="flow-form-radio"
+                className={`flow-form-${type}`}
                 ref={onRegister}
                 id={id}
                 data-input-id={id}
