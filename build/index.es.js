@@ -166,7 +166,7 @@ var Form = function (_a) {
     showData && console.log({ meta: meta, data: data, error: error, showError: showError, focus: focus });
     return (createElement("form", __assign({ onSubmit: function (e) {
             e.preventDefault();
-        }, className: "flow-form" }, rest),
+        }, className: "flow-form" }, rest, { ref: console.log }),
         createElement("fieldset", { className: "flow-form-fieldset" }, children),
         createElement("button", { type: "submit" }, "Submit")));
 };
@@ -239,21 +239,14 @@ function toCamelCase(str) {
 
 var Input = forwardRef(function (props, ref) { return (createElement("input", __assign({}, props, { ref: ref }))); });
 
+// TODO optgroup functionality
 var Select = forwardRef(function (props, ref) { return (createElement("select", __assign({}, props, { ref: ref }), props.children)); });
 
 var TextArea = forwardRef(function (props, ref) { return (createElement("textarea", __assign({}, props, { ref: ref }))); });
 
-// TODO first radio is being auto selected. register issue?
-var Radio = forwardRef(function (props, ref) {
+var CheckboxRadio = forwardRef(function (props, ref) {
     return (createElement("div", { className: "flow-form-radio-group" }, (props === null || props === void 0 ? void 0 : props.children).map(function (child) { return (createElement("label", { htmlFor: child.props.id, key: child.props.name, className: props.className },
-        createElement("input", { id: props.id, name: child.props.name, type: "radio", ref: ref, value: child.props.name, checked: props.value === child.props.name, onChange: props.onChange }),
-        child.props.name)); })));
-});
-
-// TODO first checkbox is being auto selected. register issue?
-var Checkbox = forwardRef(function (props, ref) {
-    return (createElement("div", { className: "flow-form-radio-group" }, (props === null || props === void 0 ? void 0 : props.children).map(function (child) { return (createElement("label", { htmlFor: child.props.id, key: child.props.name, className: props.className },
-        createElement("input", { id: props.id, type: "checkbox", ref: ref, value: child.props.name, checked: props.value === child.props.name, onChange: props.onChange }),
+        createElement("input", { id: props.id, type: props.type, ref: ref, value: child.props.name, checked: props.value === child.props.name, onChange: props.onChange }),
         child.props.name)); })));
 });
 
@@ -295,10 +288,10 @@ var Field = function (_a) {
                     return (createElement(TextArea, __assign({}, rest, { className: "flow-form-textarea", ref: onRegister, id: id, "data-input-id": id, name: id, type: type, value: (_b = data[id]) !== null && _b !== void 0 ? _b : '', onChange: onChange, onFocus: onFocus, onBlur: onBlur })));
                 }
                 case 'radio': {
-                    return (createElement(Radio, __assign({}, rest, { className: "flow-form-radio", ref: onRegister, id: id, "data-input-id": id, name: id, type: type, value: (_c = data[id]) !== null && _c !== void 0 ? _c : '', onChange: onChange, onFocus: onFocus, onBlur: onBlur, children: children })));
+                    return (createElement(CheckboxRadio, __assign({}, rest, { className: "flow-form-radio", ref: onRegister, id: id, "data-input-id": id, name: id, type: type, value: (_c = data[id]) !== null && _c !== void 0 ? _c : '', onChange: onChange, onFocus: onFocus, onBlur: onBlur, children: children })));
                 }
                 case 'checkbox': {
-                    return (createElement(Checkbox, __assign({}, rest, { className: "flow-form-radio", ref: onRegister, id: id, "data-input-id": id, name: id, type: type, value: (_d = data[id]) !== null && _d !== void 0 ? _d : '', onChange: onChange, onFocus: onFocus, onBlur: onBlur, children: children })));
+                    return (createElement(CheckboxRadio, __assign({}, rest, { className: "flow-form-" + type, ref: onRegister, id: id, "data-input-id": id, name: id, type: type, value: (_d = data[id]) !== null && _d !== void 0 ? _d : '', onChange: onChange, onFocus: onFocus, onBlur: onBlur, children: children })));
                 }
                 default: {
                     return (createElement(Input, __assign({}, rest, { className: "flow-form-input", ref: onRegister, id: id, "data-input-id": id, name: id, type: type, value: (_e = data[id]) !== null && _e !== void 0 ? _e : '', onChange: onChange, onFocus: onFocus, onBlur: onBlur })));

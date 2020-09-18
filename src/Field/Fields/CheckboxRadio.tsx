@@ -8,7 +8,7 @@ export const CheckboxRadio = React.forwardRef<HTMLInputElement, IField>((props, 
         <label htmlFor={child.props.id} key={child.props.name} className={props.className}>
           <input
             id={props.id}
-            type="checkbox"
+            type={props.type}
             ref={ref}
             value={child.props.name}
             checked={props.value === child.props.name}

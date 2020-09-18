@@ -18,6 +18,7 @@ const Form: React.FC<Form> = ({ children, showData, ...rest }) => {
       }}
       className="flow-form"
       {...rest}
+      ref={console.log}
     >
       <fieldset className="flow-form-fieldset">{children}</fieldset>
 

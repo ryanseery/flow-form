@@ -7,9 +7,13 @@ type RefType = HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement;
 
 type EventType = React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>;
 
+type UseFormArgs = {
+  validation?: (e: EventType) => boolean;
+};
+
 function validate(
   e: EventType,
-  validation: UseFormProps['validation'] | undefined,
+  validation: UseFormArgs['validation'] | undefined,
   required: boolean,
 ): boolean {
   if (required) {
@@ -22,9 +26,6 @@ function validate(
   return false;
 }
 
-type UseFormProps = {
-  validation?: (e: EventType) => boolean;
-};
 type UseFormReturn = {
   data: KeyValue;
   showError: KeyValBool;
@@ -33,7 +34,7 @@ type UseFormReturn = {
   onFocus: (e: EventType) => void;
   onBlur: (e: EventType) => void;
 };
-export function useFormData({ validation }: UseFormProps): UseFormReturn {
+export function useFormData({ validation }: UseFormArgs): UseFormReturn {
   const { data, showError, registerField, updateField, handleFocus, handleBlur } = React.useContext(
     Context,
   );

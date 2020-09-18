@@ -15,7 +15,9 @@
   },
   "rules": {
     "react-hooks/rules-of-hooks": "error",
-    "react-hooks/exhaustive-deps": "warn"
+    "react-hooks/exhaustive-deps": "warn",
+    "quotes": [2, "single", { "avoidEscape": true }],
+    "jsx-quotes": [2, "prefer-single"]
   },
   "settings": {
     "react": {
