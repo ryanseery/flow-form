@@ -1,4 +1,4 @@
-import { createContext, useReducer, useMemo, createElement, useContext, useCallback, forwardRef } from 'react';
+import { createContext, useReducer, useMemo, createElement, useContext, useCallback, forwardRef, useRef, useEffect } from 'react';
 
 /*! *****************************************************************************
 Copyright (c) Microsoft Corporation. All rights reserved.
@@ -237,6 +237,11 @@ function toCamelCase(str) {
         .replace(/\s+/g, '');
 }
 
+var handleDefaults = function (e) {
+    e.preventDefault();
+    e.stopPropagation();
+};
+
 var Input = forwardRef(function (props, ref) { return (createElement("input", __assign({}, props, { ref: ref }))); });
 
 // TODO optgroup functionality
@@ -248,6 +253,34 @@ var CheckboxRadio = forwardRef(function (props, ref) {
     return (createElement("div", { className: "flow-form-radio-group" }, (props === null || props === void 0 ? void 0 : props.children).map(function (child) { return (createElement("label", { htmlFor: child.props.id, key: child.props.name, className: props.className },
         createElement("input", { id: props.id, type: props.type, ref: ref, value: child.props.name, checked: props.value === child.props.name, onChange: props.onChange }),
         child.props.name)); })));
+});
+
+// TODO make onClick mandatory
+var DragDrop = forwardRef(function (props) {
+    var fileRef = useRef(null);
+    useEffect(function () {
+        window.addEventListener('dragover', function (e) {
+            handleDefaults(e);
+        });
+        window.addEventListener('drop', function (e) {
+            handleDefaults(e);
+        });
+        return function () {
+            window.removeEventListener('dragover', handleDefaults);
+            window.removeEventListener('drop', handleDefaults);
+        };
+    }, []);
+    var onDrop = function (e) {
+        handleDefaults(e);
+        // props.onChange(e);
+    };
+    var handleFileBtn = function () {
+        if (fileRef.current == null)
+            return;
+        fileRef.current.click();
+    };
+    return (createElement("div", { onDrag: handleDefaults, onDragStart: handleDefaults, onDragEnd: handleDefaults, onDragOver: handleDefaults, onDragEnter: handleDefaults, onDragLeave: handleDefaults, onDrop: onDrop, onClick: handleFileBtn },
+        createElement("input", __assign({}, props, { ref: fileRef }))));
 });
 
 var Field = function (_a) {
@@ -279,7 +312,7 @@ var Field = function (_a) {
     return (createElement("label", { htmlFor: id, className: "flow-form-label" },
         inputLabel,
         (function () {
-            var _a, _b, _c, _d, _e;
+            var _a, _b, _c, _d, _e, _f;
             switch (type) {
                 case 'select': {
                     return (createElement(Select, __assign({}, rest, { className: "flow-form-select", ref: onRegister, id: id, "data-input-id": id, name: id, value: (_a = data[id]) !== null && _a !== void 0 ? _a : '', onChange: onChange, onFocus: onFocus, onBlur: onBlur, children: children })));
@@ -293,8 +326,11 @@ var Field = function (_a) {
                 case 'checkbox': {
                     return (createElement(CheckboxRadio, __assign({}, rest, { className: "flow-form-" + type, ref: onRegister, id: id, "data-input-id": id, name: id, type: type, value: (_d = data[id]) !== null && _d !== void 0 ? _d : '', onChange: onChange, onFocus: onFocus, onBlur: onBlur, children: children })));
                 }
+                case 'drag-drop': {
+                    return (createElement(DragDrop, __assign({}, rest, { className: "flow-form-input", ref: onRegister, id: id, "data-input-id": id, name: id, type: "file", value: (_e = data[id]) !== null && _e !== void 0 ? _e : '', onChange: onChange, onFocus: onFocus, onBlur: onBlur })));
+                }
                 default: {
-                    return (createElement(Input, __assign({}, rest, { className: "flow-form-input", ref: onRegister, id: id, "data-input-id": id, name: id, type: type, value: (_e = data[id]) !== null && _e !== void 0 ? _e : '', onChange: onChange, onFocus: onFocus, onBlur: onBlur })));
+                    return (createElement(Input, __assign({}, rest, { className: "flow-form-input", ref: onRegister, id: id, "data-input-id": id, name: id, type: type, value: (_f = data[id]) !== null && _f !== void 0 ? _f : '', onChange: onChange, onFocus: onFocus, onBlur: onBlur })));
                 }
             }
         })()));

@@ -2,15 +2,16 @@ import * as React from 'react';
 import { IField } from '../Field';
 import { handleDefaults } from '../../utils';
 
-export const DragAndDrop = React.forwardRef<HTMLInputElement, IField>(props => {
+// TODO make onClick mandatory
+export const DragDrop = React.forwardRef<HTMLInputElement, IField>(props => {
   const fileRef = React.useRef<HTMLInputElement>(null);
 
   React.useEffect(() => {
-    window.addEventListener('dragover', (event: Event) => {
-      handleDefaults(event);
+    window.addEventListener('dragover', (e: Event) => {
+      handleDefaults(e);
     });
-    window.addEventListener('drop', (event: Event) => {
-      handleDefaults(event);
+    window.addEventListener('drop', (e: Event) => {
+      handleDefaults(e);
     });
 
     return () => {
@@ -21,7 +22,7 @@ export const DragAndDrop = React.forwardRef<HTMLInputElement, IField>(props => {
 
   const onDrop = (e: React.DragEvent<HTMLDivElement>) => {
     handleDefaults(e);
-    console.log('onDrop: ', e);
+    // props.onChange(e);
   };
 
   const handleFileBtn = () => {

@@ -1,11 +1,11 @@
 import * as React from 'react';
 import { Context } from './Context';
 import { KeyValue, KeyValBool } from './@types/keyTypes';
+import { EventType } from './@types/eventType';
 import { IField } from './Field/Field';
 
+// TODO get these in a file to export together
 type RefType = HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement;
-
-type EventType = React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>;
 
 type UseFormArgs = {
   validation?: (e: EventType) => boolean;

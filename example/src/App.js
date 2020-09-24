@@ -51,6 +51,8 @@ function App() {
           <input name="True" value="true" />
           <input name="False" value="false" />
         </Field>
+
+        <Field type="drag-drop">File</Field>
       </FlowForm>
     </div>
   );

@@ -1,12 +1,13 @@
 import * as React from 'react';
 import { useFormData } from '../useFormData';
 import { toCamelCase } from '../utils';
-import { Input, Select, TextArea, CheckboxRadio } from './Fields';
-
+import { Input, Select, TextArea, CheckboxRadio, DragDrop } from './Fields';
+import { EventType } from '../@types/eventType';
 export interface IField
   extends React.InputHTMLAttributes<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement> {
   children?: string | React.ReactElement;
-  validation?: (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => boolean;
+  validation?: (e: EventType) => boolean;
+  onChange: (e: EventType) => void;
 }
 
 export const Field: React.FC<IField> = ({ type = 'text', name, children, validation, ...rest }) => {
@@ -110,6 +111,23 @@ export const Field: React.FC<IField> = ({ type = 'text', name, children, validat
                 onFocus={onFocus}
                 onBlur={onBlur}
                 children={children}
+              />
+            );
+          }
+          case 'drag-drop': {
+            return (
+              <DragDrop
+                {...rest}
+                className="flow-form-input"
+                ref={onRegister}
+                id={id}
+                data-input-id={id}
+                name={id}
+                type="file"
+                value={data[id] ?? ''}
+                onChange={onChange}
+                onFocus={onFocus}
+                onBlur={onBlur}
               />
             );
           }
