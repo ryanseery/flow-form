@@ -59,7 +59,7 @@ type ID = {
 };
 
 interface Args extends ID {
-  value: any;
+  value: string | boolean | number;
   error: boolean;
 }
 

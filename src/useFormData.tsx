@@ -4,7 +4,6 @@ import { KeyValue, KeyValBool } from './@types/keyTypes';
 import { EventType } from './@types/eventType';
 import { IField } from './Field/Field';
 
-// TODO get these in a file to export together
 type RefType = HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement;
 
 type UseFormArgs = {
