@@ -23,9 +23,11 @@ function App() {
       }}
     >
       <FlowForm onSubmit={data => console.log('onSubmit: ', data)} showData>
-        <Field type="text" validation={checkString}>
-          Test 1
-        </Field>
+        <div className="STEP">
+          <Field type="text" validation={checkString}>
+            Test 1
+          </Field>
+        </div>
 
         <Field type="number" required>
           Numbers

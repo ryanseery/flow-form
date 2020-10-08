@@ -7,9 +7,12 @@ interface Form extends React.FormHTMLAttributes<HTMLFormElement> {
 }
 
 const Form: React.FC<Form> = ({ children, showData, ...rest }) => {
+  const el = React.useRef<null | HTMLFormElement>(null);
   const { meta, data, error, showError, focus } = React.useContext(Context);
 
   showData && console.log({ meta, data, error, showError, focus });
+
+  console.log('el: ', el);
 
   return (
     <form
@@ -18,7 +21,7 @@ const Form: React.FC<Form> = ({ children, showData, ...rest }) => {
       }}
       className="flow-form"
       {...rest}
-      ref={console.log}
+      ref={el}
     >
       <fieldset className="flow-form-fieldset">{children}</fieldset>
 

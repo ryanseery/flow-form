@@ -1,4 +1,4 @@
-import { createContext, useReducer, useMemo, createElement, useContext, useCallback, forwardRef, useRef, useEffect } from 'react';
+import { createContext, useReducer, useMemo, createElement, useRef, useContext, useCallback, forwardRef, useEffect } from 'react';
 
 /*! *****************************************************************************
 Copyright (c) Microsoft Corporation. All rights reserved.
@@ -162,11 +162,13 @@ styleInject(css_248z);
 
 var Form = function (_a) {
     var children = _a.children, showData = _a.showData, rest = __rest(_a, ["children", "showData"]);
+    var el = useRef(null);
     var _b = useContext(Context), meta = _b.meta, data = _b.data, error = _b.error, showError = _b.showError, focus = _b.focus;
     showData && console.log({ meta: meta, data: data, error: error, showError: showError, focus: focus });
+    console.log('el: ', el);
     return (createElement("form", __assign({ onSubmit: function (e) {
             e.preventDefault();
-        }, className: "flow-form" }, rest, { ref: console.log }),
+        }, className: "flow-form" }, rest, { ref: el }),
         createElement("fieldset", { className: "flow-form-fieldset" }, children),
         createElement("button", { type: "submit" }, "Submit")));
 };
