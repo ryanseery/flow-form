@@ -1,0 +1,26 @@
+.flow-form-fieldset {
+  border: none;
+  padding: 0;
+  margin: 0 0 1rem 0;
+}
+
+.flow-form-radio-group {
+  display: flex;
+  flex-direction: row;
+}
+
+.flow-form-radio {
+  display: flex;
+}
+
+.flow-form-input {
+  display: block;
+}
+
+.flow-form-select {
+  display: block;
+}
+
+.flow-form-textarea {
+  display: block;
+}

@@ -1,12 +1,5 @@
-export { Text } from './Text';
-export { Number } from './Number';
-export { Email } from './Email';
-export { Password } from './Password';
-export { Tel } from './Tel';
-export { Url } from './Url';
-export { Color } from './Color';
-export { TextArea } from './TextArea';
+export { Input } from './Input';
 export { Select } from './Select';
-export { DragAndDrop } from './DragAndDrop';
-export { ImgPreview } from './ImgPreview';
-export { Checkbox } from './Checkbox';
+export { TextArea } from './TextArea';
+export { CheckboxRadio } from './CheckboxRadio';
+export { DragDrop } from './DragDrop';

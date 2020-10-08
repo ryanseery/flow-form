@@ -1,156 +1,91 @@
 import * as React from 'react';
 import { Context } from './Context';
-import { isObjectEmpty } from './utils';
+import { KeyValue, KeyValBool } from './@types/keyTypes';
+import { EventType } from './@types/eventType';
+import { IField } from './Field/Field';
 
-const imageTypes = ['image/jpeg', 'image/png', 'image/gif'];
+type RefType = HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement;
 
-interface IUseFormData {
-  step: string | null;
-  id: string;
-  value: string | boolean | number | object | [];
-  required: boolean;
-  validation?: (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement> | React.DragEvent<HTMLDivElement>,
-  ) => boolean;
+type UseFormArgs = {
+  validation?: (e: EventType) => boolean;
+};
+
+function validate(
+  e: EventType,
+  validation: UseFormArgs['validation'] | undefined,
+  required: boolean,
+): boolean {
+  if (required) {
+    return !e.target.value;
+  }
+
+  if (typeof validation === 'function') {
+    return validation(e);
+  }
+  return false;
 }
 
-// TODO remove id from any function args
-export function useFormData({ step, id, value, required, validation }: IUseFormData) {
-  const {
-    setField,
-    formData,
-    error,
-    updateField,
-    removeFile,
-    updateFileField,
-    setBlur,
-    setFocus,
-    showError,
-    focus,
-    flow,
-  } = React.useContext(Context);
+type UseFormReturn = {
+  data: KeyValue;
+  showError: KeyValBool;
+  onRegister: (ref: RefType & IField) => void;
+  onChange: (e: EventType) => void;
+  onFocus: (e: EventType) => void;
+  onBlur: (e: EventType) => void;
+};
+export function useFormData({ validation }: UseFormArgs): UseFormReturn {
+  const { data, showError, registerField, updateField, handleFocus, handleBlur } = React.useContext(
+    Context,
+  );
 
-  React.useEffect(() => {
-    setField({ step, id, value, error: required || validation ? true : false });
-  }, [step, id, flow.currentStep, flow.key]);
+  const onRegister = (ref: RefType) => {
+    const { id, value, required } = ref;
 
-  function validate(e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>): boolean {
-    if (required || validation) {
-      return validation ? validation(e) : !e.target.value;
-    }
-    return false;
-  }
+    registerField({ id, value, error: required });
+  };
 
-  function validateFile(e: React.DragEvent<HTMLDivElement>): boolean {
-    if (required || validation) {
-      return validation ? validation(e) : !e.dataTransfer.files;
-    }
-    return false;
-  }
-
-  const onChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+  const onChange = (e: EventType) => {
     e.persist();
 
+    const { id, value, type, required } = e.target;
+
     updateField({
-      step,
-      id: e.target.name,
-      value: e.target.type === 'number' ? parseFloat(e.target.value) : e.target.value,
-      error: validate(e),
-    });
-  };
-
-  const onFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { files } = e.target;
-
-    const val = files ? Array.from(files) : [];
-
-    updateFileField({
-      step,
       id,
-      value: val,
-      error: validate(e),
+      value: type === 'number' ? parseFloat(value) : value,
+      error: validate(e, validation, required),
     });
   };
 
-  const onFileDrop = (e: React.DragEvent<HTMLDivElement>, id: string) => {
-    updateFileField({
-      step,
+  const onFocus = (e: EventType) => {
+    e.persist();
+
+    const { id, value, required } = e.target;
+
+    handleFocus({
       id,
-      value: Array.from(e.dataTransfer.files),
-      error: validateFile(e),
+      value,
+      error: validate(e, validation, required),
     });
   };
 
-  const onFileRemove = (index: number) => {
-    removeFile({
-      step,
+  const onBlur = (e: EventType) => {
+    e.persist();
+
+    const { id, value, required } = e.target;
+
+    handleBlur({
       id,
-      index,
+      value,
+      error: validate(e, validation, required),
     });
   };
 
-  const onImgChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const val = Array.from(e.target.files ?? []);
-
-    if (imageTypes.includes(val[0].type)) {
-      updateField({
-        step,
-        id: e.target.name,
-        value: val[0],
-        error: validate(e),
-      });
-    }
-  };
-
-  const onImgDrop = (e: React.DragEvent<HTMLDivElement>) => {
-    const files = Array.from(e.dataTransfer.files);
-
-    if (imageTypes.includes(files[0].type)) {
-      updateField({
-        step,
-        id,
-        value: files[0],
-        error: validateFile(e),
-      });
-    } else {
-      updateField({
-        step,
-        id,
-        value: '',
-        error: validateFile(e),
-      });
-    }
-  };
-
-  const onBlur = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
-    e.preventDefault();
-
-    setBlur({ step, id, showError: validate(e) });
-  };
-
-  const onFocus = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
-    e.preventDefault();
-
-    setFocus({ step, id });
-  };
-
-  // TODO clean this mess up
   return {
-    value: isObjectEmpty(formData) ? '' : step != null ? formData?.[step]?.[id] ?? '' : formData?.[id] ?? '',
-    error: isObjectEmpty(error) ? false : step != null ? error?.[step]?.[id] ?? false : error?.[id] ?? false,
-    showError: isObjectEmpty(showError)
-      ? false
-      : step != null
-      ? showError?.[step]?.[id] ?? false
-      : showError?.[id] ?? false,
-    focused: isObjectEmpty(focus) ? false : step != null ? focus?.[step]?.[id] ?? false : focus?.[id] ?? false,
-    onChange,
-    onFileChange,
-    onFileDrop,
-    onFileRemove,
-    onBlur,
-    onFocus,
-    onImgDrop,
-    onImgChange,
+    data,
+    showError,
+    onRegister: React.useCallback(onRegister, []),
+    onChange: React.useCallback(onChange, []),
+    onFocus: React.useCallback(onFocus, []),
+    onBlur: React.useCallback(onBlur, []),
   };
 }

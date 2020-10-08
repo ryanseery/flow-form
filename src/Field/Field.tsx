@@ -1,130 +1,156 @@
 import * as React from 'react';
-import { FFComponent } from '../FFComponent';
-import { toCamelCase, toKebabCase } from '../utils';
-import {
-  Text,
-  Number,
-  Email,
-  Password,
-  Tel,
-  Url,
-  Color,
-  TextArea,
-  Select,
-  DragAndDrop,
-  ImgPreview,
-  Checkbox,
-} from './Fields';
-import { Option, Input } from './Fields/@types';
-import { FieldWrapper } from './@styles';
-
-export interface IField {
-  ffComp?: string;
-  step: string | null;
-  index: number;
-  type?: string;
-  name?: string;
-  children?: string;
-  className?: string;
-  style?: React.CSSProperties;
-  required?: boolean;
-  autoComplete?: string;
-  placeholder?: string;
-  errMsg?: string;
-  validation?: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => boolean;
-  options?: Option[] | string[];
-  inputs?: Input[];
+import { useFormData } from '../useFormData';
+import { toCamelCase } from '../utils';
+import { Input, Select, TextArea, CheckboxRadio, DragDrop } from './Fields';
+import { EventType } from '../@types/eventType';
+export interface IField
+  extends React.InputHTMLAttributes<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement> {
+  children?: string | React.ReactElement;
+  validation?: (e: EventType) => boolean;
+  onChange: (e: EventType) => void;
 }
 
-export const Field: React.FC<IField> = ({
-  step = null,
-  index = 0,
-  name,
-  type,
-  children,
-  style,
-  required = false,
-  validation,
-  autoComplete = 'off',
-  placeholder,
-  errMsg,
-  options,
-  inputs,
-}) => {
-  if (!name && !children) {
-    throw new Error(`Please provide a label(<Field>Label</Field>) or name prop(<Field name="label" />).`);
-  }
-
-  const id = name ? toCamelCase(name) : toCamelCase(children ?? '');
-  const className = name ? toKebabCase(name) : toKebabCase(children ?? '');
-
-  const defaultProps = {
-    id,
-    step,
-    index,
-    type,
-    required,
+export const Field: React.FC<IField> = ({ type = 'text', name, children, validation, ...rest }) => {
+  const { data, onRegister, onChange, onFocus, onBlur } = useFormData({
     validation,
-    autoComplete,
-    placeholder,
-    className,
-    label: children ?? name,
-    style,
-    errMsg,
-    options,
-    inputs,
-  };
+  });
+
+  // TODO clean this up!
+  const { id, inputLabel } = React.useMemo(() => {
+    const isString = typeof children === 'string';
+
+    const isOptions = Array.isArray(children);
+
+    if (isString) {
+      return {
+        id: toCamelCase(children as string),
+        inputLabel: children,
+      };
+    } else if (isOptions) {
+      return {
+        id: toCamelCase(name ?? ''),
+        inputLabel: name,
+      };
+    }
+
+    return {
+      id: isString ? toCamelCase(children as string) : toCamelCase(name as string),
+      inputLabel: !isOptions && !children ? name : children ?? '',
+    };
+  }, []);
 
   return (
-    <FieldWrapper
-      id={`${id}-label`}
-      data-field-id={`${id}-label`}
-      htmlFor={id}
-      className={`flow-form-label ${className}`}
-      type={type}
-    >
-      <legend className={`flow-form-legend ${className}`} data-legend-id={`${id}-legend`}>
-        {children ? children : name ?? ''}
-        {required || validation ? <span className="required">*</span> : null}
-      </legend>
+    <label htmlFor={id} className="flow-form-label">
+      {inputLabel}
       {(() => {
         switch (type) {
-          case 'text':
-            return <Text {...defaultProps} />;
-          case 'number':
-            return <Number {...defaultProps} />;
-          case 'email':
-            return <Email {...defaultProps} />;
-          case 'password':
-            return <Password {...defaultProps} />;
-          case 'tel':
-            return <Tel {...defaultProps} />;
-          case 'url':
-            return <Url {...defaultProps} />;
-          case 'color':
-            return <Color {...defaultProps} />;
-          case 'textarea':
-            return <TextArea {...defaultProps} />;
-          case 'select':
-            return <Select {...defaultProps} />;
-          case 'dragAndDrop':
-            return <DragAndDrop {...defaultProps} />;
-          case 'imgPreview':
-            return <ImgPreview {...defaultProps} />;
-          case 'checkbox':
-            return <Checkbox {...defaultProps} />;
-          case 'radio':
-            return <Checkbox {...defaultProps} />;
-          default:
-            return <Text {...defaultProps} />;
+          case 'select': {
+            return (
+              <Select
+                {...rest}
+                className="flow-form-select"
+                ref={onRegister}
+                id={id}
+                data-input-id={id}
+                name={id}
+                value={data[id] ?? ''}
+                onChange={onChange}
+                onFocus={onFocus}
+                onBlur={onBlur}
+                children={children}
+              />
+            );
+          }
+          case 'textarea': {
+            return (
+              <TextArea
+                {...rest}
+                className="flow-form-textarea"
+                ref={onRegister}
+                id={id}
+                data-input-id={id}
+                name={id}
+                type={type}
+                value={data[id] ?? ''}
+                onChange={onChange}
+                onFocus={onFocus}
+                onBlur={onBlur}
+              />
+            );
+          }
+          case 'radio': {
+            return (
+              <CheckboxRadio
+                {...rest}
+                className="flow-form-radio"
+                ref={onRegister}
+                id={id}
+                data-input-id={id}
+                name={id}
+                type={type}
+                value={data[id] ?? ''}
+                onChange={onChange}
+                onFocus={onFocus}
+                onBlur={onBlur}
+                children={children}
+              />
+            );
+          }
+          case 'checkbox': {
+            return (
+              <CheckboxRadio
+                {...rest}
+                className={`flow-form-${type}`}
+                ref={onRegister}
+                id={id}
+                data-input-id={id}
+                name={id}
+                type={type}
+                value={data[id] ?? ''}
+                onChange={onChange}
+                onFocus={onFocus}
+                onBlur={onBlur}
+                children={children}
+              />
+            );
+          }
+          case 'drag-drop': {
+            return (
+              <DragDrop
+                {...rest}
+                className="flow-form-input"
+                ref={onRegister}
+                id={id}
+                data-input-id={id}
+                name={id}
+                type="file"
+                value={data[id] ?? ''}
+                onChange={onChange}
+                onFocus={onFocus}
+                onBlur={onBlur}
+              />
+            );
+          }
+          default: {
+            return (
+              <Input
+                {...rest}
+                className="flow-form-input"
+                ref={onRegister}
+                id={id}
+                data-input-id={id}
+                name={id}
+                type={type}
+                value={data[id] ?? ''}
+                onChange={onChange}
+                onFocus={onFocus}
+                onBlur={onBlur}
+              />
+            );
+          }
         }
       })()}
-    </FieldWrapper>
+      {/* {showError && <span>Handle ERROR</span>} */}
+    </label>
   );
-};
-
-Field.defaultProps = {
-  ffComp: FFComponent.FIELD,
-  step: null,
-  index: 0,
 };
