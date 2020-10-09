@@ -11,6 +11,7 @@ export interface IField
 }
 
 export const Field: React.FC<IField> = ({ type = 'text', name, children, validation, ...rest }) => {
+  // TODO recursive function to go up parent tree and see if one is a step
   const { data, onRegister, onChange, onFocus, onBlur } = useFormData({
     validation,
   });

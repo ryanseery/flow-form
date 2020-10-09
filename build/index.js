@@ -91,7 +91,6 @@ var handleBlur = function (payload) { return ({
 }); };
 function reducer(state, action) {
     var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l;
-    console.log('REDUCER: ', action);
     switch (action.type) {
         case ACTION.REGISTER_FORM: {
             return state;
@@ -161,19 +160,18 @@ function styleInject(css, ref) {
   }
 }
 
-var css_248z = ".flow-form-fieldset {\n  border: none;\n  padding: 0;\n  margin: 0 0 1rem 0;\n}\n\n.flow-form-radio-group {\n  display: flex;\n  flex-direction: row;\n}\n\n.flow-form-radio {\n  display: flex;\n}\n\n.flow-form-input {\n  display: block;\n}\n\n.flow-form-select {\n  display: block;\n}\n\n.flow-form-textarea {\n  display: block;\n}\n";
+var css_248z = "fieldset {\n  border: none;\n  padding: 0;\n  margin: 0 0 1rem 0;\n}\n\n.flow-form-radio-group {\n  display: flex;\n  flex-direction: row;\n}\n\n.flow-form-radio {\n  display: flex;\n}\n\n.flow-form-input {\n  display: block;\n}\n\n.flow-form-select {\n  display: block;\n}\n\n.flow-form-textarea {\n  display: block;\n}\n";
 styleInject(css_248z);
 
 var Form = function (_a) {
-    var children = _a.children, showData = _a.showData, rest = __rest(_a, ["children", "showData"]);
-    var el = React.useRef(null);
+    var children = _a.children, onSubmit = _a.onSubmit, showData = _a.showData, rest = __rest(_a, ["children", "onSubmit", "showData"]);
     var _b = React.useContext(Context), meta = _b.meta, data = _b.data, error = _b.error, showError = _b.showError, focus = _b.focus;
     showData && console.log({ meta: meta, data: data, error: error, showError: showError, focus: focus });
-    console.log('el: ', el);
     return (React.createElement("form", __assign({ onSubmit: function (e) {
             e.preventDefault();
-        }, className: "flow-form" }, rest, { ref: el }),
-        React.createElement("fieldset", { className: "flow-form-fieldset" }, children),
+            onSubmit(data);
+        }, className: "flow-form" }, rest),
+        children,
         React.createElement("button", { type: "submit" }, "Submit")));
 };
 var FlowForm = function (props) {
@@ -195,6 +193,7 @@ function useFormData(_a) {
     var _b = React.useContext(Context), data = _b.data, showError = _b.showError, registerField = _b.registerField, updateField = _b.updateField, handleFocus = _b.handleFocus, handleBlur = _b.handleBlur;
     var onRegister = function (ref) {
         var id = ref.id, value = ref.value, required = ref.required;
+        console.log('ref: ', ref);
         registerField({ id: id, value: value, error: required });
     };
     var onChange = function (e) {
@@ -291,6 +290,7 @@ var DragDrop = React.forwardRef(function (props) {
 
 var Field = function (_a) {
     var _b = _a.type, type = _b === void 0 ? 'text' : _b, name = _a.name, children = _a.children, validation = _a.validation, rest = __rest(_a, ["type", "name", "children", "validation"]);
+    // TODO recursive function to go up parent tree and see if one is a step
     var _c = useFormData({
         validation: validation,
     }), data = _c.data, onRegister = _c.onRegister, onChange = _c.onChange, onFocus = _c.onFocus, onBlur = _c.onBlur;
@@ -342,6 +342,12 @@ var Field = function (_a) {
         })()));
 };
 
+var Step = function (_a) {
+    var children = _a.children;
+    return (React.createElement("fieldset", { "data-id": "step" }, children));
+};
+
 exports.Field = Field;
 exports.FlowForm = FlowForm;
+exports.Step = Step;
 //# sourceMappingURL=index.js.map
