@@ -41,8 +41,6 @@ export function useFormData({ validation }: UseFormArgs): UseFormReturn {
   const onRegister = (ref: RefType) => {
     const { id, value, required } = ref;
 
-    console.log('ref: ', ref);
-
     registerField({ id, value, error: required });
   };
 

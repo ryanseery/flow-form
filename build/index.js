@@ -193,7 +193,6 @@ function useFormData(_a) {
     var _b = React.useContext(Context), data = _b.data, showError = _b.showError, registerField = _b.registerField, updateField = _b.updateField, handleFocus = _b.handleFocus, handleBlur = _b.handleBlur;
     var onRegister = function (ref) {
         var id = ref.id, value = ref.value, required = ref.required;
-        console.log('ref: ', ref);
         registerField({ id: id, value: value, error: required });
     };
     var onChange = function (e) {
