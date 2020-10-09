@@ -133,7 +133,6 @@ const handleBlur = (payload: { id: string }): HandleBlur => ({
 type Actions = RegisterForm | RegisterField | UpdateField | HandleFocus | HandleBlur;
 
 function reducer(state: State, action: Actions): State {
-  console.log('REDUCER: ', action);
   switch (action.type) {
     case ACTION.REGISTER_FORM: {
       return state;
