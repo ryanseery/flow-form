@@ -1,5 +1,5 @@
 import React from 'react';
-import { FlowForm, Field } from 'flow-form';
+import { FlowForm, Field, Step } from 'flow-form';
 import './App.css';
 
 function App() {
@@ -23,9 +23,11 @@ function App() {
       }}
     >
       <FlowForm onSubmit={data => console.log('onSubmit: ', data)} showData>
-        <Field type="text" validation={checkString}>
-          Test 1
-        </Field>
+        <Step>
+          <Field type="text" validation={checkString}>
+            Test 1
+          </Field>
+        </Step>
 
         <Field type="number" required>
           Numbers

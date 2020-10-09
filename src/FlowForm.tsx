@@ -1,12 +1,14 @@
 import * as React from 'react';
 import { Context, Wrapper } from './Context';
+import { KeyValue } from './@types/keyTypes';
 import './style.css';
 
 interface Form extends React.FormHTMLAttributes<HTMLFormElement> {
   showData: boolean;
-}
+  onSubmit: (formData: KeyValue) => void | Promise<void>;
+};
 
-const Form: React.FC<Form> = ({ children, showData, ...rest }) => {
+const Form: React.FC<Form> = ({ children, onSubmit, showData, ...rest }) => {
   const { meta, data, error, showError, focus } = React.useContext(Context);
 
   showData && console.log({ meta, data, error, showError, focus });
@@ -15,13 +17,12 @@ const Form: React.FC<Form> = ({ children, showData, ...rest }) => {
     <form
       onSubmit={e => {
         e.preventDefault();
+        onSubmit(data);
       }}
       className="flow-form"
       {...rest}
-      ref={console.log}
     >
-      <fieldset className="flow-form-fieldset">{children}</fieldset>
-
+      {children}
       <button type="submit">Submit</button>
     </form>
   );
