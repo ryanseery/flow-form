@@ -20,10 +20,11 @@ const Form: React.FC<Form> = ({ children, onSubmit, showData, ...rest }) => {
         onSubmit(data);
       }}
       className="flow-form"
+      data-flow-id="form"
       {...rest}
     >
       {children}
-      <button type="submit">Submit</button>
+      <button data-flow-id="submit" type="submit">Submit</button>
     </form>
   );
 };

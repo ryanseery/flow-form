@@ -41,7 +41,7 @@ export const Field: React.FC<IField> = ({ type = 'text', name, children, validat
   }, []);
 
   return (
-    <label htmlFor={id} className="flow-form-label">
+    <label htmlFor={id} className="flow-form-label" data-flow-id="label">
       {inputLabel}
       {(() => {
         switch (type) {
