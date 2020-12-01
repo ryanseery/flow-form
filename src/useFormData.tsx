@@ -10,7 +10,7 @@ interface UseFormArgs {
   validation?: (e: EventType) => boolean;
 }
 
-function validate(e: EventType, validation: UseFormArgs['validation'] | undefined, required: boolean): boolean {
+function validate(e: EventType, validation: UseFormArgs['validation'], required: boolean): boolean {
   if (required) {
     return !e.target.value;
   }

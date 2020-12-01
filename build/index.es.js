@@ -156,17 +156,21 @@ function styleInject(css, ref) {
   }
 }
 
-var css_248z = "fieldset {\n  border: none;\n  padding: 0;\n  margin: 0 0 1rem 0;\n}\n\n.flow-form-input {\n  display: block;\n}\n\n.flow-form-radio-group {\n  display: flex;\n  flex-direction: row;\n}\n\n.flow-form-radio {\n  display: flex;\n}\n";
+var css_248z = "fieldset {\n  border: none;\n  padding: 0;\n  margin: 0 0 1rem 0;\n}\n\n.flow-form-input {\n  display: block;\n}\n\n.flow-form-radio-group {\n  display: flex;\n  flex-direction: row;\n}\n";
 styleInject(css_248z);
 
+// TODO checkbox radio don't work as expected
+// TODO finish drag and drop
+// TODO showError
+// TODO steps
 var Form = function (_a) {
     var children = _a.children, onSubmit = _a.onSubmit, showData = _a.showData, rest = __rest(_a, ["children", "onSubmit", "showData"]);
     var _b = useContext(Context), meta = _b.meta, data = _b.data, error = _b.error, showError = _b.showError, focus = _b.focus;
     showData && console.log({ meta: meta, data: data, error: error, showError: showError, focus: focus });
-    return (createElement("form", __assign({ onSubmit: function (e) {
+    return (createElement("form", __assign({ "data-flow-id": "form", onSubmit: function (e) {
             e.preventDefault();
             onSubmit(data);
-        }, className: "flow-form", "data-flow-id": "form" }, rest),
+        } }, rest),
         children,
         createElement("button", { "data-flow-id": "submit", type: "submit" }, "Submit")));
 };
@@ -237,24 +241,21 @@ function toCamelCase(str) {
         .replace(/\s+/g, '');
 }
 
-var handleDefaults = function (e) {
-    e.preventDefault();
-    e.stopPropagation();
-};
-
-var Input = forwardRef(function (props, ref) { return (createElement("input", __assign({ "data-flow-id": "input" }, props, { ref: ref }))); });
+var Input = forwardRef(function (props, ref) { return (createElement("input", __assign({ "data-flow-id": "input", ref: ref }, props))); });
 
 // TODO optgroup functionality
 var Select = forwardRef(function (props, ref) { return (createElement("select", __assign({ "data-flow-id": "select" }, props, { ref: ref }), props.children)); });
 
 var TextArea = forwardRef(function (props, ref) { return (createElement("textarea", __assign({ "data-flow-id": "textarea" }, props, { ref: ref }))); });
 
-var CheckboxRadio = forwardRef(function (props, ref) {
-    return (createElement("div", { className: "flow-form-radio-group" }, (props === null || props === void 0 ? void 0 : props.children).map(function (child) { return (createElement("label", { htmlFor: child.props.id, key: child.props.name, className: props.className },
-        createElement("input", { id: props.id, type: props.type, ref: ref, value: child.props.name, checked: props.value === child.props.name, onChange: props.onChange }),
-        child.props.name)); })));
-});
+var CheckboxRadio = forwardRef(function (props, ref) { return (createElement("div", { className: "flow-form-radio-group" }, (props === null || props === void 0 ? void 0 : props.children).map(function (child) { return (createElement("label", { htmlFor: child.props.id, key: child.props.name, className: props.className },
+    createElement("input", { id: props.id, type: props.type, ref: ref, value: child.props.name, checked: props.value === child.props.name, onChange: props.onChange }),
+    child.props.name)); }))); });
 
+function handleDefaults(e) {
+    e.preventDefault();
+    e.stopPropagation();
+}
 // TODO make onClick mandatory
 var DragDrop = forwardRef(function (props) {
     var fileRef = useRef(null);
@@ -285,7 +286,6 @@ var DragDrop = forwardRef(function (props) {
 
 var Field = function (_a) {
     var _b = _a.type, type = _b === void 0 ? 'text' : _b, name = _a.name, children = _a.children, validation = _a.validation, rest = __rest(_a, ["type", "name", "children", "validation"]);
-    // TODO recursive function to go up parent tree and see if one is a step
     var _c = useFormData({
         validation: validation,
     }), data = _c.data, onRegister = _c.onRegister, onChange = _c.onChange, onFocus = _c.onFocus, onBlur = _c.onBlur;
@@ -324,10 +324,10 @@ var Field = function (_a) {
                     return (createElement(TextArea, __assign({}, rest, { className: "flow-form-input", ref: onRegister, id: id, "data-input-id": id, name: id, type: type, value: (_b = data[id]) !== null && _b !== void 0 ? _b : '', onChange: onChange, onFocus: onFocus, onBlur: onBlur })));
                 }
                 case 'radio': {
-                    return (createElement(CheckboxRadio, __assign({}, rest, { className: "flow-form-radio", ref: onRegister, id: id, "data-input-id": id, name: id, type: type, value: (_c = data[id]) !== null && _c !== void 0 ? _c : '', onChange: onChange, onFocus: onFocus, onBlur: onBlur, children: children })));
+                    return (createElement(CheckboxRadio, __assign({}, rest, { className: "flow-form-input", ref: onRegister, id: id, "data-input-id": id, name: id, type: type, value: (_c = data[id]) !== null && _c !== void 0 ? _c : '', onChange: onChange, onFocus: onFocus, onBlur: onBlur, children: children })));
                 }
                 case 'checkbox': {
-                    return (createElement(CheckboxRadio, __assign({}, rest, { className: "flow-form-radio", ref: onRegister, id: id, "data-input-id": id, name: id, type: type, value: (_d = data[id]) !== null && _d !== void 0 ? _d : '', onChange: onChange, onFocus: onFocus, onBlur: onBlur, children: children })));
+                    return (createElement(CheckboxRadio, __assign({}, rest, { className: "flow-form-input", ref: onRegister, id: id, "data-input-id": id, name: id, type: type, value: (_d = data[id]) !== null && _d !== void 0 ? _d : '', onChange: onChange, onFocus: onFocus, onBlur: onBlur, children: children })));
                 }
                 case 'drag-drop': {
                     return (createElement(DragDrop, __assign({}, rest, { className: "flow-form-input", ref: onRegister, id: id, "data-input-id": id, name: id, type: "file", value: (_e = data[id]) !== null && _e !== void 0 ? _e : '', onChange: onChange, onFocus: onFocus, onBlur: onBlur })));
@@ -339,9 +339,10 @@ var Field = function (_a) {
         })()));
 };
 
+// TODO ref on field to go through children and see what are inputs?
 var Step = function (_a) {
     var children = _a.children;
-    return (createElement("fieldset", { "data-flow-id": "step" }, children));
+    return createElement("fieldset", { "data-flow-id": "step" }, children);
 };
 
 export { Field, FlowForm, Step };

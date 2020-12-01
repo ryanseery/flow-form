@@ -1,7 +1,6 @@
 import * as React from 'react';
 
-interface Step extends React.HTMLAttributes<HTMLFieldSetElement> {};
+interface Step extends React.HTMLAttributes<HTMLFieldSetElement> {}
 
-export const Step: React.FC<Step> = ({ children }) => (
-  <fieldset data-flow-id="step">{children}</fieldset>
-);
+// TODO ref on field to go through children and see what are inputs?
+export const Step: React.FC<Step> = ({ children }) => <fieldset data-flow-id="step">{children}</fieldset>;

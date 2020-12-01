@@ -12,7 +12,3 @@ fieldset {
   display: flex;
   flex-direction: row;
 }
-
-.flow-form-radio {
-  display: flex;
-}

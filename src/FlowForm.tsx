@@ -2,7 +2,7 @@ import * as React from 'react';
 import { Context, Wrapper } from './Context';
 import { KeyValue } from './@types/keyTypes';
 import './style.css';
-interface Form extends Omit<React.FormHTMLAttributes<HTMLFormElement>, 'onSubmit'> {
+interface IForm extends Omit<React.FormHTMLAttributes<HTMLFormElement>, 'onSubmit'> {
   showData?: boolean;
   onSubmit: (formData: KeyValue) => void | Promise<void>;
 }
@@ -10,19 +10,19 @@ interface Form extends Omit<React.FormHTMLAttributes<HTMLFormElement>, 'onSubmit
 // TODO checkbox radio don't work as expected
 // TODO finish drag and drop
 // TODO showError
-const Form: React.FC<Form> = ({ children, onSubmit, showData, ...rest }) => {
+// TODO steps
+const Form: React.FC<IForm> = ({ children, onSubmit, showData, ...rest }) => {
   const { meta, data, error, showError, focus } = React.useContext(Context);
 
   showData && console.log({ meta, data, error, showError, focus });
 
   return (
     <form
+      data-flow-id="form"
       onSubmit={(e: React.FormEvent) => {
         e.preventDefault();
         onSubmit(data);
       }}
-      className="flow-form"
-      data-flow-id="form"
       {...rest}
     >
       {children}
@@ -33,7 +33,7 @@ const Form: React.FC<Form> = ({ children, onSubmit, showData, ...rest }) => {
   );
 };
 
-export const FlowForm: React.FC<Form> = props => (
+export const FlowForm: React.FC<IForm> = props => (
   <Wrapper>
     <Form {...props} />
   </Wrapper>
