@@ -1,6 +1,7 @@
-import React from 'react';
-import { FlowForm, Field, Step } from 'flow-form';
-import './App.css';
+import 'react-app-polyfill/ie11';
+import * as React from 'react';
+import * as ReactDOM from 'react-dom';
+import { FlowForm, Field } from 'flow-form';
 
 function App() {
   const checkString = e => {
@@ -17,11 +18,10 @@ function App() {
   return (
     <div className="container">
       <FlowForm onSubmit={data => console.log('onSubmit: ', data)} showData>
-        <Step>
-          <Field type="text" validation={checkString}>
-            Test 1
-          </Field>
-        </Step>
+
+        <Field type="text" validation={checkString}>
+          Test 1
+        </Field>
 
         <Field type="number" required>
           Numbers
@@ -49,9 +49,13 @@ function App() {
         </Field>
 
         <Field type="drag-drop">File</Field>
+
       </FlowForm>
     </div>
   );
 }
 
-export default App;
+ReactDOM.render(
+  <App />,
+  document.getElementById('root')
+);

@@ -53,5 +53,7 @@
     "preset": "ts-jest",
     "testEnvironment": "node"
   },
-  "dependencies": {}
+  "dependencies": {
+    "react": "^17.0.1"
+  }
 }

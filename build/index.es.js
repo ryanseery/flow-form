@@ -128,7 +128,6 @@ var Wrapper = function (_a) {
     }, []);
     return createElement(Context.Provider, { value: __assign(__assign({}, state), actions) }, children);
 };
-//# sourceMappingURL=Context.js.map
 
 function styleInject(css, ref) {
   if ( ref === void 0 ) ref = {};
@@ -177,7 +176,6 @@ var Form = function (_a) {
 };
 var FlowForm = function (props) { return (createElement(Wrapper, null,
     createElement(Form, __assign({}, props)))); };
-//# sourceMappingURL=FlowForm.js.map
 
 function validate(e, validation, required) {
     if (required) {
@@ -231,7 +229,6 @@ function useFormData(_a) {
         onBlur: useCallback(onBlur, []),
     };
 }
-//# sourceMappingURL=useFormData.js.map
 
 function toCamelCase(str) {
     if (typeof str !== 'string') {
@@ -243,22 +240,17 @@ function toCamelCase(str) {
     })
         .replace(/\s+/g, '');
 }
-//# sourceMappingURL=toCamelCase.js.map
 
 var Input = forwardRef(function (props, ref) { return (createElement("input", __assign({ "data-flow-id": "input", ref: ref }, props))); });
-//# sourceMappingURL=Input.js.map
 
 // TODO optgroup functionality
 var Select = forwardRef(function (props, ref) { return (createElement("select", __assign({ "data-flow-id": "select" }, props, { ref: ref }), props.children)); });
-//# sourceMappingURL=Select.js.map
 
 var TextArea = forwardRef(function (props, ref) { return (createElement("textarea", __assign({ "data-flow-id": "textarea" }, props, { ref: ref }))); });
-//# sourceMappingURL=TextArea.js.map
 
 var CheckboxRadio = forwardRef(function (props, ref) { return (createElement("div", { className: "flow-form-radio-group" }, (props === null || props === void 0 ? void 0 : props.children).map(function (child) { return (createElement("label", { htmlFor: child.props.id, key: child.props.name, className: props.className },
     createElement("input", { id: props.id, type: props.type, ref: ref, value: child.props.name, checked: props.value === child.props.name, onChange: props.onChange }),
     child.props.name)); }))); });
-//# sourceMappingURL=CheckboxRadio.js.map
 
 function handleDefaults(e) {
     e.preventDefault();
@@ -291,7 +283,6 @@ var DragDrop = forwardRef(function (props) {
     return (createElement("div", { "data-flow-id": "drag-drop", onDrag: handleDefaults, onDragStart: handleDefaults, onDragEnd: handleDefaults, onDragOver: handleDefaults, onDragEnter: handleDefaults, onDragLeave: handleDefaults, onDrop: onDrop, onClick: handleFileBtn },
         createElement("input", __assign({}, props, { ref: fileRef }))));
 });
-//# sourceMappingURL=DragDrop.js.map
 
 var Field = function (_a) {
     var _b = _a.type, type = _b === void 0 ? 'text' : _b, name = _a.name, children = _a.children, validation = _a.validation, rest = __rest(_a, ["type", "name", "children", "validation"]);
@@ -347,7 +338,6 @@ var Field = function (_a) {
             }
         })()));
 };
-//# sourceMappingURL=Field.js.map
 
 // TODO ref on field to go through children and see what are inputs?
 var Step = function (_a) {
