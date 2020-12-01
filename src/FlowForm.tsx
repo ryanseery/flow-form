@@ -2,11 +2,10 @@ import * as React from 'react';
 import { Context, Wrapper } from './Context';
 import { KeyValue } from './@types/keyTypes';
 import './style.css';
-
-interface Form extends React.FormHTMLAttributes<HTMLFormElement> {
+interface Form extends Omit<React.FormHTMLAttributes<HTMLFormElement>, 'onSubmit'> {
   showData: boolean;
   onSubmit: (formData: KeyValue) => void | Promise<void>;
-};
+}
 
 const Form: React.FC<Form> = ({ children, onSubmit, showData, ...rest }) => {
   const { meta, data, error, showError, focus } = React.useContext(Context);
@@ -15,24 +14,24 @@ const Form: React.FC<Form> = ({ children, onSubmit, showData, ...rest }) => {
 
   return (
     <form
-      onSubmit={e => {
+      onSubmit={(e: React.FormEvent) => {
         e.preventDefault();
         onSubmit(data);
       }}
       className="flow-form"
+      data-flow-id="form"
       {...rest}
     >
       {children}
-      <button type="submit">Submit</button>
+      <button data-flow-id="submit" type="submit">
+        Submit
+      </button>
     </form>
   );
 };
 
-interface FlowForm extends Form {}
-export const FlowForm: React.FC<FlowForm> = props => {
-  return (
-    <Wrapper>
-      <Form {...props} />
-    </Wrapper>
-  );
-};
+export const FlowForm: React.FC<Form> = props => (
+  <Wrapper>
+    <Form {...props} />
+  </Wrapper>
+);

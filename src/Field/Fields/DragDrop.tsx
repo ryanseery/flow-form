@@ -32,6 +32,7 @@ export const DragDrop = React.forwardRef<HTMLInputElement, IField>(props => {
 
   return (
     <div
+      data-flow-id="drag-drop" 
       onDrag={handleDefaults}
       onDragStart={handleDefaults}
       onDragEnd={handleDefaults}

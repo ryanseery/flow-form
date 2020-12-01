@@ -1,25 +1,25 @@
 import * as React from 'react';
 import { KeyValue, KeyValBool } from './@types/keyTypes';
 
-type Meta = {
+interface Meta {
   touched: KeyValBool;
   completedSteps: StepState[] | null;
-};
+}
 
-type StepState = {
+interface StepState {
   id: string;
   label: string;
   index: number;
-};
+}
 
-type Flow = {
+interface Flow {
   key: number;
   end: number;
   steps: StepState[] | null;
   currentStep: StepState | null;
-};
+}
 
-type State = {
+interface State {
   isFlowForm: boolean;
   canProceed: boolean;
   meta: Meta;
@@ -28,7 +28,7 @@ type State = {
   error: KeyValBool;
   showError: KeyValBool;
   focus: KeyValBool;
-};
+}
 
 const initialState: State = {
   isFlowForm: false,
@@ -49,16 +49,13 @@ const initialState: State = {
   focus: {},
 };
 
-type FormArgs = {
+interface FormArgs {
   isFlowForm: boolean;
   flow: Flow;
-};
+}
 
-type ID = {
+interface Args {
   id: string;
-};
-
-interface Args extends ID {
   value: string | boolean | number;
   error: boolean;
 }
@@ -81,50 +78,50 @@ enum ACTION {
   HANDLE_BLUR = 'HANDLE_BLUR',
 }
 
-type RegisterForm = {
+interface RegisterForm {
   type: ACTION.REGISTER_FORM;
   payload: FormArgs;
-};
+}
 const registerForm = (payload: FormArgs): RegisterForm => ({
   type: ACTION.REGISTER_FORM,
   payload,
 });
 
-type RegisterField = {
+interface RegisterField {
   type: ACTION.REGISTER_FIELD;
   payload: Args;
-};
+}
 const registerField = (payload: Args): RegisterField => ({
   type: ACTION.REGISTER_FIELD,
   payload,
 });
 
-type UpdateField = {
+interface UpdateField {
   type: ACTION.UPDATE_FIELD;
   payload: Args;
-};
+}
 const updateField = (payload: Args): UpdateField => ({
   type: ACTION.UPDATE_FIELD,
   payload,
 });
 
-type HandleFocus = {
+interface HandleFocus {
   type: ACTION.HANDLE_FOCUS;
   payload: {
     id: string;
   };
-};
+}
 const handleFocus = (payload: { id: string }): HandleFocus => ({
   type: ACTION.HANDLE_FOCUS,
   payload,
 });
 
-type HandleBlur = {
+interface HandleBlur {
   type: ACTION.HANDLE_BLUR;
   payload: {
     id: string;
   };
-};
+}
 const handleBlur = (payload: { id: string }): HandleBlur => ({
   type: ACTION.HANDLE_BLUR,
   payload,
@@ -231,7 +228,7 @@ function reducer(state: State, action: Actions): State {
   }
 }
 
-type Props = {};
+interface Props {}
 export const Wrapper: React.FC<Props> = ({ children }) => {
   const [state, dispatch] = React.useReducer(reducer, initialState);
 
