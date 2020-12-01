@@ -3,10 +3,13 @@ import { Context, Wrapper } from './Context';
 import { KeyValue } from './@types/keyTypes';
 import './style.css';
 interface Form extends Omit<React.FormHTMLAttributes<HTMLFormElement>, 'onSubmit'> {
-  showData: boolean;
+  showData?: boolean;
   onSubmit: (formData: KeyValue) => void | Promise<void>;
 }
 
+// TODO checkbox radio don't work as expected
+// TODO finish drag and drop
+// TODO showError
 const Form: React.FC<Form> = ({ children, onSubmit, showData, ...rest }) => {
   const { meta, data, error, showError, focus } = React.useContext(Context);
 

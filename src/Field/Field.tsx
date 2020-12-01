@@ -3,8 +3,7 @@ import { useFormData } from '../useFormData';
 import { toCamelCase } from '../utils';
 import { Input, Select, TextArea, CheckboxRadio, DragDrop } from './Fields';
 import { EventType } from '../@types/eventType';
-export interface IField
-  extends React.InputHTMLAttributes<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement> {
+export interface IField extends React.InputHTMLAttributes<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement> {
   children?: string | React.ReactElement;
   validation?: (e: EventType) => boolean;
   onChange: (e: EventType) => void;
@@ -49,7 +48,7 @@ export const Field: React.FC<IField> = ({ type = 'text', name, children, validat
             return (
               <Select
                 {...rest}
-                className="flow-form-select"
+                className="flow-form-input"
                 ref={onRegister}
                 id={id}
                 data-input-id={id}
@@ -66,7 +65,7 @@ export const Field: React.FC<IField> = ({ type = 'text', name, children, validat
             return (
               <TextArea
                 {...rest}
-                className="flow-form-textarea"
+                className="flow-form-input"
                 ref={onRegister}
                 id={id}
                 data-input-id={id}
@@ -101,7 +100,7 @@ export const Field: React.FC<IField> = ({ type = 'text', name, children, validat
             return (
               <CheckboxRadio
                 {...rest}
-                className={`flow-form-${type}`}
+                className="flow-form-radio"
                 ref={onRegister}
                 id={id}
                 data-input-id={id}

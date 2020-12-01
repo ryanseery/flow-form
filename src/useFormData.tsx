@@ -6,15 +6,11 @@ import { IField } from './Field/Field';
 
 type RefType = HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement;
 
-type UseFormArgs = {
+interface UseFormArgs {
   validation?: (e: EventType) => boolean;
-};
+}
 
-function validate(
-  e: EventType,
-  validation: UseFormArgs['validation'] | undefined,
-  required: boolean,
-): boolean {
+function validate(e: EventType, validation: UseFormArgs['validation'] | undefined, required: boolean): boolean {
   if (required) {
     return !e.target.value;
   }
@@ -25,18 +21,16 @@ function validate(
   return false;
 }
 
-type UseFormReturn = {
+interface UseFormReturn {
   data: KeyValue;
   showError: KeyValBool;
   onRegister: (ref: RefType & IField) => void;
   onChange: (e: EventType) => void;
   onFocus: (e: EventType) => void;
   onBlur: (e: EventType) => void;
-};
+}
 export function useFormData({ validation }: UseFormArgs): UseFormReturn {
-  const { data, showError, registerField, updateField, handleFocus, handleBlur } = React.useContext(
-    Context,
-  );
+  const { data, showError, registerField, updateField, handleFocus, handleBlur } = React.useContext(Context);
 
   const onRegister = (ref: RefType) => {
     const { id, value, required } = ref;
