@@ -1,7 +1,7 @@
-export type KeyValue = {
+export interface KeyValue {
   [key: string]: any;
-};
+}
 
-export type KeyValBool = {
+export interface KeyValBool {
   [key: string]: boolean;
-};
+}

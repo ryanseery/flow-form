@@ -166,14 +166,12 @@ var Form = function (_a) {
     return (createElement("form", __assign({ onSubmit: function (e) {
             e.preventDefault();
             onSubmit(data);
-        }, className: "flow-form" }, rest),
+        }, className: "flow-form", "data-flow-id": "form" }, rest),
         children,
-        createElement("button", { type: "submit" }, "Submit")));
+        createElement("button", { "data-flow-id": "submit", type: "submit" }, "Submit")));
 };
-var FlowForm = function (props) {
-    return (createElement(Wrapper, null,
-        createElement(Form, __assign({}, props))));
-};
+var FlowForm = function (props) { return (createElement(Wrapper, null,
+    createElement(Form, __assign({}, props)))); };
 
 function validate(e, validation, required) {
     if (required) {
@@ -233,7 +231,9 @@ function toCamelCase(str) {
         throw new TypeError('toCamelCase called on non-string');
     }
     return str
-        .replace(/(?:^\w|[A-Z]|\b\w)/g, function (word, index) { return (index === 0 ? word.toLowerCase() : word.toUpperCase()); })
+        .replace(/(?:^\w|[A-Z]|\b\w)/g, function (word, index) {
+        return index === 0 ? word.toLowerCase() : word.toUpperCase();
+    })
         .replace(/\s+/g, '');
 }
 
@@ -242,12 +242,12 @@ var handleDefaults = function (e) {
     e.stopPropagation();
 };
 
-var Input = forwardRef(function (props, ref) { return (createElement("input", __assign({}, props, { ref: ref }))); });
+var Input = forwardRef(function (props, ref) { return (createElement("input", __assign({ "data-flow-id": "input" }, props, { ref: ref }))); });
 
 // TODO optgroup functionality
-var Select = forwardRef(function (props, ref) { return (createElement("select", __assign({}, props, { ref: ref }), props.children)); });
+var Select = forwardRef(function (props, ref) { return (createElement("select", __assign({ "data-flow-id": "select" }, props, { ref: ref }), props.children)); });
 
-var TextArea = forwardRef(function (props, ref) { return (createElement("textarea", __assign({}, props, { ref: ref }))); });
+var TextArea = forwardRef(function (props, ref) { return (createElement("textarea", __assign({ "data-flow-id": "textarea" }, props, { ref: ref }))); });
 
 var CheckboxRadio = forwardRef(function (props, ref) {
     return (createElement("div", { className: "flow-form-radio-group" }, (props === null || props === void 0 ? void 0 : props.children).map(function (child) { return (createElement("label", { htmlFor: child.props.id, key: child.props.name, className: props.className },
@@ -279,7 +279,7 @@ var DragDrop = forwardRef(function (props) {
             return;
         fileRef.current.click();
     };
-    return (createElement("div", { onDrag: handleDefaults, onDragStart: handleDefaults, onDragEnd: handleDefaults, onDragOver: handleDefaults, onDragEnter: handleDefaults, onDragLeave: handleDefaults, onDrop: onDrop, onClick: handleFileBtn },
+    return (createElement("div", { "data-flow-id": "drag-drop", onDrag: handleDefaults, onDragStart: handleDefaults, onDragEnd: handleDefaults, onDragOver: handleDefaults, onDragEnter: handleDefaults, onDragLeave: handleDefaults, onDrop: onDrop, onClick: handleFileBtn },
         createElement("input", __assign({}, props, { ref: fileRef }))));
 });
 
@@ -305,12 +305,14 @@ var Field = function (_a) {
                 inputLabel: name,
             };
         }
-        return {
-            id: isString ? toCamelCase(children) : toCamelCase(name),
-            inputLabel: !isOptions && !children ? name : children !== null && children !== void 0 ? children : '',
-        };
+        else {
+            return {
+                id: isString ? toCamelCase(children) : toCamelCase(name),
+                inputLabel: !isOptions && !children ? name : children !== null && children !== void 0 ? children : '',
+            };
+        }
     }, []), id = _d.id, inputLabel = _d.inputLabel;
-    return (createElement("label", { htmlFor: id, className: "flow-form-label" },
+    return (createElement("label", { htmlFor: id, className: "flow-form-label", "data-flow-id": "label" },
         inputLabel,
         (function () {
             var _a, _b, _c, _d, _e, _f;
@@ -339,7 +341,7 @@ var Field = function (_a) {
 
 var Step = function (_a) {
     var children = _a.children;
-    return (createElement("fieldset", { "data-id": "step" }, children));
+    return (createElement("fieldset", { "data-flow-id": "step" }, children));
 };
 
 export { Field, FlowForm, Step };

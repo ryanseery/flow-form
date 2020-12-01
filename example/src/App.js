@@ -15,13 +15,7 @@ function App() {
   ];
 
   return (
-    <div
-      style={{
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-      }}
-    >
+    <div className="container">
       <FlowForm onSubmit={data => console.log('onSubmit: ', data)} showData>
         <Step>
           <Field type="text" validation={checkString}>

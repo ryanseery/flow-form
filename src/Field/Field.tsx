@@ -32,12 +32,12 @@ export const Field: React.FC<IField> = ({ type = 'text', name, children, validat
         id: toCamelCase(name ?? ''),
         inputLabel: name,
       };
+    } else {
+      return {
+        id: isString ? toCamelCase(children as string) : toCamelCase(name as string),
+        inputLabel: !isOptions && !children ? name : children ?? '',
+      };
     }
-
-    return {
-      id: isString ? toCamelCase(children as string) : toCamelCase(name as string),
-      inputLabel: !isOptions && !children ? name : children ?? '',
-    };
   }, []);
 
   return (
