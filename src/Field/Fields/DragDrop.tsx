@@ -1,6 +1,10 @@
 import * as React from 'react';
 import { IField } from '../Field';
-import { handleDefaults } from '../../utils';
+
+function handleDefaults(e: Event | React.DragEvent<HTMLDivElement>): void {
+  e.preventDefault();
+  e.stopPropagation();
+}
 
 // TODO make onClick mandatory
 export const DragDrop = React.forwardRef<HTMLInputElement, IField>(props => {
@@ -32,7 +36,7 @@ export const DragDrop = React.forwardRef<HTMLInputElement, IField>(props => {
 
   return (
     <div
-      data-flow-id="drag-drop" 
+      data-flow-id="drag-drop"
       onDrag={handleDefaults}
       onDragStart={handleDefaults}
       onDragEnd={handleDefaults}
