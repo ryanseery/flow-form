@@ -128,6 +128,7 @@ var Wrapper = function (_a) {
     }, []);
     return createElement(Context.Provider, { value: __assign(__assign({}, state), actions) }, children);
 };
+//# sourceMappingURL=Context.js.map
 
 function styleInject(css, ref) {
   if ( ref === void 0 ) ref = {};
@@ -156,7 +157,7 @@ function styleInject(css, ref) {
   }
 }
 
-var css_248z = "fieldset {\n  border: none;\n  padding: 0;\n  margin: 0 0 1rem 0;\n}\n\n.flow-form-input {\n  display: block;\n}\n\n.flow-form-radio-group {\n  display: flex;\n  flex-direction: row;\n}\n";
+var css_248z = "fieldset {\n  border: none;\n  padding: 0;\n  margin: 0 0 1rem 0;\n}\n\ninput[type='text'],\ninput[type='number'],\ninput[type='file'] {\n  display: block;\n}\n\nselect {\n  display: block;\n}\n\ntextarea {\n  display: block;\n}\n\n.style-module_flow-form-radio-group__XPkrA {\n  display: flex;\n  flex-direction: row;\n}\n";
 styleInject(css_248z);
 
 // TODO checkbox radio don't work as expected
@@ -176,6 +177,7 @@ var Form = function (_a) {
 };
 var FlowForm = function (props) { return (createElement(Wrapper, null,
     createElement(Form, __assign({}, props)))); };
+//# sourceMappingURL=FlowForm.js.map
 
 function validate(e, validation, required) {
     if (required) {
@@ -240,6 +242,7 @@ function toCamelCase(str) {
     })
         .replace(/\s+/g, '');
 }
+//# sourceMappingURL=toCamelCase.js.map
 
 var Input = forwardRef(function (props, ref) { return (createElement("input", __assign({ "data-flow-id": "input", ref: ref }, props))); });
 
@@ -318,22 +321,22 @@ var Field = function (_a) {
             var _a, _b, _c, _d, _e, _f;
             switch (type) {
                 case 'select': {
-                    return (createElement(Select, __assign({}, rest, { className: "flow-form-input", ref: onRegister, id: id, "data-input-id": id, name: id, value: (_a = data[id]) !== null && _a !== void 0 ? _a : '', onChange: onChange, onFocus: onFocus, onBlur: onBlur, children: children })));
+                    return (createElement(Select, __assign({}, rest, { ref: onRegister, id: id, "data-input-id": id, name: id, value: (_a = data[id]) !== null && _a !== void 0 ? _a : '', onChange: onChange, onFocus: onFocus, onBlur: onBlur, children: children })));
                 }
                 case 'textarea': {
-                    return (createElement(TextArea, __assign({}, rest, { className: "flow-form-input", ref: onRegister, id: id, "data-input-id": id, name: id, type: type, value: (_b = data[id]) !== null && _b !== void 0 ? _b : '', onChange: onChange, onFocus: onFocus, onBlur: onBlur })));
+                    return (createElement(TextArea, __assign({}, rest, { ref: onRegister, id: id, "data-input-id": id, name: id, type: type, value: (_b = data[id]) !== null && _b !== void 0 ? _b : '', onChange: onChange, onFocus: onFocus, onBlur: onBlur })));
                 }
                 case 'radio': {
-                    return (createElement(CheckboxRadio, __assign({}, rest, { className: "flow-form-input", ref: onRegister, id: id, "data-input-id": id, name: id, type: type, value: (_c = data[id]) !== null && _c !== void 0 ? _c : '', onChange: onChange, onFocus: onFocus, onBlur: onBlur, children: children })));
+                    return (createElement(CheckboxRadio, __assign({}, rest, { ref: onRegister, id: id, "data-input-id": id, name: id, type: type, value: (_c = data[id]) !== null && _c !== void 0 ? _c : '', onChange: onChange, onFocus: onFocus, onBlur: onBlur, children: children })));
                 }
                 case 'checkbox': {
-                    return (createElement(CheckboxRadio, __assign({}, rest, { className: "flow-form-input", ref: onRegister, id: id, "data-input-id": id, name: id, type: type, value: (_d = data[id]) !== null && _d !== void 0 ? _d : '', onChange: onChange, onFocus: onFocus, onBlur: onBlur, children: children })));
+                    return (createElement(CheckboxRadio, __assign({}, rest, { ref: onRegister, id: id, "data-input-id": id, name: id, type: type, value: (_d = data[id]) !== null && _d !== void 0 ? _d : '', onChange: onChange, onFocus: onFocus, onBlur: onBlur, children: children })));
                 }
                 case 'drag-drop': {
-                    return (createElement(DragDrop, __assign({}, rest, { className: "flow-form-input", ref: onRegister, id: id, "data-input-id": id, name: id, type: "file", value: (_e = data[id]) !== null && _e !== void 0 ? _e : '', onChange: onChange, onFocus: onFocus, onBlur: onBlur })));
+                    return (createElement(DragDrop, __assign({}, rest, { ref: onRegister, id: id, "data-input-id": id, name: id, type: "file", value: (_e = data[id]) !== null && _e !== void 0 ? _e : '', onChange: onChange, onFocus: onFocus, onBlur: onBlur })));
                 }
                 default: {
-                    return (createElement(Input, __assign({}, rest, { className: "flow-form-input", ref: onRegister, id: id, "data-input-id": id, name: id, type: type, value: (_f = data[id]) !== null && _f !== void 0 ? _f : '', onChange: onChange, onFocus: onFocus, onBlur: onBlur })));
+                    return (createElement(Input, __assign({}, rest, { ref: onRegister, id: id, "data-input-id": id, name: id, type: type, value: (_f = data[id]) !== null && _f !== void 0 ? _f : '', onChange: onChange, onFocus: onFocus, onBlur: onBlur })));
                 }
             }
         })()));
@@ -344,6 +347,7 @@ var Step = function (_a) {
     var children = _a.children;
     return createElement("fieldset", { "data-flow-id": "step" }, children);
 };
+//# sourceMappingURL=Step.js.map
 
 export { Field, FlowForm, Step };
 //# sourceMappingURL=index.es.js.map

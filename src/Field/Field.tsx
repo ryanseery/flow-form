@@ -48,7 +48,6 @@ export const Field: React.FC<IField> = ({ type = 'text', name, children, validat
             return (
               <Select
                 {...rest}
-                className="flow-form-input"
                 ref={onRegister}
                 id={id}
                 data-input-id={id}
@@ -65,7 +64,6 @@ export const Field: React.FC<IField> = ({ type = 'text', name, children, validat
             return (
               <TextArea
                 {...rest}
-                className="flow-form-input"
                 ref={onRegister}
                 id={id}
                 data-input-id={id}
@@ -82,7 +80,6 @@ export const Field: React.FC<IField> = ({ type = 'text', name, children, validat
             return (
               <CheckboxRadio
                 {...rest}
-                className="flow-form-input"
                 ref={onRegister}
                 id={id}
                 data-input-id={id}
@@ -100,7 +97,6 @@ export const Field: React.FC<IField> = ({ type = 'text', name, children, validat
             return (
               <CheckboxRadio
                 {...rest}
-                className="flow-form-input"
                 ref={onRegister}
                 id={id}
                 data-input-id={id}
@@ -118,7 +114,6 @@ export const Field: React.FC<IField> = ({ type = 'text', name, children, validat
             return (
               <DragDrop
                 {...rest}
-                className="flow-form-input"
                 ref={onRegister}
                 id={id}
                 data-input-id={id}
@@ -135,7 +130,6 @@ export const Field: React.FC<IField> = ({ type = 'text', name, children, validat
             return (
               <Input
                 {...rest}
-                className="flow-form-input"
                 ref={onRegister}
                 id={id}
                 data-input-id={id}

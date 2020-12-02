@@ -4,7 +4,17 @@ fieldset {
   margin: 0 0 1rem 0;
 }
 
-.flow-form-input {
+input[type='text'],
+input[type='number'],
+input[type='file'] {
+  display: block;
+}
+
+select {
+  display: block;
+}
+
+textarea {
   display: block;
 }
 

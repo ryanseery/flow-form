@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { Context, Wrapper } from './Context';
 import { KeyValue } from './@types/keyTypes';
-import './style.css';
+import './style.module.css';
 interface IForm extends Omit<React.FormHTMLAttributes<HTMLFormElement>, 'onSubmit'> {
   showData?: boolean;
   onSubmit: (formData: KeyValue) => void | Promise<void>;

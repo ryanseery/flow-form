@@ -3,18 +3,18 @@ import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 import { FlowForm, Field } from 'flow-form';
 
+function checkString(e) {
+  return !e.target.value || !e.target.value.length;
+};
+
+const options = [
+  { value: 'volvo', name: 'Volvo' },
+  { value: 'saab', name: 'Saab' },
+  { value: 'mercedes', name: 'Mercedes' },
+  { value: 'audi', name: 'Audi' },
+];
+
 function App() {
-  const checkString = e => {
-    return !e.target.value || !e.target.value.length;
-  };
-
-  const options = [
-    { value: 'volvo', name: 'Volvo' },
-    { value: 'saab', name: 'Saab' },
-    { value: 'mercedes', name: 'Mercedes' },
-    { value: 'audi', name: 'Audi' },
-  ];
-
   return (
     <div className="container">
       <FlowForm onSubmit={data => console.log('onSubmit: ', data)} showData>
@@ -27,7 +27,7 @@ function App() {
           Numbers
         </Field>
 
-        <Field type="select" name="cars" id="cars">
+        <Field type="select" name="Cars" id="cars">
           <option disabled defaultValue=""></option>
           {options.map(option => (
             <option key={option.name} value={option.value}>
