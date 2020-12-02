@@ -110,8 +110,9 @@ function reducer(state, action) {
             var id = action.payload.id;
             return __assign(__assign({}, state), { focus: __assign(__assign({}, state.focus), (_l = {}, _l[id] = false, _l)) });
         }
-        default:
+        default: {
             throw new Error("Context Reducer Received Unrecognized Action!");
+        }
     }
 }
 var Wrapper = function (_a) {
@@ -128,7 +129,6 @@ var Wrapper = function (_a) {
     }, []);
     return createElement(Context.Provider, { value: __assign(__assign({}, state), actions) }, children);
 };
-//# sourceMappingURL=Context.js.map
 
 function styleInject(css, ref) {
   if ( ref === void 0 ) ref = {};
@@ -168,16 +168,15 @@ var Form = function (_a) {
     var children = _a.children, onSubmit = _a.onSubmit, showData = _a.showData, rest = __rest(_a, ["children", "onSubmit", "showData"]);
     var _b = useContext(Context), meta = _b.meta, data = _b.data, error = _b.error, showError = _b.showError, focus = _b.focus;
     showData && console.log({ meta: meta, data: data, error: error, showError: showError, focus: focus });
-    return (createElement("form", __assign({ "data-flow-id": "form", onSubmit: function (e) {
+    return (createElement("form", __assign({ onSubmit: function (e) {
             e.preventDefault();
             onSubmit(data);
         } }, rest),
         children,
-        createElement("button", { "data-flow-id": "submit", type: "submit" }, "Submit")));
+        createElement("button", { type: "submit" }, "Submit")));
 };
 var FlowForm = function (props) { return (createElement(Wrapper, null,
     createElement(Form, __assign({}, props)))); };
-//# sourceMappingURL=FlowForm.js.map
 
 function validate(e, validation, required) {
     if (required) {
@@ -244,16 +243,22 @@ function toCamelCase(str) {
 }
 //# sourceMappingURL=toCamelCase.js.map
 
-var Input = forwardRef(function (props, ref) { return (createElement("input", __assign({ "data-flow-id": "input", ref: ref }, props))); });
+var Input = forwardRef(function (props, ref) { return createElement("input", __assign({ ref: ref }, props)); });
+//# sourceMappingURL=Input.js.map
 
 // TODO optgroup functionality
-var Select = forwardRef(function (props, ref) { return (createElement("select", __assign({ "data-flow-id": "select" }, props, { ref: ref }), props.children)); });
+var Select = forwardRef(function (props, ref) { return (createElement("select", __assign({}, props, { ref: ref }), props.children)); });
+//# sourceMappingURL=Select.js.map
 
-var TextArea = forwardRef(function (props, ref) { return (createElement("textarea", __assign({ "data-flow-id": "textarea" }, props, { ref: ref }))); });
+var TextArea = forwardRef(function (props, ref) { return (createElement("textarea", __assign({}, props, { ref: ref }))); });
+//# sourceMappingURL=TextArea.js.map
 
+//TODO convert to resemble other fields. Doc to show same name is needed for group
+//TODO handle in own function?
 var CheckboxRadio = forwardRef(function (props, ref) { return (createElement("div", { className: "flow-form-radio-group" }, (props === null || props === void 0 ? void 0 : props.children).map(function (child) { return (createElement("label", { htmlFor: child.props.id, key: child.props.name, className: props.className },
     createElement("input", { id: props.id, type: props.type, ref: ref, value: child.props.name, checked: props.value === child.props.name, onChange: props.onChange }),
     child.props.name)); }))); });
+//# sourceMappingURL=CheckboxRadio.js.map
 
 function handleDefaults(e) {
     e.preventDefault();
@@ -283,9 +288,10 @@ var DragDrop = forwardRef(function (props) {
             return;
         fileRef.current.click();
     };
-    return (createElement("div", { "data-flow-id": "drag-drop", onDrag: handleDefaults, onDragStart: handleDefaults, onDragEnd: handleDefaults, onDragOver: handleDefaults, onDragEnter: handleDefaults, onDragLeave: handleDefaults, onDrop: onDrop, onClick: handleFileBtn },
+    return (createElement("div", { onDrag: handleDefaults, onDragStart: handleDefaults, onDragEnd: handleDefaults, onDragOver: handleDefaults, onDragEnter: handleDefaults, onDragLeave: handleDefaults, onDrop: onDrop, onClick: handleFileBtn },
         createElement("input", __assign({}, props, { ref: fileRef }))));
 });
+//# sourceMappingURL=DragDrop.js.map
 
 var Field = function (_a) {
     var _b = _a.type, type = _b === void 0 ? 'text' : _b, name = _a.name, children = _a.children, validation = _a.validation, rest = __rest(_a, ["type", "name", "children", "validation"]);
@@ -315,37 +321,38 @@ var Field = function (_a) {
             };
         }
     }, []), id = _d.id, inputLabel = _d.inputLabel;
-    return (createElement("label", { htmlFor: id, className: "flow-form-label", "data-flow-id": "label" },
+    return (createElement("label", { htmlFor: id, className: "flow-form-label" },
         inputLabel,
         (function () {
             var _a, _b, _c, _d, _e, _f;
             switch (type) {
                 case 'select': {
-                    return (createElement(Select, __assign({}, rest, { ref: onRegister, id: id, "data-input-id": id, name: id, value: (_a = data[id]) !== null && _a !== void 0 ? _a : '', onChange: onChange, onFocus: onFocus, onBlur: onBlur, children: children })));
+                    return (createElement(Select, __assign({}, rest, { ref: onRegister, id: id, name: id, value: (_a = data[id]) !== null && _a !== void 0 ? _a : '', onChange: onChange, onFocus: onFocus, onBlur: onBlur, children: children })));
                 }
                 case 'textarea': {
-                    return (createElement(TextArea, __assign({}, rest, { ref: onRegister, id: id, "data-input-id": id, name: id, type: type, value: (_b = data[id]) !== null && _b !== void 0 ? _b : '', onChange: onChange, onFocus: onFocus, onBlur: onBlur })));
+                    return (createElement(TextArea, __assign({}, rest, { ref: onRegister, id: id, name: id, type: type, value: (_b = data[id]) !== null && _b !== void 0 ? _b : '', onChange: onChange, onFocus: onFocus, onBlur: onBlur })));
                 }
                 case 'radio': {
-                    return (createElement(CheckboxRadio, __assign({}, rest, { ref: onRegister, id: id, "data-input-id": id, name: id, type: type, value: (_c = data[id]) !== null && _c !== void 0 ? _c : '', onChange: onChange, onFocus: onFocus, onBlur: onBlur, children: children })));
+                    return (createElement(CheckboxRadio, __assign({}, rest, { ref: onRegister, id: id, name: id, type: type, value: (_c = data[id]) !== null && _c !== void 0 ? _c : '', onChange: onChange, onFocus: onFocus, onBlur: onBlur, children: children })));
                 }
                 case 'checkbox': {
-                    return (createElement(CheckboxRadio, __assign({}, rest, { ref: onRegister, id: id, "data-input-id": id, name: id, type: type, value: (_d = data[id]) !== null && _d !== void 0 ? _d : '', onChange: onChange, onFocus: onFocus, onBlur: onBlur, children: children })));
+                    return (createElement(CheckboxRadio, __assign({}, rest, { ref: onRegister, id: id, name: id, type: type, value: (_d = data[id]) !== null && _d !== void 0 ? _d : '', onChange: onChange, onFocus: onFocus, onBlur: onBlur, children: children })));
                 }
                 case 'drag-drop': {
-                    return (createElement(DragDrop, __assign({}, rest, { ref: onRegister, id: id, "data-input-id": id, name: id, type: "file", value: (_e = data[id]) !== null && _e !== void 0 ? _e : '', onChange: onChange, onFocus: onFocus, onBlur: onBlur })));
+                    return (createElement(DragDrop, __assign({}, rest, { ref: onRegister, id: id, name: id, type: "file", value: (_e = data[id]) !== null && _e !== void 0 ? _e : '', onChange: onChange, onFocus: onFocus, onBlur: onBlur })));
                 }
                 default: {
-                    return (createElement(Input, __assign({}, rest, { ref: onRegister, id: id, "data-input-id": id, name: id, type: type, value: (_f = data[id]) !== null && _f !== void 0 ? _f : '', onChange: onChange, onFocus: onFocus, onBlur: onBlur })));
+                    return (createElement(Input, __assign({}, rest, { ref: onRegister, id: id, name: id, type: type, value: (_f = data[id]) !== null && _f !== void 0 ? _f : '', onChange: onChange, onFocus: onFocus, onBlur: onBlur })));
                 }
             }
         })()));
 };
+//# sourceMappingURL=Field.js.map
 
 // TODO ref on field to go through children and see what are inputs?
 var Step = function (_a) {
     var children = _a.children;
-    return createElement("fieldset", { "data-flow-id": "step" }, children);
+    return createElement("fieldset", null, children);
 };
 //# sourceMappingURL=Step.js.map
 

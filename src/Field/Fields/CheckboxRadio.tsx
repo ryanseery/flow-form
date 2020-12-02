@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { IField } from '../Field';
-
+//TODO convert to resemble other fields. Doc to show same name is needed for group
+//TODO handle in own function?
 export const CheckboxRadio = React.forwardRef<HTMLInputElement, IField>((props, ref) => (
   <div className="flow-form-radio-group">
     {(props?.children as React.ReactElement[]).map(child => (

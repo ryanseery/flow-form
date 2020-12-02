@@ -1,6 +1,9 @@
 import * as React from 'react';
 import { KeyValue, KeyValBool } from './@types/keyTypes';
-
+//TODO move majority into meta
+//TODO remove showError
+//TODO evaluate data as it comes initially
+//TODO allow initial values
 interface Meta {
   touched: KeyValBool;
   completedSteps: StepState[] | null;
@@ -223,13 +226,14 @@ function reducer(state: State, action: Actions): State {
         },
       };
     }
-    default:
+    default: {
       throw new Error(`Context Reducer Received Unrecognized Action!`);
+    }
   }
 }
 
-interface Props {}
-export const Wrapper: React.FC<Props> = ({ children }) => {
+interface IWrapper {}
+export const Wrapper: React.FC<IWrapper> = ({ children }) => {
   const [state, dispatch] = React.useReducer(reducer, initialState);
 
   const actions = React.useMemo(() => {

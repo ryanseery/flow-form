@@ -3,8 +3,8 @@ import { Context, Wrapper } from './Context';
 import { KeyValue } from './@types/keyTypes';
 import './style.module.css';
 interface IForm extends Omit<React.FormHTMLAttributes<HTMLFormElement>, 'onSubmit'> {
-  showData?: boolean;
   onSubmit: (formData: KeyValue) => void | Promise<void>;
+  showData?: boolean;
 }
 
 // TODO checkbox radio don't work as expected
@@ -18,7 +18,6 @@ const Form: React.FC<IForm> = ({ children, onSubmit, showData, ...rest }) => {
 
   return (
     <form
-      data-flow-id="form"
       onSubmit={(e: React.FormEvent) => {
         e.preventDefault();
         onSubmit(data);
@@ -26,9 +25,7 @@ const Form: React.FC<IForm> = ({ children, onSubmit, showData, ...rest }) => {
       {...rest}
     >
       {children}
-      <button data-flow-id="submit" type="submit">
-        Submit
-      </button>
+      <button type="submit">Submit</button>
     </form>
   );
 };
