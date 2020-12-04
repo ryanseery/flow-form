@@ -160,7 +160,6 @@ function styleInject(css, ref) {
 var css_248z = "input[type='text'],\ninput[type='number'],\ninput[type='file'] {\n  display: block;\n}\n\nlabel[for='checkbox'],\nlabel[for='radio'] {\n  display: block;\n}\n\nselect {\n  display: block;\n}\n\ntextarea {\n  display: block;\n}\n\nfieldset {\n  border: none;\n  padding: 0;\n  margin: 0 0 1rem 0;\n}\n";
 styleInject(css_248z);
 
-// TODO checkbox radio don't work as expected
 // TODO finish drag and drop
 // TODO showError
 // TODO steps
@@ -234,7 +233,6 @@ function useFormData(_a) {
         onBlur: useCallback(onBlur, []),
     };
 }
-//# sourceMappingURL=useFormData.js.map
 
 function toCamelCase(str) {
     if (typeof str !== 'string') {
@@ -259,7 +257,7 @@ var TextArea = forwardRef(function (props, ref) { return (createElement("textare
 //# sourceMappingURL=TextArea.js.map
 
 //TODO not working
-var CheckboxRadio = forwardRef(function (props, ref) { return (createElement("input", __assign({ ref: ref, value: props.name, checked: props.value === props.name }, props))); });
+var CheckboxRadio = forwardRef(function (props, ref) { return (createElement("input", __assign({ ref: ref }, props, { value: props.name, checked: props.value === props.name }))); });
 //# sourceMappingURL=CheckboxRadio.js.map
 
 function handleDefaults(e) {
@@ -354,7 +352,6 @@ var Field = function (_a) {
             }
         })()));
 };
-//# sourceMappingURL=Field.js.map
 
 // TODO ref on field to go through children and see what are inputs?
 var Step = function (_a) {

@@ -1,14 +1,14 @@
 import * as React from 'react';
 import { Context, Wrapper } from './Context';
 import { KeyValue } from './@types/keyTypes';
-import './style.module.css';
+import './styles.module.css';
+
 interface IForm extends Omit<React.FormHTMLAttributes<HTMLFormElement>, 'onSubmit'> {
   onSubmit: (formData: KeyValue) => void | Promise<void>;
   showData?: boolean;
   initialValues?: KeyValue;
 }
 
-// TODO checkbox radio don't work as expected
 // TODO finish drag and drop
 // TODO showError
 // TODO steps
