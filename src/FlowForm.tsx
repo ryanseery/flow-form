@@ -5,6 +5,7 @@ import './style.module.css';
 interface IForm extends Omit<React.FormHTMLAttributes<HTMLFormElement>, 'onSubmit'> {
   onSubmit: (formData: KeyValue) => void | Promise<void>;
   showData?: boolean;
+  initialValues?: KeyValue;
 }
 
 // TODO checkbox radio don't work as expected
@@ -12,9 +13,9 @@ interface IForm extends Omit<React.FormHTMLAttributes<HTMLFormElement>, 'onSubmi
 // TODO showError
 // TODO steps
 const Form: React.FC<IForm> = ({ children, onSubmit, showData, ...rest }) => {
-  const { meta, data, error, showError, focus } = React.useContext(Context);
+  const { meta, data } = React.useContext(Context);
 
-  showData && console.log({ meta, data, error, showError, focus });
+  showData && console.log({ meta, data });
 
   return (
     <form
@@ -30,8 +31,8 @@ const Form: React.FC<IForm> = ({ children, onSubmit, showData, ...rest }) => {
   );
 };
 
-export const FlowForm: React.FC<IForm> = props => (
-  <Wrapper>
-    <Form {...props} />
+export const FlowForm: React.FC<IForm> = ({ initialValues, ...rest }) => (
+  <Wrapper initialValues={initialValues}>
+    <Form {...rest} />
   </Wrapper>
 );

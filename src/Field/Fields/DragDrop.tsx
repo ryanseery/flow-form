@@ -6,8 +6,8 @@ function handleDefaults(e: Event | React.DragEvent<HTMLDivElement>): void {
   e.stopPropagation();
 }
 
-// TODO make onClick mandatory
-export const DragDrop = React.forwardRef<HTMLInputElement, IField>(props => {
+// TODO to figure out file click!
+export const DragDrop = React.forwardRef<HTMLInputElement, IField>((props, ref) => {
   const fileRef = React.useRef<HTMLInputElement>(null);
 
   React.useEffect(() => {
@@ -45,7 +45,7 @@ export const DragDrop = React.forwardRef<HTMLInputElement, IField>(props => {
       onDrop={onDrop}
       onClick={handleFileBtn}
     >
-      <input {...props} ref={fileRef} />
+      <input {...props} ref={ref} />
     </div>
   );
 });

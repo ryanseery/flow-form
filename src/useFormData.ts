@@ -1,10 +1,10 @@
 import * as React from 'react';
 import { Context } from './Context';
-import { KeyValue, KeyValBool } from './@types/keyTypes';
+import { KeyValue } from './@types/keyTypes';
 import { EventType } from './@types/eventType';
 import { IField } from './Field/Field';
 
-type RefType = HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement;
+export type RefType = HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement;
 
 interface UseFormArgs {
   validation?: (e: EventType) => boolean;
@@ -23,14 +23,13 @@ function validate(e: EventType, validation: UseFormArgs['validation'], required:
 
 interface UseFormReturn {
   data: KeyValue;
-  showError: KeyValBool;
   onRegister: (ref: RefType & IField) => void;
   onChange: (e: EventType) => void;
   onFocus: (e: EventType) => void;
   onBlur: (e: EventType) => void;
 }
 export function useFormData({ validation }: UseFormArgs): UseFormReturn {
-  const { data, showError, registerField, updateField, handleFocus, handleBlur } = React.useContext(Context);
+  const { data, registerField, updateField, handleFocus, handleBlur } = React.useContext(Context);
 
   const onRegister = (ref: RefType) => {
     const { id, value, required } = ref;
@@ -76,7 +75,6 @@ export function useFormData({ validation }: UseFormArgs): UseFormReturn {
 
   return {
     data,
-    showError,
     onRegister: React.useCallback(onRegister, []),
     onChange: React.useCallback(onChange, []),
     onFocus: React.useCallback(onFocus, []),

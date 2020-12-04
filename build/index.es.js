@@ -39,22 +39,21 @@ function __rest(s, e) {
 }
 
 var initialState = {
-    isFlowForm: false,
-    canProceed: false,
     meta: {
         touched: {},
+        focus: {},
+        error: {},
+        isFlowForm: false,
+        canProceed: false,
         completedSteps: null,
-    },
-    flow: {
-        key: 0,
-        end: 0,
-        currentStep: null,
-        steps: null,
+        flow: {
+            key: 0,
+            end: 0,
+            currentStep: null,
+            steps: null,
+        },
     },
     data: {},
-    error: {},
-    showError: {},
-    focus: {},
 };
 var Context = createContext({});
 var ACTION;
@@ -86,29 +85,29 @@ var handleBlur = function (payload) { return ({
     payload: payload,
 }); };
 function reducer(state, action) {
-    var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l;
+    var _a, _b, _c, _d, _e, _f, _g, _h, _j;
     switch (action.type) {
         case ACTION.REGISTER_FORM: {
             return state;
         }
         case ACTION.REGISTER_FIELD: {
-            var _m = action.payload, id = _m.id, error = _m.error;
+            var _k = action.payload, id = _k.id, error = _k.error;
             if (!state.data[id]) {
-                return __assign(__assign({}, state), { meta: __assign(__assign({}, state.meta), { touched: __assign(__assign({}, state.meta.touched), (_a = {}, _a[id] = false, _a)) }), data: __assign(__assign({}, state.data), (_b = {}, _b[id] = '', _b)), error: __assign(__assign({}, state.error), (_c = {}, _c[id] = error, _c)), showError: __assign(__assign({}, state.showError), (_d = {}, _d[id] = false, _d)), focus: __assign(__assign({}, state.focus), (_e = {}, _e[id] = false, _e)) });
+                return __assign(__assign({}, state), { meta: __assign(__assign({}, state.meta), { touched: __assign(__assign({}, state.meta.touched), (_a = {}, _a[id] = false, _a)), focus: __assign(__assign({}, state.meta.focus), (_b = {}, _b[id] = false, _b)), error: __assign(__assign({}, state.meta.error), (_c = {}, _c[id] = error, _c)) }), data: __assign(__assign({}, state.data), (_d = {}, _d[id] = '', _d)) });
             }
             return state;
         }
         case ACTION.UPDATE_FIELD: {
-            var _o = action.payload, id = _o.id, value = _o.value, error = _o.error;
-            return __assign(__assign({}, state), { data: __assign(__assign({}, state.data), (_f = {}, _f[id] = value, _f)), error: __assign(__assign({}, state.error), (_g = {}, _g[id] = error, _g)), showError: __assign(__assign({}, state.showError), (_h = {}, _h[id] = error, _h)) });
+            var _l = action.payload, id = _l.id, value = _l.value, error = _l.error;
+            return __assign(__assign({}, state), { meta: __assign(__assign({}, state.meta), { error: __assign(__assign({}, state.meta.error), (_e = {}, _e[id] = error, _e)) }), data: __assign(__assign({}, state.data), (_f = {}, _f[id] = value, _f)) });
         }
         case ACTION.HANDLE_FOCUS: {
             var id = action.payload.id;
-            return __assign(__assign({}, state), { meta: __assign(__assign({}, state.meta), { touched: __assign(__assign({}, state.meta.touched), (_j = {}, _j[id] = true, _j)) }), focus: __assign(__assign({}, state.focus), (_k = {}, _k[id] = true, _k)) });
+            return __assign(__assign({}, state), { meta: __assign(__assign({}, state.meta), { touched: __assign(__assign({}, state.meta.touched), (_g = {}, _g[id] = true, _g)), focus: __assign(__assign({}, state.meta.focus), (_h = {}, _h[id] = true, _h)) }) });
         }
         case ACTION.HANDLE_BLUR: {
             var id = action.payload.id;
-            return __assign(__assign({}, state), { focus: __assign(__assign({}, state.focus), (_l = {}, _l[id] = false, _l)) });
+            return __assign(__assign({}, state), { meta: __assign(__assign({}, state.meta), { focus: __assign(__assign({}, state.meta.focus), (_j = {}, _j[id] = false, _j)) }) });
         }
         default: {
             throw new Error("Context Reducer Received Unrecognized Action!");
@@ -116,8 +115,8 @@ function reducer(state, action) {
     }
 }
 var Wrapper = function (_a) {
-    var children = _a.children;
-    var _b = useReducer(reducer, initialState), state = _b[0], dispatch = _b[1];
+    var children = _a.children, _b = _a.initialValues, initialValues = _b === void 0 ? {} : _b;
+    var _c = useReducer(reducer, __assign(__assign({}, initialState), { data: __assign(__assign({}, initialState.data), initialValues) })), state = _c[0], dispatch = _c[1];
     var actions = useMemo(function () {
         return {
             registerForm: function (payload) { return dispatch(registerForm(payload)); },
@@ -166,8 +165,8 @@ styleInject(css_248z);
 // TODO steps
 var Form = function (_a) {
     var children = _a.children, onSubmit = _a.onSubmit, showData = _a.showData, rest = __rest(_a, ["children", "onSubmit", "showData"]);
-    var _b = useContext(Context), meta = _b.meta, data = _b.data, error = _b.error, showError = _b.showError, focus = _b.focus;
-    showData && console.log({ meta: meta, data: data, error: error, showError: showError, focus: focus });
+    var _b = useContext(Context), meta = _b.meta, data = _b.data;
+    showData && console.log({ meta: meta, data: data });
     return (createElement("form", __assign({ onSubmit: function (e) {
             e.preventDefault();
             onSubmit(data);
@@ -175,8 +174,11 @@ var Form = function (_a) {
         children,
         createElement("button", { type: "submit" }, "Submit")));
 };
-var FlowForm = function (props) { return (createElement(Wrapper, null,
-    createElement(Form, __assign({}, props)))); };
+var FlowForm = function (_a) {
+    var initialValues = _a.initialValues, rest = __rest(_a, ["initialValues"]);
+    return (createElement(Wrapper, { initialValues: initialValues },
+        createElement(Form, __assign({}, rest))));
+};
 
 function validate(e, validation, required) {
     if (required) {
@@ -189,7 +191,7 @@ function validate(e, validation, required) {
 }
 function useFormData(_a) {
     var validation = _a.validation;
-    var _b = useContext(Context), data = _b.data, showError = _b.showError, registerField = _b.registerField, updateField = _b.updateField, handleFocus = _b.handleFocus, handleBlur = _b.handleBlur;
+    var _b = useContext(Context), data = _b.data, registerField = _b.registerField, updateField = _b.updateField, handleFocus = _b.handleFocus, handleBlur = _b.handleBlur;
     var onRegister = function (ref) {
         var id = ref.id, value = ref.value, required = ref.required;
         registerField({ id: id, value: value, error: required });
@@ -223,7 +225,6 @@ function useFormData(_a) {
     };
     return {
         data: data,
-        showError: showError,
         onRegister: useCallback(onRegister, []),
         onChange: useCallback(onChange, []),
         onFocus: useCallback(onFocus, []),
@@ -255,6 +256,7 @@ var TextArea = forwardRef(function (props, ref) { return (createElement("textare
 
 //TODO convert to resemble other fields. Doc to show same name is needed for group
 //TODO handle in own function?
+// TODO HALP
 var CheckboxRadio = forwardRef(function (props, ref) { return (createElement("div", { className: "flow-form-radio-group" }, (props === null || props === void 0 ? void 0 : props.children).map(function (child) { return (createElement("label", { htmlFor: child.props.id, key: child.props.name, className: props.className },
     createElement("input", { id: props.id, type: props.type, ref: ref, value: child.props.name, checked: props.value === child.props.name, onChange: props.onChange }),
     child.props.name)); }))); });
@@ -264,8 +266,8 @@ function handleDefaults(e) {
     e.preventDefault();
     e.stopPropagation();
 }
-// TODO make onClick mandatory
-var DragDrop = forwardRef(function (props) {
+// TODO to figure out file click!
+var DragDrop = forwardRef(function (props, ref) {
     var fileRef = useRef(null);
     useEffect(function () {
         window.addEventListener('dragover', function (e) {
@@ -289,7 +291,7 @@ var DragDrop = forwardRef(function (props) {
         fileRef.current.click();
     };
     return (createElement("div", { onDrag: handleDefaults, onDragStart: handleDefaults, onDragEnd: handleDefaults, onDragOver: handleDefaults, onDragEnter: handleDefaults, onDragLeave: handleDefaults, onDrop: onDrop, onClick: handleFileBtn },
-        createElement("input", __assign({}, props, { ref: fileRef }))));
+        createElement("input", __assign({}, props, { ref: ref }))));
 });
 //# sourceMappingURL=DragDrop.js.map
 
