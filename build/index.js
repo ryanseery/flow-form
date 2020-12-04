@@ -48,13 +48,13 @@ var initialState = {
         focus: {},
         error: {},
         isFlowForm: false,
-        canProceed: false,
-        completedSteps: null,
         flow: {
             key: 0,
             end: 0,
             currentStep: null,
             steps: null,
+            canProceed: false,
+            completedSteps: null,
         },
     },
     data: {},
@@ -132,6 +132,7 @@ var Wrapper = function (_a) {
     }, []);
     return React.createElement(Context.Provider, { value: __assign(__assign({}, state), actions) }, children);
 };
+//# sourceMappingURL=Context.js.map
 
 function styleInject(css, ref) {
   if ( ref === void 0 ) ref = {};
@@ -160,7 +161,7 @@ function styleInject(css, ref) {
   }
 }
 
-var css_248z = "fieldset {\n  border: none;\n  padding: 0;\n  margin: 0 0 1rem 0;\n}\n\ninput[type='text'],\ninput[type='number'],\ninput[type='file'] {\n  display: block;\n}\n\nselect {\n  display: block;\n}\n\ntextarea {\n  display: block;\n}\n\n.style-module_flow-form-radio-group__XPkrA {\n  display: flex;\n  flex-direction: row;\n}\n";
+var css_248z = "input[type='text'],\ninput[type='number'],\ninput[type='file'] {\n  display: block;\n}\n\nlabel[for='checkbox'],\nlabel[for='radio'] {\n  display: block;\n}\n\nselect {\n  display: block;\n}\n\ntextarea {\n  display: block;\n}\n\nfieldset {\n  border: none;\n  padding: 0;\n  margin: 0 0 1rem 0;\n}\n";
 styleInject(css_248z);
 
 // TODO checkbox radio don't work as expected
@@ -183,6 +184,7 @@ var FlowForm = function (_a) {
     return (React.createElement(Wrapper, { initialValues: initialValues },
         React.createElement(Form, __assign({}, rest))));
 };
+//# sourceMappingURL=FlowForm.js.map
 
 function validate(e, validation, required) {
     if (required) {
@@ -195,7 +197,7 @@ function validate(e, validation, required) {
 }
 function useFormData(_a) {
     var validation = _a.validation;
-    var _b = React.useContext(Context), data = _b.data, registerField = _b.registerField, updateField = _b.updateField, handleFocus = _b.handleFocus, handleBlur = _b.handleBlur;
+    var _b = React.useContext(Context), data = _b.data, meta = _b.meta, registerField = _b.registerField, updateField = _b.updateField, handleFocus = _b.handleFocus, handleBlur = _b.handleBlur;
     var onRegister = function (ref) {
         var id = ref.id, value = ref.value, required = ref.required;
         registerField({ id: id, value: value, error: required });
@@ -229,12 +231,14 @@ function useFormData(_a) {
     };
     return {
         data: data,
+        meta: meta,
         onRegister: React.useCallback(onRegister, []),
         onChange: React.useCallback(onChange, []),
         onFocus: React.useCallback(onFocus, []),
         onBlur: React.useCallback(onBlur, []),
     };
 }
+//# sourceMappingURL=useFormData.js.map
 
 function toCamelCase(str) {
     if (typeof str !== 'string') {
@@ -258,12 +262,8 @@ var Select = React.forwardRef(function (props, ref) { return (React.createElemen
 var TextArea = React.forwardRef(function (props, ref) { return (React.createElement("textarea", __assign({}, props, { ref: ref }))); });
 //# sourceMappingURL=TextArea.js.map
 
-//TODO convert to resemble other fields. Doc to show same name is needed for group
-//TODO handle in own function?
-// TODO HALP
-var CheckboxRadio = React.forwardRef(function (props, ref) { return (React.createElement("div", { className: "flow-form-radio-group" }, (props === null || props === void 0 ? void 0 : props.children).map(function (child) { return (React.createElement("label", { htmlFor: child.props.id, key: child.props.name, className: props.className },
-    React.createElement("input", { id: props.id, type: props.type, ref: ref, value: child.props.name, checked: props.value === child.props.name, onChange: props.onChange }),
-    child.props.name)); }))); });
+//TODO not working
+var CheckboxRadio = React.forwardRef(function (props, ref) { return (React.createElement("input", __assign({ ref: ref, value: props.name, checked: props.value === props.name }, props))); });
 //# sourceMappingURL=CheckboxRadio.js.map
 
 function handleDefaults(e) {
@@ -295,17 +295,18 @@ var DragDrop = React.forwardRef(function (props, ref) {
         fileRef.current.click();
     };
     return (React.createElement("div", { onDrag: handleDefaults, onDragStart: handleDefaults, onDragEnd: handleDefaults, onDragOver: handleDefaults, onDragEnter: handleDefaults, onDragLeave: handleDefaults, onDrop: onDrop, onClick: handleFileBtn },
-        React.createElement("input", __assign({}, props, { ref: ref }))));
+        React.createElement("input", __assign({}, props, { ref: ref, type: "file" }))));
 });
 //# sourceMappingURL=DragDrop.js.map
 
 var Field = function (_a) {
-    var _b = _a.type, type = _b === void 0 ? 'text' : _b, name = _a.name, children = _a.children, validation = _a.validation, rest = __rest(_a, ["type", "name", "children", "validation"]);
-    var _c = useFormData({
+    var _b;
+    var _c = _a.type, type = _c === void 0 ? 'text' : _c, name = _a.name, children = _a.children, validation = _a.validation, rest = __rest(_a, ["type", "name", "children", "validation"]);
+    var _d = useFormData({
         validation: validation,
-    }), data = _c.data, onRegister = _c.onRegister, onChange = _c.onChange, onFocus = _c.onFocus, onBlur = _c.onBlur;
-    // TODO clean this up!
-    var _d = React.useMemo(function () {
+    }), data = _d.data, onRegister = _d.onRegister, onChange = _d.onChange, onFocus = _d.onFocus, onBlur = _d.onBlur;
+    // TODO clean this up
+    var _e = React.useMemo(function () {
         var isString = typeof children === 'string';
         var isOptions = Array.isArray(children);
         if (isString) {
@@ -326,29 +327,33 @@ var Field = function (_a) {
                 inputLabel: !isOptions && !children ? name : children !== null && children !== void 0 ? children : '',
             };
         }
-    }, []), id = _d.id, inputLabel = _d.inputLabel;
+    }, []), id = _e.id, inputLabel = _e.inputLabel;
+    var defaultProps = __assign(__assign({}, rest), { type: type,
+        id: id,
+        onChange: onChange,
+        onFocus: onFocus,
+        onBlur: onBlur, ref: onRegister, name: id, value: (_b = data[id]) !== null && _b !== void 0 ? _b : '' });
     return (React.createElement("label", { htmlFor: id, className: "flow-form-label" },
         inputLabel,
         (function () {
-            var _a, _b, _c, _d, _e, _f;
             switch (type) {
                 case 'select': {
-                    return (React.createElement(Select, __assign({}, rest, { ref: onRegister, id: id, name: id, value: (_a = data[id]) !== null && _a !== void 0 ? _a : '', onChange: onChange, onFocus: onFocus, onBlur: onBlur, children: children })));
+                    return React.createElement(Select, __assign({ children: children }, defaultProps));
                 }
                 case 'textarea': {
-                    return (React.createElement(TextArea, __assign({}, rest, { ref: onRegister, id: id, name: id, type: type, value: (_b = data[id]) !== null && _b !== void 0 ? _b : '', onChange: onChange, onFocus: onFocus, onBlur: onBlur })));
+                    return React.createElement(TextArea, __assign({}, defaultProps));
                 }
                 case 'radio': {
-                    return (React.createElement(CheckboxRadio, __assign({}, rest, { ref: onRegister, id: id, name: id, type: type, value: (_c = data[id]) !== null && _c !== void 0 ? _c : '', onChange: onChange, onFocus: onFocus, onBlur: onBlur, children: children })));
+                    return React.createElement(CheckboxRadio, __assign({}, defaultProps));
                 }
                 case 'checkbox': {
-                    return (React.createElement(CheckboxRadio, __assign({}, rest, { ref: onRegister, id: id, name: id, type: type, value: (_d = data[id]) !== null && _d !== void 0 ? _d : '', onChange: onChange, onFocus: onFocus, onBlur: onBlur, children: children })));
+                    return React.createElement(CheckboxRadio, __assign({}, defaultProps));
                 }
                 case 'drag-drop': {
-                    return (React.createElement(DragDrop, __assign({}, rest, { ref: onRegister, id: id, name: id, type: "file", value: (_e = data[id]) !== null && _e !== void 0 ? _e : '', onChange: onChange, onFocus: onFocus, onBlur: onBlur })));
+                    return React.createElement(DragDrop, __assign({}, defaultProps));
                 }
                 default: {
-                    return (React.createElement(Input, __assign({}, rest, { ref: onRegister, id: id, name: id, type: type, value: (_f = data[id]) !== null && _f !== void 0 ? _f : '', onChange: onChange, onFocus: onFocus, onBlur: onBlur })));
+                    return React.createElement(Input, __assign({}, defaultProps));
                 }
             }
         })()));

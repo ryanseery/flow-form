@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { KeyValue, KeyValBool } from './@types/keyTypes';
+import { KeyValue, KeyBool } from './@types/keyTypes';
 
 interface StepState {
   id: string;
@@ -12,15 +12,15 @@ interface Flow {
   end: number;
   steps: StepState[] | null;
   currentStep: StepState | null;
-}
-
-interface Meta {
-  touched: KeyValBool;
-  focus: KeyValBool;
-  error: KeyValBool;
-  isFlowForm: boolean;
   canProceed: boolean;
   completedSteps: StepState[] | null;
+}
+
+export interface Meta {
+  touched: KeyBool;
+  focus: KeyBool;
+  error: KeyBool;
+  isFlowForm: boolean;
   flow: Flow;
 }
 
@@ -35,13 +35,13 @@ const initialState: State = {
     focus: {},
     error: {},
     isFlowForm: false,
-    canProceed: false,
-    completedSteps: null,
     flow: {
       key: 0,
       end: 0,
       currentStep: null,
       steps: null,
+      canProceed: false,
+      completedSteps: null,
     },
   },
   data: {},

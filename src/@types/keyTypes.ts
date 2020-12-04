@@ -2,6 +2,6 @@ export interface KeyValue {
   [key: string]: any;
 }
 
-export interface KeyValBool {
+export interface KeyBool {
   [key: string]: boolean;
 }

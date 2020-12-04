@@ -25,6 +25,8 @@ function App() {
           Test
         </Field>
 
+        <Field type="text" name='Here' />
+
         <Field type="number" required>
           Numbers
         </Field>
@@ -40,17 +42,11 @@ function App() {
 
         <Field type="textarea">Text Area</Field>
 
-        <Field type="radio" name="Radio">
-          <input name="True" value="true" />
-          <input name="False" value="false" />
-        </Field>
-
-        <Field type="checkbox" name="Checkbox">
-          <input name="True" value="true" />
-          <input name="False" value="false" />
-        </Field>
-
         <Field type="drag-drop">File</Field>
+
+        <Field type="radio" name="Radio" />
+
+        <Field type="checkbox" name="Checkbox" />
 
         <Field type="text">
           Initial
