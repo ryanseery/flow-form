@@ -45,7 +45,7 @@ export const DragDrop = React.forwardRef<HTMLInputElement, IField>((props, ref) 
       onDrop={onDrop}
       onClick={handleFileBtn}
     >
-      <input {...props} ref={ref} />
+      <input {...props} ref={ref} type="file" />
     </div>
   );
 });

@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Context } from './Context';
+import { Context, Meta } from './Context';
 import { KeyValue } from './@types/keyTypes';
 import { EventType } from './@types/eventType';
 import { IField } from './Field/Field';
@@ -23,13 +23,14 @@ function validate(e: EventType, validation: UseFormArgs['validation'], required:
 
 interface UseFormReturn {
   data: KeyValue;
+  meta: Meta;
   onRegister: (ref: RefType & IField) => void;
   onChange: (e: EventType) => void;
   onFocus: (e: EventType) => void;
   onBlur: (e: EventType) => void;
 }
 export function useFormData({ validation }: UseFormArgs): UseFormReturn {
-  const { data, registerField, updateField, handleFocus, handleBlur } = React.useContext(Context);
+  const { data, meta, registerField, updateField, handleFocus, handleBlur } = React.useContext(Context);
 
   const onRegister = (ref: RefType) => {
     const { id, value, required } = ref;
@@ -75,6 +76,7 @@ export function useFormData({ validation }: UseFormArgs): UseFormReturn {
 
   return {
     data,
+    meta,
     onRegister: React.useCallback(onRegister, []),
     onChange: React.useCallback(onChange, []),
     onFocus: React.useCallback(onFocus, []),

@@ -15,7 +15,7 @@ export const Field: React.FC<IField> = ({ type = 'text', name, children, validat
     validation,
   });
 
-  // TODO clean this up!
+  // TODO clean this up
   const { id, inputLabel } = React.useMemo(() => {
     const isString = typeof children === 'string';
 
@@ -39,102 +39,40 @@ export const Field: React.FC<IField> = ({ type = 'text', name, children, validat
     }
   }, []);
 
+  const defaultProps = {
+    ...rest,
+    type,
+    id,
+    onChange,
+    onFocus,
+    onBlur,
+    ref: onRegister,
+    name: id,
+    value: data[id] ?? '',
+  };
+
   return (
     <label htmlFor={id} className="flow-form-label">
       {inputLabel}
       {(() => {
         switch (type) {
           case 'select': {
-            return (
-              <Select
-                {...rest}
-                ref={onRegister}
-                id={id}
-                name={id}
-                value={data[id] ?? ''}
-                onChange={onChange}
-                onFocus={onFocus}
-                onBlur={onBlur}
-                children={children}
-              />
-            );
+            return <Select children={children} {...defaultProps} />;
           }
           case 'textarea': {
-            return (
-              <TextArea
-                {...rest}
-                ref={onRegister}
-                id={id}
-                name={id}
-                type={type}
-                value={data[id] ?? ''}
-                onChange={onChange}
-                onFocus={onFocus}
-                onBlur={onBlur}
-              />
-            );
+            return <TextArea {...defaultProps} />;
           }
           case 'radio': {
-            return (
-              <CheckboxRadio
-                {...rest}
-                ref={onRegister}
-                id={id}
-                name={id}
-                type={type}
-                value={data[id] ?? ''}
-                onChange={onChange}
-                onFocus={onFocus}
-                onBlur={onBlur}
-                children={children}
-              />
-            );
+            return <CheckboxRadio {...defaultProps} />;
           }
           case 'checkbox': {
-            return (
-              <CheckboxRadio
-                {...rest}
-                ref={onRegister}
-                id={id}
-                name={id}
-                type={type}
-                value={data[id] ?? ''}
-                onChange={onChange}
-                onFocus={onFocus}
-                onBlur={onBlur}
-                children={children}
-              />
-            );
+            return <CheckboxRadio {...defaultProps} />;
           }
           case 'drag-drop': {
-            return (
-              <DragDrop
-                {...rest}
-                ref={onRegister}
-                id={id}
-                name={id}
-                type="file"
-                value={data[id] ?? ''}
-                onChange={onChange}
-                onFocus={onFocus}
-                onBlur={onBlur}
-              />
-            );
+            return <DragDrop {...defaultProps} />;
           }
           default: {
-            return (
-              <Input
-                {...rest}
-                ref={onRegister}
-                id={id}
-                name={id}
-                type={type}
-                value={data[id] ?? ''}
-                onChange={onChange}
-                onFocus={onFocus}
-                onBlur={onBlur}
-              />
-            );
+            return <Input {...defaultProps} />;
           }
         }
       })()}
