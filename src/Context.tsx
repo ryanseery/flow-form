@@ -1,11 +1,6 @@
 import * as React from 'react';
 import { KeyValue, KeyValBool } from './@types/keyTypes';
 
-interface Meta {
-  touched: KeyValBool;
-  completedSteps: StepState[] | null;
-}
-
 interface StepState {
   id: string;
   label: string;
@@ -19,34 +14,37 @@ interface Flow {
   currentStep: StepState | null;
 }
 
-interface State {
+interface Meta {
+  touched: KeyValBool;
+  focus: KeyValBool;
+  error: KeyValBool;
   isFlowForm: boolean;
   canProceed: boolean;
-  meta: Meta;
+  completedSteps: StepState[] | null;
   flow: Flow;
+}
+
+interface State {
+  meta: Meta;
   data: KeyValue;
-  error: KeyValBool;
-  showError: KeyValBool;
-  focus: KeyValBool;
 }
 
 const initialState: State = {
-  isFlowForm: false,
-  canProceed: false,
   meta: {
     touched: {},
+    focus: {},
+    error: {},
+    isFlowForm: false,
+    canProceed: false,
     completedSteps: null,
-  },
-  flow: {
-    key: 0,
-    end: 0,
-    currentStep: null,
-    steps: null,
+    flow: {
+      key: 0,
+      end: 0,
+      currentStep: null,
+      steps: null,
+    },
   },
   data: {},
-  error: {},
-  showError: {},
-  focus: {},
 };
 
 interface FormArgs {
@@ -148,22 +146,18 @@ function reducer(state: State, action: Actions): State {
               ...state.meta.touched,
               [id]: false,
             },
+            focus: {
+              ...state.meta.focus,
+              [id]: false,
+            },
+            error: {
+              ...state.meta.error,
+              [id]: error,
+            },
           },
           data: {
             ...state.data,
             [id]: '',
-          },
-          error: {
-            ...state.error,
-            [id]: error,
-          },
-          showError: {
-            ...state.showError,
-            [id]: false,
-          },
-          focus: {
-            ...state.focus,
-            [id]: false,
           },
         };
       }
@@ -176,17 +170,16 @@ function reducer(state: State, action: Actions): State {
 
       return {
         ...state,
+        meta: {
+          ...state.meta,
+          error: {
+            ...state.meta.error,
+            [id]: error,
+          },
+        },
         data: {
           ...state.data,
           [id]: value,
-        },
-        error: {
-          ...state.error,
-          [id]: error,
-        },
-        showError: {
-          ...state.showError,
-          [id]: error,
         },
       };
     }
@@ -203,10 +196,10 @@ function reducer(state: State, action: Actions): State {
             ...state.meta.touched,
             [id]: true,
           },
-        },
-        focus: {
-          ...state.focus,
-          [id]: true,
+          focus: {
+            ...state.meta.focus,
+            [id]: true,
+          },
         },
       };
     }
@@ -217,20 +210,29 @@ function reducer(state: State, action: Actions): State {
 
       return {
         ...state,
-        focus: {
-          ...state.focus,
-          [id]: false,
+        meta: {
+          ...state.meta,
+          focus: {
+            ...state.meta.focus,
+            [id]: false,
+          },
         },
       };
     }
-    default:
+    default: {
       throw new Error(`Context Reducer Received Unrecognized Action!`);
+    }
   }
 }
 
-interface Props {}
-export const Wrapper: React.FC<Props> = ({ children }) => {
-  const [state, dispatch] = React.useReducer(reducer, initialState);
+interface IWrapper {
+  initialValues?: KeyValue;
+}
+export const Wrapper: React.FC<IWrapper> = ({ children, initialValues = {} }) => {
+  const [state, dispatch] = React.useReducer(reducer, {
+    ...initialState,
+    data: { ...initialState.data, ...initialValues },
+  });
 
   const actions = React.useMemo(() => {
     return {

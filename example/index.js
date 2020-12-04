@@ -17,10 +17,12 @@ const options = [
 function App() {
   return (
     <div className="container">
-      <FlowForm onSubmit={data => console.log('onSubmit: ', data)} showData>
+      <FlowForm onSubmit={data => console.log('onSubmit: ', data)} showData initialValues={{
+        initial: 'YOOOOOOO'
+      }}>
 
         <Field type="text" validation={checkString}>
-          Test 1
+          Test
         </Field>
 
         <Field type="number" required>
@@ -49,6 +51,10 @@ function App() {
         </Field>
 
         <Field type="drag-drop">File</Field>
+
+        <Field type="text">
+          Initial
+        </Field>
 
       </FlowForm>
     </div>

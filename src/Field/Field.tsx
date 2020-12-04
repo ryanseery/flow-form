@@ -40,7 +40,7 @@ export const Field: React.FC<IField> = ({ type = 'text', name, children, validat
   }, []);
 
   return (
-    <label htmlFor={id} className="flow-form-label" data-flow-id="label">
+    <label htmlFor={id} className="flow-form-label">
       {inputLabel}
       {(() => {
         switch (type) {
@@ -50,7 +50,6 @@ export const Field: React.FC<IField> = ({ type = 'text', name, children, validat
                 {...rest}
                 ref={onRegister}
                 id={id}
-                data-input-id={id}
                 name={id}
                 value={data[id] ?? ''}
                 onChange={onChange}
@@ -66,7 +65,6 @@ export const Field: React.FC<IField> = ({ type = 'text', name, children, validat
                 {...rest}
                 ref={onRegister}
                 id={id}
-                data-input-id={id}
                 name={id}
                 type={type}
                 value={data[id] ?? ''}
@@ -82,7 +80,6 @@ export const Field: React.FC<IField> = ({ type = 'text', name, children, validat
                 {...rest}
                 ref={onRegister}
                 id={id}
-                data-input-id={id}
                 name={id}
                 type={type}
                 value={data[id] ?? ''}
@@ -99,7 +96,6 @@ export const Field: React.FC<IField> = ({ type = 'text', name, children, validat
                 {...rest}
                 ref={onRegister}
                 id={id}
-                data-input-id={id}
                 name={id}
                 type={type}
                 value={data[id] ?? ''}
@@ -116,7 +112,6 @@ export const Field: React.FC<IField> = ({ type = 'text', name, children, validat
                 {...rest}
                 ref={onRegister}
                 id={id}
-                data-input-id={id}
                 name={id}
                 type="file"
                 value={data[id] ?? ''}
@@ -132,7 +127,6 @@ export const Field: React.FC<IField> = ({ type = 'text', name, children, validat
                 {...rest}
                 ref={onRegister}
                 id={id}
-                data-input-id={id}
                 name={id}
                 type={type}
                 value={data[id] ?? ''}
