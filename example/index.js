@@ -15,9 +15,14 @@ const options = [
 ];
 
 function App() {
+
+  const handleSubmit = (data) => {
+    console.log('onSubmit: ', data);
+  };
+
   return (
     <div className="container">
-      <FlowForm onSubmit={data => console.log('onSubmit: ', data)} showData initialValues={{
+      <FlowForm onSubmit={handleSubmit} showData initialValues={{
         initial: 'YOOOOOOO'
       }}>
 

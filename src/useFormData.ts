@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { Context, Meta } from './Context';
-import { KeyValue } from './@types/keyTypes';
-import { EventType } from './@types/eventType';
+import { KeyValue } from './@types/keys';
+import { EventType } from './@types/event';
 import { IField } from './Field/Field';
 
 export type RefType = HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement;
@@ -26,6 +26,7 @@ interface UseFormReturn {
   meta: Meta;
   onRegister: (ref: RefType & IField) => void;
   onChange: (e: EventType) => void;
+  onToggle: (e: React.ChangeEvent<HTMLInputElement>) => void;
   onFocus: (e: EventType) => void;
   onBlur: (e: EventType) => void;
 }
@@ -46,6 +47,19 @@ export function useFormData({ validation }: UseFormArgs): UseFormReturn {
     updateField({
       id,
       value: type === 'number' ? parseFloat(value) : value,
+      error: validate(e, validation, required),
+    });
+  };
+
+  const onToggle = (e: React.ChangeEvent<HTMLInputElement>) => {
+    console.log(e);
+    e.persist();
+
+    const { id, name, checked, required } = e.target;
+
+    updateField({
+      id,
+      value: checked ? name : '',
       error: validate(e, validation, required),
     });
   };
@@ -79,6 +93,7 @@ export function useFormData({ validation }: UseFormArgs): UseFormReturn {
     meta,
     onRegister: React.useCallback(onRegister, []),
     onChange: React.useCallback(onChange, []),
+    onToggle: React.useCallback(onToggle, []),
     onFocus: React.useCallback(onFocus, []),
     onBlur: React.useCallback(onBlur, []),
   };

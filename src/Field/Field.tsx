@@ -2,16 +2,15 @@ import * as React from 'react';
 import { useFormData } from '../useFormData';
 import { toCamelCase } from '../utils';
 import { Input, Select, TextArea, CheckboxRadio, DragDrop } from './Fields';
-import { EventType } from '../@types/eventType';
+import { EventType } from '../@types/event';
 
 export interface IField extends React.InputHTMLAttributes<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement> {
   children?: string | React.ReactElement;
   validation?: (e: EventType) => boolean;
   onChange: (e: EventType) => void;
 }
-
 export const Field: React.FC<IField> = ({ type = 'text', name, children, validation, ...rest }) => {
-  const { data, onRegister, onChange, onFocus, onBlur } = useFormData({
+  const { data, onRegister, onChange, onToggle, onFocus, onBlur } = useFormData({
     validation,
   });
 
@@ -46,13 +45,15 @@ export const Field: React.FC<IField> = ({ type = 'text', name, children, validat
     onChange,
     onFocus,
     onBlur,
-    ref: onRegister,
     name: id,
     value: data[id] ?? '',
+    ref: onRegister,
   };
 
+  const checkboxRadio = { ...defaultProps, onChange: onToggle };
+
   return (
-    <label htmlFor={id} className="flow-form-label">
+    <label htmlFor={id}>
       {inputLabel}
       {(() => {
         switch (type) {
@@ -63,10 +64,10 @@ export const Field: React.FC<IField> = ({ type = 'text', name, children, validat
             return <TextArea {...defaultProps} />;
           }
           case 'radio': {
-            return <CheckboxRadio {...defaultProps} />;
+            return <CheckboxRadio {...checkboxRadio} />;
           }
           case 'checkbox': {
-            return <CheckboxRadio {...defaultProps} />;
+            return <CheckboxRadio {...checkboxRadio} />;
           }
           case 'drag-drop': {
             return <DragDrop {...defaultProps} />;
