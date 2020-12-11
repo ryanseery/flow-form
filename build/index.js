@@ -164,7 +164,6 @@ function styleInject(css, ref) {
 var css_248z = "input[type='text'],\ninput[type='number'],\ninput[type='file'] {\n  display: block;\n}\n\nlabel[for='checkbox'],\nlabel[for='radio'] {\n  display: block;\n}\n\nselect {\n  display: block;\n}\n\ntextarea {\n  display: block;\n}\n\nfieldset {\n  border: none;\n  padding: 0;\n  margin: 0 0 1rem 0;\n}\n";
 styleInject(css_248z);
 
-// TODO checkbox radio don't work as expected
 // TODO finish drag and drop
 // TODO showError
 // TODO steps
@@ -211,6 +210,15 @@ function useFormData(_a) {
             error: validate(e, validation, required),
         });
     };
+    var onToggle = function (e) {
+        e.persist();
+        var _a = e.target, id = _a.id, name = _a.name, checked = _a.checked, required = _a.required;
+        updateField({
+            id: id,
+            value: checked ? name : '',
+            error: validate(e, validation, required),
+        });
+    };
     var onFocus = function (e) {
         e.persist();
         var _a = e.target, id = _a.id, value = _a.value, required = _a.required;
@@ -234,6 +242,7 @@ function useFormData(_a) {
         meta: meta,
         onRegister: React.useCallback(onRegister, []),
         onChange: React.useCallback(onChange, []),
+        onToggle: React.useCallback(onToggle, []),
         onFocus: React.useCallback(onFocus, []),
         onBlur: React.useCallback(onBlur, []),
     };
@@ -252,18 +261,21 @@ function toCamelCase(str) {
 }
 //# sourceMappingURL=toCamelCase.js.map
 
+//TODO error on delete of numbers
 var Input = React.forwardRef(function (props, ref) { return React.createElement("input", __assign({ ref: ref }, props)); });
 //# sourceMappingURL=Input.js.map
 
 // TODO optgroup functionality
-var Select = React.forwardRef(function (props, ref) { return (React.createElement("select", __assign({}, props, { ref: ref }), props.children)); });
+var Select = React.forwardRef(function (_a, ref) {
+    var children = _a.children, rest = __rest(_a, ["children"]);
+    return (React.createElement("select", __assign({}, rest, { ref: ref }), children));
+});
 //# sourceMappingURL=Select.js.map
 
 var TextArea = React.forwardRef(function (props, ref) { return (React.createElement("textarea", __assign({}, props, { ref: ref }))); });
 //# sourceMappingURL=TextArea.js.map
 
-//TODO not working
-var CheckboxRadio = React.forwardRef(function (props, ref) { return (React.createElement("input", __assign({ ref: ref, value: props.name, checked: props.value === props.name }, props))); });
+var CheckboxRadio = React.forwardRef(function (props, ref) { return (React.createElement("input", __assign({}, props, { ref: ref, checked: props.value === props.name }))); });
 //# sourceMappingURL=CheckboxRadio.js.map
 
 function handleDefaults(e) {
@@ -304,7 +316,7 @@ var Field = function (_a) {
     var _c = _a.type, type = _c === void 0 ? 'text' : _c, name = _a.name, children = _a.children, validation = _a.validation, rest = __rest(_a, ["type", "name", "children", "validation"]);
     var _d = useFormData({
         validation: validation,
-    }), data = _d.data, onRegister = _d.onRegister, onChange = _d.onChange, onFocus = _d.onFocus, onBlur = _d.onBlur;
+    }), data = _d.data, onRegister = _d.onRegister, onChange = _d.onChange, onToggle = _d.onToggle, onFocus = _d.onFocus, onBlur = _d.onBlur;
     // TODO clean this up
     var _e = React.useMemo(function () {
         var isString = typeof children === 'string';
@@ -332,8 +344,9 @@ var Field = function (_a) {
         id: id,
         onChange: onChange,
         onFocus: onFocus,
-        onBlur: onBlur, ref: onRegister, name: id, value: (_b = data[id]) !== null && _b !== void 0 ? _b : '' });
-    return (React.createElement("label", { htmlFor: id, className: "flow-form-label" },
+        onBlur: onBlur, name: id, value: (_b = data[id]) !== null && _b !== void 0 ? _b : '', ref: onRegister });
+    var checkboxRadio = __assign(__assign({}, defaultProps), { onChange: onToggle });
+    return (React.createElement("label", { htmlFor: id },
         inputLabel,
         (function () {
             switch (type) {
@@ -344,10 +357,10 @@ var Field = function (_a) {
                     return React.createElement(TextArea, __assign({}, defaultProps));
                 }
                 case 'radio': {
-                    return React.createElement(CheckboxRadio, __assign({}, defaultProps));
+                    return React.createElement(CheckboxRadio, __assign({}, checkboxRadio));
                 }
                 case 'checkbox': {
-                    return React.createElement(CheckboxRadio, __assign({}, defaultProps));
+                    return React.createElement(CheckboxRadio, __assign({}, checkboxRadio));
                 }
                 case 'drag-drop': {
                     return React.createElement(DragDrop, __assign({}, defaultProps));
