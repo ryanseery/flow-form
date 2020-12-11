@@ -52,7 +52,6 @@ export function useFormData({ validation }: UseFormArgs): UseFormReturn {
   };
 
   const onToggle = (e: React.ChangeEvent<HTMLInputElement>) => {
-    console.log(e);
     e.persist();
 
     const { id, name, checked, required } = e.target;

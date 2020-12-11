@@ -207,7 +207,6 @@ function useFormData(_a) {
         });
     };
     var onToggle = function (e) {
-        console.log(e);
         e.persist();
         var _a = e.target, id = _a.id, name = _a.name, checked = _a.checked, required = _a.required;
         updateField({
@@ -244,6 +243,7 @@ function useFormData(_a) {
         onBlur: useCallback(onBlur, []),
     };
 }
+//# sourceMappingURL=useFormData.js.map
 
 function toCamelCase(str) {
     if (typeof str !== 'string') {
@@ -271,7 +271,6 @@ var Select = forwardRef(function (_a, ref) {
 var TextArea = forwardRef(function (props, ref) { return (createElement("textarea", __assign({}, props, { ref: ref }))); });
 //# sourceMappingURL=TextArea.js.map
 
-//TODO radio not working
 var CheckboxRadio = forwardRef(function (props, ref) { return (createElement("input", __assign({}, props, { ref: ref, checked: props.value === props.name }))); });
 //# sourceMappingURL=CheckboxRadio.js.map
 
@@ -368,6 +367,7 @@ var Field = function (_a) {
             }
         })()));
 };
+//# sourceMappingURL=Field.js.map
 
 // TODO ref on field to go through children and see what are inputs?
 var Step = function (_a) {
