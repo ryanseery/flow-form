@@ -4,11 +4,13 @@ import { toCamelCase } from '../utils';
 import { Input, Select, TextArea, CheckboxRadio, DragDrop } from './Fields';
 import { EventType } from '../@types/event';
 
+//TODO Field.RadioGroup
 export interface IField extends React.InputHTMLAttributes<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement> {
   children?: string | React.ReactElement;
   validation?: (e: EventType) => boolean;
   onChange: (e: EventType) => void;
 }
+
 export const Field: React.FC<IField> = ({ type = 'text', name, children, validation, ...rest }) => {
   const { data, onRegister, onChange, onToggle, onFocus, onBlur } = useFormData({
     validation,

@@ -23,7 +23,7 @@ function App() {
   return (
     <div className="container">
       <FlowForm onSubmit={handleSubmit} showData initialValues={{
-        initial: 'YOOOOOOO'
+        initial: 'default'
       }}>
 
         <Field type="text" validation={checkString}>

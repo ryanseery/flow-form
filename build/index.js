@@ -247,7 +247,6 @@ function useFormData(_a) {
         onBlur: React.useCallback(onBlur, []),
     };
 }
-//# sourceMappingURL=useFormData.js.map
 
 function toCamelCase(str) {
     if (typeof str !== 'string') {
@@ -261,22 +260,17 @@ function toCamelCase(str) {
 }
 //# sourceMappingURL=toCamelCase.js.map
 
-//TODO error on delete of numbers
 var Input = React.forwardRef(function (props, ref) { return React.createElement("input", __assign({ ref: ref }, props)); });
-//# sourceMappingURL=Input.js.map
 
 // TODO optgroup functionality
 var Select = React.forwardRef(function (_a, ref) {
     var children = _a.children, rest = __rest(_a, ["children"]);
     return (React.createElement("select", __assign({}, rest, { ref: ref }), children));
 });
-//# sourceMappingURL=Select.js.map
 
 var TextArea = React.forwardRef(function (props, ref) { return (React.createElement("textarea", __assign({}, props, { ref: ref }))); });
-//# sourceMappingURL=TextArea.js.map
 
 var CheckboxRadio = React.forwardRef(function (props, ref) { return (React.createElement("input", __assign({}, props, { ref: ref, checked: props.value === props.name }))); });
-//# sourceMappingURL=CheckboxRadio.js.map
 
 function handleDefaults(e) {
     e.preventDefault();
@@ -309,7 +303,6 @@ var DragDrop = React.forwardRef(function (props, ref) {
     return (React.createElement("div", { onDrag: handleDefaults, onDragStart: handleDefaults, onDragEnd: handleDefaults, onDragOver: handleDefaults, onDragEnter: handleDefaults, onDragLeave: handleDefaults, onDrop: onDrop, onClick: handleFileBtn },
         React.createElement("input", __assign({}, props, { ref: ref, type: "file" }))));
 });
-//# sourceMappingURL=DragDrop.js.map
 
 var Field = function (_a) {
     var _b;
@@ -371,7 +364,6 @@ var Field = function (_a) {
             }
         })()));
 };
-//# sourceMappingURL=Field.js.map
 
 // TODO ref on field to go through children and see what are inputs?
 var Step = function (_a) {
