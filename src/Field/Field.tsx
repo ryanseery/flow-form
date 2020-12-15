@@ -7,12 +7,11 @@ import { EventType } from '../@types/event';
 //TODO Field.RadioGroup
 export interface IField extends React.InputHTMLAttributes<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement> {
   children?: string | React.ReactElement;
-  validation?: (e: EventType) => boolean;
+  validation?: (e: EventType | React.DragEvent<HTMLDivElement>) => boolean;
   onChange: (e: EventType) => void;
 }
-
 export const Field: React.FC<IField> = ({ type = 'text', name, children, validation, ...rest }) => {
-  const { data, onRegister, onChange, onToggle, onFocus, onBlur } = useFormData({
+  const { data, onRegister, onChange, onToggle, onFileDrop, onFocus, onBlur } = useFormData({
     validation,
   });
 
@@ -52,7 +51,9 @@ export const Field: React.FC<IField> = ({ type = 'text', name, children, validat
     ref: onRegister,
   };
 
-  const checkboxRadio = { ...defaultProps, onChange: onToggle };
+  const toggleProps = { ...defaultProps, onChange: onToggle };
+
+  const fileProps = { ...defaultProps, onFileDrop };
 
   return (
     <label htmlFor={id}>
@@ -66,13 +67,13 @@ export const Field: React.FC<IField> = ({ type = 'text', name, children, validat
             return <TextArea {...defaultProps} />;
           }
           case 'radio': {
-            return <CheckboxRadio {...checkboxRadio} />;
+            return <CheckboxRadio {...toggleProps} />;
           }
           case 'checkbox': {
-            return <CheckboxRadio {...checkboxRadio} />;
+            return <CheckboxRadio {...toggleProps} />;
           }
           case 'drag-drop': {
-            return <DragDrop {...defaultProps} />;
+            return <DragDrop {...fileProps} />;
           }
           default: {
             return <Input {...defaultProps} />;

@@ -54,7 +54,7 @@ interface FormArgs {
 
 interface Args {
   id: string;
-  value: string | boolean | number;
+  value: string | boolean | number | File[];
   error: boolean;
 }
 

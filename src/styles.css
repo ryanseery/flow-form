@@ -17,6 +17,25 @@ textarea {
   display: block;
 }
 
+.drag-drop-container {
+  min-height: 4rem;
+  border: 1px solid rgb(118, 118, 118);
+  border-radius: 0.2rem;
+}
+
+.focus {
+  outline: -webkit-focus-ring-color auto 1px;
+}
+
+.drag-drop-input {
+  display: none !important;
+}
+
+.drag-drop-list {
+  list-style: none;
+  padding: 0;
+}
+
 fieldset {
   border: none;
   padding: 0;

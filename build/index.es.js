@@ -1,4 +1,4 @@
-import { createContext, useReducer, useMemo, createElement, useContext, useCallback, forwardRef, useRef, useEffect } from 'react';
+import { createContext, useReducer, useMemo, createElement, useContext, useCallback, forwardRef, useState, Fragment } from 'react';
 
 /*! *****************************************************************************
 Copyright (c) Microsoft Corporation. All rights reserved.
@@ -157,20 +157,19 @@ function styleInject(css, ref) {
   }
 }
 
-var css_248z = "input[type='text'],\ninput[type='number'],\ninput[type='file'] {\n  display: block;\n}\n\nlabel[for='checkbox'],\nlabel[for='radio'] {\n  display: block;\n}\n\nselect {\n  display: block;\n}\n\ntextarea {\n  display: block;\n}\n\nfieldset {\n  border: none;\n  padding: 0;\n  margin: 0 0 1rem 0;\n}\n";
+var css_248z = "input[type='text'],\ninput[type='number'],\ninput[type='file'] {\n  display: block;\n}\n\nlabel[for='checkbox'],\nlabel[for='radio'] {\n  display: block;\n}\n\nselect {\n  display: block;\n}\n\ntextarea {\n  display: block;\n}\n\n.drag-drop-container {\n  min-height: 4rem;\n  border: 1px solid rgb(118, 118, 118);\n  border-radius: 0.2rem;\n}\n\n.focus {\n  outline: -webkit-focus-ring-color auto 1px;\n}\n\n.drag-drop-input {\n  display: none !important;\n}\n\n.drag-drop-list {\n  list-style: none;\n  padding: 0;\n}\n\nfieldset {\n  border: none;\n  padding: 0;\n  margin: 0 0 1rem 0;\n}\n";
 styleInject(css_248z);
 
-// TODO finish drag and drop
 // TODO showError
 // TODO steps
 var Form = function (_a) {
     var children = _a.children, onSubmit = _a.onSubmit, showData = _a.showData, rest = __rest(_a, ["children", "onSubmit", "showData"]);
     var _b = useContext(Context), meta = _b.meta, data = _b.data;
     showData && console.log({ meta: meta, data: data });
-    return (createElement("form", __assign({ onSubmit: function (e) {
+    return (createElement("form", __assign({}, rest, { onSubmit: function (e) {
             e.preventDefault();
             onSubmit(data);
-        } }, rest),
+        } }),
         children,
         createElement("button", { type: "submit" }, "Submit")));
 };
@@ -179,7 +178,6 @@ var FlowForm = function (_a) {
     return (createElement(Wrapper, { initialValues: initialValues },
         createElement(Form, __assign({}, rest))));
 };
-//# sourceMappingURL=FlowForm.js.map
 
 function validate(e, validation, required) {
     if (required) {
@@ -215,6 +213,15 @@ function useFormData(_a) {
             error: validate(e, validation, required),
         });
     };
+    // TODO handle error
+    var onFileDrop = function (e, id) {
+        e.persist();
+        updateField({
+            id: id,
+            value: Array.from(e.dataTransfer.files),
+            error: false,
+        });
+    };
     var onFocus = function (e) {
         e.persist();
         var _a = e.target, id = _a.id, value = _a.value, required = _a.required;
@@ -239,10 +246,12 @@ function useFormData(_a) {
         onRegister: useCallback(onRegister, []),
         onChange: useCallback(onChange, []),
         onToggle: useCallback(onToggle, []),
+        onFileDrop: useCallback(onFileDrop, []),
         onFocus: useCallback(onFocus, []),
         onBlur: useCallback(onBlur, []),
     };
 }
+//# sourceMappingURL=useFormData.js.map
 
 function toCamelCase(str) {
     if (typeof str !== 'string') {
@@ -257,55 +266,55 @@ function toCamelCase(str) {
 //# sourceMappingURL=toCamelCase.js.map
 
 var Input = forwardRef(function (props, ref) { return createElement("input", __assign({ ref: ref }, props)); });
+//# sourceMappingURL=Input.js.map
 
 // TODO optgroup functionality
 var Select = forwardRef(function (_a, ref) {
     var children = _a.children, rest = __rest(_a, ["children"]);
     return (createElement("select", __assign({}, rest, { ref: ref }), children));
 });
+//# sourceMappingURL=Select.js.map
 
 var TextArea = forwardRef(function (props, ref) { return (createElement("textarea", __assign({}, props, { ref: ref }))); });
+//# sourceMappingURL=TextArea.js.map
 
 var CheckboxRadio = forwardRef(function (props, ref) { return (createElement("input", __assign({}, props, { ref: ref, checked: props.value === props.name }))); });
+//# sourceMappingURL=CheckboxRadio.js.map
 
 function handleDefaults(e) {
     e.preventDefault();
     e.stopPropagation();
 }
-// TODO to figure out file click!
 var DragDrop = forwardRef(function (props, ref) {
-    var fileRef = useRef(null);
-    useEffect(function () {
-        window.addEventListener('dragover', function (e) {
-            handleDefaults(e);
-        });
-        window.addEventListener('drop', function (e) {
-            handleDefaults(e);
-        });
-        return function () {
-            window.removeEventListener('dragover', handleDefaults);
-            window.removeEventListener('drop', handleDefaults);
-        };
-    }, []);
+    var _a = useState(false), focus = _a[0], setFocus = _a[1];
+    var id = props.id, required = props.required, className = props.className, value = props.value, style = props.style, onFileDrop = props.onFileDrop, rest = __rest(props, ["id", "required", "className", "value", "style", "onFileDrop"]);
+    var onDragOver = function (e) {
+        handleDefaults(e);
+        setFocus(true);
+    };
+    var onDragLeave = function (e) {
+        handleDefaults(e);
+        setFocus(false);
+    };
     var onDrop = function (e) {
         handleDefaults(e);
-        // props.onChange(e);
+        onFileDrop(e, id, required);
+        setFocus(false);
     };
-    var handleFileBtn = function () {
-        if (fileRef.current == null)
-            return;
-        fileRef.current.click();
-    };
-    return (createElement("div", { onDrag: handleDefaults, onDragStart: handleDefaults, onDragEnd: handleDefaults, onDragOver: handleDefaults, onDragEnter: handleDefaults, onDragLeave: handleDefaults, onDrop: onDrop, onClick: handleFileBtn },
-        createElement("input", __assign({}, props, { ref: ref, type: "file" }))));
+    var styles = "drag-drop-container " + (focus ? 'focus' : '') + " " + (className !== null && className !== void 0 ? className : '');
+    return (createElement(Fragment, null,
+        createElement("div", { style: style, className: styles, onDrag: handleDefaults, onDragStart: handleDefaults, onDragEnd: handleDefaults, onDragOver: onDragOver, onDragEnter: handleDefaults, onDragLeave: onDragLeave, onDrop: onDrop },
+            createElement("input", __assign({}, rest, { multiple: true, id: id, required: required, ref: ref, type: "file", className: "drag-drop-input" }))),
+        createElement("ul", { className: "drag-drop-list" }, value && value.map(function (item, i) { return createElement("li", { key: i }, item.name); }))));
 });
+//# sourceMappingURL=DragDrop.js.map
 
 var Field = function (_a) {
     var _b;
     var _c = _a.type, type = _c === void 0 ? 'text' : _c, name = _a.name, children = _a.children, validation = _a.validation, rest = __rest(_a, ["type", "name", "children", "validation"]);
     var _d = useFormData({
         validation: validation,
-    }), data = _d.data, onRegister = _d.onRegister, onChange = _d.onChange, onToggle = _d.onToggle, onFocus = _d.onFocus, onBlur = _d.onBlur;
+    }), data = _d.data, onRegister = _d.onRegister, onChange = _d.onChange, onToggle = _d.onToggle, onFileDrop = _d.onFileDrop, onFocus = _d.onFocus, onBlur = _d.onBlur;
     // TODO clean this up
     var _e = useMemo(function () {
         var isString = typeof children === 'string';
@@ -334,7 +343,8 @@ var Field = function (_a) {
         onChange: onChange,
         onFocus: onFocus,
         onBlur: onBlur, name: id, value: (_b = data[id]) !== null && _b !== void 0 ? _b : '', ref: onRegister });
-    var checkboxRadio = __assign(__assign({}, defaultProps), { onChange: onToggle });
+    var toggleProps = __assign(__assign({}, defaultProps), { onChange: onToggle });
+    var fileProps = __assign(__assign({}, defaultProps), { onFileDrop: onFileDrop });
     return (createElement("label", { htmlFor: id },
         inputLabel,
         (function () {
@@ -346,13 +356,13 @@ var Field = function (_a) {
                     return createElement(TextArea, __assign({}, defaultProps));
                 }
                 case 'radio': {
-                    return createElement(CheckboxRadio, __assign({}, checkboxRadio));
+                    return createElement(CheckboxRadio, __assign({}, toggleProps));
                 }
                 case 'checkbox': {
-                    return createElement(CheckboxRadio, __assign({}, checkboxRadio));
+                    return createElement(CheckboxRadio, __assign({}, toggleProps));
                 }
                 case 'drag-drop': {
-                    return createElement(DragDrop, __assign({}, defaultProps));
+                    return createElement(DragDrop, __assign({}, fileProps));
                 }
                 default: {
                     return createElement(Input, __assign({}, defaultProps));
@@ -360,6 +370,7 @@ var Field = function (_a) {
             }
         })()));
 };
+//# sourceMappingURL=Field.js.map
 
 // TODO ref on field to go through children and see what are inputs?
 var Step = function (_a) {

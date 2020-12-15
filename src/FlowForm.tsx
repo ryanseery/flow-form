@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { Context, Wrapper } from './Context';
 import { KeyValue } from './@types/keys';
-import './styles.module.css';
+import './styles.css';
 
 interface IForm extends Omit<React.FormHTMLAttributes<HTMLFormElement>, 'onSubmit'> {
   onSubmit: (formData: KeyValue) => void | Promise<void>;
@@ -9,7 +9,6 @@ interface IForm extends Omit<React.FormHTMLAttributes<HTMLFormElement>, 'onSubmi
   initialValues?: KeyValue;
 }
 
-// TODO finish drag and drop
 // TODO showError
 // TODO steps
 const Form: React.FC<IForm> = ({ children, onSubmit, showData, ...rest }) => {
@@ -19,11 +18,11 @@ const Form: React.FC<IForm> = ({ children, onSubmit, showData, ...rest }) => {
 
   return (
     <form
+      {...rest}
       onSubmit={(e: React.FormEvent) => {
         e.preventDefault();
         onSubmit(data);
       }}
-      {...rest}
     >
       {children}
       <button type="submit">Submit</button>
