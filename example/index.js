@@ -23,17 +23,21 @@ function App() {
   return (
     <div className="container">
       <FlowForm onSubmit={handleSubmit} showData initialValues={{
-        initial: 'YOOOOOOO'
+        initial: 'default'
       }}>
 
         <Field type="text" validation={checkString}>
-          Test
+          Validation
         </Field>
 
-        <Field type="text" name='Here' />
+        <Field type="text" name='Title' />
+
+        <Field type="text">
+          Initial
+        </Field>
 
         <Field type="number" required>
-          Numbers
+          Required
         </Field>
 
         <Field type="select" name="Cars" id="cars">
@@ -47,15 +51,11 @@ function App() {
 
         <Field type="textarea">Text Area</Field>
 
-        <Field type="drag-drop">File</Field>
+        <Field type="drag-drop">Drag and Drop</Field>
 
         <Field type="radio" name="Radio" />
 
         <Field type="checkbox" name="Checkbox" />
-
-        <Field type="text">
-          Initial
-        </Field>
 
       </FlowForm>
     </div>
