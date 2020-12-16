@@ -1,18 +1,21 @@
 import * as React from 'react';
 import { IField } from '../Field';
+import { IDelete } from '../../@types/delete';
 
 function handleDefaults(e: React.DragEvent<HTMLDivElement>): void {
   e.preventDefault();
   e.stopPropagation();
 }
-//TODO button to remove file
+//TODO remove opens file dropdown
 interface IDragDrop extends IField {
+  id: string;
   onFileDrop: (e: React.DragEvent<HTMLDivElement>, id?: string, required?: boolean) => void;
+  onRemove: (args: IDelete) => void;
 }
 export const DragDrop = React.forwardRef<HTMLInputElement, IDragDrop>((props, ref) => {
   const [focus, setFocus] = React.useState<boolean>(false);
 
-  const { id, required, className, value, style, placeholder, onFileDrop, ...rest } = props;
+  const { id, required, className, value, style, placeholder, onFileDrop, onRemove, ...rest } = props;
 
   const onDragOver = (e: React.DragEvent<HTMLDivElement>) => {
     handleDefaults(e);
@@ -49,7 +52,15 @@ export const DragDrop = React.forwardRef<HTMLInputElement, IDragDrop>((props, re
         <input {...rest} id={id} required={required} ref={ref} type="file" className="drag-drop-input" />
       </div>
       <ul className="drag-drop-list">
-        {value && (value as []).map((item: File, i: number) => <li key={i}>{item.name}</li>)}
+        {value &&
+          (value as []).map((item: File, i: number) => (
+            <li key={i} className="drag-drop-item">
+              <span>{item.name}</span>
+              <button type="button" className="drag-drop-btn" onClick={() => onRemove({ id, name: item.name })}>
+                x
+              </button>
+            </li>
+          ))}
       </ul>
     </>
   );

@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { KeyValue, KeyBool } from './@types/keys';
+import { IDelete } from './@types/delete';
 
 interface StepState {
   id: string;
@@ -64,6 +65,7 @@ interface FormContext extends State {
   updateField: (payload: Args) => void;
   handleFocus: (payload: Args) => void;
   handleBlur: (payload: Args) => void;
+  handleRemove: (payload: IDelete) => void;
 }
 
 export const Context = React.createContext({} as FormContext);
@@ -74,6 +76,7 @@ enum ACTION {
   UPDATE_FIELD = 'UPDATE_FIELD',
   HANDLE_FOCUS = 'HANDLE_FOCUS',
   HANDLE_BLUR = 'HANDLE_BLUR',
+  HANDLE_REMOVE = 'HANDLE_REMOVE',
 }
 
 interface RegisterForm {
@@ -125,7 +128,16 @@ const handleBlur = (payload: { id: string }): HandleBlur => ({
   payload,
 });
 
-type Actions = RegisterForm | RegisterField | UpdateField | HandleFocus | HandleBlur;
+interface HandleRemove {
+  type: ACTION.HANDLE_REMOVE;
+  payload: IDelete;
+}
+const handleRemove = (payload: IDelete): HandleRemove => ({
+  type: ACTION.HANDLE_REMOVE,
+  payload,
+});
+
+type Actions = RegisterForm | RegisterField | UpdateField | HandleFocus | HandleBlur | HandleRemove;
 
 function reducer(state: State, action: Actions): State {
   switch (action.type) {
@@ -219,6 +231,24 @@ function reducer(state: State, action: Actions): State {
         },
       };
     }
+    case ACTION.HANDLE_REMOVE: {
+      const {
+        payload: { id, name },
+      } = action;
+
+      // copy target
+      let copy = [...state.data[id]];
+
+      let newArr = copy.filter((file: File) => file.name !== name);
+
+      return {
+        ...state,
+        data: {
+          ...state.data,
+          [id]: newArr,
+        },
+      };
+    }
     default: {
       throw new Error(`Context Reducer Received Unrecognized Action!`);
     }
@@ -241,6 +271,7 @@ export const Wrapper: React.FC<IWrapper> = ({ children, initialValues = {} }) =>
       updateField: (payload: Args) => dispatch(updateField(payload)),
       handleFocus: (payload: Args) => dispatch(handleFocus(payload)),
       handleBlur: (payload: Args) => dispatch(handleBlur(payload)),
+      handleRemove: (payload: IDelete) => dispatch(handleRemove(payload)),
     };
   }, []);
 

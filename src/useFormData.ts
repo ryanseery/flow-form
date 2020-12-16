@@ -2,6 +2,7 @@ import * as React from 'react';
 import { Context, Meta } from './Context';
 import { KeyValue } from './@types/keys';
 import { EventType } from './@types/event';
+import { IDelete } from './@types/delete';
 import { IField } from './Field/Field';
 
 export type RefType = HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement;
@@ -31,9 +32,10 @@ interface UseFormReturn {
   onFileDrop: (e: React.DragEvent<HTMLDivElement>, id: string, required: boolean) => void;
   onFocus: (e: EventType) => void;
   onBlur: (e: EventType) => void;
+  onRemove: (args: IDelete) => void;
 }
 export function useFormData({ validation }: UseFormArgs): UseFormReturn {
-  const { data, meta, registerField, updateField, handleFocus, handleBlur } = React.useContext(Context);
+  const { data, meta, registerField, updateField, handleFocus, handleBlur, handleRemove } = React.useContext(Context);
 
   const onRegister = (ref: RefType) => {
     const { id, value, required } = ref;
@@ -112,6 +114,15 @@ export function useFormData({ validation }: UseFormArgs): UseFormReturn {
     });
   };
 
+  const onRemove = (args: IDelete) => {
+    const { id, name } = args;
+
+    handleRemove({
+      id,
+      name,
+    });
+  };
+
   return {
     data,
     meta,
@@ -122,5 +133,6 @@ export function useFormData({ validation }: UseFormArgs): UseFormReturn {
     onFileDrop: React.useCallback(onFileDrop, []),
     onFocus: React.useCallback(onFocus, []),
     onBlur: React.useCallback(onBlur, []),
+    onRemove: React.useCallback(onRemove, []),
   };
 }
