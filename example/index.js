@@ -51,12 +51,11 @@ function App() {
 
         <Field type="textarea">Text Area</Field>
 
-        <Field type="drag-drop" placeholder="Drag and drop or click to select">Drag and Drop</Field>
-
         <Field type="radio" name="Radio" />
 
         <Field type="checkbox" name="Checkbox" />
 
+        <Field type="drag-drop" placeholder="Drag and drop or click to select">Drag and Drop</Field>
       </FlowForm>
     </div>
   );

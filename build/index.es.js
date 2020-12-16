@@ -38,6 +38,14 @@ function __rest(s, e) {
     return t;
 }
 
+function __spreadArrays() {
+    for (var s = 0, i = 0, il = arguments.length; i < il; i++) s += arguments[i].length;
+    for (var r = Array(s), k = 0, i = 0; i < il; i++)
+        for (var a = arguments[i], j = 0, jl = a.length; j < jl; j++, k++)
+            r[k] = a[j];
+    return r;
+}
+
 var initialState = {
     meta: {
         touched: {},
@@ -63,6 +71,7 @@ var ACTION;
     ACTION["UPDATE_FIELD"] = "UPDATE_FIELD";
     ACTION["HANDLE_FOCUS"] = "HANDLE_FOCUS";
     ACTION["HANDLE_BLUR"] = "HANDLE_BLUR";
+    ACTION["HANDLE_REMOVE"] = "HANDLE_REMOVE";
 })(ACTION || (ACTION = {}));
 var registerForm = function (payload) { return ({
     type: ACTION.REGISTER_FORM,
@@ -84,21 +93,25 @@ var handleBlur = function (payload) { return ({
     type: ACTION.HANDLE_BLUR,
     payload: payload,
 }); };
+var handleRemove = function (payload) { return ({
+    type: ACTION.HANDLE_REMOVE,
+    payload: payload,
+}); };
 function reducer(state, action) {
-    var _a, _b, _c, _d, _e, _f, _g, _h, _j;
+    var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k;
     switch (action.type) {
         case ACTION.REGISTER_FORM: {
             return state;
         }
         case ACTION.REGISTER_FIELD: {
-            var _k = action.payload, id = _k.id, error = _k.error;
+            var _l = action.payload, id = _l.id, error = _l.error;
             if (!state.data[id]) {
                 return __assign(__assign({}, state), { meta: __assign(__assign({}, state.meta), { touched: __assign(__assign({}, state.meta.touched), (_a = {}, _a[id] = false, _a)), focus: __assign(__assign({}, state.meta.focus), (_b = {}, _b[id] = false, _b)), error: __assign(__assign({}, state.meta.error), (_c = {}, _c[id] = error, _c)) }), data: __assign(__assign({}, state.data), (_d = {}, _d[id] = '', _d)) });
             }
             return state;
         }
         case ACTION.UPDATE_FIELD: {
-            var _l = action.payload, id = _l.id, value = _l.value, error = _l.error;
+            var _m = action.payload, id = _m.id, value = _m.value, error = _m.error;
             return __assign(__assign({}, state), { meta: __assign(__assign({}, state.meta), { error: __assign(__assign({}, state.meta.error), (_e = {}, _e[id] = error, _e)) }), data: __assign(__assign({}, state.data), (_f = {}, _f[id] = value, _f)) });
         }
         case ACTION.HANDLE_FOCUS: {
@@ -108,6 +121,13 @@ function reducer(state, action) {
         case ACTION.HANDLE_BLUR: {
             var id = action.payload.id;
             return __assign(__assign({}, state), { meta: __assign(__assign({}, state.meta), { focus: __assign(__assign({}, state.meta.focus), (_j = {}, _j[id] = false, _j)) }) });
+        }
+        case ACTION.HANDLE_REMOVE: {
+            var _o = action.payload, id = _o.id, name_1 = _o.name;
+            // copy target
+            var copy = __spreadArrays(state.data[id]);
+            var newArr = copy.filter(function (file) { return file.name !== name_1; });
+            return __assign(__assign({}, state), { data: __assign(__assign({}, state.data), (_k = {}, _k[id] = newArr, _k)) });
         }
         default: {
             throw new Error("Context Reducer Received Unrecognized Action!");
@@ -124,6 +144,7 @@ var Wrapper = function (_a) {
             updateField: function (payload) { return dispatch(updateField(payload)); },
             handleFocus: function (payload) { return dispatch(handleFocus(payload)); },
             handleBlur: function (payload) { return dispatch(handleBlur(payload)); },
+            handleRemove: function (payload) { return dispatch(handleRemove(payload)); },
         };
     }, []);
     return createElement(Context.Provider, { value: __assign(__assign({}, state), actions) }, children);
@@ -157,7 +178,7 @@ function styleInject(css, ref) {
   }
 }
 
-var css_248z = "input[type='text'],\ninput[type='number'],\ninput[type='file'] {\n  display: block;\n}\n\nlabel[for='checkbox'],\nlabel[for='radio'] {\n  display: block;\n}\n\nselect {\n  display: block;\n}\n\ntextarea {\n  display: block;\n}\n\n.drag-drop-container {\n  min-height: 4rem;\n  border: 1px solid rgb(118, 118, 118);\n  border-radius: 0.2rem;\n  display: flex;\n  align-items: center;\n  justify-content: center;\n}\n\n.focus {\n  outline: -webkit-focus-ring-color auto 1px;\n}\n\n.drag-drop-input {\n  display: none !important;\n}\n\n.drag-drop-list {\n  list-style: none;\n  padding: 0;\n  margin: 0;\n}\n\nfieldset {\n  border: none;\n  padding: 0;\n  margin: 0 0 1rem 0;\n}\n";
+var css_248z = "input[type='text'],\ninput[type='number'],\ninput[type='file'] {\n  display: block;\n}\n\nlabel[for='checkbox'],\nlabel[for='radio'] {\n  display: block;\n}\n\nselect {\n  display: block;\n}\n\ntextarea {\n  display: block;\n}\n\n.drag-drop-container {\n  min-height: 4rem;\n  border: 1px solid rgb(118, 118, 118);\n  border-radius: 0.2rem;\n  display: flex;\n  align-items: center;\n  justify-content: center;\n}\n\n.focus {\n  outline: -webkit-focus-ring-color auto 1px;\n}\n\n.drag-drop-input {\n  display: none !important;\n}\n\n.drag-drop-list {\n  list-style: none;\n  padding: 0;\n  margin: 0;\n}\n\n.drag-drop-item {\n  display: flex;\n  justify-content: center;\n  align-items: center;\n  justify-content: space-between;\n}\n\n.drag-drop-btn {\n  min-width: 1.2rem;\n}\n\nfieldset {\n  border: none;\n  padding: 0;\n  margin: 0 0 1rem 0;\n}\n";
 styleInject(css_248z);
 
 // TODO showError
@@ -191,7 +212,7 @@ function validate(e, validation, required) {
 }
 function useFormData(_a) {
     var validation = _a.validation;
-    var _b = useContext(Context), data = _b.data, meta = _b.meta, registerField = _b.registerField, updateField = _b.updateField, handleFocus = _b.handleFocus, handleBlur = _b.handleBlur;
+    var _b = useContext(Context), data = _b.data, meta = _b.meta, registerField = _b.registerField, updateField = _b.updateField, handleFocus = _b.handleFocus, handleBlur = _b.handleBlur, handleRemove = _b.handleRemove;
     var onRegister = function (ref) {
         var id = ref.id, value = ref.value, required = ref.required;
         registerField({ id: id, value: value, error: required });
@@ -250,6 +271,13 @@ function useFormData(_a) {
             error: validate(e, validation, required),
         });
     };
+    var onRemove = function (args) {
+        var id = args.id, name = args.name;
+        handleRemove({
+            id: id,
+            name: name,
+        });
+    };
     return {
         data: data,
         meta: meta,
@@ -260,6 +288,7 @@ function useFormData(_a) {
         onFileDrop: useCallback(onFileDrop, []),
         onFocus: useCallback(onFocus, []),
         onBlur: useCallback(onBlur, []),
+        onRemove: useCallback(onRemove, []),
     };
 }
 //# sourceMappingURL=useFormData.js.map
@@ -298,7 +327,7 @@ function handleDefaults(e) {
 }
 var DragDrop = forwardRef(function (props, ref) {
     var _a = useState(false), focus = _a[0], setFocus = _a[1];
-    var id = props.id, required = props.required, className = props.className, value = props.value, style = props.style, placeholder = props.placeholder, onFileDrop = props.onFileDrop, rest = __rest(props, ["id", "required", "className", "value", "style", "placeholder", "onFileDrop"]);
+    var id = props.id, required = props.required, className = props.className, value = props.value, style = props.style, placeholder = props.placeholder, onFileDrop = props.onFileDrop, onRemove = props.onRemove, rest = __rest(props, ["id", "required", "className", "value", "style", "placeholder", "onFileDrop", "onRemove"]);
     var onDragOver = function (e) {
         handleDefaults(e);
         setFocus(true);
@@ -317,7 +346,10 @@ var DragDrop = forwardRef(function (props, ref) {
         createElement("div", { style: style, className: styles, onDrag: handleDefaults, onDragStart: handleDefaults, onDragEnd: handleDefaults, onDragOver: onDragOver, onDragEnter: handleDefaults, onDragLeave: onDragLeave, onDrop: onDrop },
             createElement("span", { className: "drag-drop-cta" }, placeholder),
             createElement("input", __assign({}, rest, { id: id, required: required, ref: ref, type: "file", className: "drag-drop-input" }))),
-        createElement("ul", { className: "drag-drop-list" }, value && value.map(function (item, i) { return createElement("li", { key: i }, item.name); }))));
+        createElement("ul", { className: "drag-drop-list" }, value &&
+            value.map(function (item, i) { return (createElement("li", { key: i, className: "drag-drop-item" },
+                createElement("span", null, item.name),
+                createElement("button", { type: "button", className: "drag-drop-btn", onClick: function () { return onRemove({ id: id, name: item.name }); } }, "x"))); }))));
 });
 
 var Field = function (_a) {
@@ -325,7 +357,7 @@ var Field = function (_a) {
     var _c = _a.type, type = _c === void 0 ? 'text' : _c, name = _a.name, children = _a.children, validation = _a.validation, rest = __rest(_a, ["type", "name", "children", "validation"]);
     var _d = useFormData({
         validation: validation,
-    }), data = _d.data, onRegister = _d.onRegister, onChange = _d.onChange, onToggle = _d.onToggle, onFile = _d.onFile, onFileDrop = _d.onFileDrop, onFocus = _d.onFocus, onBlur = _d.onBlur;
+    }), data = _d.data, onRegister = _d.onRegister, onChange = _d.onChange, onToggle = _d.onToggle, onFile = _d.onFile, onFileDrop = _d.onFileDrop, onFocus = _d.onFocus, onBlur = _d.onBlur, onRemove = _d.onRemove;
     // TODO clean this up
     var _e = useMemo(function () {
         var isString = typeof children === 'string';
@@ -355,7 +387,7 @@ var Field = function (_a) {
         onFocus: onFocus,
         onBlur: onBlur, name: id, value: (_b = data[id]) !== null && _b !== void 0 ? _b : '', ref: onRegister });
     var toggleProps = __assign(__assign({}, defaultProps), { onChange: onToggle });
-    var fileProps = __assign(__assign({}, defaultProps), { onChange: onFile, onFileDrop: onFileDrop });
+    var fileProps = __assign(__assign({}, defaultProps), { onChange: onFile, onFileDrop: onFileDrop, onRemove: onRemove });
     return (createElement("label", { htmlFor: id },
         inputLabel,
         (function () {
