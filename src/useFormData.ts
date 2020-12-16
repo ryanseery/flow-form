@@ -27,6 +27,7 @@ interface UseFormReturn {
   onRegister: (ref: RefType & IField) => void;
   onChange: (e: EventType) => void;
   onToggle: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  onFile: (e: React.ChangeEvent<HTMLInputElement>) => void;
   onFileDrop: (e: React.DragEvent<HTMLDivElement>, id: string, required: boolean) => void;
   onFocus: (e: EventType) => void;
   onBlur: (e: EventType) => void;
@@ -60,6 +61,18 @@ export function useFormData({ validation }: UseFormArgs): UseFormReturn {
     updateField({
       id,
       value: checked ? name : '',
+      error: validate(e, validation, required),
+    });
+  };
+
+  const onFile = (e: React.ChangeEvent<HTMLInputElement>) => {
+    e.persist();
+
+    const { id, files, required } = e.target;
+
+    updateField({
+      id,
+      value: files ? Array.from(files) : '',
       error: validate(e, validation, required),
     });
   };
@@ -105,6 +118,7 @@ export function useFormData({ validation }: UseFormArgs): UseFormReturn {
     onRegister: React.useCallback(onRegister, []),
     onChange: React.useCallback(onChange, []),
     onToggle: React.useCallback(onToggle, []),
+    onFile: React.useCallback(onFile, []),
     onFileDrop: React.useCallback(onFileDrop, []),
     onFocus: React.useCallback(onFocus, []),
     onBlur: React.useCallback(onBlur, []),

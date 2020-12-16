@@ -11,7 +11,7 @@ export interface IField extends React.InputHTMLAttributes<HTMLInputElement | HTM
   onChange: (e: EventType) => void;
 }
 export const Field: React.FC<IField> = ({ type = 'text', name, children, validation, ...rest }) => {
-  const { data, onRegister, onChange, onToggle, onFileDrop, onFocus, onBlur } = useFormData({
+  const { data, onRegister, onChange, onToggle, onFile, onFileDrop, onFocus, onBlur } = useFormData({
     validation,
   });
 
@@ -53,7 +53,7 @@ export const Field: React.FC<IField> = ({ type = 'text', name, children, validat
 
   const toggleProps = { ...defaultProps, onChange: onToggle };
 
-  const fileProps = { ...defaultProps, onFileDrop };
+  const fileProps = { ...defaultProps, onChange: onFile, onFileDrop };
 
   return (
     <label htmlFor={id}>

@@ -157,7 +157,7 @@ function styleInject(css, ref) {
   }
 }
 
-var css_248z = "input[type='text'],\ninput[type='number'],\ninput[type='file'] {\n  display: block;\n}\n\nlabel[for='checkbox'],\nlabel[for='radio'] {\n  display: block;\n}\n\nselect {\n  display: block;\n}\n\ntextarea {\n  display: block;\n}\n\n.drag-drop-container {\n  min-height: 4rem;\n  border: 1px solid rgb(118, 118, 118);\n  border-radius: 0.2rem;\n}\n\n.focus {\n  outline: -webkit-focus-ring-color auto 1px;\n}\n\n.drag-drop-input {\n  display: none !important;\n}\n\n.drag-drop-list {\n  list-style: none;\n  padding: 0;\n}\n\nfieldset {\n  border: none;\n  padding: 0;\n  margin: 0 0 1rem 0;\n}\n";
+var css_248z = "input[type='text'],\ninput[type='number'],\ninput[type='file'] {\n  display: block;\n}\n\nlabel[for='checkbox'],\nlabel[for='radio'] {\n  display: block;\n}\n\nselect {\n  display: block;\n}\n\ntextarea {\n  display: block;\n}\n\n.drag-drop-container {\n  min-height: 4rem;\n  border: 1px solid rgb(118, 118, 118);\n  border-radius: 0.2rem;\n  display: flex;\n  align-items: center;\n  justify-content: center;\n}\n\n.focus {\n  outline: -webkit-focus-ring-color auto 1px;\n}\n\n.drag-drop-input {\n  display: none !important;\n}\n\n.drag-drop-list {\n  list-style: none;\n  padding: 0;\n  margin: 0;\n}\n\nfieldset {\n  border: none;\n  padding: 0;\n  margin: 0 0 1rem 0;\n}\n";
 styleInject(css_248z);
 
 // TODO showError
@@ -178,6 +178,7 @@ var FlowForm = function (_a) {
     return (createElement(Wrapper, { initialValues: initialValues },
         createElement(Form, __assign({}, rest))));
 };
+//# sourceMappingURL=FlowForm.js.map
 
 function validate(e, validation, required) {
     if (required) {
@@ -210,6 +211,15 @@ function useFormData(_a) {
         updateField({
             id: id,
             value: checked ? name : '',
+            error: validate(e, validation, required),
+        });
+    };
+    var onFile = function (e) {
+        e.persist();
+        var _a = e.target, id = _a.id, files = _a.files, required = _a.required;
+        updateField({
+            id: id,
+            value: files ? Array.from(files) : '',
             error: validate(e, validation, required),
         });
     };
@@ -246,6 +256,7 @@ function useFormData(_a) {
         onRegister: useCallback(onRegister, []),
         onChange: useCallback(onChange, []),
         onToggle: useCallback(onToggle, []),
+        onFile: useCallback(onFile, []),
         onFileDrop: useCallback(onFileDrop, []),
         onFocus: useCallback(onFocus, []),
         onBlur: useCallback(onBlur, []),
@@ -287,7 +298,7 @@ function handleDefaults(e) {
 }
 var DragDrop = forwardRef(function (props, ref) {
     var _a = useState(false), focus = _a[0], setFocus = _a[1];
-    var id = props.id, required = props.required, className = props.className, value = props.value, style = props.style, onFileDrop = props.onFileDrop, rest = __rest(props, ["id", "required", "className", "value", "style", "onFileDrop"]);
+    var id = props.id, required = props.required, className = props.className, value = props.value, style = props.style, placeholder = props.placeholder, onFileDrop = props.onFileDrop, rest = __rest(props, ["id", "required", "className", "value", "style", "placeholder", "onFileDrop"]);
     var onDragOver = function (e) {
         handleDefaults(e);
         setFocus(true);
@@ -304,17 +315,17 @@ var DragDrop = forwardRef(function (props, ref) {
     var styles = "drag-drop-container " + (focus ? 'focus' : '') + " " + (className !== null && className !== void 0 ? className : '');
     return (createElement(Fragment, null,
         createElement("div", { style: style, className: styles, onDrag: handleDefaults, onDragStart: handleDefaults, onDragEnd: handleDefaults, onDragOver: onDragOver, onDragEnter: handleDefaults, onDragLeave: onDragLeave, onDrop: onDrop },
-            createElement("input", __assign({}, rest, { multiple: true, id: id, required: required, ref: ref, type: "file", className: "drag-drop-input" }))),
+            createElement("span", { className: "drag-drop-cta" }, placeholder),
+            createElement("input", __assign({}, rest, { id: id, required: required, ref: ref, type: "file", className: "drag-drop-input" }))),
         createElement("ul", { className: "drag-drop-list" }, value && value.map(function (item, i) { return createElement("li", { key: i }, item.name); }))));
 });
-//# sourceMappingURL=DragDrop.js.map
 
 var Field = function (_a) {
     var _b;
     var _c = _a.type, type = _c === void 0 ? 'text' : _c, name = _a.name, children = _a.children, validation = _a.validation, rest = __rest(_a, ["type", "name", "children", "validation"]);
     var _d = useFormData({
         validation: validation,
-    }), data = _d.data, onRegister = _d.onRegister, onChange = _d.onChange, onToggle = _d.onToggle, onFileDrop = _d.onFileDrop, onFocus = _d.onFocus, onBlur = _d.onBlur;
+    }), data = _d.data, onRegister = _d.onRegister, onChange = _d.onChange, onToggle = _d.onToggle, onFile = _d.onFile, onFileDrop = _d.onFileDrop, onFocus = _d.onFocus, onBlur = _d.onBlur;
     // TODO clean this up
     var _e = useMemo(function () {
         var isString = typeof children === 'string';
@@ -344,7 +355,7 @@ var Field = function (_a) {
         onFocus: onFocus,
         onBlur: onBlur, name: id, value: (_b = data[id]) !== null && _b !== void 0 ? _b : '', ref: onRegister });
     var toggleProps = __assign(__assign({}, defaultProps), { onChange: onToggle });
-    var fileProps = __assign(__assign({}, defaultProps), { onFileDrop: onFileDrop });
+    var fileProps = __assign(__assign({}, defaultProps), { onChange: onFile, onFileDrop: onFileDrop });
     return (createElement("label", { htmlFor: id },
         inputLabel,
         (function () {

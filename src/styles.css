@@ -21,6 +21,9 @@ textarea {
   min-height: 4rem;
   border: 1px solid rgb(118, 118, 118);
   border-radius: 0.2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .focus {
@@ -34,6 +37,7 @@ textarea {
 .drag-drop-list {
   list-style: none;
   padding: 0;
+  margin: 0;
 }
 
 fieldset {
