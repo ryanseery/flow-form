@@ -5,16 +5,14 @@ function handleDefaults(e: React.DragEvent<HTMLDivElement>): void {
   e.preventDefault();
   e.stopPropagation();
 }
-
-//TODO handle on click
-//TODO text for click, prop
+//TODO button to remove file
 interface IDragDrop extends IField {
   onFileDrop: (e: React.DragEvent<HTMLDivElement>, id?: string, required?: boolean) => void;
 }
 export const DragDrop = React.forwardRef<HTMLInputElement, IDragDrop>((props, ref) => {
   const [focus, setFocus] = React.useState<boolean>(false);
 
-  const { id, required, className, value, style, onFileDrop, ...rest } = props;
+  const { id, required, className, value, style, placeholder, onFileDrop, ...rest } = props;
 
   const onDragOver = (e: React.DragEvent<HTMLDivElement>) => {
     handleDefaults(e);
@@ -47,7 +45,8 @@ export const DragDrop = React.forwardRef<HTMLInputElement, IDragDrop>((props, re
         onDragLeave={onDragLeave}
         onDrop={onDrop}
       >
-        <input {...rest} multiple id={id} required={required} ref={ref} type="file" className="drag-drop-input" />
+        <span className="drag-drop-cta">{placeholder}</span>
+        <input {...rest} id={id} required={required} ref={ref} type="file" className="drag-drop-input" />
       </div>
       <ul className="drag-drop-list">
         {value && (value as []).map((item: File, i: number) => <li key={i}>{item.name}</li>)}
