@@ -1,8 +1,6 @@
 import * as React from 'react';
 import { Context, Meta } from './Context';
-import { KeyValue } from './@types/keys';
-import { EventType } from './@types/event';
-import { IDelete } from './@types/delete';
+import { KeyValue, EventType, IDelete } from './@types';
 import { IField } from './Field/Field';
 
 export type RefType = HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement;

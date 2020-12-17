@@ -77,30 +77,6 @@ var ACTION;
     ACTION["HANDLE_BLUR"] = "HANDLE_BLUR";
     ACTION["HANDLE_REMOVE"] = "HANDLE_REMOVE";
 })(ACTION || (ACTION = {}));
-var registerForm = function (payload) { return ({
-    type: ACTION.REGISTER_FORM,
-    payload: payload,
-}); };
-var registerField = function (payload) { return ({
-    type: ACTION.REGISTER_FIELD,
-    payload: payload,
-}); };
-var updateField = function (payload) { return ({
-    type: ACTION.UPDATE_FIELD,
-    payload: payload,
-}); };
-var handleFocus = function (payload) { return ({
-    type: ACTION.HANDLE_FOCUS,
-    payload: payload,
-}); };
-var handleBlur = function (payload) { return ({
-    type: ACTION.HANDLE_BLUR,
-    payload: payload,
-}); };
-var handleRemove = function (payload) { return ({
-    type: ACTION.HANDLE_REMOVE,
-    payload: payload,
-}); };
 function reducer(state, action) {
     var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k;
     switch (action.type) {
@@ -128,7 +104,6 @@ function reducer(state, action) {
         }
         case ACTION.HANDLE_REMOVE: {
             var _o = action.payload, id = _o.id, name_1 = _o.name;
-            // copy target
             var copy = __spreadArrays(state.data[id]);
             var newArr = copy.filter(function (file) { return file.name !== name_1; });
             return __assign(__assign({}, state), { data: __assign(__assign({}, state.data), (_k = {}, _k[id] = newArr, _k)) });
@@ -143,12 +118,12 @@ var Wrapper = function (_a) {
     var _c = React.useReducer(reducer, __assign(__assign({}, initialState), { data: __assign(__assign({}, initialState.data), initialValues) })), state = _c[0], dispatch = _c[1];
     var actions = React.useMemo(function () {
         return {
-            registerForm: function (payload) { return dispatch(registerForm(payload)); },
-            registerField: function (payload) { return dispatch(registerField(payload)); },
-            updateField: function (payload) { return dispatch(updateField(payload)); },
-            handleFocus: function (payload) { return dispatch(handleFocus(payload)); },
-            handleBlur: function (payload) { return dispatch(handleBlur(payload)); },
-            handleRemove: function (payload) { return dispatch(handleRemove(payload)); },
+            registerForm: function (payload) { return dispatch({ type: ACTION.REGISTER_FORM, payload: payload }); },
+            registerField: function (payload) { return dispatch({ type: ACTION.REGISTER_FIELD, payload: payload }); },
+            updateField: function (payload) { return dispatch({ type: ACTION.UPDATE_FIELD, payload: payload }); },
+            handleFocus: function (payload) { return dispatch({ type: ACTION.HANDLE_FOCUS, payload: payload }); },
+            handleBlur: function (payload) { return dispatch({ type: ACTION.HANDLE_BLUR, payload: payload }); },
+            handleRemove: function (payload) { return dispatch({ type: ACTION.HANDLE_REMOVE, payload: payload }); },
         };
     }, []);
     return React.createElement(Context.Provider, { value: __assign(__assign({}, state), actions) }, children);
@@ -182,7 +157,7 @@ function styleInject(css, ref) {
   }
 }
 
-var css_248z = "input[type='text'],\ninput[type='number'],\ninput[type='file'] {\n  display: block;\n}\n\nlabel[for='checkbox'],\nlabel[for='radio'] {\n  display: block;\n}\n\nselect {\n  display: block;\n}\n\ntextarea {\n  display: block;\n}\n\n.drag-drop-container {\n  min-height: 4rem;\n  border: 1px solid rgb(118, 118, 118);\n  border-radius: 0.2rem;\n  display: flex;\n  align-items: center;\n  justify-content: center;\n}\n\n.focus {\n  outline: -webkit-focus-ring-color auto 1px;\n}\n\n.drag-drop-input {\n  display: none !important;\n}\n\n.drag-drop-list {\n  list-style: none;\n  padding: 0;\n  margin: 0;\n}\n\n.drag-drop-item {\n  display: flex;\n  justify-content: center;\n  align-items: center;\n  justify-content: space-between;\n}\n\n.drag-drop-btn {\n  min-width: 1.2rem;\n}\n\nfieldset {\n  border: none;\n  padding: 0;\n  margin: 0 0 1rem 0;\n}\n";
+var css_248z = "input[type='text'],\ninput[type='number'],\ninput[type='file'] {\n  display: block;\n}\n\nlabel[for='checkbox'],\nlabel[for='radio'] {\n  display: block;\n}\n\nselect {\n  display: block;\n}\n\ntextarea {\n  display: block;\n}\n\n.drag-drop-container {\n  min-height: 4rem;\n  border: 1px solid rgb(118, 118, 118);\n  border-radius: 0.2rem;\n  display: flex;\n  align-items: center;\n  justify-content: center;\n}\n\n.focus {\n  outline: -webkit-focus-ring-color auto 1px;\n}\n\n.drag-drop-input {\n  display: none !important;\n}\n\n.drag-drop-list {\n  list-style: none;\n  padding: 0;\n  margin: 0;\n}\n\n.drag-drop-item {\n  display: flex;\n  align-items: center;\n  justify-content: space-between;\n}\n\n.drag-drop-btn {\n  min-width: 1.2rem;\n}\n\nfieldset {\n  border: none;\n  padding: 0;\n  margin: 0 0 1rem 0;\n}\n";
 styleInject(css_248z);
 
 // TODO showError
@@ -355,6 +330,7 @@ var DragDrop = React.forwardRef(function (props, ref) {
                 React.createElement("span", null, item.name),
                 React.createElement("button", { type: "button", className: "drag-drop-btn", onClick: function () { return onRemove({ id: id, name: item.name }); } }, "x"))); }))));
 });
+//# sourceMappingURL=DragDrop.js.map
 
 var Field = function (_a) {
     var _b;

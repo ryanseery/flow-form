@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Context, Wrapper } from './Context';
-import { KeyValue } from './@types/keys';
+import { KeyValue } from './@types';
 import './styles.css';
 
 interface IForm extends Omit<React.FormHTMLAttributes<HTMLFormElement>, 'onSubmit'> {

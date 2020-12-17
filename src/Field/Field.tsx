@@ -2,7 +2,7 @@ import * as React from 'react';
 import { useFormData } from '../useFormData';
 import { toCamelCase } from '../utils';
 import { Input, Select, TextArea, CheckboxRadio, DragDrop } from './Fields';
-import { EventType } from '../@types/event';
+import { EventType } from '../@types';
 
 //TODO Field.RadioGroup
 export interface IField extends React.InputHTMLAttributes<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement> {

@@ -1,6 +1,5 @@
 import * as React from 'react';
-import { KeyValue, KeyBool } from './@types/keys';
-import { IDelete } from './@types/delete';
+import { KeyValue, KeyBool, IDelete } from './@types';
 
 interface StepState {
   id: string;
@@ -83,28 +82,16 @@ interface RegisterForm {
   type: ACTION.REGISTER_FORM;
   payload: FormArgs;
 }
-const registerForm = (payload: FormArgs): RegisterForm => ({
-  type: ACTION.REGISTER_FORM,
-  payload,
-});
 
 interface RegisterField {
   type: ACTION.REGISTER_FIELD;
   payload: Args;
 }
-const registerField = (payload: Args): RegisterField => ({
-  type: ACTION.REGISTER_FIELD,
-  payload,
-});
 
 interface UpdateField {
   type: ACTION.UPDATE_FIELD;
   payload: Args;
 }
-const updateField = (payload: Args): UpdateField => ({
-  type: ACTION.UPDATE_FIELD,
-  payload,
-});
 
 interface HandleFocus {
   type: ACTION.HANDLE_FOCUS;
@@ -112,10 +99,6 @@ interface HandleFocus {
     id: string;
   };
 }
-const handleFocus = (payload: { id: string }): HandleFocus => ({
-  type: ACTION.HANDLE_FOCUS,
-  payload,
-});
 
 interface HandleBlur {
   type: ACTION.HANDLE_BLUR;
@@ -123,19 +106,11 @@ interface HandleBlur {
     id: string;
   };
 }
-const handleBlur = (payload: { id: string }): HandleBlur => ({
-  type: ACTION.HANDLE_BLUR,
-  payload,
-});
 
 interface HandleRemove {
   type: ACTION.HANDLE_REMOVE;
   payload: IDelete;
 }
-const handleRemove = (payload: IDelete): HandleRemove => ({
-  type: ACTION.HANDLE_REMOVE,
-  payload,
-});
 
 type Actions = RegisterForm | RegisterField | UpdateField | HandleFocus | HandleBlur | HandleRemove;
 
@@ -236,7 +211,6 @@ function reducer(state: State, action: Actions): State {
         payload: { id, name },
       } = action;
 
-      // copy target
       let copy = [...state.data[id]];
 
       let newArr = copy.filter((file: File) => file.name !== name);
@@ -266,12 +240,12 @@ export const Wrapper: React.FC<IWrapper> = ({ children, initialValues = {} }) =>
 
   const actions = React.useMemo(() => {
     return {
-      registerForm: (payload: FormArgs) => dispatch(registerForm(payload)),
-      registerField: (payload: Args) => dispatch(registerField(payload)),
-      updateField: (payload: Args) => dispatch(updateField(payload)),
-      handleFocus: (payload: Args) => dispatch(handleFocus(payload)),
-      handleBlur: (payload: Args) => dispatch(handleBlur(payload)),
-      handleRemove: (payload: IDelete) => dispatch(handleRemove(payload)),
+      registerForm: (payload: FormArgs) => dispatch({ type: ACTION.REGISTER_FORM, payload }),
+      registerField: (payload: Args) => dispatch({ type: ACTION.REGISTER_FIELD, payload }),
+      updateField: (payload: Args) => dispatch({ type: ACTION.UPDATE_FIELD, payload }),
+      handleFocus: (payload: Args) => dispatch({ type: ACTION.HANDLE_FOCUS, payload }),
+      handleBlur: (payload: Args) => dispatch({ type: ACTION.HANDLE_BLUR, payload }),
+      handleRemove: (payload: IDelete) => dispatch({ type: ACTION.HANDLE_REMOVE, payload }),
     };
   }, []);
 

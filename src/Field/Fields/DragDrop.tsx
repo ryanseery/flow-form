@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { IField } from '../Field';
-import { IDelete } from '../../@types/delete';
+import { IDelete } from '../../@types';
 
 function handleDefaults(e: React.DragEvent<HTMLDivElement>): void {
   e.preventDefault();
