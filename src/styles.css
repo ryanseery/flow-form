@@ -4,11 +4,6 @@ input[type='file'] {
   display: block;
 }
 
-label[for='checkbox'],
-label[for='radio'] {
-  display: block;
-}
-
 select {
   display: block;
 }
@@ -24,6 +19,7 @@ textarea {
   display: flex;
   align-items: center;
   justify-content: center;
+  cursor: pointer;
 }
 
 .focus {

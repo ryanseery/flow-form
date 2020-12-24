@@ -1,15 +1,13 @@
 import * as React from 'react';
 import { Context, Meta } from './Context';
-import { KeyValue, EventType, IDelete } from './@types';
+import { KeyValue, TEvent, IDelete, Ref } from './@types';
 import { IField } from './Field/Field';
 
-export type RefType = HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement;
-
 interface UseFormArgs {
-  validation?: (e: EventType) => boolean;
+  validation?: (e: TEvent) => boolean;
 }
 
-function validate(e: EventType, validation: UseFormArgs['validation'], required: boolean): boolean {
+function validate(e: TEvent, validation: UseFormArgs['validation'], required: boolean): boolean {
   if (required) {
     return !e.target.value;
   }
@@ -23,25 +21,25 @@ function validate(e: EventType, validation: UseFormArgs['validation'], required:
 interface UseFormReturn {
   data: KeyValue;
   meta: Meta;
-  onRegister: (ref: RefType & IField) => void;
-  onChange: (e: EventType) => void;
+  onRegister: (ref: Ref & IField) => void;
+  onChange: (e: TEvent) => void;
   onToggle: (e: React.ChangeEvent<HTMLInputElement>) => void;
   onFile: (e: React.ChangeEvent<HTMLInputElement>) => void;
   onFileDrop: (e: React.DragEvent<HTMLDivElement>, id: string, required: boolean) => void;
-  onFocus: (e: EventType) => void;
-  onBlur: (e: EventType) => void;
+  onFocus: (e: TEvent) => void;
+  onBlur: (e: TEvent) => void;
   onRemove: (args: IDelete) => void;
 }
 export function useFormData({ validation }: UseFormArgs): UseFormReturn {
   const { data, meta, registerField, updateField, handleFocus, handleBlur, handleRemove } = React.useContext(Context);
 
-  const onRegister = (ref: RefType) => {
+  const onRegister = (ref: Ref) => {
     const { id, value, required } = ref;
 
     registerField({ id, value, error: required });
   };
 
-  const onChange = (e: EventType) => {
+  const onChange = (e: TEvent) => {
     e.persist();
 
     const { id, value, type, required } = e.target;
@@ -77,7 +75,6 @@ export function useFormData({ validation }: UseFormArgs): UseFormReturn {
     });
   };
 
-  // TODO handle error
   const onFileDrop = (e: React.DragEvent<HTMLDivElement>, id: string) => {
     e.persist();
 
@@ -88,7 +85,7 @@ export function useFormData({ validation }: UseFormArgs): UseFormReturn {
     });
   };
 
-  const onFocus = (e: EventType) => {
+  const onFocus = (e: TEvent) => {
     e.persist();
 
     const { id, value, required } = e.target;
@@ -100,7 +97,7 @@ export function useFormData({ validation }: UseFormArgs): UseFormReturn {
     });
   };
 
-  const onBlur = (e: EventType) => {
+  const onBlur = (e: TEvent) => {
     e.persist();
 
     const { id, value, required } = e.target;
