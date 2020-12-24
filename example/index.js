@@ -14,12 +14,11 @@ const options = [
   { value: 'audi', name: 'Audi' },
 ];
 
+const handleSubmit = (data) => {
+  console.log('onSubmit: ', data);
+};
+
 function App() {
-
-  const handleSubmit = (data) => {
-    console.log('onSubmit: ', data);
-  };
-
   return (
     <div className="container">
       <FlowForm onSubmit={handleSubmit} showData initialValues={{
@@ -51,11 +50,11 @@ function App() {
 
         <Field type="textarea">Text Area</Field>
 
+        <Field type="drag-drop" placeholder="Drag and drop or click to select">Drag and Drop</Field>
+
         <Field type="radio" name="Radio" />
 
         <Field type="checkbox" name="Checkbox" />
-
-        <Field type="drag-drop" placeholder="Drag and drop or click to select">Drag and Drop</Field>
       </FlowForm>
     </div>
   );

@@ -6,16 +6,22 @@ function handleDefaults(e: React.DragEvent<HTMLDivElement>): void {
   e.preventDefault();
   e.stopPropagation();
 }
-//TODO remove opens file dropdown
+//TODO fix 'string | number | readonly string[]' on array map
 interface IDragDrop extends IField {
   id: string;
   onFileDrop: (e: React.DragEvent<HTMLDivElement>, id?: string, required?: boolean) => void;
   onRemove: (args: IDelete) => void;
 }
 export const DragDrop = React.forwardRef<HTMLInputElement, IDragDrop>((props, ref) => {
+  const { id, required, className, value, style, placeholder, onFileDrop, onRemove, ...rest } = props;
+  const inputRef = React.useRef<HTMLInputElement | null>(null);
   const [focus, setFocus] = React.useState<boolean>(false);
 
-  const { id, required, className, value, style, placeholder, onFileDrop, onRemove, ...rest } = props;
+  React.useEffect(() => {
+    if (typeof ref === 'function') {
+      ref(inputRef.current);
+    }
+  }, []);
 
   const onDragOver = (e: React.DragEvent<HTMLDivElement>) => {
     handleDefaults(e);
@@ -33,6 +39,10 @@ export const DragDrop = React.forwardRef<HTMLInputElement, IDragDrop>((props, re
     setFocus(false);
   };
 
+  const handleClick = () => {
+    inputRef?.current?.click();
+  };
+
   const styles = `drag-drop-container ${focus ? 'focus' : ''} ${className ?? ''}`;
 
   return (
@@ -47,9 +57,10 @@ export const DragDrop = React.forwardRef<HTMLInputElement, IDragDrop>((props, re
         onDragEnter={handleDefaults}
         onDragLeave={onDragLeave}
         onDrop={onDrop}
+        onClick={handleClick}
       >
         <span className="drag-drop-cta">{placeholder}</span>
-        <input {...rest} id={id} required={required} ref={ref} type="file" className="drag-drop-input" />
+        <input {...rest} id={id} required={required} ref={inputRef} type="file" className="drag-drop-input" />
       </div>
       <ul className="drag-drop-list">
         {value &&

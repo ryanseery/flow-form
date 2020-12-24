@@ -2,13 +2,13 @@ import * as React from 'react';
 import { useFormData } from '../useFormData';
 import { toCamelCase } from '../utils';
 import { Input, Select, TextArea, CheckboxRadio, DragDrop } from './Fields';
-import { EventType } from '../@types';
+import { TEvent } from '../@types';
 
 //TODO Field.RadioGroup
 export interface IField extends React.InputHTMLAttributes<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement> {
   children?: string | React.ReactElement;
-  validation?: (e: EventType | React.DragEvent<HTMLDivElement>) => boolean;
-  onChange: (e: EventType) => void;
+  validation?: (e: TEvent | React.DragEvent<HTMLDivElement>) => boolean;
+  onChange: (e: TEvent) => void;
 }
 export const Field: React.FC<IField> = ({ type = 'text', name, children, validation, ...rest }) => {
   const { data, onRegister, onChange, onToggle, onFile, onFileDrop, onFocus, onBlur, onRemove } = useFormData({
@@ -51,17 +51,19 @@ export const Field: React.FC<IField> = ({ type = 'text', name, children, validat
     ref: onRegister,
   };
 
+  const selectProps = { ...defaultProps, children };
+
   const toggleProps = { ...defaultProps, onChange: onToggle };
 
   const fileProps = { ...defaultProps, onChange: onFile, onFileDrop, onRemove };
 
   return (
-    <label htmlFor={id}>
-      {inputLabel}
+    <>
+      <label htmlFor={id}>{inputLabel}</label>
       {(() => {
         switch (type) {
           case 'select': {
-            return <Select children={children} {...defaultProps} />;
+            return <Select {...selectProps} />;
           }
           case 'textarea': {
             return <TextArea {...defaultProps} />;
@@ -81,6 +83,6 @@ export const Field: React.FC<IField> = ({ type = 'text', name, children, validat
         }
       })()}
       {/* {showError && <span>Handle ERROR</span>} */}
-    </label>
+    </>
   );
 };
